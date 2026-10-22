@@ -599,8 +599,88 @@ export async function clearSessionStorage() {
 /**
  * Verify stored blobs match saved metadata before restoring UI state.
  */
+
+/** Rebuild a legacy PDF-less notation session from persisted bytes. */
+function rebuildNotationOnlySession(meta, files, musicXmlBuffer) {
+  if (meta.musicXmlSize != null && musicXmlBuffer.byteLength !== meta.musicXmlSize) {
+    return null
+  }
+  const musicXmlSource = rebuildMusicXmlSourceFromSessionMeta(
+    meta.musicXmlFileName,
+    musicXmlBuffer.slice(0),
+    meta,
+  )
+  if (!musicXmlSource?.data) {
+    return null
+  }
+  // A PDF-less source must never carry a foreign PDF owner identity: the
+  // invariant that ties companions to a PDF cannot apply without one.
+  const ownedNotation = { ...musicXmlSource }
+  delete ownedNotation.ownerPdfIdentity
+  let midiSource = null
+  if (meta.midiFileName && files.midi) {
+    midiSource = {
+      fileName: meta.midiFileName,
+      data: files.midi.slice(0),
+      ...(meta.midiOwnerPdfIdentity ? { ownerPdfIdentity: meta.midiOwnerPdfIdentity } : {}),
+    }
+  }
+  return { musicXmlSource: ownedNotation, midiSource }
+}
 export function validateRestoredSession(meta, files) {
   const issues = []
+
+  const musicXmlFileName = meta?.musicXmlFileName ?? null
+  const musicXmlBuffer = files.musicXml
+  // Legacy compat: sessions saved while standalone MusicXML/MXL importing was
+  // available stored notation with no PDF. Those no longer open practice, but
+  // the notation must still restore (so nothing is lost) and the restore must
+  // report as partial so the UI asks for the PDF instead of pretending it is
+  // playable. Reported as an issue, not silently accepted.
+  const legacyNotationOnly =
+    Boolean(musicXmlFileName && musicXmlBuffer) &&
+    !meta?.pdfMeta?.fileName &&
+    meta?.musicXmlSourceKind !== 'omr' &&
+    meta?.musicXmlSourceKind !== 'audio-arrangement'
+  if (legacyNotationOnly) {
+    const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
+    if (restored) {
+      return {
+        ok: true,
+        issues: ['musicxml-only-session'],
+        pdfFile: null,
+        pdfMeta: null,
+        midiSource: restored.midiSource,
+        musicXmlSource: restored.musicXmlSource,
+        legacyNotationOnly: true,
+        partial: true,
+      }
+    }
+  }
+
+  // Audio Vision arrangements are MusicXML-only but first-class: they restore
+  // fully (no PDF-import guidance, lands on the saved view) rather than as a
+  // legacy notation-only session.
+  const audioArrangementSession =
+    Boolean(musicXmlFileName && musicXmlBuffer) &&
+    !meta?.pdfMeta?.fileName &&
+    meta?.musicXmlSourceKind === 'audio-arrangement'
+  if (audioArrangementSession) {
+    const restored = rebuildNotationOnlySession(meta, files, musicXmlBuffer)
+    if (restored) {
+      return {
+        ok: true,
+        issues: [],
+        pdfFile: null,
+        pdfMeta: null,
+        midiSource: restored.midiSource,
+        musicXmlSource: restored.musicXmlSource,
+        legacyNotationOnly: false,
+        audioArrangement: true,
+        partial: false,
+      }
+    }
+  }
 
   if (!meta?.pdfMeta?.fileName) {
     issues.push('missing-pdf-meta')

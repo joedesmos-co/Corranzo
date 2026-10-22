@@ -12,10 +12,29 @@ const practiceCss = readFileSync(join(root, 'src', 'styles', 'practice.css'), 'u
 const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
 const editorial = readFileSync(join(root, 'src', 'styles', 'editorial-polish.css'), 'utf8')
 
+function resolveToken(name) {
+  let value = null
+  let current = name
+  const seen = new Set()
+  while (!seen.has(current)) {
+    seen.add(current)
+    const match = tokens.match(new RegExp(`${current}\\s*:\\s*([^;]+);`))
+    if (!match) return null
+    value = match[1].trim()
+    const reference = /^var\((--[A-Za-z0-9-]+)\)$/.exec(value)
+    if (!reference) break
+    current = reference[1]
+  }
+  return value
+}
+
 describe('minimal audio transport styling', () => {
   it('uses monochromatic design tokens', () => {
-    expect(tokens).toContain('--sf-bg-app: #141210')
-    expect(tokens).toContain('--sf-bg-panel: #1c1814')
+    // #141210 was the original slate value; the palette was re-tuned to the
+    // desk green (#191e1b / #242b25). The token indirection is deliberate, so
+    // assert the resolved colour and the form, not the old literal.
+    expect(resolveToken('--sf-bg-app')).toBe('#191e1b')
+    expect(resolveToken('--sf-bg-panel')).toBe('#242b25')
     expect(tokens).toContain('--sf-radius-sm: 4px')
     expect(tokens).toContain('--sf-shadow-soft: none')
     expect(tokens).toContain('--sf-font-micro')

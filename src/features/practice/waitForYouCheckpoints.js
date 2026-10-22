@@ -1,6 +1,10 @@
 import { getBeatAtTime } from '../musicxml/timingQuery.js'
 import { getTimeline } from '../musicxml/timeline.js'
 import { usesPerformedTimeline } from '../musicxml/performedTimeline.js'
+import {
+  getTimingValidation,
+  TIMING_VALIDATION_STATUS,
+} from '../musicxml/timingValidation.js'
 import { alignChordScoreTime } from '../playback/pianoVoiceMix.js'
 import { filterNotesForPracticeScope } from './practiceScope.js'
 import { resolveGroupChordSymbol } from './guitarChordShapeCheckpoint.js'
@@ -60,6 +64,53 @@ function groupNotesByTime(notes) {
   return groups
 }
 
+/**
+ * Overfull-measure fallback: an invalidated timeline (voice-flattened source)
+ * can merge notes written in DIFFERENT measures into one checkpoint, because
+ * measure N's overflow sounds inside measure N+1's window. A player reading
+ * the print cannot play two separated written notes simultaneously, so such a
+ * checkpoint never advances — an impossible Wait For You requirement.
+ *
+ * When timing validation fails, split every simultaneous group by WRITTEN
+ * MEASURE only (both staves of a piano grand staff share a measure number, so
+ * same-measure cross-staff notes stay one playable target): each checkpoint
+ * then requires only notes printed in one measure. Nothing is re-timed,
+ * truncated, or dropped — the performed times stay exactly as parsed (and stay
+ * visibly wrong, flagged by the follow layer's measureMismatch diagnostics).
+ * Valid scores are untouched: legitimate cross-measure simultaneity (tremolo
+ * across a barline, tied repeats) keeps its single checkpoint.
+ */
+function splitCrossWrittenMeasureGroups(groups) {
+  const split = []
+  for (const group of groups) {
+    const writtenMeasures = new Set(
+      group.notes.map((note) => `${note.measureNumber ?? ''}`),
+    )
+    if (writtenMeasures.size <= 1) {
+      split.push(group)
+      continue
+    }
+    const byWritten = new Map()
+    for (const note of group.notes) {
+      const key = `${note.measureNumber ?? ''}`
+      const bucket = byWritten.get(key)
+      if (bucket) {
+        bucket.push(note)
+      } else {
+        byWritten.set(key, [note])
+      }
+    }
+    for (const notes of byWritten.values()) {
+      split.push({
+        timeSeconds: group.timeSeconds,
+        notes,
+        splitFromCrossMeasureGroup: true,
+      })
+    }
+  }
+  return split
+}
+
 function isAttackNote(note) {
   if (!note) {
     return false
@@ -112,8 +163,60 @@ function sameTieVoice(left, right) {
   )
 }
 
-/** Fold tied continuations into their attack note so WFY/visual keep one target. */
-function mergeTiedContinuations(notes) {
+/**
+ * Resolve the attack note a continuation belongs to.
+ *
+ * Identity is the parser's `tieChainId` when present. Chain identity is
+ * EXCLUSIVE: a tie-stop whose chain head is not in this list (loop started
+ * inside the tie, or a timing map built without parser merging) must NOT be
+ * folded into a same-pitch note from a DIFFERENT chain — repeated tied notes
+ * on one pitch are common (Aguado op03-4/5, Chopin mazurka, fugue BWV 846),
+ * and a same-pitch fallback silently attached another chain's continuation,
+ * drawing a sustain bar across unrelated measures.
+ * Only timing maps without chain ids use the part/voice/pitch search.
+ */
+function findTieChainHead(merged, note) {
+  const chainId = note.tieChainId
+  if (chainId != null) {
+    return (
+      [...merged]
+        .reverse()
+        .find(
+          (candidate) =>
+            candidate.tieChainId === chainId &&
+            candidate.tieStart &&
+            !candidate.suppressPlaybackAttack,
+        ) ?? null
+    )
+  }
+  // Legacy timing maps built without parser chain ids. A chain head from a
+  // real (parser-built) chain always carries a tieChainId, so requiring the
+  // head to lack one too keeps a dangling tie-stop — a source defect with no
+  // resolvable attack — from being folded into an unrelated same-pitch chain.
+  return [...merged]
+    .reverse()
+    .find(
+      (candidate) =>
+        candidate.tieStart &&
+        candidate.tieChainId == null &&
+        sameTieVoice(candidate, note) &&
+        !candidate.suppressPlaybackAttack,
+    )
+}
+
+/**
+ * Fold tied continuations into their attack note so WFY/visual keep one target.
+ *
+ * DURATIONS ARE NOT ADDED HERE. The parser (`applyTieSustainToNotes`) already
+ * merged every continuation into the chain head's `durationQuarters` /
+ * `durationSeconds` (sounding duration) and recorded the chain total in
+ * `tiedChainDurationQuarters`. Adding again double-counted a 2q+2q tie as 6q.
+ * This fold only attaches continuation metadata (for display) and re-states
+ * the head duration from the chain record, which makes it idempotent and safe
+ * for timing maps whose chain record is missing (duration left untouched).
+ */
+export function mergeTiedContinuations(notes) {
+
   const sorted = [...notes].sort(
     (left, right) =>
       left.timeSeconds - right.timeSeconds ||
@@ -127,20 +230,12 @@ function mergeTiedContinuations(notes) {
       note.suppressPlaybackAttack || (note.tieStop && !note.tieStart),
     )
     if (isTieContinuation) {
-      const head = [...merged]
-        .reverse()
-        .find(
-          (candidate) =>
-            candidate.tieStart &&
-            sameTieVoice(candidate, note) &&
-            !candidate.suppressPlaybackAttack,
-        )
+      const head = findTieChainHead(merged, note)
       if (head) {
-        const addedQuarters = Number.isFinite(note.durationQuarters) ? note.durationQuarters : 0
-        const addedSeconds = Number.isFinite(note.durationSeconds) ? note.durationSeconds : 0
-        head.durationQuarters = (Number.isFinite(head.durationQuarters) ? head.durationQuarters : 0) + addedQuarters
-        if (Number.isFinite(head.durationSeconds) || addedSeconds > 0) {
-          head.durationSeconds = (Number.isFinite(head.durationSeconds) ? head.durationSeconds : 0) + addedSeconds
+        // Re-state (never accumulate) the sounding duration from the chain
+        // record; the parser already merged it.
+        if (Number.isFinite(head.tiedChainDurationQuarters)) {
+          head.durationQuarters = head.tiedChainDurationQuarters
         }
         head.tieStop = Boolean(head.tieStop || note.tieStop)
         head.hasTiedSustain = true
@@ -272,7 +367,12 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
 
   notes = mergeTiedContinuations(notes)
 
-  const groups = groupNotesByTime(notes)
+  const timingValidation = getTimingValidation(timingMap)
+  const timingValidated = timingValidation.status !== TIMING_VALIDATION_STATUS.INVALID
+  let groups = groupNotesByTime(notes)
+  if (!timingValidated) {
+    groups = splitCrossWrittenMeasureGroups(groups)
+  }
   const harmonyEvents = options.harmonyEvents ?? timingMap?.harmonyEvents ?? []
 
   return groups.map((group, index) => {
@@ -314,6 +414,11 @@ export function buildNoteCheckpoints(timingMap, loopRegion = null, options = {})
       rollingWindowMs: checkpointModel.rollingWindowMs,
       isTiedContinuation: checkpointModel.isTiedContinuation,
       isChord: midis.length > 1,
+      // Timing-fidelity provenance: false when the source has overfull
+      // measures (see timingValidation). A split checkpoint was separated from
+      // a cross-written-measure simultaneity by the honest fallback.
+      timingValidated,
+      splitFromCrossMeasureGroup: Boolean(group.splitFromCrossMeasureGroup),
       notes: group.notes,
     }
   })

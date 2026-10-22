@@ -117,7 +117,12 @@ function mapDefaultXToBand(measureNumbers, hints, startAnchor, endAnchor) {
   const maxX = Math.max(...values.map((entry) => entry.defaultX))
   const range = maxX - minX
 
-  return measureNumbers.map((number) => {
+  // Measure x positions first, so each measure's playable span can run to
+  // the next measure's start (last measure: the system end). Without real
+  // spans, highlight geometry collapses to a 0.05-wide sliver at x while
+  // the cursor roams the full inter-anchor span — a 0.3-page bar/box split
+  // on cross-engraving pairs.
+  const placed = measureNumbers.map((number) => {
     const defaultX = hints.get(number)
     const t =
       defaultX == null || range < 1
@@ -125,15 +130,28 @@ function mapDefaultXToBand(measureNumbers, hints, startAnchor, endAnchor) {
         : (defaultX - minX) / range
 
     return {
-      page: startAnchor.page,
+      number,
       x: startAnchor.x + (endAnchor.x - startAnchor.x) * t,
       y: startAnchor.y + (endAnchor.y - startAnchor.y) * t * 0.12,
-      measureNumber: number,
+    }
+  })
+  return placed.map((entry, index) => {
+    const nextX = index + 1 < placed.length ? placed[index + 1].x : endAnchor.x
+    const playableEndX = Math.max(nextX, entry.x + 0.015)
+    return {
+      page: startAnchor.page,
+      x: entry.x,
+      y: entry.y,
+      measureNumber: entry.number,
       source: ANCHOR_SOURCE.MUSICXML_LAYOUT,
       meta: {
         role: 'measure',
         layout: 'default-x',
         systemIndex: startAnchor.meta?.systemIndex,
+        measureStartX: entry.x,
+        playableStartX: entry.x,
+        playableEndX,
+        systemEndX: endAnchor.x,
       },
     }
   })

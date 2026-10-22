@@ -18,7 +18,7 @@
  * Render-cycle discipline: every value the interval loop reads goes
  * through a ref mirror (props/state go stale inside timers).
  */
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { idleFeedbackForCheckpoint } from './waitForYouInputFeedback.js'
 import { midiToNoteLabel } from '../midi-input/midiNoteLabel.js'
 import {
@@ -356,6 +356,14 @@ export default function useNeuralMicInput({
 
   // Reset per-checkpoint confirmation + chord state (seek / loop / restart).
   useEffect(() => {
+    // An idle hook never reads this state: the model-load effect and the poll
+    // loop both early-return on `!active`, and the session only consumes this
+    // hook's output when the neural flag is on. Resetting while idle is dead
+    // work that still dispatches React state — 3.8 dispatches/s across the two
+    // idle instances, each re-rendering the whole practice tree.
+    if (!active) {
+      return
+    }
     if (checkpointIdRef.current === checkpointId) {
       return
     }
@@ -364,7 +372,7 @@ export default function useNeuralMicInput({
     chordStateRef.current = createChordMatchState()
     poolRef.current = []
     resetFeedback()
-  }, [checkpointId, resetFeedback])
+  }, [active, checkpointId, resetFeedback])
 
   // Lazy model load + hardware capability check (L3). Runs on every
   // activation (runtime cached, warmup re-measured); falls back (phase
@@ -889,45 +897,66 @@ export default function useNeuralMicInput({
     ? 'Neural idle'
     : describePhase(phase)
 
-  return {
-    matchingEnabled: displayPhase === 'listening',
-    inputFeedback,
-    resetFeedback,
-    lastHeardMidi,
-    liveFrame: null,
-    calibration: null,
-    calibrationStatus: null,
-    micCalibrating: false,
-    micStatusLabel,
-    retryCalibration: () => {},
-    isChordCheckpoint,
-    isMicChordCollection: false,
-    isMicV2Polyphonic: false,
-    expectedCount: expectedMidis.length,
-    chordMicMode: 'neural-experimental',
-    feedbackOutcome: inputFeedback.outcome,
-    micEngineMode: 'neural-experimental',
-    micEngineV2Enabled: false,
-    micEngineV2Active: false,
-    micEngineV3Enabled: false,
-    performanceExpectation: null,
-    v2RuntimeError: phaseError,
-    exportDebugFrames: () => ({ phase, backend, warmedMs, error: phaseError }),
-    exportMicTrace: () => [],
-    neural: {
-      phase: displayPhase,
+  return useMemo(
+    () => ({
+      matchingEnabled: displayPhase === 'listening',
+      inputFeedback,
+      resetFeedback,
+      lastHeardMidi,
+      liveFrame: null,
+      calibration: null,
+      calibrationStatus: null,
+      micCalibrating: false,
+      micStatusLabel,
+      retryCalibration: () => {},
+      isChordCheckpoint,
+      isMicChordCollection: false,
+      isMicV2Polyphonic: false,
+      expectedCount: expectedMidis.length,
+      chordMicMode: 'neural-experimental',
+      feedbackOutcome: inputFeedback.outcome,
+      micEngineMode: 'neural-experimental',
+      micEngineV2Enabled: false,
+      micEngineV2Active: false,
+      micEngineV3Enabled: false,
+      performanceExpectation: null,
+      v2RuntimeError: phaseError,
+      exportDebugFrames: () => ({ phase, backend, warmedMs, error: phaseError }),
+      exportMicTrace: () => [],
+      neural: {
+        phase: displayPhase,
+        backend,
+        warmedMs,
+        error: phaseError,
+        level: inputLevel,
+        detectedNotes,
+        rejected,
+        silenceSkips,
+        noiseFlatSkips,
+        debug: debugSnapshot,
+        verdict: debugSnapshot?.lastVerdict ?? null,
+        decision: inputFeedback?.message ?? null,
+        outcome: inputFeedback?.outcome ?? null,
+      },
+    }),
+    [
+      displayPhase,
+      inputFeedback,
+      micStatusLabel,
+      isChordCheckpoint,
+      phaseError,
       backend,
       warmedMs,
-      error: phaseError,
-      level: inputLevel,
+      inputLevel,
       detectedNotes,
       rejected,
       silenceSkips,
       noiseFlatSkips,
-      debug: debugSnapshot,
-      verdict: debugSnapshot?.lastVerdict ?? null,
-      decision: inputFeedback?.message ?? null,
-      outcome: inputFeedback?.outcome ?? null,
-    },
-  }
+      debugSnapshot,
+      phase,
+      lastHeardMidi,
+      expectedMidis.length,
+      resetFeedback,
+    ],
+  )
 }

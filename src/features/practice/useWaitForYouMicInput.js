@@ -58,8 +58,14 @@ import {
 } from './micAttackLatch.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
 import { chordCollectionEvidenceMidis } from '../microphone-input/micChordPolyphonyEvidence.js'
-import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
-import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
+import {
+  MIC_CALIBRATION_STATUS,
+  MIC_CALIBRATION_STATUS_LABELS,
+} from '../microphone-input/micCalibration.js'
+import {
+  getMicLiveFrameSnapshot,
+  publishMicLiveFrame,
+} from '../microphone-input/micLiveFrameRuntime.js'
 import {
   buildExpectedStringByMidi,
   guitarStringPickLabel,
@@ -363,7 +369,9 @@ export default function useWaitForYouMicInput({
     }),
   )
   const [lastHeardMidi, setLastHeardMidi] = useState(null)
-  const [liveFrame, setLiveFrame] = useState(null)
+  // Live frames no longer live in React state: they publish to the mic
+  // live-frame runtime so a per-frame level meter does not re-render the whole
+  // practice session. See micLiveFrameRuntime.js.
   const [calibration, setCalibration] = useState(null)
   const [calibrationKey, setCalibrationKey] = useState(0)
   const feedbackOutcomeRef = useRef(inputFeedback.outcome)
@@ -470,7 +478,7 @@ export default function useWaitForYouMicInput({
       }),
     )
     setLastHeardMidi(null)
-    setLiveFrame(null)
+    publishMicLiveFrame(null)
     resetMicChordCollectionState(collectionStateRef.current)
     resetGuitarChordShapeBufferState(guitarChordShapeBufferRef.current)
     lastStableChordKeyRef.current = ''
@@ -870,7 +878,7 @@ export default function useWaitForYouMicInput({
         frame.calibrationStatus === MIC_CALIBRATION_STATUS.MEASURING
       ) {
         liveFramePublishCounterRef.current = 0
-        setLiveFrame({
+        publishMicLiveFrame({
           ...frame,
           diagnostic,
           diagnosticLabel,
@@ -965,16 +973,22 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      // Chords can carry POLYPHONIC evidence without a monophonic pitch
-      // (the v2 score-informed engine reports several expected tones at
-      // once). The monophonic-only guards below dropped those frames
-      // before the chord collection could use them, so real chords never
-      // completed (browser-measured on the real C-major triad). Every fed
-      // tone is an EXPECTED pitch (the v2 scorer only scores expected
-      // notes), so the wrong-streak protection is unchanged.
-      const chordPolyphonicEvidence = isMicChordCollection
-        ? chordCollectionEvidenceMidis(frame, expectedMidis)
-        : []
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch: the
+      // v2 score-informed engine reports several expected tones in the same
+      // frame. The monophonic-only guards below dropped those frames before
+      // the chord collection could use them, so a real three-note chord never
+      // completed (browser-measured on the real C-major triad).
+      //
+      // The evidence is consumed ONLY by the chord collection — the V3-off /
+      // no-expectation fallback path. When V3 owns the decision (the default)
+      // the shipped behaviour is unchanged.
+      //
+      // Every fed tone is an EXPECTED pitch (the v2 scorer only scores
+      // expected notes), so this cannot introduce a non-expected tone.
+      const chordPolyphonicEvidence =
+        isMicChordCollection && !(micEngineV3Enabled && performanceExpectation)
+          ? chordCollectionEvidenceMidis(frame, expectedMidis)
+          : []
 
       const recognitionTimeMs = performanceMode === PERFORMANCE_MODE.PLAY_ALONG
         ? Math.max(0, Number(performanceTimeMs) || 0)
@@ -1013,7 +1027,7 @@ export default function useWaitForYouMicInput({
             musicalTimingRef.current = timingOnly.state
           }
           // A ringing previous note must not swallow POLYPHONIC chord
-          // evidence: the collection's own stable-hit logic decides
+          // evidence: the collection's own per-tone stable-hit logic decides
           // whether the chord is really there.
           if (!chordPolyphonicEvidence.length) {
             resetMatchConfirm()
@@ -1126,12 +1140,17 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      // Chords can carry POLYPHONIC evidence without a monophonic pitch
-      // (the v2 score-informed engine reports several expected tones at
-      // once). The old monophonic-only guard dropped those frames before
-      // the chord collection could use them, so real chords never
-      // completed (browser-measured on the real C-major triad).
-      if ((frame.midi == null || !frame.gateOpen) && !chordPolyphonicEvidence.length && !guitarShapeQuietCollect && !rollingChordQuietCollect) {
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch (the
+      // v2 score-informed engine reports several expected tones at once). The
+      // old monophonic-only guard dropped those frames before the chord
+      // collection could use them, so real chords never completed
+      // (browser-measured on the real C-major triad).
+      if (
+        (frame.midi == null || !frame.gateOpen) &&
+        !chordPolyphonicEvidence.length &&
+        !guitarShapeQuietCollect &&
+        !rollingChordQuietCollect
+      ) {
         return
       }
 
@@ -1147,11 +1166,11 @@ export default function useWaitForYouMicInput({
       // sequential collector only when V3 is disabled or an expectation could
       // not be constructed, so the rollback path remains operational.
       if (isMicChordCollection && !v3Evaluation) {
-        // Chord collection now consumes the v2 POLYPHONIC evidence for
-        // this frame (plus the monophonic pitch): the collection is
-        // designed to accumulate expected tones over a window, but it was
-        // fed one pitch per frame, so real chords often never completed
-        // (browser-measured: the real C-major triad never completes).
+        // The collection now consumes the v2 POLYPHONIC evidence for this
+        // frame (plus the monophonic pitch): the collection accumulates
+        // expected tones over a window, but it used to be fed ONE pitch per
+        // frame, so a real three-note chord never completed (browser-measured
+        // on the real C-major triad).
         // Every fed tone is an EXPECTED pitch (the v2 scorer only scores
         // expected notes), so the wrong-streak protection is unchanged.
         const evidenceMidis = chordCollectionEvidenceMidis(frame, expectedMidis)
@@ -1190,19 +1209,16 @@ export default function useWaitForYouMicInput({
           // A chord cannot be confirmed by MONOPHONIC clarity: the
           // autocorrelation clarity of three simultaneous tones is low by
           // construction, so the old gate rejected every real chord
-          // (browser-measured: the collection reaches "3/3 matched" and
-          // the checkpoint never advances). The collection's own stable
-          // hits (2 per tone) plus the wrong-streak limit ARE the
-          // confidence for a chord; the key must also be stable, so it is
-          // built from the evidence set instead of the fluctuating
-          // monophonic pitch.
+          // (browser-measured: the collection reaches "3/3 matched" and the
+          // checkpoint never advances). The collection's own per-tone stable
+          // hits plus the wrong-streak limit ARE the confidence for a chord;
+          // the key must also be stable, so it is built from the evidence set
+          // instead of the fluctuating monophonic pitch.
           const chordEvidenceKey = [...new Set(evidenceMidis)].sort((left, right) => left - right).join(',')
-          if (typeof window !== 'undefined') {
-          }
           if (
             confirmConfidentMatch(
               `${currentCheckpoint.id}:sequence:${chordEvidenceKey}`,
-              frameConfident || chordPolyphonicEvidence.length > 0,
+              frameConfident || (chordPolyphonicEvidence.length > 0 && isMusicalMicFrame(frame)),
               { pitchCents, threshold: 1 },
             )
           ) {
@@ -1240,6 +1256,20 @@ export default function useWaitForYouMicInput({
         v2Preview?.outcome === MATCH_OUTCOME.COMPLETE &&
         (!isMicChordCollection || Boolean(v3Evaluation))
       ) {
+        // A V3 acceptance already carries attack authority plus the full
+        // matched set — it must commit immediately. Waiting for three more
+        // hook-level confirmations deadlocks: V3 latches consumed on its
+        // first accept, so subsequent frames report HOLD and the count can
+        // never reach threshold (single-note V3 stalls at "1/1 matched").
+        // V2-direct results (no recognitionDecision) keep the confirm path.
+        if (v2Preview.recognitionDecision?.advance === true) {
+          resetMatchConfirm()
+          const previewMidis = v2Preview.recognitionDecision?.matchedMidis ?? frame.v2DetectedMidis ?? []
+          setLastHeardMidi(previewMidis[0] ?? frame.midi)
+          advancedForTrace = true
+          applyMatchResult(v2Preview, frame)
+          return
+        }
         const previewMidis = v2Preview.recognitionDecision?.matchedMidis ?? frame.v2DetectedMidis ?? []
         const key = `${currentCheckpoint.id}:${micEngineV3Enabled ? 'v3' : 'v2'}:${[...previewMidis]
           .sort((left, right) => left - right)
@@ -1384,6 +1414,7 @@ export default function useWaitForYouMicInput({
     analysisKey: performanceExpectation?.id ?? currentCheckpoint?.id ?? '',
   })
 
+  const liveFrame = getMicLiveFrameSnapshot()
   const micCalibrating = Boolean(
     detectEnabled &&
       (liveFrame?.calibrating ||
@@ -1398,30 +1429,58 @@ export default function useWaitForYouMicInput({
         ? MIC_CALIBRATION_STATUS_LABELS[MIC_CALIBRATION_STATUS.READY]
         : null
 
-  return {
-    matchingEnabled,
-    inputFeedback,
-    resetFeedback,
-    lastHeardMidi,
-    liveFrame,
-    calibration: active && detectEnabled ? calibration : null,
-    calibrationStatus: liveFrame?.calibrationStatus ?? calibration?.status ?? null,
-    micCalibrating,
-    micStatusLabel,
-    retryCalibration,
-    isChordCheckpoint: Boolean(currentCheckpoint?.isChord),
-    isMicChordCollection,
-    isMicV2Polyphonic,
-    expectedCount: expectedMidis.length,
-    chordMicMode: chordTargets.mode,
-    feedbackOutcome: inputFeedback.outcome,
-    micEngineMode,
-    micEngineV2Enabled,
-    micEngineV2Active,
-    micEngineV3Enabled,
-    performanceExpectation,
-    v2RuntimeError,
-    exportDebugFrames,
-    exportMicTrace,
-  }
+  return useMemo(
+    () => ({
+      matchingEnabled,
+      inputFeedback,
+      resetFeedback,
+      lastHeardMidi,
+      liveFrame: getMicLiveFrameSnapshot(),
+      calibration: active && detectEnabled ? calibration : null,
+      calibrationStatus: liveFrame?.calibrationStatus ?? calibration?.status ?? null,
+      micCalibrating,
+      micStatusLabel,
+      retryCalibration,
+      isChordCheckpoint: Boolean(currentCheckpoint?.isChord),
+      isMicChordCollection,
+      isMicV2Polyphonic,
+      expectedCount: expectedMidis.length,
+      chordMicMode: chordTargets.mode,
+      feedbackOutcome: inputFeedback.outcome,
+      micEngineMode,
+      micEngineV2Enabled,
+      micEngineV2Active,
+      micEngineV3Enabled,
+      performanceExpectation,
+      v2RuntimeError,
+      exportDebugFrames,
+      exportMicTrace,
+    }),
+    [
+      matchingEnabled,
+      inputFeedback,
+      lastHeardMidi,
+      calibration,
+      micCalibrating,
+      micStatusLabel,
+      micEngineMode,
+      v2RuntimeError,
+      performanceExpectation,
+      isMicChordCollection,
+      isMicV2Polyphonic,
+      expectedMidis.length,
+      chordTargets.mode,
+      micEngineV2Enabled,
+      micEngineV2Active,
+      micEngineV3Enabled,
+      exportDebugFrames,
+      exportMicTrace,
+      retryCalibration,
+      resetFeedback,
+      active,
+      detectEnabled,
+      currentCheckpoint,
+      liveFrame,
+    ],
+  )
 }

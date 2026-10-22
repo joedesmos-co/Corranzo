@@ -220,9 +220,10 @@ export default function usePracticeSession({
   )
 
   const ensurePaused = useCallback(() => {
-    if (playbackRef.current.isPlaying) {
-      pausePlayback()
-    }
+    // Cancel pending starts even before isPlaying commits, without moving
+    // the manual WFY clock back to the idle audio engine's offset.
+    if (playbackRef.current.isPlaying) pausePlayback()
+    else playbackRef.current.pause()
   }, [pausePlayback])
 
   ensurePausedRef.current = ensurePaused
@@ -498,6 +499,28 @@ export default function usePracticeSession({
     (isWaitForYou || playback.isPlaying)
 
   const microphone = useMicrophoneCapture({ active: micCaptureActive })
+
+  // Practice/UI-state recovery for the WFY -> Play Along handoff: the mode
+  // switch briefly deactivates capture, and no Start button exists in the
+  // Play Along UI to re-acquire it — without this the Play Along detector
+  // stays silently dead. Fires only when the user selected microphone and
+  // permission is already granted (no prompt, gesture-safe); denial or
+  // error flips the gate off. Mic lifecycle internals stay untouched.
+  const micCaptureRecoverable =
+    practiceActive &&
+    wfyInputSourceReady &&
+    wfyInputSource === WFY_INPUT_SOURCE.MICROPHONE &&
+    microphone.permission === MIC_PERMISSION.GRANTED &&
+    !microphone.isListening
+  useEffect(() => {
+    if (!micCaptureRecoverable) {
+      return undefined
+    }
+    const recoverTimer = globalThis.setTimeout(() => {
+      microphone.requestAccess?.()
+    }, 0)
+    return () => globalThis.clearTimeout(recoverTimer)
+  }, [micCaptureRecoverable, microphone])
 
   const webMidi = useWebMidiInput({
     listen:
@@ -1148,9 +1171,39 @@ export default function usePracticeSession({
     onRecordWfyEvent,
   ])
 
+  // Tick-stable: depend on the stable playback fields, not the `playback`
+  // object identity (which changes every render). `currentTime` and `isPlaying`
+  // are deliberately excluded — they are tick-varying and consumers read them
+  // from the PracticeTickContext instead, so this memo rebuilds only on
+  // load/settings/play-pause changes.
   const playbackForSession = useMemo(
     () => ({
-      ...playback,
+      tracks: playback.tracks,
+      duration: playback.duration,
+      isLoading: playback.isLoading,
+      error: playback.error,
+      playbackRate: playback.playbackRate,
+      metronomeEnabled: playback.metronomeEnabled,
+      metronomeLevel: playback.metronomeLevel,
+      metronomeSubdivision: playback.metronomeSubdivision,
+      metronomeCountIn: playback.metronomeCountIn,
+      metronomeDisplay: playback.metronomeDisplay,
+      mappingWarning: playback.mappingWarning,
+      audioSource: playback.audioSource,
+      instrumentStatus: playback.instrumentStatus,
+      effectiveTempo: playback.effectiveTempo,
+      play: playback.play,
+      pause: playback.pause,
+      stop: playback.stop,
+      seek: playback.seek,
+      setPlaybackRate: playback.setPlaybackRate,
+      setMetronomeEnabled: playback.setMetronomeEnabled,
+      setMetronomeLevel: playback.setMetronomeLevel,
+      setMetronomeSubdivision: playback.setMetronomeSubdivision,
+      setMetronomeCountIn: playback.setMetronomeCountIn,
+      testSound: playback.testSound,
+      setTrackMuted: playback.setTrackMuted,
+      getScoreTime: playback.getScoreTime,
       pause: pausePlayback,
       controlsDisabled: !hasMusicXml || playback.isLoading,
       playDisabled: !hasMusicXml || playback.isLoading || isWaitForYou,
@@ -1160,7 +1213,32 @@ export default function usePracticeSession({
         : null,
     }),
     [
-      playback,
+      playback.tracks,
+      playback.duration,
+      playback.isLoading,
+      playback.error,
+      playback.playbackRate,
+      playback.metronomeEnabled,
+      playback.metronomeLevel,
+      playback.metronomeSubdivision,
+      playback.metronomeCountIn,
+      playback.metronomeDisplay,
+      playback.mappingWarning,
+      playback.audioSource,
+      playback.instrumentStatus,
+      playback.effectiveTempo,
+      playback.play,
+      playback.pause,
+      playback.stop,
+      playback.seek,
+      playback.setPlaybackRate,
+      playback.setMetronomeEnabled,
+      playback.setMetronomeLevel,
+      playback.setMetronomeSubdivision,
+      playback.setMetronomeCountIn,
+      playback.testSound,
+      playback.setTrackMuted,
+      playback.getScoreTime,
       pausePlayback,
       hasMusicXml,
       isWaitForYou,
@@ -1189,7 +1267,37 @@ export default function usePracticeSession({
     playAlongFeedback.outcomes,
   ])
 
-  return useMemo(
+  // Tick-stable session identity: rebuild only when something real changes.
+  // Clock/practiceTime/measure/beat/playback.currentTime are deliberately
+  // excluded — they move on every tick and consumers read them from the
+  // PracticeTickContext (or the stable context) instead. The session object
+  // still carries them (captured from closure on rebuild) for any consumer
+  // that has not yet migrated, but its identity is stable within a measure.
+  const sessionKey = [
+    hasMidi ? 'm' : '-',
+    hasMusicXml ? 'x' : '-',
+    practiceMode,
+    checkpointMode,
+    wfyInputSource,
+    isWaitForYou ? 'w' : '-',
+    playback.isPlaying ? 'p' : '-',
+    playback.isLoading ? 'l' : '-',
+    measure?.currentMeasure?.number ?? 'none',
+    waitForYou?.currentCheckpoint?.id ?? 'none',
+    waitForYou?.checkpointIndex,
+    waitForYouInput?.feedbackOutcome ?? 'none',
+    playAlongInputActive ? 'a' : '-',
+    neuralMicEnabled ? 'n' : '-',
+    isDemoPiece ? 'd' : '-',
+    instrumentId,
+    importReadiness?.status ?? 'none',
+    practiceAttempt?.id ?? 'none',
+    effectivePracticeScope,
+    practiceScopeAvailable ? 'A' : '-',
+    wfyInputSourceReady ? 'R' : '-',
+  ].join('|')
+
+  const session = useMemo(
     () => ({
       practicePrefsSnapshot,
       practiceMode,
@@ -1253,70 +1361,7 @@ export default function usePracticeSession({
       importReadiness,
       isDemoPiece,
     }),
-    [
-      practicePrefsSnapshot,
-      practiceMode,
-      effectivePracticeScope,
-      practiceScope,
-      practiceScopeAvailable,
-      setPracticeScope,
-      handlePracticeModeChange,
-      isWaitForYou,
-      hasMidi,
-      hasMusicXml,
-      instrumentId,
-      sourceVisualMap,
-      playAlongVisualCheckpoint,
-      midiSource?.fileName,
-      musicXmlSource?.fileName,
-      playbackForSession,
-      clock,
-      practiceTime,
-      timing,
-      alignment,
-      measure,
-      beat,
-      loop,
-      waitForYouForUi,
-      waitForYouMidi,
-      waitForYouMic,
-      neuralMic,
-      neuralMicEnabled,
-      neuralMicLive,
-      neuralPlayAlongLive,
-      neuralPlayAlongMic,
-      waitForYouInput,
-      wfyInputSource,
-      wfyInputSourceReady,
-      wfyInputSourceSelectedThisSession,
-      showWfyInputSourceModal,
-      handleWfyInputSourceChange,
-      deferWfyInputSourceModal,
-      microphone,
-      matchSettingsState.settings,
-      matchSettingsState.rawSettings,
-      matchSettingsState.updateSetting,
-      matchSettingsState.resetSettings,
-      referencePlayback,
-      checkpointMode,
-      setCheckpointMode,
-      webMidi,
-      playAlongMidi,
-      neuralPlayAlongLive,
-      neuralPlayAlongMic,
-      playAlongMic,
-      playAlongFeedback,
-      playAlongLaneGroups,
-      practiceAttempt,
-      laneOutcomesByGroupId,
-      timingDisabled,
-      seekToPracticeTimeWithWfy,
-      handlePlay,
-      handleMidiStop,
-      handleMidiSeek,
-      handleToggleMute,
-      importReadiness,
-      isDemoPiece,
-    ],
+    [sessionKey],
   )
+  return { session, clock, practiceTime, measure, beat, playback }
 }

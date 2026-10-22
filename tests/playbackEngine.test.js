@@ -61,8 +61,7 @@ describe('playback engine scheduling invariants', () => {
     expect(scheduledEvents.size).toBe(0)
   })
 
-  it('keeps the score clock continuous when tempo changes during playback', () => {
-    globalThis.__TEST_TONE_NOW__ = 104
+  it('keeps the score clock continuous when tempo changes during playback', () => {    globalThis.__TEST_TONE_NOW__ = 104
     const engine = new ScorePlaybackEngine()
 
     engine.duration = 120
@@ -83,4 +82,47 @@ describe('playback engine scheduling invariants', () => {
     expect(engine.getCurrentScoreTime()).toBeCloseTo(14, 6)
     expect(engine.scheduleWindow).toHaveBeenCalledWith(14, 16.5)
   })
+
+  it('schedules post-fermata notes at written score time (audio/cursor stay together)', () => {
+    // Fermata extends only the sounding duration of its own note: onsets
+    // downstream never move, so the wall clock both the audio scheduler
+    // and the cursor use cannot diverge.
+    globalThis.__TEST_TONE_NOW__ = 200
+    const engine = new ScorePlaybackEngine()
+    engine.voice = { triggerAttackRelease: vi.fn() }
+    engine.metronome = {}
+    engine.playbackRate = 1
+    engine.playStartedAt = 200
+    engine.noteEvents = [
+      { type: 'note', scoreTimeSeconds: 0, baseDurationSeconds: 0.875, midi: 60, name: 'C4', velocity: 0.8, fermata: true },
+      { type: 'note', scoreTimeSeconds: 0.5, baseDurationSeconds: 0.5, midi: 62, name: 'D4', velocity: 0.8 },
+    ]
+    engine.scheduleWindow(0, 2.5)
+    const names = engine.voice.triggerAttackRelease.mock.calls.map((call) => call[0])
+    expect(names).toEqual(['C4', 'D4'])
+    expect(engine.wallTimeForScoreTime(0.5)).toBeCloseTo(200.5, 6)
+  })
+})
+
+describe('pending playback cancellation', () => {
+  for (const action of ['pause', 'stop', 'seek', 'dispose']) {
+    it(`does not start after ${action} while instrument loading is pending`, async () => {
+      let ready
+      const waiting = new Promise(resolve => { ready = resolve })
+      const engine = new ScorePlaybackEngine()
+      engine.duration = 10
+      engine.ensureVoices = vi.fn(async () => {})
+      engine.whenInstrumentReady = vi.fn(() => waiting)
+      engine.releaseAll = vi.fn()
+      engine.beginScorePlayback = vi.fn()
+      engine.startCountInThenPlayback = vi.fn()
+      const request = engine.playFromUserGesture(Promise.resolve())
+      await vi.waitFor(() => expect(engine.whenInstrumentReady).toHaveBeenCalled())
+      engine[action](0)
+      ready()
+      await request
+      expect(engine.beginScorePlayback).not.toHaveBeenCalled()
+      expect(engine.startCountInThenPlayback).not.toHaveBeenCalled()
+    })
+  }
 })

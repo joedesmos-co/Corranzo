@@ -1,17 +1,19 @@
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS } from '../../features/practice/practiceMode.js'
 import { formatTime } from '../../features/playback/formatTime.js'
-import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
+import { usePracticeTick, useScoreFollowCursorOptional } from '../../context/PracticeTickContext.jsx'
 import { workspaceStatus } from '../../features/practice/workspaceStatus.js'
 import Icon from '../../design/Icon.jsx'
 import { getExpectedMidis } from '../../features/practice/waitForYouNoteMatch.js'
 import { midiToNoteLabel } from '../../features/midi-input/midiNoteLabel.js'
+import ScoreFeedbackChips from './ScoreFeedbackChips.jsx'
 
 function ToolButton({ tool, onTool, id, icon, label, children }) { return <button className="workspace-tool-button" data-tour-id={id === 'input' ? 'practice-input-source' : id === 'settings' ? 'practice-advanced' : undefined} aria-label={label} title={label} aria-expanded={tool === id} aria-haspopup="dialog" onClick={() => onTool(id)}><Icon name={icon} size={20} /><span>{children || label}</span></button> }
 
-export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled }) {
+export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled, engraved = false }) {
   const tick = usePracticeTick()
+  const cursorState = useScoreFollowCursorOptional()
   const p = s.playback
-  const status = workspaceStatus(s, scoreFollow)
+  const status = workspaceStatus(s, scoreFollow, { engraved })
   const current = tick.practiceTime ?? s.practiceTime
   const duration = tick.playbackDuration || p.duration
   const isPlaying = tick.playbackIsPlaying
@@ -37,22 +39,47 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
       <div className={`workspace-status workspace-status--${status.kind}`} data-tour-id="score-cursor" role="status" title={status.detail}><span className="workspace-status-dot" />{status.label}</div>
       {s.practiceMode !== PRACTICE_MODE.PREVIEW && <ToolButton tool={tool} onTool={onTool} id="input" icon={s.wfyInputSource === 'microphone' && s.wfyInputSourceReady ? 'mic' : 'keyboard'} label="Practice input">{s.wfyInputSourceReady && s.wfyInputSource !== 'manual' ? (s.wfyInputSource === 'microphone' ? 'Microphone' : 'MIDI keyboard') : 'Connect instrument'}</ToolButton>}
     </div>
+    {/* Practice feedback for surfaces that cannot paint the notehead itself
+        (a PDF page is printed ink, not addressable glyphs). The chips report
+        exactly what the recognition engine decided. */}
+    <ScoreFeedbackChips entries={cursorState?.scoreNoteStates ?? []} />
     {s.isWaitForYou && <div className="workspace-your-turn">
-      <div><span className="workspace-eyebrow">{s.waitForYou.isComplete ? 'Well played' : 'Your next notes'}</span><strong title={checkpoint?.detailsLabel}>{s.waitForYou.isComplete && <Icon name="check" size={20} />}{s.waitForYou.isComplete ? 'Passage complete' : label}</strong><span className="workspace-target-detail">{targetNotes}{checkpoint?.measureNumber ? ' · ' : ''}{checkpoint?.measureNumber ? `Bar ${checkpoint.measureNumber}` : ''}{s.waitForYou.guidance?.secondary ? ` · ${s.waitForYou.guidance.secondary}` : ''}</span></div>
+      <div>
+        <span className="workspace-eyebrow">
+          {s.waitForYou.isComplete
+            ? 'Well played'
+            : `Your turn${s.waitForYou.totalCheckpoints > 0 ? ` · ${Math.min(s.waitForYou.checkpointIndex + 1, s.waitForYou.totalCheckpoints)} of ${s.waitForYou.totalCheckpoints}` : ''}`}
+        </span>
+        <strong title={checkpoint?.detailsLabel}>
+          {s.waitForYou.isComplete && <Icon name="check" size={16} />}
+          {s.waitForYou.isComplete ? 'Passage complete' : label}
+        </strong>
+        <span className="workspace-target-detail">
+          {targetNotes}
+          {checkpoint?.measureNumber ? ' · ' : ''}
+          {checkpoint?.measureNumber ? `Bar ${checkpoint.measureNumber}` : ''}
+        </span>
+      </div>
+      {(s.waitForYouInput?.inputFeedback?.outcome === 'chord-partial' ||
+        s.waitForYouInput?.inputFeedback?.outcome === 'wrong') &&
+        s.waitForYouInput.inputFeedback.message && (
+        <span className="workspace-wfy-feedback" role="status">
+          {s.waitForYouInput.inputFeedback.message}
+        </span>
+      )}
       <button onClick={() => s.referencePlayback.playCheckpointReference(checkpoint)} disabled={!checkpoint || s.referencePlayback.isPlaying}><Icon name="tracks" size={16} />{s.referencePlayback.isPlaying ? 'Playing…' : 'Hear it'}</button>
       <button onClick={s.waitForYou.showHint} disabled={s.waitForYou.isComplete}>Hint</button>
       <button onClick={s.waitForYou.skipCheckpoint} disabled={s.waitForYou.isComplete}>Skip</button>
       {(s.waitForYou.guidance?.state === 'hint' || s.waitForYou.guidance?.hint) && <span className="workspace-wfy-guidance">{s.waitForYou.guidance.hint || s.waitForYou.guidance.primary}</span>}
-      {s.waitForYouInput?.inputFeedback?.outcome === 'chord-partial' && <span role="status">{s.waitForYouInput.inputFeedback.message}</span>}
       {s.referencePlayback.error && <span role="alert">Reference sound unavailable.</span>}
     </div>}
     <div className="workspace-transport-row" data-tour-id="practice-playback">
       <button className="workspace-icon workspace-restart" aria-label="Restart passage" title="Restart passage" disabled={s.timingDisabled} onClick={s.isWaitForYou ? s.waitForYou.restart : s.handleMidiStop}><Icon name="prev" size={20} /></button>
-      <button className={`workspace-play${isPlaying ? ' workspace-play--playing' : ''}`} aria-label={s.isWaitForYou ? (s.waitForYou.isComplete ? 'Start again' : 'Continue (Enter)') : isPlaying ? 'Pause (Space)' : 'Play (Space)'} disabled={s.isWaitForYou ? s.timingDisabled : p.controlsDisabled} onClick={s.isWaitForYou ? (s.waitForYou.isComplete ? s.waitForYou.restart : s.waitForYou.markCorrectAndContinue) : isPlaying ? p.pause : s.handlePlay}>
+      <button className={`workspace-play${isPlaying ? ' workspace-play--playing' : ''}${s.isWaitForYou ? ' workspace-play--continue' : ''}`} aria-label={s.isWaitForYou ? (s.waitForYou.isComplete ? 'Start again' : 'Continue (Enter)') : isPlaying ? 'Pause (Space)' : 'Play (Space)'} title={s.isWaitForYou && !s.waitForYou.isComplete ? 'Continue without playing (Enter)' : undefined} disabled={s.isWaitForYou ? s.timingDisabled : p.controlsDisabled} onClick={s.isWaitForYou ? (s.waitForYou.isComplete ? s.waitForYou.restart : s.waitForYou.markCorrectAndContinue) : isPlaying ? p.pause : s.handlePlay}>
         <Icon name={s.isWaitForYou ? 'next' : isPlaying ? 'pause' : 'play'} size={24} className={!s.isWaitForYou && !isPlaying ? 'workspace-play-symbol' : ''} /><span>{s.isWaitForYou ? (s.waitForYou.isComplete ? 'Again' : 'Continue') : isPlaying ? 'Pause' : 'Play'}</span>
       </button>
       <div className="workspace-position">
-        <div><span className="workspace-bar-reference"><span>Bar</span> <strong>{s.measure.currentMeasure?.number ?? '—'}</strong>{s.loop.enabled && loop?.isValid && <small className="workspace-passage-label">{loop.label.replace(/^Measures/, 'Bars').replace(/^Measure/, 'Bar')}</small>}</span><span>{formatTime(current)} <i>/</i> {formatTime(duration || 0)}</span></div>
+        <div><span className="workspace-bar-reference"><span>Bar</span> <strong>{s.measure.currentMeasure?.number ?? '—'}</strong>{s.loop.enabled && loop?.isValid && <small className="workspace-passage-label">{loop.label.replace(/^Measures/, 'Bars').replace(/^Measure/, 'Bar')}</small>}</span><span>{formatTime(current)} <i>/</i> {duration > 0 ? formatTime(duration) : '—'}</span></div>
         <div className="workspace-seek-wrap">
           {loop?.isValid && duration > 0 && <span className={`workspace-loop-range${s.loop.enabled ? ' workspace-loop-range--on' : ''}`} style={{ left: `${loop.startTimeSeconds / duration * 100}%`, width: `${Math.max(.5, loop.durationSeconds / duration * 100)}%` }} title={`Loop: ${loop.label}`} />}
           <input type="range" aria-label="Score position" min="0" max={duration || 1} step="0.1" value={Math.min(current, duration || 1)} disabled={s.timingDisabled} onChange={e => s.handleMidiSeek(Number(e.target.value))} />

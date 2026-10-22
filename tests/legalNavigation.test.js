@@ -17,9 +17,9 @@ describe('legal route navigation', () => {
     expect(getViewFromPathname('/contact')).toBe('contact')
   })
 
-  it('app navigation leaves legal pathname for Library, Practice, and Profile', () => {
+  it('app navigation uses a hash, not a legal or bare path', () => {
     for (const view of ['library', 'practice', 'profile']) {
-      expect(pathnameForView(view)).toBe('/')
+      expect(pathnameForView(view)).toBe(`/#${view}`)
       expect(pathnameForView(view)).not.toBe('/privacy')
     }
   })
@@ -33,7 +33,7 @@ describe('legal route navigation', () => {
   it('session restore still does not override direct legal route', () => {
     expect(
       resolveRestoredActiveView({
-        pathname: '/privacy',
+        location: { pathname: '/privacy', hash: '' },
         savedActiveView: 'practice',
         hasMusicXml: true,
       }),

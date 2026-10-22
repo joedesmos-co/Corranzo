@@ -15,7 +15,7 @@ const base = process.env.UI_REVIEW_URL || 'http://127.0.0.1:5178/'
 const piece = 'public/fixtures/practice-library/piano-mozart-menuet-k2/piano-mozart-menuet-k2'
 const pdf = { name: 'Mozart — Menuet in F.pdf', mimeType: 'application/pdf', buffer: readFileSync(`${piece}.pdf`) }
 const xml = { name: 'Menuet.musicxml', mimeType: 'application/xml', buffer: readFileSync(`${piece}.musicxml`) }
-const pick = (file = pdf) => page.getByLabel('Choose score PDF', { exact: true }).setInputFiles(file)
+const pick = (file = pdf) => page.getByLabel('Choose score file', { exact: true }).setInputFiles(file)
 async function navigate(name) {
   const nav = page.getByRole('navigation', { name: 'Primary', exact: true })
   if (!await nav.isVisible()) await page.getByRole('button', { name: 'Open navigation', exact: true }).click()

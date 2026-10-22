@@ -4,7 +4,14 @@ import { ACCEPT_ATTRIBUTES, isMuseScoreSourceFile, MUSESCORE_PLANNED_MESSAGE } f
 import { applyClassifiedUploads, classifyUploadFiles } from '../features/import/classifyUploadFiles.js'
 import { importFileNotice } from '../features/import/importPresentation.js'
 
-/** Classifies inputs and delegates to the existing owned import handlers. */
+/**
+ * Classifies inputs and delegates to the existing owned import handlers.
+ *
+ * The primary picker is PDF-first: a sheet-music file IS the score the musician
+ * reads. MusicXML/MXL/MIDI are still accepted, but only as companions to a PDF
+ * under "Advanced", so score following has a page to follow. Dropping notation
+ * or MIDI here alone is redirected to that panel rather than silently opened.
+ */
 export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidiSelect, onClassifiedUpload = null, disabled = false, advanced = false, hasPdf = false }) {
   const inputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
@@ -45,7 +52,7 @@ export default function MultiFileUpload({ onFileSelect, onMusicXmlSelect, onMidi
       {!hasPdf && <span>{advanced ? 'MusicXML, MXL or MIDI · matching PDFs also accepted' : 'Choose a PDF, or drop it here.'}</span>}</span>
       {!hasPdf && !advanced && <span className="score-import-drop__format">PDF · up to 80 MB</span>}
     </button>
-    <input ref={inputRef} type="file" multiple={advanced} accept={advanced ? [ACCEPT_ATTRIBUTES.sheetMusic, '.musicxml,.xml,.mxl,.mid,.midi'].join(',') : ACCEPT_ATTRIBUTES.sheetMusic} hidden disabled={disabled || busy}
+    <input ref={inputRef} type="file" multiple={advanced} accept={advanced ? [ACCEPT_ATTRIBUTES.sheetMusic, ACCEPT_ATTRIBUTES.scoreTiming].join(',') : ACCEPT_ATTRIBUTES.sheetMusic} hidden disabled={disabled || busy}
       aria-label={advanced ? 'Choose optional files' : 'Choose score PDF'}
       onChange={event => { handleFiles(event.target.files); event.target.value = '' }} />
     {/* role="alert" is not a permitted role on a list, which hides the list

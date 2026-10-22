@@ -38,7 +38,6 @@ function LiveCapture({ onReady }) {
   // Deliver the capture object only when something MEANINGFUL changes:
   // the hook returns a fresh object literal every render, so delivering
   // on every render would loop (setState -> render -> setState).
-  window.__liveMicrophone = microphone
   const delivered = useRef(null)
   useEffect(() => {
     const signature = `${microphone?.isListening ? 1 : 0}:${microphone?.sampleRate ?? 0}:${microphone?.errorMessage ?? ''}`

@@ -119,6 +119,54 @@ function beatWeightedProgress(timingMap, practiceTime, t0, t1) {
   return { progress: 1, xRatio: 1 }
 }
 
+const OWN_WINDOW_TOLERANCE = 0.001
+const writtenWindowCache = new WeakMap()
+
+function inPerformedWindow(timeSeconds, window) {
+  return (
+    timeSeconds >= window.startTimeSeconds - OWN_WINDOW_TOLERANCE &&
+    timeSeconds <= window.endTimeSeconds + OWN_WINDOW_TOLERANCE
+  )
+}
+
+function writtenWindowsFor(timingMap, measureNumber, repeatPass) {
+  let perMap = writtenWindowCache.get(timingMap)
+  if (!perMap) {
+    perMap = new Map()
+    writtenWindowCache.set(timingMap, perMap)
+  }
+  const key = `${measureNumber}:${repeatPass ?? 1}`
+  if (!perMap.has(key)) {
+    perMap.set(
+      key,
+      getTimeline(timingMap)
+        .windowsForMeasure(measureNumber)
+        .filter((entry) => (entry.repeatPass ?? 1) === (repeatPass ?? 1)),
+    )
+  }
+  return perMap.get(key)
+}
+
+/**
+ * Onset ownership for a performed measure window. Written-measure notes
+ * always belong; a foreign-written note sounding inside this window is
+ * adopted only when its own written-measure window (same repeat pass)
+ * does NOT contain it — i.e. it overflowed past its barline (overfull
+ * virtuoso measures) and would otherwise own no knot anywhere. A downbeat
+ * exactly on the barline stays with its written (next) measure, never both.
+ * Callers check window containment first; this resolves ties and orphans.
+ */
+export function onsetOwnedByWindow(timingMap, note, performedMeasureNumber, window) {
+  if (note.measureNumber === performedMeasureNumber) {
+    return true
+  }
+  if (!inPerformedWindow(note.performedSeconds, window)) {
+    return false
+  }
+  const own = writtenWindowsFor(timingMap, note.measureNumber, note.repeatPass)
+  return !own.some((entry) => inPerformedWindow(note.performedSeconds, entry))
+}
+
 function noteXInMeasureSpan(note, layoutExtents, xStart, xEnd) {
   if (layoutExtents.hasDefaultX && note.defaultX != null) {
     const minX = layoutExtents.minDefaultX ?? 0
@@ -148,15 +196,18 @@ export function buildMeasureMusicalEvents(
 
   const timeline = getTimeline(timingMap)
   const layoutExtents = getMeasureLayoutExtents(timingMap, measureNumber)
+  // Written-measure ownership plus orphan adoption (overfull-measure
+  // overflow sounds inside this window; a barline-exact downbeat stays
+  // with its written next measure). See onsetOwnedByWindow.
   const performedNotes = timeline
     .performedNotes()
     .filter(
       (note) =>
-        note.measureNumber === measureNumber &&
         !note.isRest &&
         !note.isTabMirror &&
         note.performedSeconds >= window.startTimeSeconds - 0.001 &&
-        note.performedSeconds <= window.endTimeSeconds + 0.001,
+        note.performedSeconds <= window.endTimeSeconds + 0.001 &&
+        onsetOwnedByWindow(timingMap, note, measureNumber, window),
     )
 
   const events = [
@@ -213,7 +264,6 @@ export function buildMeasureMusicalEvents(
       }
       lastGeomX = entry.geomX
     }
-
     for (const entry of built) {
       const x = geometryIsForward && entry.geomX != null ? entry.geomX : entry.timeX
       events.push({
@@ -224,6 +274,9 @@ export function buildMeasureMusicalEvents(
           ...entry.group.notes.map((note) => note.durationSeconds ?? 0),
           0,
         ),
+        // Provenance for honest precision reporting: engraved default-x
+        // drove this onset x, or the measure fell back to time-proportional.
+        geometry: geometryIsForward ? 'engraved' : 'time',
       })
     }
   }
@@ -407,6 +460,7 @@ export function resolveMusicalXInMeasure({
       mode: 'beat-linear',
       atOnset: false,
       events,
+      geometry: 'time',
     }
   }
 
@@ -423,6 +477,7 @@ export function resolveMusicalXInMeasure({
         atOnset: true,
         events,
         nearestEvent: event,
+        geometry: event.geometry ?? 'time',
       }
     }
   }
@@ -474,7 +529,25 @@ export function resolveMusicalXInMeasure({
     atOnset: atNoteOnset || atNextOnset,
     events,
     nearestEvent: local < 0.5 ? before : after,
+    geometry: segmentGeometry(events, before, after),
   }
+}
+
+/**
+ * Provenance of the current segment's x: engraved default-x only when the
+ * surrounding note events that bound it used engraved geometry. Bridge and
+ * measure-end tails inherit the last note event's provenance.
+ */
+function segmentGeometry(events, before, after) {
+  const noteEvents = events.filter((event) => event.kind === 'note' || event.kind === 'chord')
+  if (noteEvents.length === 0) {
+    return 'time'
+  }
+  const relevant = [before, after].filter(
+    (event) => event?.kind === 'note' || event?.kind === 'chord',
+  )
+  const pool = relevant.length > 0 ? relevant : [noteEvents[noteEvents.length - 1]]
+  return pool.every((event) => event.geometry === 'engraved') ? 'engraved' : 'time'
 }
 
 function resolveSegmentMode(events, before, after, prior) {

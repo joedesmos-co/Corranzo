@@ -1,0 +1,109 @@
+{
+ "pass": [
+  {
+   "name": "browser pipeline ran without errors",
+   "detail": ""
+  },
+  {
+   "name": "web audio rendered 4 s fixture",
+   "detail": ""
+  },
+  {
+   "name": "basic pitch capability probe",
+   "detail": "{\"backend\":\"cpu\",\"warmedMs\":1245.5,\"startupMs\":1498.4,\"ok\":false}"
+  },
+  {
+   "name": "browser basic pitch detected notes",
+   "detail": "9 notes in 5235ms"
+  },
+  {
+   "name": "analysis used browser model notes",
+   "detail": ""
+  },
+  {
+   "name": "browser tempo estimate",
+   "detail": "117 BPM"
+  },
+  {
+   "name": "browser arrangement melody recall",
+   "detail": "1"
+  },
+  {
+   "name": "browser guitar MusicXML + TAB",
+   "detail": "12 notes"
+  }
+ ],
+ "fail": [],
+ "skipped": [],
+ "startedAt": "2026-10-10T03:02:08.162Z",
+ "finishedAt": "2026-10-10T03:02:15.376Z",
+ "browserSummary": {
+  "renderedSeconds": 4,
+  "renderedSampleRate": 44100,
+  "rms": 0.04067610867724143,
+  "samples22050": 88200,
+  "capability": {
+   "backend": "cpu",
+   "warmedMs": 1245.5,
+   "startupMs": 1498.4,
+   "ok": false
+  },
+  "bpMs": 5235,
+  "backend": "cpu",
+  "tempoBpm": 117,
+  "pitchSource": "basic-pitch",
+  "arrangedNotes": 9,
+  "hasTab": true,
+  "xmlNotes": 12,
+  "melodyRecallPc": 1,
+  "bpNoteCount": 9,
+  "bpNotes": [
+   [
+    61,
+    3.51,
+    3.97
+   ],
+   [
+    57,
+    3,
+    3.48
+   ],
+   [
+    61,
+    2.5,
+    2.99
+   ],
+   [
+    64,
+    2,
+    2.49
+   ],
+   [
+    50,
+    1.49,
+    1.59
+   ],
+   [
+    64,
+    0.99,
+    1.49
+   ],
+   [
+    61,
+    0.5,
+    0.99
+   ],
+   [
+    57,
+    0,
+    0.48
+   ],
+   [
+    69,
+    1.47,
+    1.99
+   ]
+  ],
+  "errors": []
+ }
+}

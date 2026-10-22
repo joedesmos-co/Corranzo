@@ -15,7 +15,7 @@ function PracticePositionTick({ collapsible = false }) {
       disabled={session.timingDisabled}
       hasMusicXml={session.hasMusicXml}
       timingLoading={session.timing.isLoading}
-      position={session.beat.position}
+      position={tick.beatPosition}
       measureNavigation={session.measure}
       beatNavigation={session.beat}
       timingMap={session.timing.timingMap}
@@ -30,8 +30,8 @@ function PracticePositionTick({ collapsible = false }) {
   }
 
   const summary = session.hasMusicXml
-    ? `Measure ${session.beat.position?.measureNumber ?? '—'} · Beat ${
-        session.beat.position?.beatNumber ?? '—'
+    ? `Measure ${tick.beatPosition?.measureNumber ?? '—'} · Beat ${
+        tick.beatPosition?.beatNumber ?? '—'
       }`
     : 'Timing unavailable'
 

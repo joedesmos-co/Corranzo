@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import PracticePageFollowController from './PracticePageFollowController.jsx'
 import {
   usePracticeSessionContext,
+  usePracticeSessionStable,
   usePracticeVisualSession,
 } from '../../context/PracticeSessionContext.jsx'
+import { usePracticeTick } from '../../context/PracticeTickContext.jsx'
 import usePracticeKeyboardShortcuts from '../../features/practice/usePracticeKeyboardShortcuts.js'
 import {
   PRACTICE_VIEW_MODE,
@@ -23,6 +25,8 @@ import OmrQualityWarningBanner from './OmrQualityWarningBanner.jsx'
 import RecognitionProblemReportDialog from '../omr/RecognitionProblemReportDialog.jsx'
 import VisualPracticeView from './VisualPracticeView.jsx'
 import PracticeErrorBoundary from './PracticeErrorBoundary.jsx'
+import OsmdScoreView from './OsmdScoreView.jsx'
+import { isPdflessNotationSource } from '../../features/import/musicXmlSource.js'
 import '../../styles/practice.css'
 import '../../styles/workspace.css'
 
@@ -50,6 +54,22 @@ export default function PracticeView({
   activeScoreSnapshot = null,
 }) {
   const { session, scoreFollow, practiceStats, practicePiece } = usePracticeSessionContext()
+  const stable = usePracticeSessionStable()
+  const tick = usePracticeTick()
+  // Audio Vision arrangements are internally generated MusicXML with no PDF
+  // page. They now use the SAME workspace as a PDF score: the score surface is
+  // the engraved MusicXML instead of a PDF page, and everything else - modes,
+  // transport, tools, the red cursor - is the one Practice Engine.
+  const isEngravedNotation = isPdflessNotationSource(musicXmlSource)
+  const hasPracticeSurface = Boolean(pdfFile) || isEngravedNotation
+  // The score title: the title the engraver prints wins (what the musician
+  // sees on the page), then the file name.
+  const notationTitle = musicXmlSource?.source === 'upload' || isEngravedNotation
+    ? session.timing?.timingMap?.title ?? null
+    : null
+  const scoreTitle = (notationTitle || fileName || 'Your score')
+    .replace(/\.[^.]+$/, '')
+    .replace(/ - (Piano|Guitar)$/, '')
   const { setPdfPageSizes } = usePracticeVisualSession()
   const { instrumentId } = useInstrument()
   const practiceErrorResetKey = [
@@ -157,19 +177,19 @@ export default function PracticeView({
   const canNextPage = numPages != null && pageNumber < numPages
 
   usePracticeKeyboardShortcuts({
-    enabled: Boolean(pdfFile),
-    isPlaying: session.playback.isPlaying,
+    enabled: Boolean(pdfFile || isPdflessNotationSource(musicXmlSource)),
+    isPlaying: tick.playbackIsPlaying,
     hasMidi: session.hasMidi,
     hasMusicXml: session.hasMusicXml,
     isWaitForYou: session.isWaitForYou,
     waitForYouStatus: session.waitForYou.status,
     alignmentMode: scoreFollow.alignmentMode || scoreFollow.semiAutoPreview,
-    playbackLoading: session.playback.isLoading,
+    playbackLoading: stable.playback.isLoading,
     allowPageKeys: !scoreFollow.alignmentMode && !scoreFollow.semiAutoPreview,
     canPrevPage,
     canNextPage,
-    canPrevMeasure: session.measure.canGoPrevious,
-    canNextMeasure: session.measure.canGoNext,
+    canPrevMeasure: tick.canGoPreviousMeasure,
+    canNextMeasure: tick.canGoNextMeasure,
     onTogglePlayPause: () => {
       const current = sessionRef.current
       if (current.playback.isPlaying) {
@@ -191,7 +211,7 @@ export default function PracticeView({
 
   return (
     <main ref={workspaceRef} className={`practice-workspace score-workspace${focus ? ' score-workspace--focus' : ''}`} aria-label="Score workspace" data-mode={session.practiceMode}>
-      {!pdfFile ? (
+      {!hasPracticeSurface ? (
         <div className="practice-workspace__empty">
           <h2>Choose a piece first</h2>
           <p className="practice-workspace__empty-lead">
@@ -205,7 +225,7 @@ export default function PracticeView({
             onReloadPractice={onReloadPractice}
             onReturnToLibrary={onReturnToLibrary}
           >
-            {!isVisualView && (
+            {!isVisualView && pdfFile && (
               <PracticePageFollowController
                 scrollContainerRef={pdfScrollRef}
                 pageNumber={pageNumber}
@@ -217,7 +237,7 @@ export default function PracticeView({
             )}
             <header className="workspace-header" inert={tool ? true : undefined}>
               <button className="workspace-back" aria-label="Back to Library" onClick={onReturnToLibrary}><Icon name="prev" size={16} /><span>Library</span></button>
-              <h1>{(fileName || 'Your score').replace(/\.[^.]+$/, '').replace(/ - (Piano|Guitar)$/, '')}</h1>
+              <h1>{scoreTitle}</h1>
               <div className="workspace-representation" role="group" aria-label="Score presentation">
                 <button aria-pressed={!isVisualView} onClick={() => handleViewModeChange(PRACTICE_VIEW_MODE.SCORE)}>{PRACTICE_VIEW_MODE_LABELS[PRACTICE_VIEW_MODE.SCORE]}</button>
                 <NoteGuideButton active={isVisualView} onSelect={() => handleViewModeChange(PRACTICE_VIEW_MODE.VISUAL)} />
@@ -237,30 +257,38 @@ export default function PracticeView({
                     onDismiss={onDismissOmrQualityWarning}
                     onReportProblem={() => openReportDialog({ defaultCategory: null })}
                   />
-                  <PdfViewer
-                    variant="practice"
-                    file={pdfFile}
-                    fileName={fileName}
-                    pdfMeta={pdfMeta}
-                    pageNumber={pageNumber}
-                    numPages={numPages}
-                    paperTheme={paperTheme}
-                    onWorkspaceFocus={toggleFocus}
-                    onDocumentLoadSuccess={onDocumentLoadSuccess}
-                    onPrevPage={onPrevPage}
-                    onNextPage={onNextPage}
-                    onTogglePaper={onTogglePaper}
-                    actionsRef={pdfActionsRef}
-                    scrollContainerRef={pdfScrollRef}
-                    onPageSizesChange={setPdfPageSizes}
-                  />
+                  {pdfFile ? (
+                    <PdfViewer
+                      variant="practice"
+                      file={pdfFile}
+                      fileName={fileName}
+                      pdfMeta={pdfMeta}
+                      pageNumber={pageNumber}
+                      numPages={numPages}
+                      paperTheme={paperTheme}
+                      onWorkspaceFocus={toggleFocus}
+                      onDocumentLoadSuccess={onDocumentLoadSuccess}
+                      onPrevPage={onPrevPage}
+                      onNextPage={onNextPage}
+                      onTogglePaper={onTogglePaper}
+                      actionsRef={pdfActionsRef}
+                      scrollContainerRef={pdfScrollRef}
+                      onPageSizesChange={setPdfPageSizes}
+                    />
+                  ) : (
+                    /* Audio Vision arrangement: the same workspace, the same
+                       transport and the same modes - the score itself is the
+                       engraved MusicXML, so the red cursor reads the engraved
+                       noteheads instead of a PDF page. */
+                    <OsmdScoreView musicXmlSource={musicXmlSource} />
+                  )}
                 </div>
               )}
             </div>
             <div className="workspace-dock-wrap" inert={tool ? true : undefined}>
-              <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} />
+              <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} engraved={isEngravedNotation} />
             </div>
-            {tool && <WorkspaceTools tool={tool} onClose={closeTool} returnFocusTo={toolOriginRef} session={session} scoreFollow={scoreFollow} fileName={fileName} pageNumber={pageNumber} practiceStats={practiceStats} pieceId={practicePiece?.id} onReport={() => { closeTool(); openReportDialog() }} />}
+            {tool && <WorkspaceTools tool={tool} onClose={closeTool} returnFocusTo={toolOriginRef} session={session} scoreFollow={scoreFollow} fileName={fileName} pageNumber={pageNumber} practiceStats={practiceStats} pieceId={practicePiece?.id} engraved={isEngravedNotation} onReport={() => { closeTool(); openReportDialog() }} />}
             <RecognitionProblemReportDialog
               open={reportOpen}
               onClose={() => setReportOpen(false)}

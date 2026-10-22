@@ -43,7 +43,11 @@ describe('Corranzo UX polish sprint', () => {
     expect(library).toContain('Import a score')
     expect(library).toContain('Public-domain scores')
     expect(upload).toContain('Import a score')
+    // PDF-first: a standalone notation export is no longer an entry point, so
+    // it must be routed to the Advanced companion picker instead.
     expect(upload).toContain('Choose a PDF, or drop it here.')
+    expect(upload).not.toContain('PDF or MusicXML, or drop it here.')
+    expect(upload).toContain('Choose the PDF you want to read. Optional notation and accompaniment files belong under Advanced.')
     // The old "one file at a time" restriction no longer applies.
     expect(upload).not.toContain('Upload one file at a time')
   })

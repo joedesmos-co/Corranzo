@@ -1,10 +1,13 @@
 import { WFY_CHECKPOINT_MODE } from '../../features/practice/waitForYouCheckpointMode.js'
+import { getMeasureBounds } from '../../features/musicxml/measureNavigation.js'
 import WaitForYouMatchSettingsPanel from './WaitForYouMatchSettingsPanel.jsx'
 import ScoreFollowControls from '../pdf/ScoreFollowControls.jsx'
 import ScoreFollowApproximateHint from './ScoreFollowApproximateHint.jsx'
 
 export default function PracticeSetupPanel({ session, scoreFollow }) {
-  const measureBounds = session.measure?.bounds
+  const measureBounds = session.timing?.timingMap
+    ? getMeasureBounds(session.timing.timingMap)
+    : null
   const setupPhase = scoreFollow?.setupStatus?.phase
   const showSetupHeading =
     setupPhase === 'failed' ||

@@ -41,11 +41,29 @@ describe('beta onboarding', () => {
   it('uses minimalist surface hooks on home and demo surfaces', () => {
     const css = readFileSync(join(root, 'src', 'App.css'), 'utf8')
     const tokens = readFileSync(join(root, 'src', 'styles', 'tokens.css'), 'utf8')
+    // Resolve var() indirection so palette assertions check the colour the
+    // browser actually paints.
+    function resolveToken(name) {
+      let value = null
+      let current = name
+      const seen = new Set()
+      while (!seen.has(current)) {
+        seen.add(current)
+        const match = tokens.match(new RegExp(`${current}\\s*:\\s*([^;]+);`))
+        if (!match) return null
+        value = match[1].trim()
+        const reference = /^var\((--[A-Za-z0-9-]+)\)$/.exec(value)
+        if (!reference) break
+        current = reference[1]
+      }
+      return value
+    }
     expect(readSrc('components', 'TopBar.jsx')).toContain('CorranzoLogo')
     expect(readSrc('components', 'DemoPieceCard.jsx')).not.toContain('CorranzoLogo')
     expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('corranzo-logo.png')
     expect(readSrc('features', 'brand', 'corranzoBrand.js')).toContain('site.webmanifest')
-    expect(tokens).toContain('--sf-bg-app: #141210')
+    // The app background is now the re-tuned desk green via token indirection.
+    expect(resolveToken('--sf-bg-app')).toBe('#191e1b')
     expect(tokens).toContain('--sf-font-mono')
     expect(css).toMatch(/\.library-welcome__logo/)
     expect(css).toMatch(/grid-template-columns: repeat\(12/)
@@ -63,7 +81,7 @@ describe('beta onboarding', () => {
   })
 
   it('goHome clears legal pathname back to library home', () => {
-    expect(pathnameForView('library')).toBe('/')
+    expect(pathnameForView('library')).toBe('/#library')
     expect(pathnameForView('privacy')).toBe('/privacy')
   })
 })

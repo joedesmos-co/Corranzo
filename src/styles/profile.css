@@ -8,6 +8,14 @@
   background: var(--sf-bg-raised);
 }
 
+/* Tablet split view: tighten the header padding before the phone layout so
+   the stats column is not squeezed on iPad-width split panes. */
+@media (max-width: 900px) {
+  .profile-view { padding: 24px var(--cz-collection-gutter) 40px; }
+  .profile-header__title { font-size: 40px; }
+  .profile-header { margin-bottom: 24px; }
+}
+
 .profile-header {
   margin-bottom: 28px;
 }
@@ -235,6 +243,13 @@
   .profile-stats-grid { gap: 16px; }
   .profile-stat__value { font-size: 21px; }
   .profile-footer { align-items: start; flex-direction: column; }
+}
+
+/* Phone: the stats scope filter must keep its 44 px touch target and wrap
+   rather than clip three labelled options. */
+@media (max-width: 760px) {
+  .profile-scope { display: flex; flex-wrap: wrap; gap: 0; }
+  .profile-scope__option { flex: 1; min-height: 44px; padding-inline: 8px; font-size: 12px; }
 }
 
 .profile-manual-log {

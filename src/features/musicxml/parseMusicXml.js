@@ -12,6 +12,7 @@ import {
 import { quartersToSeconds } from './timingMath.js'
 import { buildPerformedMeasureTimeline } from './parseMeasureRepeats.js'
 import { applyTieSustainToNotes } from './mergeTiedNotesForPlayback.js'
+import { validateMeasureTiming } from './timingValidation.js'
 import {
   analyzeChordSheetScore,
   buildChordSheetNoteEvents,
@@ -474,12 +475,25 @@ function techniqueMarking(kind, node, index) {
 }
 
 function readGuitarTechniques(noteNode) {
+  const techniques = []
+  // <arpeggiate> is a direct child of <note>, not of <notations>.
+  const arpeggiateNode = findChild(noteNode, 'arpeggiate')
+  if (arpeggiateNode) {
+    const direction = String(attr(arpeggiateNode, 'direction') ?? 'up').toLowerCase()
+    techniques.push({
+      kind: 'arpeggio',
+      type: null,
+      number: '1',
+      text: null,
+      index: 0,
+      direction: direction === 'down' ? 'down' : 'up',
+    })
+  }
   const notations = findChild(noteNode, 'notations')
   if (!notations) {
-    return []
+    return techniques
   }
   const technical = findChild(notations, 'technical')
-  const techniques = []
 
   if (technical) {
     findChildren(technical, 'hammer-on').forEach((node, index) => {
@@ -488,13 +502,43 @@ function readGuitarTechniques(noteNode) {
     findChildren(technical, 'pull-off').forEach((node, index) => {
       techniques.push(techniqueMarking('pull-off', node, index))
     })
-    if (findChild(technical, 'bend')) {
-      techniques.push({ kind: 'bend', type: null, number: '1', text: null, index: 0 })
+    const bendNode = findChild(technical, 'bend')
+    if (bendNode) {
+      // Preserve bend shape: semitone amount, release, pre-bend. The
+      // schedule turns this into a pitch curve; without details a bend
+      // would stay a metadata flag forever.
+      const alterText = textOf(findChild(bendNode, 'bend-alter'))
+      const alter = Number(alterText)
+      techniques.push({
+        kind: 'bend',
+        type: null,
+        number: '1',
+        text: null,
+        index: 0,
+        semitones: Number.isFinite(alter) && alter !== 0 ? Math.max(-12, Math.min(12, alter)) : 2,
+        release: findChild(bendNode, 'release') != null,
+        preBend: findChild(bendNode, 'pre-bend') != null,
+      })
+    }
+    if (findChild(technical, 'harmonic')) {
+      // Natural/artificial alike: the sampler cannot voice a true harmonic
+      // partial stack, so this stays recognized-only downstream. Parsed
+      // here so the technique is never silently dropped from the score.
+      techniques.push({ kind: 'harmonic', type: null, number: '1', text: null, index: 0 })
     }
     findChildren(technical, 'other-technical').forEach((node, index) => {
       const text = textOf(node)
       if (text && /vib(?:rato)?/i.test(text)) {
         techniques.push({ kind: 'vibrato', type: null, number: '1', text, index })
+      }
+      // MusicXML has no dedicated palm-mute / let-ring elements; scores
+      // notate them as free text. Match conservatively so unrelated text
+      // never mutes a note by accident.
+      if (text && /palm[\s-]?mutes?|p\.?\s*m\.?(?![a-z])/i.test(text)) {
+        techniques.push({ kind: 'muted', type: null, number: '1', text, index })
+      }
+      if (text && /let[\s-]?ring|laissez[\s-]?vibrer/i.test(text)) {
+        techniques.push({ kind: 'let-ring', type: null, number: '1', text, index })
       }
     })
   }
@@ -504,7 +548,26 @@ function readGuitarTechniques(noteNode) {
   })
 
   const ornaments = findChild(notations, 'ornaments')
-  if (ornaments && findChild(ornaments, 'wavy-line')) {
+  const hasTrill = ornaments != null && findChild(ornaments, 'trill-mark') != null
+  if (hasTrill) {
+    techniques.push({ kind: 'trill', type: null, number: '1', text: null, index: 0 })
+  }
+  if (ornaments != null) {
+    if (findChild(ornaments, 'mordent') != null) {
+      techniques.push({ kind: 'mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'inverted-mordent') != null) {
+      techniques.push({ kind: 'inverted-mordent', type: null, number: '1', text: null, index: 0 })
+    }
+    if (findChild(ornaments, 'turn') != null) {
+      const turnNode = findChild(ornaments, 'turn')
+      const inverted = String(attr(turnNode, 'inverted') ?? '').toLowerCase() === 'yes'
+      techniques.push({ kind: inverted ? 'inverted-turn' : 'turn', type: null, number: '1', text: null, index: 0 })
+    }
+  }
+  // A wavy line after a trill-mark extends the trill — it is NOT vibrato.
+  // A standalone wavy line is the conventional vibrato marking.
+  if (ornaments && findChild(ornaments, 'wavy-line') && !hasTrill) {
     techniques.push({ kind: 'vibrato', type: null, number: '1', text: null, index: 0 })
   }
 
@@ -707,6 +770,8 @@ function walkPart({
   harmonyEvents,
   partNotation = null,
   wedgeSpans = null,
+  pedalSpans = null,
+  partMeasureNoteEnds = null,
 }) {
   const measureNodes = findChildren(partNode, 'measure')
   let divisions = DEFAULT_DIVISIONS
@@ -735,6 +800,14 @@ function walkPart({
     let cursorDivisions = 0
     let lastNoteStartDivisions = 0
     let maxCursorDivisions = 0
+    // Written note content extent for this measure (pre-tie-merge durations):
+    // the furthest cursor position reached by a NOTE advance. Chords and grace
+    // notes do not advance the cursor. Used by timing validation to detect
+    // measures whose written notes cannot fit the time-signature window.
+    let maxNoteEndDivisions = 0
+    let measureNoteCount = 0
+    const measureVoiceTags = new Set()
+    let measureBackups = 0
     let measureBeats = beats
     let measureBeatType = beatType
 
@@ -795,8 +868,7 @@ function walkPart({
           }
 
           const wedge = wedgeFromDirection(child, helpers)
-          if (wedge && Array.isArray(wedgeSpans)) {
-            if (wedge.stage === 'start' && wedge.type) {
+          if (wedge && Array.isArray(wedgeSpans)) {            if (wedge.stage === 'start' && wedge.type) {
               const startVelocity = resolveNoteVelocity(
                 activeVelocity,
                 velocityByStaff,
@@ -835,6 +907,27 @@ function walkPart({
             }
           }
 
+          // Sustain pedal marks (<direction-type><pedal type="start|stop">):
+          // collected per part in quarter time; converted to seconds with
+          // the assembled tempo map and applied to score-note durations in
+          // buildScoreNoteSchedule (piano only — guitars have no damper).
+          if (Array.isArray(pedalSpans)) {
+            for (const directionType of findChildren(child, 'direction-type')) {
+              for (const pedal of findChildren(directionType, 'pedal')) {
+                const pedalType = String(attr(pedal, 'type') ?? '').toLowerCase()
+                if (pedalType === 'start' || pedalType === 'stop') {
+                  pedalSpans.push({
+                    type: pedalType,
+                    quarterTime,
+                    measureNumber,
+                    staff: directionStaff,
+                    partId,
+                  })
+                }
+              }
+            }
+          }
+
           if (!isPrimary) {
             break
           }
@@ -868,6 +961,7 @@ function walkPart({
           const duration = numberOf(childText(child, 'duration'), 0)
           cursorDivisions = Math.max(0, cursorDivisions - duration)
           lastNoteStartDivisions = cursorDivisions
+          measureBackups += 1
           break
         }
 
@@ -901,6 +995,13 @@ function walkPart({
           const startDivisions = isChord ? lastNoteStartDivisions : cursorDivisions
           const quarterTime = measureStartQuarters + startDivisions / divisions
           const durationQuarters = duration / divisions
+
+          if (!isChord && !isGrace) {
+            measureNoteCount += 1
+          }
+          if (Number.isFinite(voice) && voice > 0) {
+            measureVoiceTags.add(voice)
+          }
 
           if (!isGrace) {
             const layout = readNoteLayoutOrdered(child)
@@ -977,6 +1078,10 @@ function walkPart({
               stemDirection,
               beams,
               voice: Number.isFinite(voice) && voice > 0 ? voice : 1,
+              // True when the source omitted <voice> (MusicXML allows it).
+              // Tie pairing needs this to continue a voice-2 chain from a
+              // voice-less tie-stop; the normalized voice stays 1 elsewhere.
+              voiceDefaulted: !(Number.isFinite(voice) && voice > 0),
               velocity: resolveNoteVelocity(activeVelocity, velocityByStaff, layout.staff),
               ...layout,
             })
@@ -997,6 +1102,7 @@ function walkPart({
             lastNoteStartDivisions = cursorDivisions
             cursorDivisions += duration
             maxCursorDivisions = Math.max(maxCursorDivisions, cursorDivisions)
+            maxNoteEndDivisions = Math.max(maxNoteEndDivisions, cursorDivisions)
           }
           break
         }
@@ -1006,9 +1112,34 @@ function walkPart({
       }
     }
 
+    // Written note-content extent per (part, measure) for timing validation.
+    if (partMeasureNoteEnds) {
+      const entries = partMeasureNoteEnds.get(partId) ?? []
+      entries.push({
+        index,
+        number: measureNumber,
+        endQuarters: maxNoteEndDivisions / divisions,
+        noteCount: measureNoteCount,
+        voices: [...measureVoiceTags].sort((left, right) => left - right),
+        hasBackup: measureBackups > 0,
+      })
+      partMeasureNoteEnds.set(partId, entries)
+    }
+
     if (isPrimary) {
       const lengthFromTimeSignature = measureLengthQuarters(measureBeats, measureBeatType)
       const notatedLengthQuarters = maxCursorDivisions / divisions
+      // NOTE (overnight P7 investigation): overfull-measure window extension
+      // was tried here twice and reverted. (1) max(nominal, running-cursor)
+      // misfires on multi-voice measures: the running cursor accumulates
+      // across voices without backup (Prelude BWV846 fixture: 7.5 vs 4).
+      // (2) max over per-note end times (tie-aware) still perturbs validated
+      // checkpoint derivation (Prelude 479 -> 513) via performed-note
+      // reconciliation, breaking the MIDI acceptance suite. Overflow
+      // compensation stays at the cursor layer (onsetOwnedByWindow orphan
+      // adoption); playback uses true note times and is unaffected. A correct
+      // fix needs joint work with checkpoint derivation against
+      // musician-verified ground truth — see the final report handoff.
       const lengthQuarters =
         lengthFromTimeSignature > 0 ? lengthFromTimeSignature : notatedLengthQuarters
       const { newSystem, newPage } = measurePrintFlags(measureNode)
@@ -1033,6 +1164,9 @@ function walkPart({
         // detection see a short first bar even when implicit is absent. Does NOT
         // affect timing (lengthQuarters is unchanged).
         notatedLengthQuarters,
+        // Written NOTE content extent for this measure (pre-tie-merge), used by
+        // timing validation: notes cannot sound past this barline.
+        notatedNoteEndQuarters: maxNoteEndDivisions / divisions,
         // Engraved measure width in tenths (<measure width>), if present — used
         // to map MusicXML horizontal layout onto detected PDF barline spans.
         engravedWidth: Number.isFinite(engravedWidth) && engravedWidth > 0 ? engravedWidth : null,
@@ -1103,7 +1237,11 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const rawTimingEvents = []
   const harmonyEvents = []
   const wedgeSpans = []
+  const pedalMarks = []
   const partNotationById = new Map()
+  // Written note-content extents per (part, measure) — evidence for timing
+  // validation (overfull measures), not a timing change.
+  const partMeasureNoteEnds = new Map()
 
   const notationForPart = (partId) => {
     let info = partNotationById.get(partId)
@@ -1130,6 +1268,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     harmonyEvents,
     partNotation: notationForPart(primaryId),
     wedgeSpans,
+    pedalSpans: pedalMarks,
+    partMeasureNoteEnds,
   })
 
   partNodes.slice(1).forEach((partNode, index) => {
@@ -1147,6 +1287,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
       harmonyEvents,
       partNotation: notationForPart(partId),
       wedgeSpans,
+      pedalSpans: pedalMarks,
+      partMeasureNoteEnds,
     })
   })
 
@@ -1189,6 +1331,45 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   }
 
   const toSeconds = (quarterTime) => quartersToSeconds(quarterTime, tempoChanges)
+
+  // Sustain pedal marks → second-spans (start/stop pairing per part+staff;
+  // a dangling start rings to the score end, like a held damper).
+  const pedalSpans = []
+  {
+    const openByKey = new Map()
+    const ordered = [...pedalMarks].sort((left, right) => left.quarterTime - right.quarterTime)
+    for (const mark of ordered) {
+      const key = `${mark.partId ?? ''}:${mark.staff ?? ''}`
+      if (mark.type === 'start') {
+        if (!openByKey.has(key)) {
+          openByKey.set(key, mark)
+        }
+      } else if (openByKey.has(key)) {
+        const start = openByKey.get(key)
+        openByKey.delete(key)
+        if (mark.quarterTime > start.quarterTime) {
+          pedalSpans.push({
+            startSeconds: toSeconds(start.quarterTime),
+            endSeconds: toSeconds(mark.quarterTime),
+            partId: start.partId,
+            staff: start.staff,
+          })
+        }
+      }
+    }
+    const scoreEndQuarters = Math.max(
+      0,
+      ...notes.filter((note) => Number.isFinite(note.quarterTime)).map((note) => note.quarterTime),
+    )
+    for (const start of openByKey.values()) {
+      pedalSpans.push({
+        startSeconds: toSeconds(start.quarterTime),
+        endSeconds: toSeconds(scoreEndQuarters),
+        partId: start.partId,
+        staff: start.staff,
+      })
+    }
+  }
 
   const keySignatures = []
   for (const event of keySignatureEvents.sort(
@@ -1254,6 +1435,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     pageBreakBefore: boundary.pageBreakBefore,
     implicit: boundary.implicit,
     notatedLengthQuarters: boundary.notatedLengthQuarters,
+    notatedNoteEndQuarters: boundary.notatedNoteEndQuarters,
     engravedWidth: boundary.engravedWidth,
     // Repeat / volta markings for written-score evaluation (not playback expansion).
     marking: boundary.marking ?? null,
@@ -1357,6 +1539,13 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
   const markings = measureBoundaries.map((boundary) => boundary.marking)
   const performedMeasureTimeline = buildPerformedMeasureTimeline(measures, markings, beats)
 
+  // Timing validation: are there measures whose WRITTEN note content cannot
+  // fit the time-signature window (overfull / voice-flattened files)? This is
+  // a source-fidelity verdict, not a timing change — the performed timeline
+  // above stays exactly as parsed, and consumers (Wait For You grouping)
+  // decide honestly what to do with an invalidated score.
+  const timingValidation = validateMeasureTiming(measures, partMeasureNoteEnds)
+
   // Prefer written duration when repeat expansion was aborted or not used —
   // never ship a pathological performed clock as the score duration.
   const durationSeconds = performedMeasureTimeline.diagnostics?.usesPerformedTimeline
@@ -1392,6 +1581,8 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     measures,
     beats,
     performedMeasureTimeline,
+    timingValidation,
+    partMeasureNoteEnds,
     tempoChanges,
     timeSignatures,
     keySignatures,
@@ -1399,6 +1590,7 @@ export function parseMusicXml(xmlString, fileName = 'score.musicxml') {
     timingEvents,
     harmonyEvents,
     wedgeSpans,
+    pedalSpans,
     chordSheet: chordSheetAnalysis.isChordSheet
       ? {
           isChordSheet: true,

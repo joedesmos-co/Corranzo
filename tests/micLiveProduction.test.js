@@ -1,27 +1,25 @@
 /**
  * Production microphone live injection tests — REAL Chromium, REAL app
- * capture code, REAL v2 score-informed recognizer, REAL licensed
- * recordings.
+ * capture code, REAL v2 score-informed recognizer, REAL recorded audio.
  *
  * Audio enters at the microphone/media boundary (decoded clip PCM plays
  * through a MediaStreamAudioDestinationNode whose stream replaces
  * getUserMedia output), so the whole shipped path runs: capture ->
- * analyser -> calibration -> v2 score-informed detection -> confirmation
- * -> canonical practice callback.
+ * analyser -> calibration -> v2 score-informed detection -> V3 performance
+ * expectation -> confirmation -> canonical practice callback.
  *
- * This is the production counterpart of tests/neuralLiveInjection.test.js
- * (which covers the EXPERIMENTAL neural path). It exists because the
- * shipped recognizer had no MediaStream injection coverage, so the
- * spectral-vs-neural A/B could not be validated in a browser.
+ * Two chord paths exist and BOTH are pinned here:
+ *   - the DEFAULT V3 performance-expectation path (V3 on), and
+ *   - the V2 chord-collection fallback (V3 off: `?v3=0`), which is also the
+ *     path used for imported scores with no performance expectation.
  *
- * Labeled injected-stream tests: physical-microphone acceptance remains a
+ * Labelled injected-stream tests: physical-microphone acceptance remains a
  * separate attended step.
  */
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { chromium } from 'playwright'
 import { createServer } from 'vite'
-import { readFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { join, resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readWavPcm } from '../scripts/lib/readWavPcm.mjs'
 
@@ -71,18 +69,34 @@ describe('production mic live injection (v2 score-informed)', () => {
     await viteServer?.close()
   })
 
-  async function runProductionInjection({ clip, expectedMidis, checkpointId, instrumentId = 'piano', dwellMs = null, waitMs = 90_000 }) {
+  async function runProductionInjection({
+    clip,
+    expectedMidis,
+    checkpointId,
+    instrumentId = 'piano',
+    v3 = null,
+    dwellMs = null,
+    waitMs = 90_000,
+  }) {
     const page = await browser.newPage()
-    await page.goto(`${baseUrl}/scripts/mic-live/live.html`, { waitUntil: 'load' })
+    const query = v3 === null ? '' : `?v3=${v3 ? 1 : 0}`
+    await page.goto(`${baseUrl}/scripts/mic-live/live.html${query}`, { waitUntil: 'load' })
     await page.evaluate(
-      ({ samples, sampleRate, expected, checkpoint, instrument }) => window.__liveApi.inject({
-        samples,
-        sampleRate,
-        expectedMidis: expected,
-        checkpointId: checkpoint,
-        instrumentId: instrument,
-      }),
-      { samples: clip.samples, sampleRate: clip.sampleRate, expected: expectedMidis, checkpoint: checkpointId, instrument: instrumentId },
+      ({ samples, sampleRate, expected, checkpoint, instrument }) =>
+        window.__liveApi.inject({
+          samples,
+          sampleRate,
+          expectedMidis: expected,
+          checkpointId: checkpoint,
+          instrumentId: instrument,
+        }),
+      {
+        samples: clip.samples,
+        sampleRate: clip.sampleRate,
+        expected: expectedMidis,
+        checkpoint: checkpointId,
+        instrument: instrumentId,
+      },
     )
     if (dwellMs != null) {
       await page.waitForTimeout(dwellMs)
@@ -111,75 +125,51 @@ describe('production mic live injection (v2 score-informed)', () => {
     expect(results.feedbackOutcome).toBe('correct')
   }, 180_000)
 
-  it('completes a real piano chord on the v2 collection path', async () => {
-    // Regression for the Step 5 launch-sprint fix: the chord collection
-    // consumed ONE monophonic pitch per frame and kept a single pending
-    // index, so a real three-note chord never completed (browser-measured:
-    // "3/3 matched" but the checkpoint never advanced). With the v2
-    // fallback path (V3 performance expectations off) the production
-    // recognizer now completes the chord.
-    const clip = loadPolyphonyClip('real-c-major-triad.wav')
-    const page = await browser.newPage()
-    await page.goto(`${baseUrl}/scripts/mic-live/live.html?v3=0`, { waitUntil: 'load' })
-    await page.evaluate(
-      ({ samples, sampleRate }) => window.__liveApi.inject({
-        samples,
-        sampleRate,
-        expectedMidis: [60, 64, 67],
-        checkpointId: 'prod-chord-v2',
-      }),
-      { samples: clip.samples, sampleRate: clip.sampleRate },
-    )
-    await page.waitForFunction(
-      () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.wrong > 0),
-      null,
-      { timeout: 120_000, polling: 1000 },
-    )
-    const results = await page.evaluate(() => window.__liveResults)
-    console.log('PROD-CHORD-V2', JSON.stringify({
-      matched: results.matched?.length ?? 0,
-      wrong: results.wrong,
-      outcome: results.feedbackOutcome,
-      mode: results.micEngineMode,
-    }))
-    await page.evaluate(() => window.__liveTeardown?.())
-    await page.close()
-    expect(results.matched.length).toBeGreaterThanOrEqual(1)
-    expect(results.feedbackOutcome).toBe('correct')
-  }, 240_000)
-
-  it('never falsely completes or mis-reports a chord in the production path', async () => {
-    // The real C-major triad currently does NOT complete in the v2
-    // collection path: the adaptive analyser noise floor closes the gate
-    // on SUSTAINED chords, so the v2 engine reports zero detections while
-    // the chord rings (browser-measured). The chord-collection fix (per
-    // expected-tone hit counters + polyphonic evidence) is covered by
-    // unit tests (tests/micChordPolyphonyEvidence.test.js); what remains
-    // is the gate behaviour, tracked in
-    // docs/MIC_ENGINE_AB_BENCHMARK.md.
-    //
-    // This test pins the SAFETY property that must hold either way: the
-    // production path must not advance a chord it has not confirmed, and
-    // must not report a wrong note for a legitimate chord.
-    //
-    // When the sustained-chord gate is fixed, INVERT this assertion
-    // (expect matched.length >= 1) — the change must be reviewed.
+  it('completes a real piano chord on the DEFAULT V3 path', async () => {
+    // The V3 performance-expectation engine owns the chord decision by
+    // default. It must emit COMPLETE and advance the checkpoint.
     const clip = loadPolyphonyClip('real-c-major-triad.wav')
     const results = await runProductionInjection({
       clip,
       expectedMidis: [60, 64, 67],
-      checkpointId: 'prod-triad',
-      dwellMs: 45_000,
+      checkpointId: 'prod-triad-v3',
     })
-    console.log('PROD-TRIAD', JSON.stringify({
-      matched: results.matched?.length ?? 0,
-      wrong: results.wrong,
-      outcome: results.feedbackOutcome,
-      mode: results.micEngineMode,
-    }))
+    expect(results.matched.length).toBeGreaterThanOrEqual(1)
+    expect(results.feedbackOutcome).toBe('correct')
+    expect(results.micEngineMode).toBe('v3-performance-expectation')
+  }, 240_000)
+
+  it('completes a real piano chord on the V2 chord-collection fallback', async () => {
+    // Regression: the collection consumed ONE monophonic pitch per frame
+    // and kept a single pending index, so a real three-note chord never
+    // completed (browser-measured: "Heard: C4 + E4 - need G4"). This is
+    // the path used when V3 is off and for imported scores with no
+    // performance expectation.
+    const clip = loadPolyphonyClip('real-c-major-triad.wav')
+    const results = await runProductionInjection({
+      clip,
+      expectedMidis: [60, 64, 67],
+      checkpointId: 'prod-triad-v2',
+      v3: false,
+    })
+    expect(results.matched.length).toBeGreaterThanOrEqual(1)
+    expect(results.feedbackOutcome).toBe('correct')
+  }, 240_000)
+
+  it('never falsely completes a chord it has not heard (V2 collection path)', async () => {
+    // SAFETY: only two of the three triad tones are played. The checkpoint
+    // must NOT advance and must not be reported as wrong.
+    const clip = loadPolyphonyClip('uiowa-piano-mf-c4-e4-dyad.wav')
+    const results = await runProductionInjection({
+      clip,
+      expectedMidis: [60, 64, 67],
+      checkpointId: 'prod-partial-v2',
+      v3: false,
+      dwellMs: 40_000,
+    })
     expect(results.matched).toHaveLength(0)
     expect(results.wrong).toBe(0)
-    expect(results.feedbackOutcome).not.toBe('wrong')
+    expect(results.feedbackOutcome).not.toBe('correct')
   }, 180_000)
 
   it('does not advance on room noise (production path)', async () => {
@@ -191,6 +181,6 @@ describe('production mic live injection (v2 score-informed)', () => {
       dwellMs: 30_000,
     })
     expect(results.matched).toHaveLength(0)
-    expect(results.feedbackOutcome).not.toBe('complete')
+    expect(results.feedbackOutcome).not.toBe('correct')
   }, 180_000)
 })

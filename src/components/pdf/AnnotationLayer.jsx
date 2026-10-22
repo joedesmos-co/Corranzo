@@ -22,6 +22,22 @@ function readPageRect(layerRef) {
   return rect
 }
 
+/**
+ * The annotation brush only needs the page's box size. Storing width/height
+ * rather than the whole DOMRect keeps the value stable while the page scrolls
+ * (a DOMRect's left/top change on every scroll event), which would otherwise
+ * re-render this layer for the whole scroll.
+ */
+function samePageBox(left, right) {
+  if (left === right) {
+    return true
+  }
+  if (!left || !right) {
+    return false
+  }
+  return left.width === right.width && left.height === right.height
+}
+
 export default function AnnotationLayer({
   layout,
   strokes,
@@ -43,10 +59,23 @@ export default function AnnotationLayer({
 
   const syncPageRect = useCallback(() => {
     const rect = readPageRect(layerRef)
-    if (rect) {
-      setPageRect(rect)
-    }
+    // Value-guarded: the effect below re-runs whenever `layout` changes, and
+    // re-measures are frequent (scroll, resize, page-follow). Replacing the
+    // state object with an equal box made this effect's setState re-trigger the
+    // render that produced the new `layout` — an unbounded passive-effect loop.
+    setPageRect((previous) => {
+      const next = rect ? { width: rect.width, height: rect.height } : null
+      return samePageBox(previous, next) ? previous : next
+    })
   }, [])
+
+  // Depend on the layout's VALUES, not its identity. Callers legitimately build
+  // a fresh layout object per render, and an identity dependency here turns
+  // every render into an effect run.
+  const layoutLeft = layout?.left ?? 0
+  const layoutTop = layout?.top ?? 0
+  const layoutWidth = layout?.width
+  const layoutHeight = layout?.height
 
   useEffect(() => {
     syncPageRect()
@@ -61,7 +90,7 @@ export default function AnnotationLayer({
       window.removeEventListener('resize', syncPageRect)
       scrollTarget.removeEventListener('scroll', syncPageRect)
     }
-  }, [layout, syncPageRect])
+  }, [layoutLeft, layoutTop, layoutWidth, layoutHeight, syncPageRect])
 
   const flushPendingPoints = useCallback(() => {
     if (pendingPointsRef.current.length === 0) {

@@ -370,12 +370,13 @@ describe('Fix F: sampled piano keeps the piano-like synth fallback', () => {
     expect(freq).toBeLessThanOrEqual(3200)
   })
 
-  it('reverb is applied (wet > 0)', () => {
+  it('ambience is applied (deterministic convolver, wet > 0)', () => {
     const voiceSrc = readFileSync(
       join(__dir, '..', 'src', 'features', 'playback', 'sampledInstrumentVoice.js'),
       'utf8',
     )
-    expect(voiceSrc).toMatch(/tone\.Reverb/)
+    expect(voiceSrc).toMatch(/tone\.Convolver/)
+    expect(voiceSrc).toMatch(/AMBIENCE_IMPULSE_SEED/)
     const pianoSrc = pianoInstrumentSource()
     const match = pianoSrc.match(/reverbWet:\s*([\d.]+)/)
     expect(match).toBeTruthy()

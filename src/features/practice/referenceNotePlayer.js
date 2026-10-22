@@ -20,6 +20,7 @@ import {
  * the voice registry — never a bare synth), cached per instrument so switching
  * between piano and guitar keeps both warm.
  */
+let referenceGeneration = 0
 const referenceVoices = new Map() // instrumentId → { instrument, connected, voiceId }
 
 async function getReferenceVoice(instrumentId) {
@@ -78,6 +79,7 @@ export async function warmupReferenceVoice(instrumentId) {
 
 /** Release any sounding reference notes without tearing down cached voices. */
 export function releaseReferenceVoices(time) {
+  referenceGeneration += 1
   const now = typeof time === 'number' ? time : Tone.now?.() ?? 0
   for (const entry of referenceVoices.values()) {
     entry.instrument.releaseAll?.(now)
@@ -93,14 +95,18 @@ export async function playReferenceMidis(midis, durationSeconds = 0.55, options 
     return
   }
 
+  const generation = ++referenceGeneration
   await startToneFromUserGesture()
+  if (generation !== referenceGeneration) return
   const entry = await getReferenceVoice(options.instrumentId)
+  if (generation !== referenceGeneration) return
   connectVoiceToDestination(entry)
   await Promise.race([
     entry.instrument.whenReady?.() ?? Promise.resolve(),
     new Promise((resolve) => globalThis.setTimeout(resolve, REFERENCE_PLAYBACK_READINESS_MS)),
   ])
 
+  if (generation !== referenceGeneration) return
   const velocity = mapPlaybackVelocity(REFERENCE_VELOCITY_INPUT)
   const names = playableMidis.map((midi) => midiToNoteName(midi))
   const safeDuration = Number.isFinite(durationSeconds) && durationSeconds > 0 ? durationSeconds : 0.55
@@ -113,6 +119,7 @@ export async function playReferenceMidis(midis, durationSeconds = 0.55, options 
 }
 
 export function disposeReferencePlayer() {
+  referenceGeneration += 1
   for (const entry of referenceVoices.values()) {
     entry.instrument.releaseAll?.()
     entry.instrument.dispose()

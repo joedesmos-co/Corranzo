@@ -14,6 +14,7 @@
 export const INSTRUMENT_IDS = {
   PIANO: 'piano',
   GUITAR: 'guitar',
+  ELECTRIC_GUITAR: 'electric-guitar',
 }
 
 export const DEFAULT_INSTRUMENT_ID = INSTRUMENT_IDS.PIANO
@@ -57,7 +58,7 @@ const DEFINITIONS = {
 
   [INSTRUMENT_IDS.GUITAR]: {
     id: INSTRUMENT_IDS.GUITAR,
-    label: 'Guitar',
+    label: 'Acoustic Guitar',
     voiceId: 'guitar',
     midiRange: { min: 40, max: 88 }, // E2 .. E6 (19th fret, string 1)
     strings: {
@@ -85,6 +86,39 @@ const DEFINITIONS = {
     },
     playback: {
       /** Six strings — six simultaneous voices. */
+      maxPolyphony: 6,
+    },
+  },
+
+  [INSTRUMENT_IDS.ELECTRIC_GUITAR]: {
+    id: INSTRUMENT_IDS.ELECTRIC_GUITAR,
+    label: 'Electric Guitar',
+    voiceId: 'electric-guitar',
+    midiRange: { min: 40, max: 88 }, // E2 .. E6 (19th fret, string 1)
+    strings: {
+      count: 6,
+      tuning: STANDARD_GUITAR_TUNING,
+      fretCount: 19,
+      preferredMaxFret: 12,
+    },
+    notation: {
+      clefs: ['treble'],
+      grandStaff: false,
+      supportsTablature: true,
+      /** Guitar sounds an octave below written treble-clef pitch. */
+      writtenOctaveOffset: -1,
+    },
+    omr: {
+      partName: 'Electric Guitar',
+      stavesPerSystem: 1,
+      supportsTablature: true,
+    },
+    visualPractice: {
+      kind: 'fretboard',
+    },
+    playback: {
+      /** Clean tone only — crunch/distortion are unsupported. */
+      tone: 'clean',
       maxPolyphony: 6,
     },
   },

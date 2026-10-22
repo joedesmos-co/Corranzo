@@ -188,6 +188,23 @@ describe('practice library pieces', () => {
     expect(filterLibraryItems(pianoPieces, 'bach.mid')).toHaveLength(1)
     expect(filterLibraryItems(guitarPieces, 'bach')).toEqual([])
   })
+
+  it('prefers the authored MusicXML work title over the upload filename', () => {
+    const xml = '<?xml version="1.0"?><score-partwise><work><work-title>Moonlight Sonata</work-title></work><part-list/></score-partwise>'
+    const bytes = new TextEncoder().encode(xml).buffer
+    const bundles = {
+      [INSTRUMENT_IDS.PIANO]: {
+        instrumentId: INSTRUMENT_IDS.PIANO,
+        pdfMeta: { fileName: 'scan001.pdf' },
+        musicXmlSource: { fileName: 'scan001.musicxml', data: bytes, source: 'upload' },
+        demoPieceActive: false,
+      },
+    }
+    const [card] = buildUploadedPracticePieces(bundles, { activeInstrumentId: INSTRUMENT_IDS.PIANO })
+    expect(card.title).toBe('Moonlight Sonata')
+    expect(card.musicXmlFileName).toBe('scan001.musicxml')
+    expect(card.pdfFileName).toBe('scan001.pdf')
+  })
 })
 
 describe('library tab shell', () => {

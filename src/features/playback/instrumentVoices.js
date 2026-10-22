@@ -13,6 +13,7 @@
 const VOICE_MODULE_LOADERS = {
   piano: () => import('./pianoInstrument.js'),
   guitar: () => import('./guitarInstrument.js'),
+  'electric-guitar': () => import('./electricGuitarInstrument.js'),
 }
 
 const FALLBACK_VOICE_ID = 'piano'

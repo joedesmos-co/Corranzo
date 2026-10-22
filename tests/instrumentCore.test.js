@@ -29,11 +29,12 @@ import {
 const GUITAR_STRINGS = getInstrument(INSTRUMENT_IDS.GUITAR).strings
 
 describe('instrument registry', () => {
-  it('supports exactly piano and guitar, defaulting to piano', () => {
-    expect(listInstruments().map((item) => item.id)).toEqual(['piano', 'guitar'])
+  it('supports piano, acoustic guitar, and clean electric guitar, defaulting to piano', () => {
+    expect(listInstruments().map((item) => item.id)).toEqual(['piano', 'guitar', 'electric-guitar'])
     expect(DEFAULT_INSTRUMENT_ID).toBe('piano')
     expect(isSupportedInstrumentId('piano')).toBe(true)
     expect(isSupportedInstrumentId('guitar')).toBe(true)
+    expect(isSupportedInstrumentId('electric-guitar')).toBe(true)
     expect(isSupportedInstrumentId('violin')).toBe(false)
   })
 

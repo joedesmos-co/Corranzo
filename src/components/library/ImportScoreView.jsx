@@ -6,7 +6,11 @@ import PdfOmrPlaybackPanel from './PdfOmrPlaybackPanel.jsx'
 import Icon from '../../design/Icon.jsx'
 import { getInstrument } from '../../features/instruments/instruments.js'
 import useMusicXmlTiming from '../../features/musicxml/useMusicXmlTiming.js'
-import { isLibraryScoreTimingReady, musicXmlSourceKey, shouldShowLibraryOmrPanel } from '../../features/import/musicXmlSource.js'
+import {
+  isLibraryScoreTimingReady,
+  musicXmlSourceKey,
+  shouldShowLibraryOmrPanel,
+} from '../../features/import/musicXmlSource.js'
 import { PRACTICE_MODE, PRACTICE_MODE_LABELS, normalizePracticeMode } from '../../features/practice/practiceMode.js'
 import { IMPORT_MODE_HELP } from '../../features/import/importPresentation.js'
 import useCompanionMidiCheck from '../../features/import/useCompanionMidiCheck.js'
@@ -45,7 +49,16 @@ export default function ImportScoreView({
   const owned = !musicXmlSource?.ownerPdfIdentity || musicXmlSource.ownerPdfIdentity === pdfIdentity
   const sourceReady = owned && isLibraryScoreTimingReady(musicXmlSource)
   const mapReady = timing.timingMap?.sourceContentKey === musicXmlSourceKey(musicXmlSource)
-  const ready = hasPdf && pdfState === 'ready' && sourceReady && mapReady && !timing.isLoading && !timing.error && timing.timingMap?.notes?.length > 0
+  // A9 — audio arrangements carry no PDF: timing readiness alone opens practice.
+  // The timing map (parsed from our MusicXML) drives Preview / Play Along /
+  // Wait For You exactly as it does for uploads; PDF page-follow visuals are
+  // unavailable, which the arrangement banner states honestly.
+  const isAudioArrangement = musicXmlSource?.source === 'audio-arrangement'
+  const arrangementMeta = isAudioArrangement ? musicXmlSource?.omrMeta?.arrangement ?? null : null
+  const timingReady = sourceReady && mapReady && !timing.isLoading && !timing.error && timing.timingMap?.notes?.length > 0
+  // PDF-first: the page is the score, so a PDF is required. Audio Vision
+  // arrangements are the one PDF-less source (there is no page to read).
+  const ready = isAudioArrangement ? timingReady : hasPdf && pdfState === 'ready' && timingReady
   const emptyNotation = sourceReady && mapReady && !timing.isLoading && !timing.error && !timing.timingMap?.notes?.length
   const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource, pdfIdentity })
   const qualityWarning = musicXmlSource?.omrMeta?.quality?.acceptance === 'warning'
@@ -91,10 +104,30 @@ export default function ImportScoreView({
         </> : <>
           <MultiFileUpload {...pickerProps} />
           <p className="score-import-format-note">A digital PDF or a clear scan works best. Have a photo? Save or print it as a PDF first.</p>
-          <div className="score-import-how"><span>01</span><p><strong>Choose your sheet music</strong>A PDF is all you need to start.</p><span>02</span><p><strong>Let Corranzo read the page</strong>We’ll prepare playback and tell you if anything needs a closer look.</p><span>03</span><p><strong>Make it your own</strong>Choose how to begin, then open your score.</p></div>
+          <div className="score-import-how"><span>01</span><p><strong>Choose your sheet music</strong>A PDF is all you need to start.</p><span>02</span><p><strong>Let Corranzo read the notes</strong>We’ll prepare playback and tell you if anything needs a closer look.</p><span>03</span><p><strong>Make it your own</strong>Choose how to begin, then open your score.</p></div>
         </>}
       </div>
       <div className="score-import-outcome">
+        {isAudioArrangement && !ready && <div className="score-import-message" role="status">
+          <h2>Preparing your arrangement</h2>
+          <p>{timing.error || emptyNotation ? 'The arrangement could not be read. Try analyzing the recording again.' : 'Reading the generated notation and preparing playback.'}</p>
+        </div>}
+        {isAudioArrangement && ready && arrangementMeta && <div className="score-import-message" role="note">
+          <h2>Arranged from your recording</h2>
+          <p>
+            {arrangementMeta.targetPart === 'solo-guitar' ? 'Solo guitar with standard notation + TAB' : 'Solo piano, two hands'}
+            {arrangementMeta.difficulty ? ` · ${arrangementMeta.difficulty}` : ''}
+            {Number.isFinite(arrangementMeta.confidence) ? ` · confidence ${Math.round(arrangementMeta.confidence * 100)}%` : ''}.
+            {arrangementMeta.excerpt?.truncated
+              ? ` Covers ${Math.floor(arrangementMeta.excerpt.startSeconds / 60)}:${String(Math.floor(arrangementMeta.excerpt.startSeconds % 60)).padStart(2, '0')}–${Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) / 60)}:${String(Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) % 60)).padStart(2, '0')} of the recording.`
+              : ''}
+            Page-follow visuals need a PDF — timing, playback and practice modes work from the notation.
+            {arrangementMeta.uncertainRegions > 0
+              ? ` ${arrangementMeta.uncertainRegions} passage${arrangementMeta.uncertainRegions === 1 ? '' : 's'} could not be corroborated by an independent check — review before you practice.`
+              : ''}
+            {arrangementMeta.partial ? ' Some passages were uncertain; listen through before you practice.' : ''}
+          </p>
+        </div>}
         {!hasPdf && <div className="score-import-empty"><p className="cz-edition-label">A little care goes a long way</p><h2>A clear page.<br />A better start.</h2><p>Include the whole page, keep notes sharp, and avoid glare or shadows. For photos, keep the camera square to the music.</p><p>Your score is prepared in this browser.</p></div>}
         {hasPdf && showOmrPanel && <PdfOmrPlaybackPanel
           key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
@@ -129,10 +162,11 @@ export default function ImportScoreView({
           <MultiFileUpload {...pickerProps} advanced disabled={uploadsDisabled || !hasPdf} />
           {musicXmlSource?.fileName && <div className="score-import-attachment"><span>{musicXmlSource.fileName}</span><button onClick={onClearMusicXml} disabled={uploadsDisabled}>Remove notation file</button></div>}
           {midiFileName && <div className="score-import-attachment"><span>{midiFileName}</span><button onClick={onClearMidi} disabled={uploadsDisabled}>Remove MIDI</button></div>}
-          {!hasPdf && (musicXmlSource || midiFileName) && <p role="status">Optional files are attached. Add the matching PDF to open a score.</p>}
-          {timing.error && <p className="score-import-detail">{timing.error}</p>}
-          {importFeedback?.message && <p className="score-import-detail">{importFeedback.message}</p>}
-          <p>Native MuseScore files and direct image files aren’t supported here. Export your score to PDF or MusicXML first.</p>
+        {!musicXmlSource && !isAudioArrangement && (musicXmlSource || midiFileName) && <p role="status">Optional files are attached. Add the matching PDF to open a score.</p>}
+        {musicXmlSource && !isAudioArrangement && <p role="status">Attached under Advanced. Add the matching PDF to open a score.</p>}
+        {timing.error && <p className="score-import-detail">{timing.error}</p>}
+        {importFeedback?.message && <p className="score-import-detail">{importFeedback.message}</p>}
+        <p>Native MuseScore files and direct image files aren’t supported here. Export your score to PDF first — a MusicXML export can be attached under Advanced for score following.</p>
         </details>
       </div>
     </div>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE score-partwise  PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+
+<!-- Repaired 2026-10-14 by scripts/repair-flattened-practice-musicxml.mjs
+     from the bundled Mutopia MIDI (the authoritative source this file was
+     derived from): music21 MIDI-to-MusicXML conversion had flattened the
+     two-voice texture into one sequential stream (overfull measures).
+     Pitches and written durations preserved 1:1; onsets restored from the
+     MIDI; voice split derived by non-overlap coloring. Verified against
+     the MIDI note-for-note. See docs/timing-integrity-investigation.md. -->
 <score-partwise version="3.1"><work><work-title>Study in A Minor</work-title></work> version="4.0">
   <movement-title>Music21 Fragment</movement-title>
   <identification>
@@ -42,8 +50,7 @@
   <!--=========================== Part 1 ===========================-->
   <part id="Pd2223731f5a016f23ce4f6f632bbad1a">
     <!--========================= Measure 1 ==========================-->
-    <measure implicit="no" number="1">
-      <attributes>
+    <measure implicit="no" number="1"><attributes>
         <divisions>10080</divisions>
         <key>
           <fifths>0</fifths>
@@ -57,8 +64,7 @@
           <sign>F</sign>
           <line>4</line>
         </clef>
-      </attributes>
-      <direction>
+      </attributes><direction>
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -66,2219 +72,1964 @@
           </metronome>
         </direction-type>
         <sound tempo="90" />
-      </direction>
-      <note dynamics="100.00">
+      </direction><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
-          <step>B</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 2 ==========================-->
-    <measure implicit="no" number="2">
-      <note dynamics="100.00">
+    <measure implicit="no" number="2"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 3 ==========================-->
-    <measure implicit="no" number="3">
-      <note dynamics="100.00">
+    <measure implicit="no" number="3"><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 4 ==========================-->
-    <measure implicit="no" number="4">
-      <note dynamics="100.00">
+    <measure implicit="no" number="4"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 5 ==========================-->
-    <measure implicit="no" number="5">
-      <note dynamics="100.00">
+    <measure implicit="no" number="5"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
-          <step>B</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 6 ==========================-->
-    <measure implicit="no" number="6">
-      <note dynamics="100.00">
+    <measure implicit="no" number="6"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>0</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>natural</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>C</step>
-          <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
         <accidental>sharp</accidental>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note></measure>
     <!--========================= Measure 7 ==========================-->
-    <measure implicit="no" number="7">
-      <note dynamics="100.00">
+    <measure implicit="no" number="7"><note dynamics="100.00">
         <pitch>
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>G</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
         <accidental>sharp</accidental>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note></measure>
     <!--========================= Measure 8 ==========================-->
-    <measure implicit="no" number="8">
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+    <measure implicit="no" number="8"><note>
+        <rest />
+        <duration>10080</duration><voice>1</voice>
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note>
-        <rest />
-        <duration>10080</duration>
+      </note><backup><duration>30240</duration></backup><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-    </measure>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><backup><duration>20160</duration></backup><note><rest/><duration>2520</duration><voice>3</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 9 ==========================-->
-    <measure implicit="no" number="9">
-      <note dynamics="100.00">
+    <measure implicit="no" number="9"><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>10080</duration><voice>1</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>quarter</type>
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 10 =========================-->
-    <measure implicit="no" number="10">
-      <note dynamics="100.00">
+    <measure implicit="no" number="10"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 11 =========================-->
-    <measure implicit="no" number="11">
-      <note dynamics="100.00">
+    <measure implicit="no" number="11"><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 12 =========================-->
-    <measure implicit="no" number="12">
-      <note dynamics="100.00">
-        <pitch>
-          <step>G</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-      </note>
-      <note>
+    <measure implicit="no" number="12"><note>
         <rest />
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <type>quarter</type>
-      </note>
-    </measure>
-    <!--========================= Measure 13 =========================-->
-    <measure implicit="no" number="13">
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration><voice>1</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>quarter</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration><voice>1</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>quarter</type>
+      </note><backup><duration>30240</duration></backup><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>20160</duration></backup><note><rest/><duration>2520</duration><voice>3</voice></note><note dynamics="100.00">
         <pitch>
-          <step>E</step>
+          <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13"><note dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+        <accidental>sharp</accidental>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+        <type>quarter</type>
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>10080</duration><voice>1</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>quarter</type>
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 14 =========================-->
-    <measure implicit="no" number="14">
-      <note dynamics="100.00">
+    <measure implicit="no" number="14"><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
-          <step>A</step>
+          <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+        <type>quarter</type>
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
-          <step>A</step>
-          <octave>3</octave>
+          <step>E</step>
+          <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-    </measure>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note></measure>
     <!--========================= Measure 15 =========================-->
-    <measure implicit="no" number="15">
-      <note dynamics="100.00">
+    <measure implicit="no" number="15"><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>G</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>G</step>
-          <alter>1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-        <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
+      </note><backup><duration>40320</duration></backup><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
         <accidental>sharp</accidental>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+        <accidental>sharp</accidental>
+      </note><note dynamics="100.00">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>G</step>
           <alter>1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>2520</duration>
+        <duration>2520</duration><voice>2</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>16th</type>
         <accidental>sharp</accidental>
-      </note>
-    </measure>
+      </note></measure>
     <!--========================= Measure 16 =========================-->
-    <measure implicit="no" number="16">
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>10080</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+    <measure implicit="no" number="16"><note>
+        <rest />
+        <duration>10080</duration><voice>1</voice>
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <instrument id="I5063464e6a88832b73f199b39182adc5" />
-        <type>16th</type>
-      </note>
-      <note dynamics="100.00">
+      </note><note dynamics="100.00">
         <pitch>
           <step>A</step>
           <octave>2</octave>
         </pitch>
-        <duration>10080</duration>
+        <duration>10080</duration><voice>1</voice>
         <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <note>
-        <rest />
-        <duration>10080</duration>
+      </note><backup><duration>30240</duration></backup><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>10080</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
         <type>quarter</type>
-      </note>
-      <barline location="right">
+      </note><note><rest/><duration>2520</duration><voice>2</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>2</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><backup><duration>20160</duration></backup><note><rest/><duration>2520</duration><voice>3</voice></note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><note dynamics="100.00">
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2520</duration><voice>3</voice>
+        <instrument id="I5063464e6a88832b73f199b39182adc5" />
+        <type>16th</type>
+      </note><barline location="right">
         <bar-style>light-heavy</bar-style>
-      </barline>
-    </measure>
+      </barline></measure>
   </part>
 </score-partwise>

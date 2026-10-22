@@ -145,7 +145,13 @@ expect(app).toMatch(
 
     expect(micQa).toContain("getByRole('dialog', { name: 'How should Corranzo hear you?' })")
     expect(micQa).toContain("getByRole('radiogroup', { name: 'Practice input source' })")
-    expect(micQa).toContain("locator('.wait-for-you__mic-calibration, .wait-for-you__mic-off')")
-    expect(micQa).toContain("openWfyMicPractice(page, { chooseInput: false })")
+    expect(micQa).toContain('openWfyMicPractice(page, { chooseInput: false })')
+    // The first-run input control moved into the workspace dock's
+    // "Practice input" tool as MicrophoneInputStatusPanel, so the QA script
+    // must address that surface (the retired .wait-for-you__mic-* markers
+    // no longer exist in the shell).
+    expect(micQa).toContain('openMicStatusPanel')
+    expect(micQa).toContain('.mic-input-status')
+    expect(micQa).toContain("getByRole('button', { name: 'Practice input' })")
   })
 })

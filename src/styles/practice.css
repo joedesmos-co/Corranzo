@@ -1122,6 +1122,17 @@
   line-height: 1.45;
 }
 
+.wait-for-you__timing-notice {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(190, 160, 90, 0.34);
+  border-radius: 8px;
+  background: rgba(220, 200, 120, 0.08);
+  color: #e6d9b8;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
 .wait-for-you__mic-off {
   display: grid;
   gap: 8px;

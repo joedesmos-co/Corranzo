@@ -9,6 +9,24 @@ const PAGE_CHANGE_ALPHA = 0.55
 const SNAP_THRESHOLD = 0.0005
 
 /**
+ * Wait-For-You checkpoint glide.
+ *
+ * The checkpoint positions themselves are exact — the bar must end precisely
+ * on the required notehead. What is wrong is the TRANSITION: hopping from one
+ * checkpoint column to the next reads as a teleport, because the eye expects
+ * the cursor to travel. So the bar glides: a bounded, eased move that covers
+ * the gap and then holds on the note while the musician plays.
+ *
+ * The glide is deliberately small and additive — it never changes where the
+ * cursor lands, only how it gets there.
+ */
+const CHECKPOINT_GLIDE_MIN_DISTANCE = 0.0008
+const CHECKPOINT_GLIDE_BASE_MS = 210
+const CHECKPOINT_GLIDE_MAX_MS = 420
+/** Page-normalised distance → extra milliseconds (a long gap takes longer). */
+const CHECKPOINT_GLIDE_MS_PER_UNIT = 2400
+
+/**
  * Audio-clock cursor driver. During playback the RAF loop reads
  * `getScoreTime()` (Tone-synchronized) and publishes to the imperative runtime
  * store so the overlay can paint at 60 fps without React re-rendering the
@@ -17,6 +35,7 @@ const SNAP_THRESHOLD = 0.0005
 export default function useScoreFollowCursorDriver({
   targetCursor,
   active,
+  smoothCheckpoints = false,
   resetSnapKey = '',
   lockExact = false,
   getScoreTime = null,
@@ -49,20 +68,43 @@ export default function useScoreFollowCursorDriver({
   }, [resetSnapKey])
 
   useEffect(() => {
-    if (lockExact || !active) {
-      const next = targetCursor ?? { visible: false }
-      stateRef.current.initialized = false
-      publishScoreFollowCursor({ ...next, smoothed: false })
-      if (next.visible) {
-        stateRef.current.x = next.x
-        stateRef.current.y = next.y
-        stateRef.current.page = next.page
-        stateRef.current.measureNumber = next.measureNumber ?? null
-        stateRef.current.systemKey = systemKeyForCursor(next)
-        stateRef.current.initialized = true
-      }
+    if (active && !lockExact) return undefined
+    const next = targetCursor ?? { visible: false }
+    const state = stateRef.current
+    const fromX = state.x
+    const fromY = state.y
+    const toX = Number.isFinite(next.x) ? next.x : fromX
+    const toY = Number.isFinite(next.y) ? next.y : fromY
+    const distance = Math.abs(toX - fromX)
+    // A page change is a different surface, not a gap to travel across: the
+    // bar appears on the new page instead of sliding over the page break.
+    const glide =
+      smoothCheckpoints &&
+      next.visible &&
+      state.initialized &&
+      Number.isFinite(fromX) &&
+      distance > CHECKPOINT_GLIDE_MIN_DISTANCE &&
+      next.page === state.page
+    const duration = Math.min(
+      CHECKPOINT_GLIDE_MAX_MS,
+      CHECKPOINT_GLIDE_BASE_MS + distance * CHECKPOINT_GLIDE_MS_PER_UNIT,
+    )
+    let frame = 0
+    const start = performance.now()
+    const paint = (now) => {
+      const progress = glide ? Math.min(1, (now - start) / duration) : 1
+      const ease = progress * progress * (3 - 2 * progress)
+      const x = glide ? fromX + (toX - fromX) * ease : toX
+      const y = glide ? fromY + (toY - fromY) * ease : toY
+      Object.assign(state, { x, y, page: next.page,
+        measureNumber: next.measureNumber, systemKey: systemKeyForCursor(next),
+        initialized: Boolean(next.visible) })
+      publishScoreFollowCursor({ ...next, x, y, smoothed: glide && progress < 1 })
+      if (progress < 1) frame = requestAnimationFrame(paint)
     }
-  }, [lockExact, active, targetCursor])
+    paint(start)
+    return () => cancelAnimationFrame(frame)
+  }, [lockExact, active, targetCursor, smoothCheckpoints])
 
   useEffect(() => {
     if (!active || lockExact) {

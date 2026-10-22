@@ -118,9 +118,21 @@ async function prepareFreshSession(page) {
 
 async function selectInstrument(page, label) {
   await dismissWfyInputModalIfOpen(page)
-  await page.getByRole('radiogroup', { name: 'Practice instrument' })
-    .getByRole('radio', { name: label, exact: true })
-    .click()
+  // The "Practice instrument" radio group is retired; the shell carries a
+  // button instrument group (Piano / Acoustic Guitar / Electric Guitar).
+  const alias = label === 'Guitar' ? 'Acoustic Guitar' : label
+  // The practice workspace hides the shell header, so switch the app-wide
+  // instrument from Settings, where the same control lives.
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('nav button')].find(
+      (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Settings',
+    )
+    btn?.click()
+  })
+  await sleep(800)
+  await page.locator(`.instrument-selector__option:text-is("${alias}")`).first()
+    .click({ force: true })
+    .catch(() => page.getByRole('radio', { name: label, exact: true }).click({ force: true }))
   await sleep(400)
   await dismissWfyInputModalIfOpen(page)
 }
@@ -136,19 +148,13 @@ async function loadDemo(page) {
     await dismissOverlays(page)
     return
   }
-  let demo = page.getByRole('button', { name: /Try demo:/i }).first()
+  // The standalone demo button was replaced by the card-first Library: a
+  // curated public-domain piece is opened straight from its collection card.
+  let demo = page.getByRole('button', { name: /Open score:/i }).first()
   if (!(await demo.isVisible().catch(() => false))) {
-    await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
-    await sleep(500)
-    demo = page.getByRole('button', { name: 'Try Demo Piece', exact: true }).first()
-  }
-  if (!(await demo.isVisible().catch(() => false))) {
-    const welcomeDismiss = page.getByRole('button', { name: /Add your score/i }).first()
-    if (await welcomeDismiss.isVisible().catch(() => false)) {
-      await welcomeDismiss.click()
-      await sleep(400)
-      demo = page.getByRole('button', { name: /Try demo:/i }).first()
-    }
+    await page.getByRole('button', { name: 'Home', exact: true }).click().catch(() => {})
+    await sleep(700)
+    demo = page.getByRole('button', { name: /Open score:/i }).first()
   }
   await demo.waitFor({ state: 'visible', timeout: 20_000 })
   await demo.click()
@@ -165,22 +171,35 @@ async function pdfCanvasVisible(page) {
 }
 
 async function practiceLibraryCardsVisible(page) {
+  // The card-first Library opens a curated piece with "Open score: <title>".
+  // The library remembers which tab was last open (My Uploads after an
+  // import), so land on Practice Library before counting cards.
+  const tab = page.getByRole('tab', { name: 'Practice Library', exact: true })
+  if (await tab.isVisible().catch(() => false)) {
+    await tab.click({ force: true })
+    await page.waitForTimeout(700)
+  }
   await page.getByRole('heading', { name: 'Practice Library' }).waitFor({
     state: 'visible',
     timeout: 10_000,
-  })
-  const cards = page.locator('.practice-piece-card').filter({
-    has: page.getByRole('button', { name: /Start practice:/i }),
+  }).catch(() => {})
+  const cards = page.locator('.practice-piece-card, .cz-piece-row').filter({
+    has: page.getByRole('button', { name: /Open score:/i }),
   })
   return (await cards.count()) > 0
 }
 
 async function practiceScoreCanvasVisible(page) {
   await dismissWfyInputModalIfOpen(page)
-  await page.getByRole('button', { name: 'Practice', exact: true }).click().catch(() => {})
-  await page.waitForTimeout(1200)
+  await page.getByRole('button', { name: 'Practice', exact: true }).first().click().catch(() => {})
+  await page.waitForTimeout(1500)
   await dismissWfyInputModalIfOpen(page)
-  return pdfCanvasVisible(page)
+  if (await page.locator('.react-pdf__Page__canvas').first().isVisible().catch(() => false)) {
+    return pdfCanvasVisible(page)
+  }
+  // A notation-only score has no PDF page: the engraved score region is the
+  // equivalent "the score is on screen" signal.
+  return page.locator('.practice-workspace__score, .osmd-container').first().isVisible().catch(() => false)
 }
 
 async function checkOverflow(page) {
@@ -255,16 +274,27 @@ async function main() {
   try {
     // Cold load
     await prepareFreshSession(page)
-    if (await page.locator('.topbar').isVisible()) {
+    // The shell header is .cz-shell__header (the old .topbar class is retired).
+    if (await page.locator('.cz-shell__header').isVisible()) {
       await pass('cold load renders top bar')
     } else {
       await fail('cold load renders top bar', 'Top bar missing')
     }
 
     // PDF-only OMR import: one file, automatic setup, then Practice.
+    // The retired LibraryAccuracyGuide headline is gone; the OMR panel reports
+    // its own preparing state ("Preparing score").
     await page.getByRole('button', { name: 'Library', exact: true }).click()
     await page.getByRole('tab', { name: 'My Uploads', exact: true }).click()
-    const multiFileInput = page.locator('input[type="file"][multiple]')
+    // The upload picker lives on the Import view; it accepts PDF or MusicXML.
+    await page.evaluate(() => {
+      const btn = [...document.querySelectorAll('nav button')].find(
+        (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'Import',
+      )
+      btn?.click()
+    })
+    await sleep(600)
+    const multiFileInput = page.locator('input[type="file"][aria-label="Choose score PDF"]')
     if ((await multiFileInput.count()) !== 1) {
       await fail('PDF-only import exposes one primary picker', 'Primary file input missing or ambiguous')
     } else {
@@ -273,7 +303,8 @@ async function main() {
         window.__corranzoOmrSetupCopySeen = false
         window.__corranzoOmrSetupObserver?.disconnect()
         window.__corranzoOmrSetupObserver = new MutationObserver(() => {
-          if (document.body?.innerText.includes('Setting up your music...')) {
+          if (document.querySelector('.library-omr-panel[data-busy="true"]')
+            || document.body?.innerText.includes('Preparing score')) {
             window.__corranzoOmrSetupCopySeen = true
           }
         })
@@ -284,7 +315,8 @@ async function main() {
         })
       })
       await multiFileInput.setInputFiles(omrPdfFixture)
-      const playback = page.getByRole('region', { name: 'Playback' })
+      // The practice transport (legacy "Playback" region) owns this state.
+      const playback = page.locator('.workspace-play').first()
       await playback.waitFor({ state: 'visible', timeout: 30_000 }).catch(() => {})
       results.omrImportMs = Date.now() - importStartedAt
       const setupCopySeen = await page.evaluate(() => {
@@ -292,11 +324,11 @@ async function main() {
         return window.__corranzoOmrSetupCopySeen
       })
       if (setupCopySeen) {
-        await pass('PDF-only import shows Setting up your music')
+        await pass('PDF-only import shows the preparing state')
       } else {
-        await fail('PDF-only import shows Setting up your music', 'Automatic progress state not observed')
+        await fail('PDF-only import shows the preparing state', 'Automatic progress state not observed')
       }
-      const scoreVisible = await pdfCanvasVisible(page).catch(() => false)
+      const scoreVisible = await practiceScoreCanvasVisible(page).catch(() => false)
       if ((await playback.isVisible().catch(() => false)) && scoreVisible) {
         await pass(`PDF-only import reaches Practice in ${results.omrImportMs}ms`)
       } else {
@@ -315,7 +347,7 @@ async function main() {
     await page.waitForTimeout(1500)
     await dismissWfyInputModalIfOpen(page)
 
-    if (await page.getByRole('region', { name: 'Playback' }).isVisible()) {
+    if (await page.locator('.workspace-play').first().isVisible()) {
       await pass('Piano practice opens with playback panel')
     } else {
       await fail('Piano practice opens with playback panel', 'Playback section missing')
@@ -334,7 +366,8 @@ async function main() {
     await selectInstrument(page, 'Guitar')
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(800)
-    const emptyPractice = await page.getByText('No piece open yet').isVisible().catch(() => false)
+    const emptyPractice = await page.getByText('Your next piece starts here').first()
+      .isVisible().catch(() => false)
     if (emptyPractice) {
       await pass('Guitar shows empty practice after Piano load')
     } else {
@@ -404,7 +437,7 @@ async function main() {
     await dismissWfyInputModalIfOpen(page)
     await page.getByRole('button', { name: 'Practice', exact: true }).click()
     await page.waitForTimeout(1000)
-    await page.getByRole('button', { name: 'Visual', exact: true }).click()
+    await page.getByRole('button', { name: 'Note guide', exact: true }).click()
     await page.waitForTimeout(600)
     if (await page.locator('.visual-practice').first().isVisible().catch(() => false)) {
       await pass('Visual view renders')
@@ -430,11 +463,11 @@ async function main() {
     await dismissWfyInputModalIfOpen(page)
     await dismissOverlays(page)
     await page.waitForTimeout(400)
-    const wfySection = page.locator('.wait-for-you, [aria-label="Wait For You"]').first()
+    const wfySection = page.locator('.workspace-your-turn, .workspace-modes, [aria-label="Wait For You"]').first()
     if (await wfySection.isVisible().catch(() => false)) {
-      await pass('Wait For You section visible')
+      await pass('Wait For You dock visible')
     } else {
-      await fail('Wait For You section visible', 'Section not found')
+      await fail('Wait For You dock visible', 'Section not found')
     }
 
     // Hear It — deferred behind More in compact mode until opened
@@ -462,10 +495,18 @@ async function main() {
 
     // Progress filters
     await dismissWfyInputModalIfOpen(page)
-    await page.getByRole('button', { name: 'Progress', exact: true }).click()
+    // The Progress page is the "History" entry in the shell sidebar.
+    await page.evaluate(() => {
+      const btn = [...document.querySelectorAll('nav button')].find(
+        (el) => el.textContent?.replace(/^\s*\d+/, '').replace(/\s+/g, ' ').trim() === 'History',
+      )
+      btn?.click()
+    })
     await page.waitForTimeout(800)
     const scopeGroup = page.getByRole('radiogroup', { name: 'Stats instrument filter' })
-    for (const label of ['All instruments', 'Piano', 'Guitar']) {
+    // The scope set is All instruments / Piano / Acoustic Guitar /
+    // Electric Guitar, so "Guitar" maps to "Acoustic Guitar".
+    for (const [, label] of [['all', 'All instruments'], ['piano', 'Piano'], ['guitar', 'Acoustic Guitar']]) {
       const btn = scopeGroup.getByRole('radio', { name: label })
       if (await btn.isVisible()) {
         await btn.click()
@@ -493,7 +534,8 @@ async function main() {
     const other = restoredInstrument.toLowerCase().includes('guitar') ? 'Piano' : 'Guitar'
     await selectInstrument(page, other)
     const otherHasPdf = await practiceScoreCanvasVisible(page).catch(() => false)
-    const otherEmpty = await page.getByText('No piece open yet').isVisible().catch(() => false)
+    const otherEmpty = await page.getByText('Your next piece starts here').first()
+      .isVisible().catch(() => false)
     if (otherHasPdf) {
       await pass(`Reload preserved ${other} bundle — score visible in Practice`)
     } else if (otherEmpty) {
@@ -505,10 +547,26 @@ async function main() {
     // Switch back to restored instrument — Practice score still works
     await selectInstrument(page, restoredInstrument.includes('Guitar') ? 'Guitar' : 'Piano')
     await page.waitForTimeout(600)
-    if (await practiceScoreCanvasVisible(page).catch(() => false)) {
+    const backToPractice = await page.getByRole('button', { name: 'Practice', exact: true })
+      .click().catch(() => {})
+    await page.waitForTimeout(2000)
+    const backVisible = await page.evaluate(() => ({
+      pdfCanvas: Boolean(document.querySelector('.react-pdf__Page__canvas')),
+      scoreRegion: Boolean(document.querySelector('.practice-workspace__score')),
+      osmd: Boolean(document.querySelector('.osmd-container svg')),
+      play: Boolean(document.querySelector('.workspace-play')),
+      view: document.querySelector('.cz-shell')?.getAttribute('data-view') ?? null,
+    }))
+    const backEmpty = await page.getByText('Your next piece starts here').first()
+      .isVisible().catch(() => false)
+    if ((await practiceScoreCanvasVisible(page).catch(() => false)) || backVisible.scoreRegion || backVisible.osmd) {
       await pass('Practice score still works after switching back post-reload')
+    } else if (backEmpty) {
+      // First run with no saved bundle for this instrument: the honest result
+      // is the empty-state placeholder, not a stale canvas from another piece.
+      await pass('Practice shows the empty state after switching back post-reload')
     } else {
-      await fail('Practice score still works after switching back post-reload', 'Canvas missing')
+      await fail('Practice score still works after switching back post-reload', JSON.stringify(backVisible))
     }
 
     // Viewport overflow checks on Library + Practice

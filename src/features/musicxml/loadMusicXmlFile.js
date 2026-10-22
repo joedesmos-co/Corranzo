@@ -1,6 +1,27 @@
 import { XMLParser } from 'fast-xml-parser'
 import JSZip from 'jszip'
 
+/** Local-file header signature; the archive's own container.xml is the source
+ *  of truth for the root member once this matches. */
+function startsWithZipMagic(bytes) {
+  return Boolean(bytes) && bytes.byteLength >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4b
+}
+
+/**
+ * True when the file's BYTES are a compressed MusicXML archive. Content, not
+ * extension: a compressor/decompressor may legitimately leave a `.mxl` name
+ * on uncompressed XML, and the engraver gets the same plain-XML payload
+ * either way.
+ */
+export async function isCompressedScoreFile(file) {
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer(), 0, Math.min(file.size, 4))
+    return startsWithZipMagic(bytes)
+  } catch {
+    return false
+  }
+}
+
 function isMxlFile(file) {
   const name = file.name.toLowerCase()
   return name.endsWith('.mxl') || file.type === 'application/vnd.recordare.musicxml+xml'
@@ -35,11 +56,18 @@ async function resolveMxlRootPath(zip) {
     }
   }
 
+  // `endsWith('.xml')` is not enough: the canonical extension is `.musicxml`,
+  // whose last four characters are "cxml", so a container-less archive whose
+  // root member is "score.musicxml" would otherwise look empty.
   const xmlEntries = Object.keys(zip.files).filter(
-    (path) =>
-      path.toLowerCase().endsWith('.xml') &&
-      !path.startsWith('__MACOSX') &&
-      !/META-INF\/container\.xml/i.test(path),
+    (path) => {
+      const lower = path.toLowerCase()
+      return (
+        (lower.endsWith('.xml') || lower.endsWith('.musicxml')) &&
+        !path.startsWith('__MACOSX') &&
+        !/META-INF\/container\.xml/i.test(path)
+      )
+    },
   )
 
   if (xmlEntries.length === 0) {
@@ -49,10 +77,10 @@ async function resolveMxlRootPath(zip) {
   return xmlEntries[0]
 }
 
-async function readMxlXml(file) {
+async function readMxlXml(file, bytes = null) {
   let zip
   try {
-    zip = await JSZip.loadAsync(await file.arrayBuffer())
+    zip = await JSZip.loadAsync(bytes ?? (await file.arrayBuffer()))
   } catch (zipError) {
     const message =
       zipError instanceof Error ? zipError.message.toLowerCase() : ''
@@ -93,10 +121,10 @@ export function isMusicXmlFile(file) {
 }
 
 export async function loadMusicXmlFile(file) {
-  if (isMxlFile(file)) {
+  if (await isCompressedScoreFile(file)) {
     return readMxlXml(file)
   }
-  if (isXmlFile(file)) {
+  if (isXmlFile(file) || isMxlFile(file)) {
     return file.text()
   }
   throw new Error('Unsupported file type. Upload .musicxml, .xml, or .mxl.')

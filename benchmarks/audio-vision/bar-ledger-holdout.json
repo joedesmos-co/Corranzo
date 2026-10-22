@@ -1,0 +1,1040 @@
+{
+  "rows": [
+    {
+      "id": "holdout-01-bn1-129-eb-comp",
+      "bars": 6,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 5,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 1,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.167,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 2,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 1,
+          "dominantBassPc": 10,
+          "verdict": "both"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-bn2-131-b-comp",
+      "bars": 14,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 0.571,
+      "rootAndQualityAccuracy": 0.571,
+      "missedBars": 0,
+      "segmentationBars": 13,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 8,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.571,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "E:min",
+          "chosen": "4/minor",
+          "distinctEstimates": 1,
+          "dominantBassPc": 11,
+          "verdict": "both"
+        },
+        {
+          "measure": null,
+          "label": "A:7",
+          "chosen": "9/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:hdim7",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 1,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:7",
+          "chosen": "6/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "E:min",
+          "chosen": "4/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A:7",
+          "chosen": "9/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:hdim7",
+          "chosen": "1/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 1,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:7",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-bn3-119-g-comp",
+      "bars": 16,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 2,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.125,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "E:min",
+          "chosen": "4/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:maj",
+          "chosen": "0/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:maj",
+          "chosen": "0/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "E:min",
+          "chosen": "4/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:maj",
+          "chosen": "0/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:maj",
+          "chosen": "0/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-funk1-114-ab-comp",
+      "bars": 6,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 0.5,
+      "rootAndQualityAccuracy": 0.5,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 0,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-funk2-108-eb-comp",
+      "bars": 14,
+      "rootAccuracy": 0.643,
+      "qualityAccuracy": 0.286,
+      "rootAndQualityAccuracy": 0.286,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 0,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "G#:min",
+          "chosen": "3/suspended4",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:7",
+          "chosen": "5/diminished",
+          "distinctEstimates": 6,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:hdim7",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:7",
+          "chosen": "7/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:min",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:min",
+          "chosen": "3/suspended4",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:7",
+          "chosen": "1/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 6,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "B:maj",
+          "chosen": "8/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:hdim7",
+          "chosen": "5/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:7",
+          "chosen": "10/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:min",
+          "chosen": "3/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-funk3-112-c-comp",
+      "bars": 16,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 0,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:min",
+          "chosen": "10/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:min",
+          "chosen": "5/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:min",
+          "chosen": "10/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:min",
+          "chosen": "5/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-jazz1-130-d-comp",
+      "bars": 6,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 2,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.333,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A:maj",
+          "chosen": "9/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-jazz2-110-bb-comp",
+      "bars": 14,
+      "rootAccuracy": 0.929,
+      "qualityAccuracy": 0.571,
+      "rootAndQualityAccuracy": 0.571,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 4,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.286,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "D#:min",
+          "chosen": "3/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:7",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:hdim7",
+          "chosen": "0/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:7",
+          "chosen": "5/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:min",
+          "chosen": "5/suspended4",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:min",
+          "chosen": "3/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:7",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:hdim7",
+          "chosen": "0/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "F:7",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:min",
+          "chosen": "10/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "holdout-01-jazz3-137-eb-comp",
+      "bars": 16,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 7,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.438,
+      "perBar": [
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:min",
+          "chosen": "0/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "C:min",
+          "chosen": "0/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 0,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": null,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "bars": 108,
+    "missedBars": 0,
+    "segmentationBars": 106,
+    "rootOnlyBars": 0,
+    "qualityOnlyBars": 0,
+    "bothWrongBars": 0,
+    "bassEvidenceBars": 108,
+    "bassAgreesWithRootBars": 24
+  }
+}

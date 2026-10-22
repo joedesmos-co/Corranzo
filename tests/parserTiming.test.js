@@ -125,4 +125,29 @@ describe('MusicXML parsing — timing correctness', () => {
     const xml = `<?xml version="1.0"?><score-partwise version="3.1"><part-list/></score-partwise>`
     expect(() => parseMusicXml(xml)).toThrow(/part/i)
   })
+
+  it('keeps nominal windows for multi-voice measures (no cursor-accumulation extension)', () => {
+    // Voices accumulate on the running cursor without backup (7.5 quarters
+    // of cursor in a 4/4 bar), but the window must stay nominal: extending
+    // it perturbs checkpoint derivation (Prelude 479 -> 513, breaks MIDI
+    // acceptance). Overflow compensation lives at the cursor layer.
+    const overflow = F.note('C', 4, 1) + F.note('D', 4, 1) + F.note('E', 4, 1) + F.note('F', 4, 1)
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}${F.soundTempo(120)}${overflow}</measure>` +
+        `<measure number="2">${F.note('A', 4, 1)}${F.note('B', 4, 1)}${F.note('C', 5, 1)}${F.note('D', 5, 1)}</measure></part>`,
+    )
+    const t = parseMusicXml(xml)
+    expect(measure(t, 1).lengthQuarters).toBe(4)
+    expect(measure(t, 2).startTimeSeconds).toBeCloseTo(2, 6)
+  })
+
+  it('keeps underfull (pickup) measures nominally padded', () => {
+    const xml = F.scoreWrap(
+      `<part id="P1"><measure number="1">${F.attributes()}${F.soundTempo(120)}${F.note('C', 4, 1)}</measure>` +
+        `<measure number="2">${F.note('A', 4, 1)}${F.note('B', 4, 1)}${F.note('C', 5, 1)}${F.note('D', 5, 1)}</measure></part>`,
+    )
+    const t = parseMusicXml(xml)
+    expect(measure(t, 1).lengthQuarters).toBe(4)
+    expect(measure(t, 2).startTimeSeconds).toBeCloseTo(2, 6)
+  })
 })

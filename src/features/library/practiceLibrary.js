@@ -5,6 +5,7 @@ import {
   normalizeInstrumentId,
 } from '../instruments/instruments.js'
 import { PRACTICE_LIBRARY_FIXTURES } from '../../dev/fixturePaths.js'
+import { getMusicXmlWorkTitle } from '../import/musicXmlSource.js'
 
 export const LIBRARY_TABS = {
   PRACTICE: 'practice',
@@ -105,7 +106,10 @@ export function buildUploadedPracticePieces(
       const hasTiming = Boolean(bundle.musicXmlSource?.data)
       const hasMidi = Boolean(bundle.midiSource?.data)
       const approxDuration = formatApproxDuration(bundle.musicXmlSource?.omrMeta?.durationSeconds)
-      const title = stripExtension(bundle.pdfMeta.fileName) || 'Uploaded score'
+      // Prefer the title authored inside the MusicXML over the upload
+      // filename; the original filenames stay on the card metadata.
+      const workTitle = getMusicXmlWorkTitle(bundle.musicXmlSource)
+      const title = workTitle || stripExtension(bundle.pdfMeta.fileName) || 'Uploaded score'
       // Truthful save copy: when the persistence lane reports failure, never
       // claim success. Integrator passes saveStatus from useSessionPersistence;
       // without it we keep the established saved copy for the success path.

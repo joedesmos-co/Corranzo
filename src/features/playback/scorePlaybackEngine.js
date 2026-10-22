@@ -282,6 +282,11 @@ export class ScorePlaybackEngine {
     const schedule = await buildCombinedPlaybackSchedule(timingMap, midiArrayBuffer, {
       rate: this.playbackRate,
       alignmentDiagnostics,
+      // Piano damper only: guitars have no sustain pedal, and strumming
+      // only makes sense for fretted strings. The resolver id is the
+      // single source of truth for which voice is playing.
+      sustainPedal: this.voiceResolver.instrumentId === 'piano',
+      instrumentId: this.voiceResolver.instrumentId,
     })
     if (loadToken !== this.loadToken) {
       return null
@@ -599,6 +604,9 @@ export class ScorePlaybackEngine {
         this.voice.triggerAttackRelease(name, duration, at, velocity, {
           midi: event.midi ?? null,
           tieChainId: event.tieChainId ?? null,
+          muted: event.muted ?? false,
+          pitchCurve: event.pitchCurve ?? null,
+          slurAttack: event.slurAttack ?? null,
         })
         this.scheduledEvents.add(event)
         triggersThisSlice += 1
@@ -761,13 +769,18 @@ export class ScorePlaybackEngine {
       return
     }
 
+    const request = this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
+    const cancelled = () => request !== this.playRequestGeneration
     await awaitToneStarted(audioContextStart)
+    if (cancelled()) return
 
     await this.ensureVoices()
+    if (cancelled()) return
     // Wait briefly for the sampled piano so the first note is real piano, not
     // the synth fallback. Instant when samples were preloaded at score-load;
     // proceeds on the synth only if samples genuinely fail/time out.
     await this.whenInstrumentReady()
+    if (cancelled()) return
     this.releaseAll()
     this.scheduledEvents.clear()
 
@@ -800,6 +813,7 @@ export class ScorePlaybackEngine {
   }
 
   seek(scoreSeconds) {
+    this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
     const clamped = Math.max(0, Math.min(scoreSeconds, this.duration))
     const wasPlaying = this.playing
 
@@ -824,6 +838,7 @@ export class ScorePlaybackEngine {
   }
 
   stopInternal(resetOffset = false) {
+    this.playRequestGeneration = (this.playRequestGeneration ?? 0) + 1
     this.playing = false
     this.cancelCountIn()
     this.stopProgressLoop()

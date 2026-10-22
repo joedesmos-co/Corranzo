@@ -17,7 +17,7 @@ describe('session restore routing', () => {
   it('keeps Privacy page when restore would open Practice', () => {
     expect(
       resolveRestoredActiveView({
-        pathname: '/privacy',
+        location: { pathname: '/privacy', hash: '' },
         savedActiveView: 'practice',
         hasMusicXml: true,
       }),
@@ -27,14 +27,14 @@ describe('session restore routing', () => {
   it('keeps Terms and Contact pages over saved session view', () => {
     expect(
       resolveRestoredActiveView({
-        pathname: '/terms',
+        location: { pathname: '/terms', hash: '' },
         savedActiveView: 'practice',
         hasMusicXml: true,
       }),
     ).toBe('terms')
     expect(
       resolveRestoredActiveView({
-        pathname: '/contact',
+        location: { pathname: '/contact', hash: '' },
         savedActiveView: 'library',
         hasMusicXml: true,
       }),
@@ -44,15 +44,32 @@ describe('session restore routing', () => {
   it('still restores practice on app routes when timing file exists', () => {
     expect(
       resolveRestoredActiveView({
-        pathname: '/',
+        location: { pathname: '/', hash: '' },
         savedActiveView: 'practice',
         hasMusicXml: true,
       }),
     ).toBe('practice')
     expect(
       resolveRestoredActiveView({
-        pathname: '/',
+        location: { pathname: '/', hash: '' },
         savedActiveView: 'library',
+        hasMusicXml: true,
+      }),
+    ).toBe('library')
+  })
+
+  it('honours an app-view hash over the saved session view', () => {
+    expect(
+      resolveRestoredActiveView({
+        location: { pathname: '/', hash: '#/practice' },
+        savedActiveView: 'library',
+        hasMusicXml: true,
+      }),
+    ).toBe('practice')
+    expect(
+      resolveRestoredActiveView({
+        location: { pathname: '/', hash: '#/library' },
+        savedActiveView: 'practice',
         hasMusicXml: true,
       }),
     ).toBe('library')
@@ -61,7 +78,7 @@ describe('session restore routing', () => {
   it('falls back to library when timing file is missing', () => {
     expect(
       resolveRestoredActiveView({
-        pathname: '/',
+        location: { pathname: '/', hash: '' },
         savedActiveView: 'practice',
         hasMusicXml: false,
       }),

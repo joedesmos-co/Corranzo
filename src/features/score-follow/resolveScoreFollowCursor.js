@@ -12,6 +12,7 @@ import {
   resolveTrustedAnchorForMeasure,
 } from './trustedAnchors.js'
 import { sortAnchorsByMeasure } from './anchorSort.js'
+import { withPrecision } from './cursorPrecision.js'
 import { clamp, lerp } from './scoreFollowEasing.js'
 import { resolveMusicalXInMeasure } from './cursorMusicalProgress.js'
 
@@ -121,8 +122,20 @@ function interpolateBetweenAnchors(timingMap, practiceTime, before, after, curre
 /**
  * Single cursor resolver: exact anchor when present, interpolation across gaps,
  * start-lock only at t ≤ threshold. Gaps never flip needsSetup.
+ *
+ * The exported wrapper stamps every visible cursor with an honest `precision`
+ * tier (cursorPrecision.js) and the intra-measure `geometry` provenance
+ * ('engraved' | 'time') where the musical resolver produced it.
  */
-export function resolveScoreFollowCursor({
+export function resolveScoreFollowCursor(args) {
+  const resolved = resolveScoreFollowCursorInner(args)
+  if (!resolved?.cursor) {
+    return resolved
+  }
+  return { ...resolved, cursor: withPrecision(resolved.cursor) }
+}
+
+function resolveScoreFollowCursorInner({
   timingMap,
   practiceTime,
   trustedAnchors,
@@ -260,6 +273,7 @@ export function resolveScoreFollowCursor({
             interpolated: !musical.atOnset,
             atOnset: musical.atOnset,
             progressMode: musical.mode,
+            geometry: musical.geometry ?? 'time',
             meta: exact.meta,
             anchorBeat1X: exact.x,
             playableEndX: glideTargetX,

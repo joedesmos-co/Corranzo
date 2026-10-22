@@ -393,9 +393,12 @@ describe('Visual mode architecture correction', () => {
     expect(staffLane).toContain('score-follow-bar__line')
     expect(tabLane).toContain('score-follow-bar__line')
     expect(readSource('components', 'practice', 'VisualPracticeView.jsx')).toContain('getScoreTime')
-    expect(context).toContain('playAlongNoteTarget: null')
-    expect(context).toContain('showOnPage: false')
-    expect(context).toContain('mode: \'wait-for-you\'')
+    // Play Along shares the score overlay language: a real timeline target
+    // (steady highlight, no pulse) instead of null. The note-guide lane
+    // keeps owning rolling feedback; the score shows the event state.
+    expect(context).toContain('playAlongNoteTarget: timelineHighlightActive ? timelineScoreTarget : null')
+    expect(context).toContain('showOnPage: Boolean(')
+    expect(context).toContain('mode: isPlayAlong ? \'play-along\' : \'preview\'')
     expect(session).toContain('seekToPracticeTimeWithWfy(seconds, { sync: false })')
   })
 })

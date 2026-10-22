@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   beginAutoPracticeSession,
   checkpointAutoPracticeSession,
@@ -92,9 +92,12 @@ export default function usePracticeStatsTracker({
     setLiveSession(snapshotActiveSession())
   }, [])
 
-  return {
-    liveSession,
-    recordWfyEvent,
-    recordLoopCompleted,
-  }
+  return useMemo(
+    () => ({
+      liveSession,
+      recordWfyEvent,
+      recordLoopCompleted,
+    }),
+    [liveSession, recordWfyEvent, recordLoopCompleted],
+  )
 }

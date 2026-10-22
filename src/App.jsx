@@ -1,5 +1,5 @@
 import { normalizePracticeMode } from './features/practice/practiceMode.js'
-import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense, memo } from 'react'
 import AppShell from './components/shell/AppShell.jsx'
 import SettingsView from './components/shell/SettingsView.jsx'
 import LibraryPanel from './components/LibraryPanel.jsx'
@@ -24,7 +24,7 @@ const loadPracticeModules = () => practiceModules ??= Promise.all([
   import('./components/practice/PracticeView.jsx'),
 ])
 const PracticeSessionProvider = lazy(async () => ({ default: (await loadPracticeModules())[0].PracticeSessionProvider }))
-const PracticeView = lazy(async () => ({ default: (await loadPracticeModules())[1].default }))
+const PracticeView = memo(lazy(async () => ({ default: (await loadPracticeModules())[1].default })))
 
 /** Phase A: dev-only design proof surface. Never linked from prod UI. */
 function isDesignSandboxPath() {
@@ -64,7 +64,8 @@ import { formatDemoLoadError } from './features/demo/formatDemoLoadError.js'
 import { fetchSampleFixtureFiles } from './dev/loadSampleFixtures.js'
 import { getDemoPieceForInstrument } from './dev/fixturePaths.js'
 import {
-  getViewFromPathname,
+  getViewFromLocation,
+  currentViewPath,
   isLegalPathname,
   isLegalView,
   pathnameForView,
@@ -123,6 +124,7 @@ import {
   snapshotInstrumentBundle,
   bundleHasActiveFile,
 } from './features/instruments/instrumentPracticeBundle.js'
+import { isCompressedScoreFile, loadMusicXmlFile } from './features/musicxml/loadMusicXmlFile.js'
 import {
   createMusicXmlSource,
   cloneMusicXmlSource,
@@ -161,13 +163,28 @@ import './App.css'
 import './styles/profile.css'
 import './styles/legal.css'
 import './styles/collection.css'
+import './styles/osmd.css'
 
 function resolveInitialView() {
-  return getViewFromPathname(window.location.pathname) ?? 'home'
+  return getViewFromLocation(window.location)
 }
 
 function isFullPracticeSet(pdfLoaded, midiSource, musicXmlSource) {
   return Boolean(pdfLoaded && midiSource?.data && musicXmlSource?.data)
+}
+
+/**
+ * Notation bytes to store. A compressed .mxl is unpacked here so every
+ * downstream consumer (timing parse, OSMD engraving, session restore) works
+ * from plain XML and no surface has to understand zip archives.
+ */
+async function readScoreTimingBytes(file) {
+  if (await isCompressedScoreFile(file)) {
+    const xml = await loadMusicXmlFile(file)
+    const encoded = new TextEncoder().encode(xml)
+    return encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.byteLength)
+  }
+  return readFileArrayBuffer(file, 'musicXml')
 }
 
 /** Practice needs PDF + timing; MIDI is optional sound. */
@@ -441,7 +458,7 @@ export default function App() {
 
   useEffect(() => {
     function handlePopState() {
-      setActiveView(normalizeAppView(getViewFromPathname(window.location.pathname) ?? 'home'))
+      setActiveView(normalizeAppView(getViewFromLocation(window.location)))
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -485,8 +502,18 @@ export default function App() {
     setActiveView(nextView)
     requestAnimationFrame(() => window.scrollTo(0, 0))
     const nextPath = pathnameForView(nextView)
-    if (window.location.pathname !== nextPath) {
-      window.history.pushState({}, '', nextPath)
+    // Preserve any query string (e.g. the dev-only ?e2e-midi=1 flag) across
+    // view changes: pathnameForView returns path+hash, so splice the search in
+    // between pathname and hash.
+    const [nextPathname, nextHash] = nextPath.includes('#')
+      ? nextPath.split('#')
+      : [nextPath, '']
+    const search = window.location.search
+    const fullPath = `${nextPathname}${search}${nextHash ? '#' + nextHash : ''}`
+    // Compare the full in-app path (path + search + hash) so app-view changes
+    // still push a history entry and Back/Forward work.
+    if (currentViewPath(window.location) !== fullPath) {
+      window.history.pushState({}, '', fullPath)
     }
   }, [])
 
@@ -859,7 +886,7 @@ export default function App() {
     }
 
     try {
-      const data = await readFileArrayBuffer(file, 'musicXml')
+      const data = await readScoreTimingBytes(file)
       const replacingOmr = isOmrGeneratedPlayback(musicXmlSource)
       // User-supplied timing owns the session — cancel any in-flight preparation.
       cancelInFlightOmrGeneration(setAutoOmrRequest, {
@@ -867,6 +894,8 @@ export default function App() {
         reason: 'uploaded-musicxml',
       })
       const ownerPdfIdentity = buildPdfSourceIdentity(pdfMeta)
+      // Notation is a companion to the loaded PDF: it belongs to that PDF
+      // identity, and a PDF is required for the score to be openable.
       const nextXml = withOwnerPdfIdentity(
         { fileName: file.name, data, source: 'upload' },
         ownerPdfIdentity,
@@ -895,7 +924,9 @@ export default function App() {
       setLibraryFeedback({
         type: 'success',
         message: canPractice
-          ? `Loaded ${file.name}. Checking your score.`
+          ? ownerPdfIdentity
+            ? `Loaded ${file.name}. Checking your score.`
+            : `Loaded ${file.name}. Checking your score — the page will be engraved from your notation.`
           : `Loaded ${file.name}. Choose the matching PDF to begin.`,
       })
       if (canPractice) {
@@ -935,6 +966,60 @@ export default function App() {
     })
     navigateToView('import')
   }, [clearDemoPiece, navigateToView])
+
+  // A9 — Audio Vision: an analyzed recording becomes a normal MusicXML score
+  // source (source 'audio-arrangement', no PDF) that flows through the same
+  // timing → playback → practice path as uploads and OMR output.
+  const handleAudioArrangementReady = useCallback((payload) => {
+    if (!payload?.musicXmlString) return
+    clearDemoPiece()
+    markDemoCardHidden()
+    // The generated arrangement must become the active score. Without this the
+    // previously imported PDF was still the current score, so "Open Score"
+    // opened that PDF instead of the arrangement.
+    // The imported PDF itself is NOT deleted: it stays in the library and can
+    // be reopened from there. Only the in-memory "current score" moves.
+    setPdfFile((previous) => {
+      if (previous) URL.revokeObjectURL(previous)
+      return null
+    })
+    setPdfBuffer(null)
+    setPdfMeta(null)
+    setFileName(payload.fileName ?? 'audio-arrangement.musicxml')
+    if (liveBundleRef.current) {
+      liveBundleRef.current.pdfFile = null
+      liveBundleRef.current.pdfBuffer = null
+      liveBundleRef.current.pdfMeta = null
+    }
+    const nextXml = createMusicXmlSource(payload.fileName ?? 'audio-arrangement.musicxml', payload.musicXmlString, {
+      source: 'audio-arrangement',
+      omrMeta: {
+        arrangement: {
+          targetPart: payload.targetPart ?? null,
+          difficulty: payload.difficulty ?? null,
+          confidence: payload.confidence?.overall ?? null,
+          partial: Boolean(payload.partial),
+          warningCount: Array.isArray(payload.warnings) ? payload.warnings.length : 0,
+          excerpt: payload.excerpt ?? null,
+          uncertainRegions: Array.isArray(payload.uncertainRegions) ? payload.uncertainRegions.length : 0,
+          transcriptionAgreement: Number.isFinite(payload.transcriptionAgreement) ? payload.transcriptionAgreement : null,
+        },
+      },
+    })
+    setMusicXmlSource(nextXml)
+    if (liveBundleRef.current) {
+      liveBundleRef.current.musicXmlSource = nextXml
+    }
+    resetPracticePrefsForNewScore()
+    setPracticeRemountKey((key) => key + 1)
+    setLibraryFeedback({
+      type: 'success',
+      message: payload.partial
+        ? 'Arrangement ready with some uncertain passages. Review the arranger notes, then open your score.'
+        : 'Arrangement ready. Open your score to preview and practice.',
+    })
+    navigateToView('import')
+  }, [clearDemoPiece, markDemoCardHidden, navigateToView, resetPracticePrefsForNewScore])
 
   const handleClearMidi = useCallback(() => {
     clearDemoPiece()
@@ -1839,7 +1924,7 @@ export default function App() {
           if (isMuseScoreSourceFile(file)) {
             setLibraryFeedback({ type: 'info', message: MUSESCORE_PLANNED_MESSAGE })
           } else {
-            const data = await readFileArrayBuffer(file, 'musicXml')
+            const data = await readScoreTimingBytes(file)
             const ownerMeta = classified.pdf[0]
               ? {
                   fileName: classified.pdf[0].name,
@@ -1847,9 +1932,12 @@ export default function App() {
                   lastModified: classified.pdf[0].lastModified,
                 }
               : pdfMeta
+            const ownerIdentity = buildPdfSourceIdentity(ownerMeta)
+            // Notation is a companion to the PDF it belongs to; without a PDF
+            // there is nothing to open a score from.
             const nextXml = withOwnerPdfIdentity(
               { fileName: file.name, data, source: 'upload' },
-              buildPdfSourceIdentity(ownerMeta),
+              ownerIdentity,
             )
             // Uploaded timing wins — cancel any preparation started for this PDF.
             cancelInFlightOmrGeneration(setAutoOmrRequest)
@@ -2015,13 +2103,32 @@ export default function App() {
     ],
   )
 
-  function handleDocumentLoadSuccess({ numPages: total }) {
+  const handleDocumentLoadSuccess = useCallback(({ numPages: total }) => {
     setNumPages(total)
     setPageNumber((page) => Math.min(Math.max(1, page), total))
     if (activeViewRef.current === 'practice') {
       setPracticePdfReady(true)
     }
-  }
+  }, [])
+
+  const handleReloadPractice = useCallback(() => {
+    setPracticeRemountKey((key) => key + 1)
+  }, [])
+
+  const handleReturnToLibrary = useCallback(() => {
+    navigateToView('library')
+  }, [])
+
+  const handleDismissOmrQualityWarning = useCallback((scoreId) => {
+    if (!scoreId) {
+      return
+    }
+    setOmrWarningDismissedScoreIds((prev) => {
+      const next = new Set(prev)
+      next.add(scoreId)
+      return next
+    })
+  }, [])
 
   function handlePrevPage() {
     setPageNumber((page) => Math.max(1, page - 1))
@@ -2040,6 +2147,135 @@ export default function App() {
   }
 
   const handleSessionRestore = useCallback(async (payload, shouldApply = () => true) => {
+    // Legacy session restore: standalone MusicXML/MXL imports no longer open
+    // practice (there is no page to follow), but a session saved while they did
+    // must not crash or lose the notation. Restore the bytes, land on Import,
+    // and tell the musician what to add.
+    if (!payload.pdfMeta?.fileName && payload.musicXmlSource?.data) {
+      if (!shouldApply()) return
+      const nextEpoch = practiceSessionEpochRef.current + 1
+      practiceSessionEpochRef.current = nextEpoch
+      const restoredNotation = cloneMusicXmlSource(payload.musicXmlSource)
+      const restoredNotationValidation = restoredNotation && isOmrGeneratedPlayback(restoredNotation)
+        ? validateRestoredOmrPlayback(restoredNotation)
+        : { ok: true }
+      const nextMusicXml = restoredNotationValidation.ok ? restoredNotation : null
+      if (!restoredNotationValidation.ok) {
+        setLibraryFeedback({ type: 'info', message: restoredNotationValidation.message })
+      }
+      const nextMidi = payload.midiSource?.data
+        ? {
+            fileName: payload.midiSource.fileName,
+            data: payload.midiSource.data.slice(0),
+            ...(payload.midiSource.ownerPdfIdentity ? { ownerPdfIdentity: payload.midiSource.ownerPdfIdentity } : {}),
+          }
+        : null
+      setPdfFile(null)
+      setPdfBuffer(null)
+      setPdfMeta(null)
+      setFileName(nextMusicXml?.fileName ?? null)
+      setMidiSource(nextMidi)
+      if (liveBundleRef.current) {
+        liveBundleRef.current.musicXmlSource = nextMusicXml ?? null
+        liveBundleRef.current.midiSource = nextMidi ?? null
+      }
+      setMusicXmlSource(nextMusicXml)
+      const restoredShell = syncActiveScoreFromLegacy(null, {
+        pdfFile: null,
+        pdfBuffer: null,
+        pdfMeta: null,
+        fileName: nextMusicXml?.fileName ?? null,
+        generation: nextEpoch,
+      })
+      const restoredScoreId = payload.scoreId ?? restoredShell.scoreId
+      activeScoreRef.current = { ...restoredShell, scoreId: restoredScoreId }
+      setActiveScoreIdOnGate(restoredScoreId)
+      setAutoOmrRequest(null)
+      setPageNumber(1)
+      setPracticeSessionEpoch(nextEpoch)
+      setPracticeRemountKey((key) => key + 1)
+      activatePdfScoreSource({
+        pdfIdentity: null,
+        epoch: nextEpoch,
+        reason: 'session-restore-legacy-notation',
+        scoreId: restoredScoreId,
+      })
+      practicePrefsRef.current = payload.practicePrefs ?? null
+      setInitialPracticePrefs(payload.practicePrefs)
+      // An Audio Vision arrangement is a PDF-less score that IS playable: it
+      // restores straight into the practice workspace, exactly as it opened
+      // before the reload. A legacy notation-only session is a different
+      // thing: it needs its PDF, so it lands on Import with that guidance.
+      const isAudioArrangement = nextMusicXml?.source === 'audio-arrangement'
+      if (isAudioArrangement) {
+        setLibraryFeedback({
+          type: 'success',
+          message: 'Your arrangement is back — pick up where you left off.',
+        })
+      } else {
+        setLibraryFeedback({
+          type: 'info',
+          message: `This saved session was a notation-only score. Choose the matching PDF to open it — the attached notation is still used for score following.`,
+        })
+      }
+      // Land on Import for a legacy notation-only session (there is no PDF to
+      // practise from, and the Import view is the only place that renders the
+      // "add the matching PDF" guidance). An arrangement lands on the view it
+      // was saved on, so the musician returns to the score they were playing.
+      setActiveView(
+        normalizeAppView(
+          resolveRestoredActiveView({
+            location: window.location,
+            // A saved legal route is always honoured; otherwise Import, never
+            // the practice workspace, and never a bare library.
+            savedActiveView: isAudioArrangement ? (payload.activeView ?? 'practice') : 'import',
+            hasMusicXml: isAudioArrangement,
+          }),
+        ),
+      )
+      setPdfSoftWarning(null)
+      setDemoPieceActive(false)
+      markDemoCardHidden()
+      activeInstrumentRef.current = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
+      instrumentBundleStoreRef.current.clear(activeInstrumentRef.current)
+      setInstrumentId(activeInstrumentRef.current)
+      if (typeof window !== 'undefined' && nextMusicXml?.data) {
+        const musicXml = describeMusicXmlContent(nextMusicXml)
+        window.__SCOREFLOW_AUTHORITATIVE_SOURCE__ = {
+          scoreId: restoredScoreId,
+          ownerScoreId: restoredScoreId,
+          pdfMetaIdentity: null,
+          pdfContentHash: null,
+          musicXmlHash: musicXml.contentHash,
+          musicXmlByteLength: musicXml.byteLength,
+          measureCount: musicXml.measureCount,
+          durationSeconds: musicXml.durationSeconds,
+          ownerPdfIdentity: null,
+          practiceSessionEpoch: nextEpoch,
+          sourceType: nextMusicXml.source ?? 'restore',
+          at: Date.now(),
+        }
+        logScoreSourceLifecycle('authoritative-musicxml-changed', {
+          reason: 'session-restore-legacy-notation',
+          authoritativeMusicXmlHash: musicXml.contentHash,
+          ownerPdfIdentity: null,
+          ownerScoreId: restoredScoreId,
+          practiceSessionEpoch: nextEpoch,
+        })
+        const restoredActive = syncActiveScoreFromLegacy(activeScoreRef.current, {
+          pdfFile: null,
+          pdfBuffer: null,
+          pdfMeta: null,
+          fileName: nextMusicXml.fileName,
+          musicXmlSource: nextMusicXml,
+          midiSource: nextMidi,
+          generation: nextEpoch,
+        })
+        activeScoreRef.current = restoredActive
+        publishActiveScore(restoredActive, { reason: 'session-restore-legacy-notation' })
+      }
+      return
+    }
     const restoredInstrument = normalizeInstrumentId(payload.instrumentId ?? DEFAULT_INSTRUMENT_ID)
     const otherBundles = Object.entries(payload.instrumentBundles ?? {}).filter(([id, bundle]) => normalizeInstrumentId(id) !== restoredInstrument && bundle?.pdfFile)
     const [restoredBuffer, otherBuffers] = await Promise.all([
@@ -2140,7 +2376,7 @@ export default function App() {
     setActiveView(
       normalizeAppView(
         resolveRestoredActiveView({
-          pathname: window.location.pathname,
+          location: window.location,
           savedActiveView: payload.activeView,
           hasMusicXml: Boolean(nextMusicXml),
         }),
@@ -2708,8 +2944,8 @@ export default function App() {
           onGoToPage={handleGoToPage}
           onTogglePaper={togglePaperTheme}
           timingSourceKind={musicXmlSource?.source ?? null}
-          onReloadPractice={() => setPracticeRemountKey((key) => key + 1)}
-          onReturnToLibrary={() => navigateToView('library')}
+          onReloadPractice={handleReloadPractice}
+          onReturnToLibrary={handleReturnToLibrary}
           omrQuality={musicXmlSource?.omrMeta?.quality ?? null}
           omrOwnerScoreId={
             musicXmlSource?.omrMeta?.quality?.ownerScoreId ??
@@ -2718,16 +2954,7 @@ export default function App() {
             null
           }
           omrWarningDismissedScoreIds={omrWarningDismissedScoreIds}
-          onDismissOmrQualityWarning={(scoreId) => {
-            if (!scoreId) {
-              return
-            }
-            setOmrWarningDismissedScoreIds((prev) => {
-              const next = new Set(prev)
-              next.add(scoreId)
-              return next
-            })
-          }}
+          onDismissOmrQualityWarning={handleDismissOmrQualityWarning}
           musicXmlSource={musicXmlSource}
           activeScoreSnapshot={activeScoreRef.current}
         />
@@ -2802,6 +3029,7 @@ export default function App() {
             onMusicXmlSelect={wrapUpload('musicXml', handleMusicXmlSelect)}
             onClearMidi={handleClearMidi}
             onClearMusicXml={handleClearMusicXml}
+            onArrangementReady={handleAudioArrangementReady}
             onOmrGenerated={handleOmrGenerated}
             autoOmrRequest={autoOmrRequest}
             onAutoOmrRequestConsumed={handleAutoOmrRequestConsumed}

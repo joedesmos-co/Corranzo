@@ -40,6 +40,17 @@ export default function WaitForYouInputSourceSelector({
         checked={inputSource === option.id}
         disabled={disabled || !option.available}
         onChange={() => onInputSourceChange(option.id)}
+        // Confirming the already-selected option must also count as an
+        // explicit choice: the session readiness flag is set by the change
+        // handler, and onChange never fires for the checked option
+        // (arrangement sessions default to MIDI on Web-MIDI desktops,
+        // which otherwise dead-ends WFY input). Guarded so real changes
+        // (change + click) still call the handler exactly once.
+        onClick={() => {
+          if (inputSource === option.id) {
+            onInputSourceChange(option.id)
+          }
+        }}
       />
       <span className="wfy-input-source__option-text">
         <span className="wfy-input-source__option-label">{option.label}</span>

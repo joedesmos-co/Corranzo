@@ -671,14 +671,15 @@ export function buildOmrMusicXml({
 } = {}) {
   const sortedMeasuresRaw = [...measures].sort((a, b) => a.measureNumber - b.measureNumber)
   
-  // DEBUG: Log measure numbers at entry
-  console.error('[buildOmrMusicXml] Input measures:', measures.length, 'min:', Math.min(...measures.map(m => m.measureNumber)), 'max:', Math.max(...measures.map(m => m.measureNumber)))
-  console.error('[buildOmrMusicXml] Sorted raw first 20:', sortedMeasuresRaw.slice(0, 20).map(m => m.measureNumber))
+  // DEBUG: Log measure numbers at entry (console.debug so routine traces
+  // stay out of the console-error channel that acceptance suites assert on).
+  console.debug('[buildOmrMusicXml] Input measures:', measures.length, 'min:', Math.min(...measures.map(m => m.measureNumber)), 'max:', Math.max(...measures.map(m => m.measureNumber)))
+  console.debug('[buildOmrMusicXml] Sorted raw first 20:', sortedMeasuresRaw.slice(0, 20).map(m => m.measureNumber))
   
   const repeatSanitize = sanitizeOmrRepeatMarkings(sortedMeasuresRaw)
   const sortedMeasures = repeatSanitize.measures
   
-  console.error('[buildOmrMusicXml] After sanitize:', sortedMeasures.length, 'min:', Math.min(...sortedMeasures.map(m => m.measureNumber)), 'max:', Math.max(...sortedMeasures.map(m => m.measureNumber)))
+  console.debug('[buildOmrMusicXml] After sanitize:', sortedMeasures.length, 'min:', Math.min(...sortedMeasures.map(m => m.measureNumber)), 'max:', Math.max(...sortedMeasures.map(m => m.measureNumber)))
   
   if (!sortedMeasures.length) {
     throw new Error('No notes detected for experimental playback.')

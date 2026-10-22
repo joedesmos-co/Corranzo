@@ -180,7 +180,9 @@ export default function useSessionPersistence({
       let restoredMeta = loaded.meta
       let usedBackup = false
 
-      const bundleOnlyRestore = !result.ok || !result.pdfMeta
+      // A legacy notation-only session restores partial (its notation is kept
+      // but it needs a PDF), so the bundle fallback is only for lost PDFs.
+      const bundleOnlyRestore = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly && !result.audioArrangement)
       // Last-known-good fallback: when the current generation fails
       // validation, retry the backup manifest + its generation blobs.
       if (bundleOnlyRestore && Object.keys(instrumentBundles).length === 0) {
@@ -212,7 +214,7 @@ export default function useSessionPersistence({
         }
       }
       if (!mountedRef.current || controller.signal.aborted) return
-      const stillBundleOnly = !result.ok || !result.pdfMeta
+      const stillBundleOnly = !result.ok || (!result.pdfMeta && !result.legacyNotationOnly && !result.audioArrangement)
       const fallbackBundleEntry = stillBundleOnly
         ? Object.entries(instrumentBundles)[0] ?? null
         : null
@@ -267,11 +269,13 @@ export default function useSessionPersistence({
       if (result.partial) {
         setRestoreStatus(RESTORE_STATUS.PARTIAL)
         setRestoreMessage(
-          result.issues?.includes('stale-omr-session')
-            ? 'Your PDF is saved, but playback needs preparation. Continue from Import.'
-            : usedBackup || wasRecovered
-              ? 'Your last save needed recovery, but your score is open. Check Import before practicing.'
-              : 'Your PDF is saved, but some companion files are missing. Check Import before practicing.',
+          result.issues?.includes('musicxml-only-session')
+            ? 'That saved session was a notation-only score. Import the matching PDF to open it — the notation is still attached for score following.'
+            : result.issues?.includes('stale-omr-session')
+              ? 'Your PDF is saved, but playback needs preparation. Continue from Import.'
+              : usedBackup || wasRecovered
+                ? 'Your last save needed recovery, but your score is open. Check Import before practicing.'
+                : 'Your PDF is saved, but some companion files are missing. Check Import before practicing.',
         )
       } else {
         setRestoreStatus(RESTORE_STATUS.RESTORED)
@@ -313,8 +317,8 @@ export default function useSessionPersistence({
   }, [attemptRestore, restoreStatus, restoreSuspended])
 
   useEffect(() => {
-    if (restoreGateOpen && !restoreSuspended) updateSavedSessionView(activeView, pdfMeta, instrumentId)
-  }, [activeView, pdfMeta, instrumentId, restoreGateOpen, restoreSuspended])
+    if (restoreGateOpen && !restoreSuspended) updateSavedSessionView(activeView, pdfMeta, instrumentId, musicXmlSource)
+  }, [activeView, pdfMeta, musicXmlSource, instrumentId, restoreGateOpen, restoreSuspended])
 
   const scheduleSave = useCallback(() => {
     if (!restoreGateOpen) {
@@ -328,7 +332,13 @@ export default function useSessionPersistence({
       if (readSaveGeneration() !== generationAtSchedule) {
         return
       }
-      if (!pdfMeta?.fileName || !pdfBuffer) {
+      // A save needs score bytes: either the PDF (the score) or a MusicXML-only
+      // score such as an Audio Vision arrangement. A session with neither is not
+      // something to persist.
+      if (pdfMeta?.fileName && !pdfBuffer) {
+        return
+      }
+      if (!pdfMeta?.fileName && !musicXmlSource?.data) {
         return
       }
 
@@ -385,7 +395,7 @@ export default function useSessionPersistence({
 
       try {
         await saveSessionFiles({
-          pdf: { data: pdfBuffer.slice(0) },
+          pdf: pdfBuffer ? { data: pdfBuffer.slice(0) } : null,
           midi: midiSource?.data ? { data: midiSource.data.slice(0) } : null,
           musicXml: musicXmlSource?.data ? { data: musicXmlSource.data.slice(0) } : null,
           sourceVisualMap: musicXmlSource?.omrMeta?.sourceVisualMap ?? null,
@@ -438,7 +448,7 @@ export default function useSessionPersistence({
   ])
 
   useEffect(() => {
-    if (!pdfMeta?.fileName || !restoreGateOpen) {
+    if ((!pdfMeta?.fileName && !musicXmlSource?.data) || !restoreGateOpen) {
       return undefined
     }
     scheduleSave()
@@ -447,7 +457,7 @@ export default function useSessionPersistence({
         clearTimeout(saveTimerRef.current)
       }
     }
-  }, [pdfMeta, scheduleSave, restoreGateOpen])
+  }, [pdfMeta, musicXmlSource, scheduleSave, restoreGateOpen])
 
   const clearSavedSession = useCallback(async () => {
     restoreControllerRef.current?.abort()

@@ -56,6 +56,9 @@ export function buildInputFeedback({
       tone: 'success',
       playedMidi,
       playedLabel,
+      // Per-tone completion for score highlighting. Stays a Set (the
+      // established contract: guidance/labels call .has on it).
+      matchedIndices: matchedIndices ?? new Set(),
     }
   }
 
@@ -74,6 +77,9 @@ export function buildInputFeedback({
       matchedCount,
       total,
       remainingLabels: remaining,
+      // Per-tone completion for score highlighting. Stays a Set (the
+      // established contract: guidance/labels call .has on it).
+      matchedIndices: matchedIndices ?? new Set(),
     }
   }
 

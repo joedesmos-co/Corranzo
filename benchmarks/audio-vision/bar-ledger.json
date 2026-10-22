@@ -1,0 +1,1790 @@
+{
+  "rows": [
+    {
+      "id": "guitarset-jazz-solo",
+      "bars": 6,
+      "rootAccuracy": 0.167,
+      "qualityAccuracy": 0.333,
+      "rootAndQualityAccuracy": 0,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 0,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "B:maj",
+          "chosen": "9/suspended4",
+          "distinctEstimates": 10,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "E:maj",
+          "chosen": "11/suspended4",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "B:maj",
+          "chosen": "4/major7",
+          "distinctEstimates": 9,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "F#:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "E:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "B:maj",
+          "chosen": "11/major7",
+          "distinctEstimates": 9,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-ss-comp",
+      "bars": 16,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 15,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 9,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.563,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "D:min",
+          "chosen": "2/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 8,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 1,
+          "dominantBassPc": 10,
+          "verdict": "both"
+        },
+        {
+          "measure": 10,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "D:min",
+          "chosen": "2/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 2,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 4,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 16,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-bn1-129-eb",
+      "bars": 6,
+      "rootAccuracy": 0.5,
+      "qualityAccuracy": 0.333,
+      "rootAndQualityAccuracy": 0.333,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 1,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.167,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "D#:maj",
+          "chosen": "3/major7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "G#:maj",
+          "chosen": "5/minor",
+          "distinctEstimates": 6,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "G#:maj",
+          "chosen": "5/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "D#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-bn2-131-b",
+      "bars": 14,
+      "rootAccuracy": 0.643,
+      "qualityAccuracy": 0.357,
+      "rootAndQualityAccuracy": 0.357,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 7,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.5,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "E:min",
+          "chosen": "4/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 4,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "A:7",
+          "chosen": "9/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "D:maj",
+          "chosen": "2/major7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 2,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "G:maj",
+          "chosen": "4/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "C#:hdim7",
+          "chosen": "4/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "F#:7",
+          "chosen": "4/diminished",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "E:min",
+          "chosen": "4/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "A:7",
+          "chosen": "9/dominant7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "D:maj",
+          "chosen": "6/suspended4",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "G:maj",
+          "chosen": "7/major7",
+          "distinctEstimates": 6,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "C#:hdim7",
+          "chosen": "1/minor7",
+          "distinctEstimates": 6,
+          "dominantBassPc": 1,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "F#:7",
+          "chosen": "6/dominant7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "B:min",
+          "chosen": "6/suspended4",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-bn3-119-g",
+      "bars": 16,
+      "rootAccuracy": 0.375,
+      "qualityAccuracy": 0.375,
+      "rootAndQualityAccuracy": 0.25,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 4,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.25,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "G:maj",
+          "chosen": "7/major7",
+          "distinctEstimates": 2,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "E:min",
+          "chosen": "11/minor7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 2,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "B:min",
+          "chosen": "11/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "C:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "C:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 8,
+          "label": "D:maj",
+          "chosen": "9/minor7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "G:maj",
+          "chosen": "4/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "D:maj",
+          "chosen": "11/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "E:min",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "B:min",
+          "chosen": "11/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 0,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "C:maj",
+          "chosen": "7/suspended4",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "G:maj",
+          "chosen": "4/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "C:maj",
+          "chosen": "0/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 16,
+          "label": "D:maj",
+          "chosen": "9/suspended4",
+          "distinctEstimates": 3,
+          "dominantBassPc": 2,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-funk1-114-ab",
+      "bars": 6,
+      "rootAccuracy": 0.667,
+      "qualityAccuracy": 0.5,
+      "rootAndQualityAccuracy": 0.5,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 1,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.167,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "C#:maj",
+          "chosen": "5/diminished",
+          "distinctEstimates": 4,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "D#:maj",
+          "chosen": "3/dominant7",
+          "distinctEstimates": 7,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "C#:maj",
+          "chosen": "5/diminished",
+          "distinctEstimates": 6,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-funk2-108-eb",
+      "bars": 14,
+      "rootAccuracy": 0.714,
+      "qualityAccuracy": 0.5,
+      "rootAndQualityAccuracy": 0.429,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 0,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "G#:min",
+          "chosen": "8/minor7",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "C#:7",
+          "chosen": "5/diminished",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "B:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "F:hdim7",
+          "chosen": "8/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "A#:7",
+          "chosen": "10/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D#:min",
+          "chosen": "3/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "G#:min",
+          "chosen": "8/minor7",
+          "distinctEstimates": 2,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "C#:7",
+          "chosen": "1/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "B:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "F:hdim7",
+          "chosen": "5/diminished",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "A#:7",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "D#:min",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-funk3-112-c-",
+      "bars": 16,
+      "rootAccuracy": 0.75,
+      "qualityAccuracy": 0.563,
+      "rootAndQualityAccuracy": 0.563,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 10,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.625,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "A#:min",
+          "chosen": "10/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "F:min",
+          "chosen": "5/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "F#:maj",
+          "chosen": "1/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 8,
+          "label": "G#:maj",
+          "chosen": "1/suspended4",
+          "distinctEstimates": 2,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "G#:maj",
+          "chosen": "5/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "A#:min",
+          "chosen": "5/suspended4",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "F:min",
+          "chosen": "5/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 16,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-jazz1-130-d",
+      "bars": 6,
+      "rootAccuracy": 0.667,
+      "qualityAccuracy": 0.5,
+      "rootAndQualityAccuracy": 0.5,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 2,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.333,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "D:maj",
+          "chosen": "2/dominant7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "G:maj",
+          "chosen": "7/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D:maj",
+          "chosen": "9/minor",
+          "distinctEstimates": 6,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "A:maj",
+          "chosen": "9/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "G:maj",
+          "chosen": "2/minor7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-jazz2-110-bb",
+      "bars": 14,
+      "rootAccuracy": 0.786,
+      "qualityAccuracy": 0.214,
+      "rootAndQualityAccuracy": 0.214,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 3,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.214,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "D#:min",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "G#:7",
+          "chosen": "8/minor7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "C:hdim7",
+          "chosen": "0/minor7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "F:7",
+          "chosen": "3/diminished",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "A#:min",
+          "chosen": "10/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "D#:min",
+          "chosen": "3/minor7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "G#:7",
+          "chosen": "8/dominant7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "C#:maj",
+          "chosen": "1/dominant7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "F#:maj",
+          "chosen": "6/dominant7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "C:hdim7",
+          "chosen": "3/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "F:7",
+          "chosen": "5/minor7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "A#:min",
+          "chosen": "10/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-jazz3-137-eb",
+      "bars": 16,
+      "rootAccuracy": 0.688,
+      "qualityAccuracy": 0.563,
+      "rootAndQualityAccuracy": 0.563,
+      "missedBars": 0,
+      "segmentationBars": 15,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 1,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 4,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.25,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "D#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 1,
+          "dominantBassPc": 10,
+          "verdict": "bothWrong"
+        },
+        {
+          "measure": 2,
+          "label": "A#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "C:min",
+          "chosen": "0/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 8,
+          "label": "A#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "D#:maj",
+          "chosen": "3/major7",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "A#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "C:min",
+          "chosen": "0/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 4,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 16,
+          "label": "A#:maj",
+          "chosen": "7/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-rock1-130-a",
+      "bars": 6,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 3,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.5,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "A:maj",
+          "chosen": "9/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "A:maj",
+          "chosen": "9/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "E:maj",
+          "chosen": "4/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 8,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "D:maj",
+          "chosen": "2/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "A:maj",
+          "chosen": "9/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-rock2-142-d",
+      "bars": 14,
+      "rootAccuracy": 0.929,
+      "qualityAccuracy": 0.643,
+      "rootAndQualityAccuracy": 0.571,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 3,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.214,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "C:7",
+          "chosen": "0/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "E:hdim7",
+          "chosen": "4/diminished",
+          "distinctEstimates": 4,
+          "dominantBassPc": 4,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "A:7",
+          "chosen": "9/dominant7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D:min",
+          "chosen": "9/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "G:min",
+          "chosen": "7/minor7",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "C:7",
+          "chosen": "0/dominant7",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "E:hdim7",
+          "chosen": "4/diminished",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "A:7",
+          "chosen": "9/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "D:min",
+          "chosen": "2/minor",
+          "distinctEstimates": 2,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-rock3-117-bb",
+      "bars": 16,
+      "rootAccuracy": 0.938,
+      "qualityAccuracy": 0.938,
+      "rootAndQualityAccuracy": 0.938,
+      "missedBars": 0,
+      "segmentationBars": 16,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 16,
+      "bassAgreesWithRootBars": 8,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.5,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "D:min",
+          "chosen": "2/minor",
+          "distinctEstimates": 5,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 2,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 8,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "F:maj",
+          "chosen": "2/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "G:min",
+          "chosen": "7/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "D:min",
+          "chosen": "2/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "A#:maj",
+          "chosen": "10/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "D#:maj",
+          "chosen": "3/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 16,
+          "label": "F:maj",
+          "chosen": "5/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-ss1-100-c-",
+      "bars": 6,
+      "rootAccuracy": 1,
+      "qualityAccuracy": 1,
+      "rootAndQualityAccuracy": 1,
+      "missedBars": 0,
+      "segmentationBars": 6,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 6,
+      "bassAgreesWithRootBars": 2,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.333,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "G#:maj",
+          "chosen": "8/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "F#:maj",
+          "chosen": "6/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "C#:maj",
+          "chosen": "1/major",
+          "distinctEstimates": 3,
+          "dominantBassPc": 5,
+          "verdict": "segmentation"
+        }
+      ]
+    },
+    {
+      "id": "guitarset-00-ss2-107-ab",
+      "bars": 14,
+      "rootAccuracy": 0.929,
+      "qualityAccuracy": 0.643,
+      "rootAndQualityAccuracy": 0.643,
+      "missedBars": 0,
+      "segmentationBars": 14,
+      "rootOnlyBars": 0,
+      "qualityOnlyBars": 0,
+      "bothWrongBars": 0,
+      "bassEvidenceBars": 14,
+      "bassAgreesWithRootBars": 3,
+      "bassEvidenceRate": 1,
+      "bassRootAgreement": 0.214,
+      "perBar": [
+        {
+          "measure": 1,
+          "label": "C#:min",
+          "chosen": "1/minor",
+          "distinctEstimates": 3,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 2,
+          "label": "F#:7",
+          "chosen": "6/major",
+          "distinctEstimates": 6,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 3,
+          "label": "B:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 4,
+          "label": "E:maj",
+          "chosen": "4/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 4,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 5,
+          "label": "A#:hdim7",
+          "chosen": "10/diminished",
+          "distinctEstimates": 3,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 6,
+          "label": "D#:7",
+          "chosen": "3/dominant7",
+          "distinctEstimates": 5,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 7,
+          "label": "G#:min",
+          "chosen": "8/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 9,
+          "label": "C#:min",
+          "chosen": "1/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 10,
+          "label": "F#:7",
+          "chosen": "6/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 11,
+          "label": "B:maj",
+          "chosen": "11/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 6,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 12,
+          "label": "E:maj",
+          "chosen": "4/major",
+          "distinctEstimates": 4,
+          "dominantBassPc": 11,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 13,
+          "label": "A#:hdim7",
+          "chosen": "3/suspended4",
+          "distinctEstimates": 5,
+          "dominantBassPc": 10,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 14,
+          "label": "D#:7",
+          "chosen": "3/major",
+          "distinctEstimates": 5,
+          "dominantBassPc": 7,
+          "verdict": "segmentation"
+        },
+        {
+          "measure": 15,
+          "label": "G#:min",
+          "chosen": "8/minor",
+          "distinctEstimates": 4,
+          "dominantBassPc": 9,
+          "verdict": "segmentation"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "bars": 186,
+    "missedBars": 0,
+    "segmentationBars": 184,
+    "rootOnlyBars": 0,
+    "qualityOnlyBars": 0,
+    "bothWrongBars": 1,
+    "bassEvidenceBars": 186,
+    "bassAgreesWithRootBars": 60
+  }
+}

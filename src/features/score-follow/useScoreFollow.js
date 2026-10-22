@@ -19,6 +19,7 @@ import { analyzeSemiAutoScoreSetup } from './semiAutoScoreAlignment.js'
 import { buildAnchorsFromSystemStarts } from './buildAnchorsFromSystemStarts.js'
 import { createAnchorId } from './scoreFollowStorage.js'
 import { resolveScoreFollowCursor } from './resolveScoreFollowCursor.js'
+import { resolveDisplayCursorAtTime } from './scoreFollowDisplayPosition.js'
 import {
   findNextUnmarkedMeasureNumber,
   getScoreFollowMarkingProgress,
@@ -36,7 +37,7 @@ import {
 import { buildMeasureBoundaryDiagnostic } from './measureBoundaryDiagnostics.js'
 import { buildHeldNoteDiagnostic } from './heldNoteDiagnostics.js'
 import { buildCursorMotionDiagnostic } from './cursorMotionDiagnostics.js'
-import { buildCursorMotionTimeline, resolveCursorMotion } from './cursorMotionTimeline.js'
+import { buildCursorMotionTimeline } from './cursorMotionTimeline.js'
 import { buildCursorMappingDebug } from './scoreFollowCursorMappingDebug.js'
 import { isPlaybackVisualsOffEnabled } from '../playback/playbackVisualsDiagnostics.js'
 import { buildScoreFollowPrecisionReport } from './scoreFollowPrecisionDiagnostics.js'
@@ -140,11 +141,16 @@ export default function useScoreFollow({
   hasPdf,
   visiblePageNumber,
   isPlaying = false,
+  smoothCheckpoints = false,
   sessionReady = false,
   isDemoPiece = false,
   autoSetupGateOpen = true,
   experimentalOmrPlayback = false,
   omrMeasureGrid = null,
+  // Exact printed-notehead geometry (OMR source map). The painted cursor
+  // resolves its onsets through the SAME source geometry the note target uses,
+  // so the line and the notehead it triggers can never disagree.
+  sourceVisualMap = null,
 }) {
   const isBundledDemoSession = isDemoFixtureFileSet(pdfFileName, timingSourceId ?? null)
   const isDemoSession = isDemoPiece || isBundledDemoSession
@@ -523,9 +529,14 @@ export default function useScoreFollow({
   const motionTimeline = useMemo(
     () =>
       hasTiming && trustedAnchors.length > 0
-        ? buildCursorMotionTimeline({ timingMap, trustedAnchors })
+        ? buildCursorMotionTimeline({
+            timingMap,
+            trustedAnchors,
+            sourceVisualMap,
+            preferredRepresentation: activeGuitarScoreTarget,
+          })
         : null,
-    [hasTiming, timingMap, trustedAnchors],
+    [hasTiming, timingMap, trustedAnchors, sourceVisualMap, activeGuitarScoreTarget],
   )
 
   const resolved = useMemo(
@@ -541,31 +552,26 @@ export default function useScoreFollow({
     [hasTiming, trustedAnchors, anchorTrust, timingMap, practiceTime],
   )
 
-  // Position comes from the motion timeline (exact, smooth); resolveScoreFollowCursor
-  // still owns visibility/trust gating and the no-timeline fallback. Using one
-  // source for both the static (paused) and realtime (playing) cursor keeps them
-  // consistent — no jump when playback pauses.
+  // Position comes from the shared display-position resolver (motion
+  // timeline primary, legacy fallback) — the same function the realtime
+  // driver, the WFY geometry lookup, and the precision diagnostics use, so
+  // the posed cursor, the playing cursor, and the measurements agree.
   const cursor = useMemo(() => {
     const base = resolved.cursor
-    if (!base?.visible || !motionTimeline) {
+    if (!base?.visible) {
       return base
     }
-    const motion = resolveCursorMotion(motionTimeline, practiceTime)
-    if (!motion) {
+    if (!motionTimeline) {
       return base
     }
-    return {
-      ...base,
-      x: motion.x,
-      y: motion.y,
-      page: motion.page,
-      measureNumber: motion.measureNumber ?? base.measureNumber,
-      systemIndex: motion.systemIndex ?? base.systemIndex,
-      progressMode: motion.segmentType ?? base.progressMode,
-      interpolationSource: `motion-timeline:${motion.segmentType ?? 'phrase'}`,
-      fallbackTier: 'motion-timeline',
-    }
-  }, [resolved, motionTimeline, practiceTime])
+    return resolveDisplayCursorAtTime({
+      timingMap,
+      practiceTime,
+      trustedAnchors,
+      trust: anchorTrust,
+      motionTimeline,
+    })
+  }, [resolved, motionTimeline, practiceTime, timingMap, trustedAnchors, anchorTrust])
   const followNeedsSetup = anchorTrust.needsSetup
 
   const lockExactCursor = Boolean(cursor?.lockExact || cursor?.forcedStart)
@@ -595,32 +601,20 @@ export default function useScoreFollow({
       if (!hasTiming || trustedAnchors.length === 0 || !anchorTrust.showCursor) {
         return { visible: false }
       }
-      // Primary path: the precomputed motion timeline (already smooth + onset
-      // locked, so the driver publishes it directly with no predictive follower).
-      const motion = motionTimeline ? resolveCursorMotion(motionTimeline, t) : null
-      if (motion) {
-        return {
-          ...motion,
-          lockExact: false,
-          interpolated: true,
-          interpolationSource: `motion-timeline:${motion.segmentType ?? 'phrase'}`,
-          fallbackTier: 'motion-timeline',
-        }
-      }
-      // Fallback for times/measures the timeline does not cover (e.g. gaps with
-      // no anchor): the legacy resolver.
-      return resolveScoreFollowCursor({
+      return resolveDisplayCursorAtTime({
         timingMap,
         practiceTime: t,
         trustedAnchors,
         trust: anchorTrust,
-      }).cursor
+        motionTimeline,
+      })
     },
     [hasTiming, trustedAnchors, anchorTrust, timingMap, motionTimeline],
   )
 
   useScoreFollowCursorDriver({
     targetCursor: cursor,
+    smoothCheckpoints,
     active: realtimeCursorActive,
     resetSnapKey,
     lockExact: lockExactCursor,
@@ -629,11 +623,12 @@ export default function useScoreFollow({
   })
 
   useEffect(() => {
-    if (realtimeCursorActive || followNeedsSetup || !enabled || !cursor?.visible) {
+    if (smoothCheckpoints || realtimeCursorActive || followNeedsSetup || !enabled || !cursor?.visible) {
       return
     }
     publishScoreFollowCursor({ ...cursor, smoothed: false })
   }, [
+    smoothCheckpoints,
     realtimeCursorActive,
     followNeedsSetup,
     enabled,

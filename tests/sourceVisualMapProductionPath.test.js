@@ -375,8 +375,14 @@ describe('source visual map production path', () => {
     expect(target.highlight.sourceNoteheadIds).not.toContain(
       neighborAnchor.sourceNoteheadId,
     )
+    // Individual boxes carry their tone identity (MIDI + notehead id) so
+    // chord partials can color completed tones without re-resolving.
     expect(target.highlight.noteBoxes).toEqual(
-      expectedAnchors.map((anchor) => anchor.sourceBBox),
+      expectedAnchors.map((anchor) => ({
+        ...anchor.sourceBBox,
+        midi: anchor.midi,
+        sourceNoteheadId: anchor.sourceNoteheadId,
+      })),
     )
   })
 

@@ -1,6 +1,13 @@
 import { PRACTICE_MODE } from './practiceMode.js'
-/** One musician-facing summary; technical details stay in advanced settings. */
-export function workspaceStatus(session, follow) {
+/**
+ * One musician-facing summary; technical details stay in advanced settings.
+ *
+ * `engraved` marks a score that is internally engraved MusicXML (an Audio
+ * Vision arrangement). Its cursor reads the engraved noteheads, so it always
+ * follows the music - there is no page to calibrate against and no score
+ * follow switch to turn on.
+ */
+export function workspaceStatus(session, follow, { engraved = false } = {}) {
   if (session.timing.error || session.playback.error) return { kind: 'error', label: 'Playback unavailable', detail: 'Open settings for recovery options.' }
   if (session.timing.isLoading || session.playback.isLoading) return { kind: 'preparing', label: 'Preparing your score', detail: 'You can read and mark the page while it loads.' }
   if (!session.hasMusicXml) return { kind: 'quiet', label: 'Read & mark', detail: 'Playback is not available for this score yet.' }
@@ -14,8 +21,8 @@ export function workspaceStatus(session, follow) {
     const matching = session.waitForYouInput?.matchingEnabled
     return { kind: 'waiting', label: matching ? 'Listening · your turn' : 'Your turn', detail: matching ? 'Play the highlighted notes to continue.' : 'Use Continue, or connect your instrument.' }
   }
-  if (!follow.enabled) return { kind: 'quiet', label: 'Score follow off', detail: 'Turn it on in workspace settings.' }
-  if (['running', 'preparing', 'analyzing', 'queued'].includes(follow.setupStatus?.phase)) return { kind: 'preparing', label: 'Preparing score follow', detail: 'The score is still available to read.' }
-  if (!follow.canFollow) return { kind: 'quiet', label: 'Score follow unavailable', detail: 'Score following is unavailable. The page stays in your control.' }
+  if (!engraved && !follow.enabled) return { kind: 'quiet', label: 'Score follow off', detail: 'Turn it on in workspace settings.' }
+  if (!engraved && ['running', 'preparing', 'analyzing', 'queued'].includes(follow.setupStatus?.phase)) return { kind: 'preparing', label: 'Preparing score follow', detail: 'The score is still available to read.' }
+  if (!engraved && !follow.canFollow) return { kind: 'quiet', label: 'Score follow unavailable', detail: 'Score following is unavailable. The page stays in your control.' }
   return { kind: 'ready', label: session.practiceMode === PRACTICE_MODE.PREVIEW ? 'Listen & follow' : 'Play with the score', detail: session.practiceMode === PRACTICE_MODE.PREVIEW ? 'The score follows the music.' : 'The music keeps time while you play.' }
 }

@@ -9,8 +9,23 @@ const repoRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const tokensCss = readFileSync(path.join(repoRoot, 'src/styles/tokens.css'), 'utf8')
 
 function tokenValue(name) {
-  const match = tokensCss.match(new RegExp(`${name}\\s*:\\s*([^;]+);`))
-  return match ? match[1].trim() : null
+  // Tokens are chained (--cz-signal: var(--cz-vermilion-light)), so resolve
+  // the indirection instead of handing a raw "var(...)" string to the
+  // contrast maths — otherwise luminance computes NaN and the AA check
+  // silently degrades into a false failure.
+  const seen = new Set()
+  let current = name
+  let value = null
+  while (!seen.has(current)) {
+    seen.add(current)
+    const match = tokensCss.match(new RegExp(`${current}\\s*:\\s*([^;]+);`))
+    if (!match) return null
+    value = match[1].trim()
+    const reference = /^var\((--[A-Za-z0-9-]+)\)$/.exec(value)
+    if (!reference) break
+    current = reference[1]
+  }
+  return value
 }
 
 function luminance(hex) {

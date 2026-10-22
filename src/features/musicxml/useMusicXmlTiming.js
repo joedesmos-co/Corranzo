@@ -159,12 +159,15 @@ export default function useMusicXmlTiming(musicXmlSource, queryTime = 0) {
     [timingMap, queryTime],
   )
 
-  return {
-    timingMap,
-    isLoading,
-    error,
-    debugState,
-    contentHash: xmlContentHash,
-    sourceKey: xmlSourceKey,
-  }
+  return useMemo(
+    () => ({
+      timingMap,
+      isLoading,
+      error,
+      debugState,
+      contentHash: xmlContentHash,
+      sourceKey: xmlSourceKey,
+    }),
+    [timingMap, isLoading, error, debugState, xmlContentHash, xmlSourceKey],
+  )
 }

@@ -47,7 +47,7 @@ try {
     return route.continue()
   })
   const pdf = readFileSync('public/fixtures/practice-library/piano-mozart-menuet-k2/piano-mozart-menuet-k2.pdf')
-  const pick = () => page.getByLabel('Choose score PDF', { exact: true }).setInputFiles({ name: 'Menuet.pdf', mimeType: 'application/pdf', buffer: pdf })
+  const pick = () => page.getByLabel('Choose score file', { exact: true }).setInputFiles({ name: 'Menuet.pdf', mimeType: 'application/pdf', buffer: pdf })
   await pick()
   await page.locator('.score-import-processing[data-busy="true"]').waitFor()
   const status = page.locator('.score-import-processing [role="status"]').first()

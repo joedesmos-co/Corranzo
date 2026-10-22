@@ -1,6 +1,6 @@
 import { noteHasLayout } from '../musicxml/readNoteLayout.js'
 import { clamp, lerp } from '../score-follow/scoreFollowEasing.js'
-import { resolveScoreFollowCursor } from '../score-follow/resolveScoreFollowCursor.js'
+import { resolveDisplayCursorAtTime } from '../score-follow/scoreFollowDisplayPosition.js'
 import { isPlayableCheckpointKind } from './waitForYouCheckpoints.js'
 import { resolveNotePracticeHand } from './practiceScope.js'
 import {
@@ -8,11 +8,8 @@ import {
   resolveSourceVisualAnchorGeometry,
   SOURCE_VISUAL_COORDINATE_SPACE,
 } from '../omr/omrSourceVisualMap.js'
-import {
-  buildMeasureAnchorGeometry,
-  getMeasureLayoutExtents,
-  getMeasureTimingWindow,
-} from './noteTargetContext.js'
+import { buildMeasureAnchorGeometry, getMeasureLayoutExtents, getMeasureTimingWindow } from './noteTargetContext.js'
+import { resolveEngravedNoteXInMeasure } from './engravedNoteX.js'
 
 export const NOTE_TARGET_MARKER_OFFSET_Y = 0.036
 
@@ -62,28 +59,32 @@ function finite(value) {
   return Number.isFinite(value)
 }
 
-function staffBandY(geometry, staff, midi, partId) {
+/**
+ * Vertical position of a notehead on its staff.
+ *
+ * When the score carries engraved layout (MusicXML default-y) the exact
+ * offset is used. When it does not — a real edition exported without layout,
+ * such as the bundled demo score — the note is placed by its PITCH within the
+ * pitch range of the notes on that staff, so a low note sits low on the staff
+ * and a high note sits high, instead of every note landing on one line.
+ */
+function staffBandY(geometry, staff, midi, partId, staffRange = null) {
   const { yTop, yBottom, staffSplitY } = geometry
+  const inBottom = staff === 2
+  const bandTop = inBottom ? staffSplitY : yTop
+  const bandBottom = inBottom ? yBottom : staffSplitY
 
-  if (staff === 1) {
-    return lerp(yTop, staffSplitY, 0.45)
-  }
-  if (staff === 2) {
-    return lerp(staffSplitY, yBottom, 0.45)
-  }
-
-  if (midi != null) {
+  let fraction = 0.45
+  if (midi != null && staffRange && staffRange.max > staffRange.min) {
+    // The top of the staff is the highest pitch; y grows downward.
+    fraction = 0.12 + 0.76 * (1 - (midi - staffRange.min) / (staffRange.max - staffRange.min))
+  } else if (midi != null && staff == null) {
     const lowerPart = partId && /P2|2|bass|left|LH/i.test(String(partId))
-    if (lowerPart) {
-      return lerp(staffSplitY, yBottom, 0.42)
-    }
-    if (midi >= 60) {
-      return lerp(yTop, staffSplitY, 0.42)
-    }
-    return lerp(staffSplitY, yBottom, 0.42)
+    fraction = 0.42
+    void lowerPart
   }
 
-  return staffSplitY
+  return lerp(bandTop, bandBottom, fraction)
 }
 
 /** MusicXML default-y: positive = below staff line (down on page). */
@@ -104,19 +105,17 @@ function resolveNoteX({
 }) {
   const { xMeasureStart, xMeasureEnd } = geometry
 
-  if (layoutExtents.hasDefaultX && note.defaultX != null) {
-    // MusicXML default-x is tenths from the left of the measure. Map against the
-    // engraved measure width (or a modest estimate from the rightmost note) —
-    // never min/max-stretch the note cluster across the full PDF measure span,
-    // which parked early notes halfway across empty bars.
-    const engravedWidth = layoutExtents.engravedWidth
-    const maxX = layoutExtents.maxDefaultX ?? note.defaultX
-    const widthTenths =
-      Number.isFinite(engravedWidth) && engravedWidth > 0
-        ? engravedWidth
-        : Math.max(maxX + Math.max(40, maxX * 0.15), 80)
-    const ratio = clamp(note.defaultX / widthTenths, 0, 1)
-    return lerp(xMeasureStart, xMeasureEnd, ratio)
+  // Shared engraved mapping (see engravedNoteX.js): the note target and the
+  // painted red cursor resolve a note's x through this one function, so the
+  // line and the notehead it triggers can never drift apart.
+  const engravedX = resolveEngravedNoteXInMeasure({
+    defaultX: note.defaultX,
+    layoutExtents,
+    xStart: xMeasureStart,
+    xEnd: xMeasureEnd,
+  })
+  if (engravedX != null) {
+    return engravedX
   }
 
   if (timingWindow) {
@@ -178,6 +177,7 @@ function resolveOwnedSourcePlacement(note, sourceAnchorIndex, preferredRepresent
       x: ownedSourceAnchor.sourceCenter.x,
       y: ownedSourceAnchor.sourceCenter.y,
       page: ownedSourceAnchor.page,
+      midi: note.midi ?? ownedSourceAnchor.midi ?? null,
       source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
       confidence: ownedSourceAnchor.confidence,
       coordinateSpace: SOURCE_VISUAL_COORDINATE_SPACE,
@@ -204,6 +204,7 @@ function resolveSingleNotePosition({
   checkpointTime,
   sourceAnchorIndex,
   preferredRepresentation,
+  staffRanges = null,
 }) {
   const sourcePlacement = resolveOwnedSourcePlacement(
     note,
@@ -216,6 +217,7 @@ function resolveSingleNotePosition({
     return {
       x: clamp(note.xNorm, 0.03, 0.97),
       y: clamp(note.yNorm, 0.06, 0.94),
+      midi: note.midi ?? null,
       source: NOTE_TARGET_SOURCE.DIRECT_GEOMETRY,
       confidence: CONFIDENCE_BY_SOURCE[NOTE_TARGET_SOURCE.DIRECT_GEOMETRY],
       coordinateSpace: 'pdf-analysis-normalized',
@@ -231,7 +233,9 @@ function resolveSingleNotePosition({
   })
 
   const span = geometry.yBottom - geometry.yTop
-  let y = staffBandY(geometry, note.staff, note.midi, note.partId)
+  const staffKey =
+    note.staff ?? (note.partId && /P2|2|bass|left|LH/i.test(String(note.partId)) ? 2 : 1)
+  let y = staffBandY(geometry, staffKey, note.midi, note.partId, staffRanges?.get(staffKey) ?? null)
   y += layoutYOffsetTenths(note.defaultY, span)
   if (note.relativeY != null) {
     y += layoutYOffsetTenths(note.relativeY, span)
@@ -242,6 +246,7 @@ function resolveSingleNotePosition({
   return {
     x: clamp(x, 0.03, 0.97),
     y,
+    midi: note.midi ?? null,
     source: classifySource(note, layoutExtents, timingWindow, geometry),
     coordinateSpace: 'pdf-analysis-normalized',
   }
@@ -264,7 +269,11 @@ function pickStrongestSource(sources) {
 
 function noteBoxForPlacement(placement, geometry) {
   if (placement.sourceBBox) {
-    return placement.sourceBBox
+    return {
+      ...placement.sourceBBox,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+    }
   }
   const measureWidth = Math.max(0.03, geometry.xMeasureEnd - geometry.xMeasureStart)
   const corridorHeight = Math.max(0.055, geometry.yBottom - geometry.yTop)
@@ -276,6 +285,8 @@ function noteBoxForPlacement(placement, geometry) {
     y0: clamp(placement.y - halfHeight, 0, 1),
     x1: clamp(placement.x + halfWidth, 0, 1),
     y1: clamp(placement.y + halfHeight, 0, 1),
+    midi: placement.midi ?? null,
+    sourceNoteheadId: placement.sourceNoteheadId ?? null,
   }
 }
 
@@ -390,7 +401,16 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
       placements.map((placement) => [placement.sourceNoteheadId, placement]),
     ).values(),
   ]
-  const xs = uniquePlacements.map((placement) => placement.x)
+  // Same cross-measure rule as the fallback path: the marker column sits
+  // with the checkpoint's own measure; every owned box still renders.
+  const measureNumber = checkpoint.measureNumber
+  const inMeasure =
+    notes.length === placements.length
+      ? uniquePlacements.filter((_, index) => notes[index]?.measureNumber === measureNumber)
+      : []
+  const xPlacements = inMeasure.length > 0 ? inMeasure : uniquePlacements
+  const crossMeasure = new Set(notes.map((note) => note.measureNumber)).size > 1
+  const xs = xPlacements.map((placement) => placement.x)
   const ys = uniquePlacements.map((placement) => placement.y)
   const x = xs.reduce((sum, value) => sum + value, 0) / xs.length
   const y = ys.reduce((sum, value) => sum + value, 0) / ys.length
@@ -406,7 +426,6 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
     source: NOTE_TARGET_SOURCE.SOURCE_NOTEHEAD,
     confidence,
   })
-  const measureNumber = checkpoint.measureNumber
   const checkpointTime = checkpoint.timeSeconds
 
   return {
@@ -414,7 +433,18 @@ function buildExactSourceTarget({ checkpoint, notes, placements, mode }) {
     targetKey:
       checkpoint.id ??
       `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
+    // The printed noteheads this event owns. The notehead feedback layer draws
+    // the musician's feedback ON these, so the score itself reports what was
+    // played.
+    notePlacements: uniquePlacements.map((placement) => ({
+      x: placement.x,
+      y: placement.y,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+      sourceBBox: placement.sourceBBox ?? null,
+    })),
     page: uniquePlacements[0].page,
+    crossMeasure,
     x: clamp(x, 0, 1),
     y: clamp(y, 0, 1),
     noteAnchorY: clamp(y, 0, 1),
@@ -447,6 +477,7 @@ export function resolveNoteTargetPosition({
   sourceVisualMap = null,
   preferredRepresentation = null,
   mode = 'wait-for-you',
+  motionTimeline = null,
 }) {
   if (!checkpoint || !isPlayableCheckpointKind(checkpoint.kind)) {
     return { visible: false, reason: 'not-note-checkpoint' }
@@ -498,12 +529,19 @@ export function resolveNoteTargetPosition({
     }
   }
 
-  const sharedCursor = resolveScoreFollowCursor({
-    timingMap,
-    practiceTime: checkpointTime,
-    trustedAnchors: anchors,
-    trust: { showCursor: true, needsSetup: false },
-  })
+  // Same display resolver the painted bar uses (motion timeline when the
+  // caller threads it, legacy fallback otherwise) — page/y here must agree
+  // with the bar, never a parallel estimate.
+  const sharedCursor = {
+    cursor: resolveDisplayCursorAtTime({
+      timingMap,
+      practiceTime: checkpointTime,
+      trustedAnchors: anchors,
+      trust: { showCursor: true, needsSetup: false },
+      motionTimeline,
+    }),
+  }
+  sharedCursor.confidence = sharedCursor.cursor?.confidence ?? null
 
   const geometry = buildMeasureAnchorGeometry(anchors, timingMap, measureNumber, checkpointTime)
   if (!geometry) {
@@ -529,6 +567,20 @@ export function resolveNoteTargetPosition({
   // Exact rendering is all-or-nothing for a semantic event. If ownership is
   // partial or below the precision threshold, resolve every member through the
   // conservative measure/layout hierarchy so coordinate spaces never mix.
+  // Pitch range per staff, so a note can be placed on its own line when the
+  // score carries no engraved vertical layout.
+  const staffRanges = new Map()
+  for (const note of notes) {
+    if (note?.midi == null) continue
+    const staff = note.staff ?? (note.partId && /P2|2|bass|left|LH/i.test(String(note.partId)) ? 2 : 1)
+    const range = staffRanges.get(staff)
+    if (!range) {
+      staffRanges.set(staff, { min: note.midi, max: note.midi })
+    } else {
+      range.min = Math.min(range.min, note.midi)
+      range.max = Math.max(range.max, note.midi)
+    }
+  }
   const placements = notes.map((note) =>
     resolveSingleNotePosition({
       note,
@@ -538,12 +590,25 @@ export function resolveNoteTargetPosition({
       checkpointTime,
       sourceAnchorIndex: new Map(),
       preferredRepresentation,
+      staffRanges,
     }),
   )
 
+  // Cross-measure checkpoints (simultaneous notes notated in two measures,
+  // e.g. tremolo across a barline): the marker column and the WFY bar lock
+  // must sit with the checkpoint's own measure — the one the timeline cursor
+  // is in — never at an average stranded between measures. All boxes still
+  // render (every required note stays visible).
+  const inMeasure = notes
+    .map((note, index) => ({ note, index }))
+    .filter(({ note }) => note.measureNumber === measureNumber)
+  const xPool = (inMeasure.length > 0 ? inMeasure : notes.map((note, index) => ({ note, index })))
+    .map(({ index }) => placements[index].x)
+  const crossMeasure =
+    new Set(notes.map((note) => note.measureNumber)).size > 1
   const xs = placements.map((placement) => placement.x)
   const ys = placements.map((placement) => placement.y)
-  const x = xs.reduce((sum, value) => sum + value, 0) / xs.length
+  const x = xPool.reduce((sum, value) => sum + value, 0) / xPool.length
   const yMin = Math.min(...ys)
   const yMax = Math.max(...ys)
   const y = checkpoint.isChord && yMax - yMin > 0.025 ? (yMin + yMax) / 2 : ys.reduce((a, b) => a + b, 0) / ys.length
@@ -573,6 +638,12 @@ export function resolveNoteTargetPosition({
   }
 
   const noteAnchorY = clamp(y, 0.06, 0.94)
+  // The size of a printed notehead, derived from the staff it sits on (four
+  // staff spaces tall, a notehead is about one space high). The notehead
+  // feedback layer needs this to draw a notehead-sized shape when the exact
+  // printed head is not owned by the score.
+  const staffSpace = Math.max(0.004, (geometry.yBottom - geometry.yTop) / 4)
+  const noteheadSize = { width: staffSpace * 1.16, height: staffSpace * 0.98 }
   const markerY = clamp(
     Math.min(noteAnchorY, geometry.yTop + 0.008) - NOTE_TARGET_MARKER_OFFSET_Y,
     0.04,
@@ -582,6 +653,16 @@ export function resolveNoteTargetPosition({
   return {
     visible: true,
     targetKey: checkpoint.id ?? `${measureNumber}:${checkpointTime}:${notes.map((note) => note.midi).join(',')}`,
+    // One placement per note of the event, in the same order as the notes.
+    // The notehead feedback layer draws the musician's feedback ON these, so
+    // the score itself reports what was played.
+    notePlacements: placements.map((placement) => ({
+      x: placement.x,
+      y: placement.y,
+      midi: placement.midi ?? null,
+      sourceNoteheadId: placement.sourceNoteheadId ?? null,
+      sourceBBox: placement.sourceBBox ?? null,
+    })),
     page: geometry.page,
     x: clamp(x, 0.03, 0.97),
     y: markerY,
@@ -601,6 +682,8 @@ export function resolveNoteTargetPosition({
     chordSpread,
     hasLayoutData,
     measureNumber,
+    crossMeasure,
     placement: geometry.placement,
+    noteheadSize,
   }
 }

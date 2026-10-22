@@ -1,0 +1,62 @@
+# Arrangement-grade benchmark (real recordings)
+
+generated 2026-10-10T22:24:15.998Z
+
+| recording | pitch | config | result | conf | melStrict | melPc | xmlNotes | ms |
+|---|---|---|---|---|---|---|---|---|
+| mic-real-acoustic-jazz-single | basic-pitch | solo-piano/easy | ok | 0.69 | 0.833 | 0.833 | 16 | 366 |
+| mic-real-acoustic-jazz-single | basic-pitch | solo-piano/advanced | ok | 0.69 | 0.833 | 0.833 | 17 | 339 |
+| mic-real-acoustic-jazz-single | basic-pitch | solo-guitar/easy | ok | 0.69 | 0.833 | 0.833 | 12 | 343 |
+| mic-real-acoustic-jazz-single | basic-pitch | solo-guitar/advanced | ok | 0.69 | 0.833 | 0.833 | 12 | 343 |
+| mic-real-acoustic-jazz-single | spectral | solo-piano/easy | ok | 0.7 | 0.5 | 0.5 | 24 | 339 |
+| mic-real-acoustic-jazz-single | spectral | solo-piano/advanced | ok | 0.7 | 0.5 | 0.5 | 24 | 342 |
+| mic-real-acoustic-jazz-single | spectral | solo-guitar/easy | ok | 0.7 | 0.5 | 0.5 | 21 | 351 |
+| mic-real-acoustic-jazz-single | spectral | solo-guitar/advanced | ok | 0.7 | 0.5 | 0.5 | 21 | 386 |
+| mic-real-acoustic-jazz-dyad | basic-pitch | solo-piano/easy | ok | 0.72 | 0.857 | 0.857 | 16 | 446 |
+| mic-real-acoustic-jazz-dyad | basic-pitch | solo-piano/advanced | ok | 0.72 | 0.857 | 0.857 | 17 | 350 |
+| mic-real-acoustic-jazz-dyad | basic-pitch | solo-guitar/easy | ok | 0.72 | 0.857 | 0.857 | 13 | 387 |
+| mic-real-acoustic-jazz-dyad | basic-pitch | solo-guitar/advanced | ok | 0.72 | 0.857 | 0.857 | 14 | 411 |
+| mic-real-acoustic-jazz-dyad | spectral | solo-piano/easy | ok | 0.71 | 0.571 | 0.571 | 22 | 427 |
+| mic-real-acoustic-jazz-dyad | spectral | solo-piano/advanced | ok | 0.71 | 0.571 | 0.571 | 22 | 459 |
+| mic-real-acoustic-jazz-dyad | spectral | solo-guitar/easy | ok | 0.71 | 0.571 | 0.571 | 19 | 332 |
+| mic-real-acoustic-jazz-dyad | spectral | solo-guitar/advanced | ok | 0.71 | 0.571 | 0.571 | 19 | 486 |
+| mic-real-acoustic-bossa-chord | basic-pitch | solo-piano/easy | ok | 0.66 | 0.333 | 0.444 | 16 | 353 |
+| mic-real-acoustic-bossa-chord | basic-pitch | solo-piano/advanced | ok | 0.64 | 0.556 | 0.556 | 24 | 370 |
+| mic-real-acoustic-bossa-chord | basic-pitch | solo-guitar/easy | ok | 0.7 | 0.444 | 0.444 | 13 | 449 |
+| mic-real-acoustic-bossa-chord | basic-pitch | solo-guitar/advanced | ok | 0.69 | 0.556 | 0.556 | 19 | 425 |
+| mic-real-acoustic-bossa-chord | spectral | solo-piano/easy | ok | 0.72 | 0.556 | 0.556 | 18 | 411 |
+| mic-real-acoustic-bossa-chord | spectral | solo-piano/advanced | ok | 0.72 | 0.556 | 0.556 | 18 | 355 |
+| mic-real-acoustic-bossa-chord | spectral | solo-guitar/easy | ok | 0.69 | 0.556 | 0.556 | 16 | 433 |
+| mic-real-acoustic-bossa-chord | spectral | solo-guitar/advanced | ok | 0.69 | 0.556 | 0.556 | 16 | 419 |
+| mic-real-acoustic-strum-dense | basic-pitch | solo-piano/easy | ok | 0.64 | 0.333 | 0.524 | 28 | 436 |
+| mic-real-acoustic-strum-dense | basic-pitch | solo-piano/advanced | ok | 0.71 | 0.762 | 0.905 | 45 | 401 |
+| mic-real-acoustic-strum-dense | basic-pitch | solo-guitar/easy | ok | 0.73 | 0.524 | 0.714 | 23 | 342 |
+| mic-real-acoustic-strum-dense | basic-pitch | solo-guitar/advanced | ok | 0.75 | 0.81 | 0.905 | 41 | 470 |
+| mic-real-acoustic-strum-dense | spectral | solo-piano/easy | ok | 0.77 | 0.286 | 0.571 | 22 | 403 |
+| mic-real-acoustic-strum-dense | spectral | solo-piano/advanced | ok | 0.77 | 0.286 | 0.571 | 23 | 329 |
+| mic-real-acoustic-strum-dense | spectral | solo-guitar/easy | ok | 0.77 | 0.286 | 0.571 | 20 | 408 |
+| mic-real-acoustic-strum-dense | spectral | solo-guitar/advanced | ok | 0.77 | 0.286 | 0.571 | 21 | 437 |
+| mic-real-acoustic-funk-dense | basic-pitch | solo-piano/easy | ok | 0.68 | 0.211 | 0.526 | 31 | 465 |
+| mic-real-acoustic-funk-dense | basic-pitch | solo-piano/advanced | ok | 0.75 | 0.737 | 0.737 | 37 | 348 |
+| mic-real-acoustic-funk-dense | basic-pitch | solo-guitar/easy | ok | 0.74 | 0.526 | 0.579 | 21 | 404 |
+| mic-real-acoustic-funk-dense | basic-pitch | solo-guitar/advanced | ok | 0.75 | 0.737 | 0.737 | 30 | 408 |
+| mic-real-acoustic-funk-dense | spectral | solo-piano/easy | ok | 0.76 | 0.316 | 0.632 | 24 | 429 |
+| mic-real-acoustic-funk-dense | spectral | solo-piano/advanced | ok | 0.76 | 0.316 | 0.632 | 25 | 380 |
+| mic-real-acoustic-funk-dense | spectral | solo-guitar/easy | ok | 0.76 | 0.316 | 0.632 | 22 | 367 |
+| mic-real-acoustic-funk-dense | spectral | solo-guitar/advanced | ok | 0.76 | 0.316 | 0.632 | 23 | 432 |
+| mic-real-electric-eg01-dense | basic-pitch | solo-piano/easy | ok | 0.68 | 0.75 | 0.75 | 16 | 367 |
+| mic-real-electric-eg01-dense | basic-pitch | solo-piano/advanced | ok | 0.66 | 0.75 | 0.75 | 18 | 362 |
+| mic-real-electric-eg01-dense | basic-pitch | solo-guitar/easy | ok | 0.7 | 0.875 | 0.875 | 13 | 336 |
+| mic-real-electric-eg01-dense | basic-pitch | solo-guitar/advanced | ok | 0.68 | 0.875 | 0.875 | 15 | 341 |
+| mic-real-electric-eg01-dense | spectral | solo-piano/easy | ok | 0.71 | 0.375 | 0.5 | 18 | 339 |
+| mic-real-electric-eg01-dense | spectral | solo-piano/advanced | ok | 0.71 | 0.375 | 0.5 | 19 | 342 |
+| mic-real-electric-eg01-dense | spectral | solo-guitar/easy | ok | 0.71 | 0.375 | 0.5 | 16 | 343 |
+| mic-real-electric-eg01-dense | spectral | solo-guitar/advanced | ok | 0.71 | 0.375 | 0.5 | 17 | 340 |
+| mic-real-electric-eg10-dense | basic-pitch | solo-piano/easy | ok | 0.53 | 0.333 | 0.667 | 10 | 341 |
+| mic-real-electric-eg10-dense | basic-pitch | solo-piano/advanced | ok | 0.57 | 1 | 1 | 17 | 351 |
+| mic-real-electric-eg10-dense | basic-pitch | solo-guitar/easy | ok | 0.61 | 1 | 1 | 9 | 342 |
+| mic-real-electric-eg10-dense | basic-pitch | solo-guitar/advanced | ok | 0.61 | 1 | 1 | 15 | 327 |
+| mic-real-electric-eg10-dense | spectral | solo-piano/easy | ok | 0.6 | 0 | 0.333 | 15 | 390 |
+| mic-real-electric-eg10-dense | spectral | solo-piano/advanced | ok | 0.61 | 0 | 0.333 | 20 | 429 |
+| mic-real-electric-eg10-dense | spectral | solo-guitar/easy | ok | 0.6 | 0 | 0.333 | 13 | 434 |
+| mic-real-electric-eg10-dense | spectral | solo-guitar/advanced | ok | 0.61 | 0 | 0.333 | 18 | 428 |

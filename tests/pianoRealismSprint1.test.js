@@ -47,14 +47,23 @@ describe('Piano Realism Sprint 1 — sample set & coverage', () => {
     for (const file of Object.values(PIANO_SAMPLE_URLS)) {
       expect(files.has(file)).toBe(true)
     }
-    expect(Object.keys(PIANO_SAMPLE_URLS)).toHaveLength(30)
+    expect(Object.keys(PIANO_SAMPLE_URLS)).toHaveLength(29)
   })
 
   it('covers A0–C8 within a 1.5-semitone pitch-shift budget', () => {
     const coverage = reportPianoKeyboardCoverage()
     expect(coverage.missingMidi).toEqual([])
-    expect(coverage.extremeTranspose).toEqual([])
     expect(coverage.coveredCount).toBe(88)
+    // MIDI 0..105 keep the 1.5-semitone budget: no key may exceed it below
+    // the documented top-of-compass exception.
+    const unexpected = coverage.extremeTranspose.filter((entry) => entry.targetMidi < 107)
+    expect(unexpected).toEqual([])
+    // The exception is exactly the two notes that used to inherit the
+    // defective C8 sample (~+150 cents, i.e. the wrong note). They now
+    // shift up from A7 instead, which lands them near +39 cents at a
+    // 2-3 semitone shift. Asserting the exact set keeps this a deliberate,
+    // bounded decision rather than something that can quietly grow.
+    expect(coverage.extremeTranspose.map((entry) => entry.targetMidi)).toEqual([107, 108])
     expect(nearestPianoSample(60).sampleName).toBe('C4')
     expect(Math.abs(nearestPianoSample(61).transposeSemitones)).toBeLessThanOrEqual(1.5)
   })

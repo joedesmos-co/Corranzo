@@ -14,7 +14,7 @@ describe('logo home navigation', () => {
   it('targets the dedicated Home without the legacy welcome panel', () => {
     expect(getHomeNavigationTarget()).toEqual({
       view: 'home',
-      pathname: '/',
+      pathname: '/#home',
       showWelcome: false,
     })
   })

@@ -29,7 +29,7 @@ async function start(page) {
   await page.getByRole('button', { name: 'Bring your own score', exact: true }).click()
   await page.locator('.score-import').waitFor()
 }
-const pick = (page, file = pdf) => page.getByLabel('Choose score PDF', { exact: true }).setInputFiles(file)
+const pick = (page, file = pdf) => page.getByLabel('Choose score file', { exact: true }).setInputFiles(file)
 const ready = page => page.locator('.score-import-ready').waitFor({ timeout: 120000 })
 const shot = async (page, name) => { await page.mouse.move(0, 0); return page.screenshot({ path: `${dir}/${name}.png`, animations: 'disabled' }) }
 async function noOverflow(page) { assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'No horizontal overflow') }

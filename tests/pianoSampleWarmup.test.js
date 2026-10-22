@@ -9,6 +9,8 @@ import {
   __resetPianoSampleWarmupForTests,
 } from '../src/features/playback/pianoSampleWarmup.js'
 
+import { listInstruments } from '../src/features/instruments/instruments.js'
+
 describe('pianoSampleWarmup', () => {
   afterEach(() => {
     __resetInstrumentSampleWarmupForTests()
@@ -51,6 +53,6 @@ describe('pianoSampleWarmup', () => {
 
     warmupAllInstrumentSamplesOnIdle()
 
-    expect(idle).toHaveBeenCalledTimes(2)
+    expect(idle).toHaveBeenCalledTimes(listInstruments().length)
   })
 })

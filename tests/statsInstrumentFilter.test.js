@@ -1,6 +1,7 @@
 /**
- * Stats instrument scoping: exactly three views — both instruments combined,
- * just piano, just guitar — projected from one canonical stats object.
+ * Stats instrument scoping: combined plus one view per supported instrument
+ * (piano, acoustic guitar, electric guitar) — projected from one canonical
+ * stats object.
  */
 import { describe, expect, it } from 'vitest'
 import {
@@ -68,11 +69,12 @@ function buildMixedStats() {
 }
 
 describe('stats scopes', () => {
-  it('offers exactly three options: combined, piano, guitar', () => {
+  it('offers combined plus one scope per supported instrument', () => {
     expect(listStatsScopes()).toEqual([
       { id: 'all', label: 'All instruments' },
       { id: 'piano', label: 'Piano' },
-      { id: 'guitar', label: 'Guitar' },
+      { id: 'guitar', label: 'Acoustic Guitar' },
+      { id: 'electric-guitar', label: 'Electric Guitar' },
     ])
   })
 
@@ -115,7 +117,7 @@ describe('filterStatsByInstrument', () => {
     expect(guitar.autoPracticeSeconds).toBe(300)
     expect(guitar.lastAutoPracticedAt).toBe(1700000200000)
     expect(Object.keys(guitar.pieces)).toEqual(['piece:lagrima'])
-    expect(guitar.statsScopeLabel).toBe('Guitar')
+    expect(guitar.statsScopeLabel).toBe('Acoustic Guitar')
   })
 
   it('projects mixed-instrument piece activity to the selected instrument', () => {

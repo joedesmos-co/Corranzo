@@ -9,7 +9,7 @@ const errors = [], consoleErrors = [], cycles = []
 page.on('pageerror', e => errors.push(e.stack))
 page.on('console', e => { if (e.type() === 'error') consoleErrors.push(e.text()) })
 const pdf = readFileSync('public/fixtures/practice-library/piano-mozart-menuet-k2/piano-mozart-menuet-k2.pdf')
-const pick = name => page.getByLabel('Choose score PDF', { exact: true }).setInputFiles({ name, mimeType: 'application/pdf', buffer: pdf })
+const pick = name => page.getByLabel('Choose score file', { exact: true }).setInputFiles({ name, mimeType: 'application/pdf', buffer: pdf })
 let failure
 try {
   await page.goto(process.env.UI_REVIEW_URL || 'http://127.0.0.1:5178/')

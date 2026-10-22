@@ -62,15 +62,18 @@ export default function useBeatNavigation(timingMap, practiceTime, onSeekToTime)
       position.measure.number,
     )
     onSeekToTime(performedStart ?? getMeasureStartTime(position.measure))
-  }, [position?.measure, position?.measureStartTimeSeconds, onSeekToTime, timingMap])
+  }, [position, onSeekToTime, timingMap])
 
-  return {
-    position,
-    currentBeat,
-    canGoPreviousBeat: Boolean(previousBeat),
-    canGoNextBeat: Boolean(nextBeat),
-    goToPreviousBeat,
-    goToNextBeat,
-    goToCurrentMeasureStart,
-  }
+  return useMemo(
+    () => ({
+      position,
+      currentBeat,
+      canGoPreviousBeat: Boolean(previousBeat),
+      canGoNextBeat: Boolean(nextBeat),
+      goToPreviousBeat,
+      goToNextBeat,
+      goToCurrentMeasureStart,
+    }),
+    [position, currentBeat, previousBeat, nextBeat, goToPreviousBeat, goToNextBeat, goToCurrentMeasureStart],
+  )
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PdfPage from './PdfPage.jsx'
 import PdfPageOverlayStack from './PdfPageOverlayStack.jsx'
 import PdfOverlayLayer from './PdfOverlayLayer.jsx'
@@ -7,6 +7,21 @@ import ScoreFollowOverlay from './ScoreFollowOverlay.jsx'
 import CalibrationDebugOverlay from './CalibrationDebugOverlay.jsx'
 import { ANNOTATION_TOOLS } from './annotationConstants.js'
 import { measurePdfOverlayLayout } from '../../utils/pdfOverlayLayout.js'
+
+function sameOverlayLayout(left, right) {
+  if (left === right) {
+    return true
+  }
+  if (!left || !right) {
+    return false
+  }
+  return (
+    left.left === right.left &&
+    left.top === right.top &&
+    left.width === right.width &&
+    left.height === right.height
+  )
+}
 
 function PdfPageFrame({
   pageNumber,
@@ -35,11 +50,17 @@ function PdfPageFrame({
     const frame = frameRef.current
     const pageElement = frame?.querySelector('.react-pdf__Page')
     if (!frame || !pageElement) {
-      setOverlayLayout(null)
+      setOverlayLayout((previous) => (previous == null ? previous : null))
       return
     }
 
-    setOverlayLayout(measurePdfOverlayLayout(pageElement))
+    // Value-guarded: a re-measure that yields the same box must not replace the
+    // state object, or every observer/effect re-run re-renders the whole page
+    // stack (and any downstream `[layout]` effect) for no visible change.
+    setOverlayLayout((previous) => {
+      const next = measurePdfOverlayLayout(pageElement)
+      return sameOverlayLayout(previous, next) ? previous : next
+    })
   }, [])
 
   useEffect(() => {
@@ -101,19 +122,30 @@ function PdfPageFrame({
       scoreFollow.enabled ||
       semiAutoPreview ||
       scoreFollow.showNoteTarget ||
+      scoreFollow.showScoreNoteStates ||
       scoreFollow.showCandidateAnchors)
 
   const showCalibrationDebugLayer =
     scoreFollow?.showCalibrationOverlay && scoreFollow?.calibrationOverlayPage
 
-  const innerLayout = overlayLayout
-    ? {
-        left: 0,
-        top: 0,
-        width: overlayLayout.width,
-        height: overlayLayout.height,
-      }
-    : null
+  // The overlay stack is positioned by `overlayLayout`, but the annotation layer
+  // itself draws in the page's LOCAL box (the rotator owns the transform), so
+  // its layout is derived, not measured. Keeping this memoized matters: a fresh
+  // objectLiteral on every render made AnnotationLayer's `[layout]` effect re-run
+  // each render, and that effect calls setState — an unbounded passive-effect
+  // render loop (React "Maximum update depth exceeded").
+  const innerLayout = useMemo(
+    () =>
+      overlayLayout
+        ? {
+            left: 0,
+            top: 0,
+            width: overlayLayout.width,
+            height: overlayLayout.height,
+          }
+        : null,
+    [overlayLayout],
+  )
 
   const frameBoxStyle =
     frameDisplayWidth && frameDisplayHeight
@@ -175,6 +207,8 @@ function PdfPageFrame({
                 cursor={scoreFollow.cursor}
                 noteTarget={scoreFollow.noteTarget}
                 showNoteTarget={scoreFollow.showNoteTarget}
+                scoreNoteStates={scoreFollow.scoreNoteStates ?? []}
+                showScoreNoteStates={scoreFollow.showScoreNoteStates ?? false}
                 anchors={scoreFollow.displayAnchors ?? scoreFollow.anchors}
                 onPlaceAnchor={scoreFollow.placeAnchorAt}
                 systemStartMode={systemStartMode}
