@@ -2016,3 +2016,41 @@ not.
     rest recall .296, dur_acc .760). Deeper architecture review justified.
 
   Sealed TEST untouched. Not merged to main.
+
+
+## Accuracy breakthrough mission: direct architecture comparison (this session)
+
+  Scored generated MusicXML (not just renderability) against page-1 truth on
+  the same 5 DEV scores, using multiset matching on (midi, duration, dots):
+    auto_e2e: complete TP 311/902 (recall .345, precision .336); pitch TP
+      199/249? (pitch key includes chord members; see report); duration
+      TP 18/41; rests 0/27.
+    homr 0.7.0: complete TP 636/902 (recall .705, precision .705); pitch
+      TP 188/249; duration TP 40/41; rests 27/27.
+  Per-score homr complete recall: .29, .75, 1.00, .87, .95.
+  Note: multiset metric is stricter than the native position metric that
+    produced the familiar 607/902 = .703 baseline; both systems are scored
+    identically here, so the relative result is valid.
+
+  MusicXML measure validity (5 DEV pages): auto_e2e bad measures 20/28,
+    29/38, 0/22, 1/25, 8/14; homr 4/16, 12/20, 0/10, 0/16, 0/32.
+  homr is decisively stronger on both content and measure validity.
+
+  Licensing:
+    - homr 0.7.0: AGPL-3.0 (software); weights from TrOMR (license must be
+      confirmed before any production use). Isolated research evaluation only.
+    - oemer 0.1.8: MIT (software). Weights download failed in this
+      environment (SSL certificate verification), so oemer was NOT scored.
+      It is the legally usable candidate for the next evaluation.
+    - Audiveris: AGPL-3.0 (not installed/tested).
+
+  Decision: current architecture cannot sustainably reach high fidelity.
+  Pretrained OMR is decisively better. Production path must either (a) obtain
+  a licensing decision for an AGPL engine, or (b) evaluate the MIT oemer
+  engine on the same references. No AGPL code/weights copied into production.
+
+  Input-quality gate preserved; it triggers only on no-staff/no-note input,
+  so clean music is not rejected merely because the recognizer is weak.
+
+  No accuracy improvement implemented this session; the decisive comparison
+  is the deliverable. Sealed TEST untouched; not merged.
