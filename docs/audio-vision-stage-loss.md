@@ -112,6 +112,24 @@ loses on the product's constraints - so it is **not** integrated, and the
 measured weakness of the current model (precision, durations) is addressed in
 the pipeline instead.
 
+## Verification
+
+| check | result |
+|---|---|
+| audio-vision unit suites (analysis, arrangement, pipeline, import, measure integrity, MusicXML semantics, tempo persistence, agreement) | **90 passed / 0 failed** |
+| new regression suites (`audioVisionTranscriptionCleanup`, `audioVisionMusicXmlOutput`) | **23 passed** |
+| browser flow, upload -> arrangement -> review -> import -> practice -> playback (`browser-audio-vision-uiflow.mjs`) | **7 passed / 0 failed** |
+| browser critical-UX suite | 13 passed / 6 failed - **identical to the pre-change baseline** (the 6 are the research branch's known gaps: the TAB staff, the corrected tempo in the score, the active-score switch and the arrangement persistence across a reload - all features that live on the product branch) |
+| MusicXML written by the real pipeline | every measure exactly one bar per voice in the detected meter, no overfull measure, every note survives a write -> read -> parse round trip |
+| full repository suite | unchanged from the branch baseline (the 7 known UI failures and the 2 load-dependent neural-injection flakes, both reproduced without these changes) |
+
+The browser runs were executed with the production Practice Engine untouched:
+the other agent's in-progress `PracticeSessionContext` / `usePracticeSession`
+edit was set aside for the duration of the run (saved as a patch, restored
+byte-for-byte afterwards, md5 verified) because that in-progress edit crashes
+the practice view with `Cannot read properties of undefined (reading
+'effectiveTempo')` - a failure of their change, not of this one.
+
 ## What is still weak (and honest about it)
 
 * **Density on dense material.** 2.1 notes/s on a guitar solo, 4.2-6.5 on a

@@ -87,8 +87,16 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
 /**
  * Analyze mono 22050 Hz samples. views: { harmonic, percussive } magnitude frames (optional).
  * predictNotes: async (samples) => [{ midi, startSeconds, endSeconds }] | null (Basic Pitch).
+ *
+ * `corroborateNotes` (default OFF) drops a short transcribed note that no
+ * spectral-flux detector heard attack. It is OFF by default because it was
+ * MEASURED to delete real notes on real recordings: the flux detector misses
+ * a soft pick, and the gate then drops a genuine note. Measured on the
+ * GuitarSet takes the arrangement's event F1 is 0.692 with the gate off and
+ * 0.667 with it on; on the mic-real clips 0.535 vs 0.519. Switch it on with
+ * `corroborateNotes: true` to reproduce the older behaviour.
  */
-export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null, corroborateNotes = true } = {}) {
+export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null, corroborateNotes = false } = {}) {
   const totalSeconds = samples.length / sampleRate
   const report = (stage, fraction) => {
     try { onProgress?.({ stage, fraction }) } catch { /* noop */ }
