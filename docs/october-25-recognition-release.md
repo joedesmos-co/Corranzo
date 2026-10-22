@@ -333,19 +333,72 @@ tests/micLiveProduction.test.js                    | 186 ++++++++++++++++++++
 
 | required check | result |
 |---|---|
-| real browser practice and score-switching tests | see §9 |
-| MIDI / microphone behaviour checks with known limitations | see §9; the neural recogniser is OFF and is the known limitation |
-| complete MusicXML validity and fidelity tests | `tests/audioVisionMusicXmlSemantics.test.js` green; the stage-loss ledger reports `xml=true` for all five GuitarSet takes in both gate states |
-| Preview / Play Along / Wait For You regressions | see §9 |
-| no cursor or audio lifecycle regressions | see §9 |
-| Safari/WebKit and Chromium smoke tests | see §9 |
-| clear separation of verified results and remaining uncertainty | this document: every number is labelled with how it was measured; §10 lists what is still unknown |
+| real browser practice and score-switching tests | **§9** — all nine in-repo browser suites green (68 passed, 6 skipped, 0 failed) and all seven standalone browser scripts green except two **byte-identical pre-existing** failures on `main` |
+| MIDI / microphone behaviour checks with known limitations | **§9** — `browser-unified-practice-midi-e2e.mjs` 24/25 and `browser-unified-practice-mic-e2e.mjs` 22/24, both with one pre-existing failure identical on `main`; `tests/micLiveProduction.test.js` 5/5 (the new mic regression); **known limitation: the neural recogniser is OFF by default, is 2.3× over the real-time hop budget and drops 75 % of its inference windows — it is not a supported practice path in this beta** |
+| complete MusicXML validity and fidelity tests | `tests/audioVisionMusicXmlSemantics.test.js` green; `scripts/browser-audio-vision-critical-ux.mjs` verifies the corrected tempo reaches the MusicXML (`per-minute=93`) and that the arrangement round-trips through a browser restart byte-for-byte; the stage-loss ledger reports `xml=true` for all five GuitarSet takes in **both** gate states |
+| Preview / Play Along / Wait For You regressions | **§9** — all three modes exercised in Chromium and WebKit, 0 console errors, 0 page errors |
+| no cursor or audio lifecycle regressions | **§9** — the practice-surface regression reports a continuous cursor with no teleports and no backward movement; `playbackAcceptance` 10/10, `audioRender` 25/25 |
+| Safari/WebKit and Chromium smoke tests | **§9** — `browser-audio-vision-unified-webkit.mjs` 12/12 in **webkit** and 12/12 in **chromium**; `browser-smoke-pass.mjs` 19/19 with no horizontal overflow on desktop / iPad / mobile |
+| clear separation of verified results and remaining uncertainty | this document: every number states how it was measured; §10 lists what is still unknown and §11 lists the rollback options |
 
 ---
 
 ## 9. Browser verification results
 
-*(filled in from the runs on the integration branch — see §9 table below)*
+### 9.1 In-repo browser suites (real Chromium, real app)
+
+Every file that drives a real browser was run individually on the integration branch
+(one browser process per file, so a slow machine cannot turn a real failure into a
+resource artefact).
+
+| suite | result | what it covers |
+|---|---|---|
+| `tests/micLiveProduction.test.js` (new) | **5 / 5 passed** (92 s) | real MediaStream injection: a correct note advances; a real piano chord completes on the **default V3 path**; a real piano chord completes on the **V2 collection fallback**; a **partial** chord does not advance; **room noise** does not advance |
+| `tests/practiceVisualRuntime.test.js` | **2 / 2 passed** | opens Practice and survives **Score → Visual → Score** in a real browser |
+| `tests/playbackAcceptance.test.js` | **10 / 10 passed** | audio lifecycle: long notes sustain, repeated notes are distinct attacks, no clipping, registers consistent |
+| `tests/audioRender.test.js` | **25 / 25 passed** | rendered audio: slides, vibrato, bends, hammer-ons, trills, arpeggio stagger, dynamics |
+| `tests/samplePitchCoverage.test.js` | **3 / 3 passed** | every piano / acoustic-guitar / electric-guitar sample sounds at its declared key |
+| `tests/neuralMicCaptureBrowser.test.js` | **1 / 1 passed** | the experimental neural capture path (grants capture, polls analyser frames, evaluates the silence gate) |
+| `tests/neuralPipelineBrowser.test.js` | 3 skipped | conditional (experimental) |
+| `tests/neuralBrowserSmoke.test.js` | 3 skipped | conditional (experimental) |
+| `tests/neuralLiveInjection.test.js` | **16 / 16 passed** (560 s) | the experimental neural path end to end — including the case that **fails on `main`** (`attackPresence`), and the WFY ⇄ Play Along switch-back with no starvation, a multi-minute soak, octave and strum handling, and no advance on speech-like audio |
+
+**No cursor regression, no audio-lifecycle regression, no neural-path regression.**
+
+### 9.2 Standalone browser scripts (real app, real audio, real engines)
+
+| script | result | what it covers |
+|---|---|---|
+| `scripts/browser-practice-surface-regression.mjs` | **11 / 11 passed** | **Play Along**: the cursor produced continuous frames (157 frames, 157 distinct), never teleported between notes (max jump 2.09), never moved backwards. **Pause** while the instrument is still loading: the music never started. **Zoom** (fit page / fit width) re-renders the score. **Resize** re-renders. **Scroll**: the cursor stays locked to the score. **Page change**. **Tempo**: the playback rate changed and the transport still reads. No page exceptions. |
+| `scripts/browser-audio-vision-unified-webkit.mjs` (**webkit** — Safari's engine) | **12 / 12 passed**, 0 console errors, 0 page errors | the arrangement is generated (Web Worker inference); the unified workspace is the normal Practice Engine; **Preview · Play Along · Wait For You** all present; the red cursor is on the engraved score and moves with the music; the cursor follows the **notation** staff, not the TAB copy; the engraving keeps its natural width; a short score is not stretched; the guitar arrangement keeps standard notation **and** a separate TAB staff; Wait For You initializes with a target; seeking moves the practice clock |
+| `scripts/browser-audio-vision-unified-webkit.mjs` (**chromium**) | **12 / 12 passed**, 0 console errors, 0 page errors | the same twelve checks in Chromium |
+| `scripts/browser-audio-vision-uiflow.mjs` | **7 / 7 passed** | library navigation → create-from-audio → upload + duration probe → arrangement review → import view → arrangement practice surface (transport + targets, no PDF needed) → the practice transport plays the arrangement |
+| `scripts/browser-audio-vision-critical-ux.mjs` | **19 / 19 passed** | PDF import; the progress stages advance; **the main thread stays responsive** (worst heartbeat gap 51 ms); the import view shows the arrangement, not the PDF; Open Score opens the engraved arrangement with **no PDF canvas**; the guitar arrangement carries a six-line TAB staff in standard tuning; the piano arrangement opens the full Practice Engine and its preview playback engages; a corrected tempo is applied to the rebuilt arrangement **and** to the opened score (MusicXML `per-minute=93`); **the second arrangement is the active score** (score switching); the arrangement **survives a browser restart byte-for-byte** and reopens in practice; an unsupported file, malformed audio and silence are each refused honestly; **cancel** stops the run and leaves the panel |
+| `scripts/browser-smoke-pass.mjs` | **19 / 19 passed** | cold load; PDF-only import → Practice; piano practice + Play without a crash; guitar shows the empty practice after a piano load; repeated Piano ↔ Guitar switches clear live Practice; Visual and Score views render; the Wait For You dock is visible; the Hear It control is deferred until a checkpoint; the progress instrument filters switch; reload restores the active instrument; **no horizontal overflow on desktop / iPad / mobile**; no console errors; no uncaught page errors |
+| `scripts/browser-unified-practice-midi-e2e.mjs` | 24 passed, **1 failed**, 1 skipped | the failure is `wfy cursor locks to the required notehead column: cursor=32.37 box=0` — **byte-identical on untouched `main`** (same cursor value, same box value), so it is pre-existing and not caused by this release. Everything else passes: preview cursor, no blue notehead highlight boxes, WFY MIDI source, WFY entry at the first checkpoint, the compact WFY dock, a correct note advances, **a wrong note does not advance** and flashes red, a **partial chord stays required**, a **completed chord advances**, rapid duplicate input advances exactly once, Play Along highlights, preview play / pause / seek, **changing scores resets Wait For You**, zoom keeps the highlights, no console or page errors |
+| `scripts/browser-unified-practice-mic-e2e.mjs` | 22 passed, **1 failed**, 1 skipped | the failure is `mic run waits on middle C` — **identical on untouched `main`** (same rendered text), so pre-existing. Everything else passes: a correct C4 advances and turns green, a wrong note does not advance and is refused, a melody run advances several checkpoints, **the mic cursor travels with the checkpoints**, neural mode progresses, **disabling neural resumes spectral listening**, denied permission shows guidance and practice continues via Continue, Play Along evaluates timed mic events, **model unavailable never shows Ready and falls back to spectral**, no console or page errors across all mic runs |
+
+### 9.3 Unit / non-browser suites on the integration branch
+
+**383 files → 382 passed, 1 skipped. 3842 tests → 3829 passed, 13 skipped, 0 failed.**
+
+The three files that timed out in an earlier run (`finalMicLowNoteCorpus`,
+`scoreFollowMotionModel`, `sourceFaithfulZeroDefectBaseline`) all pass once the worktree has a
+real `node_modules` — they were resource artefacts of a shared Vite optimizer cache, and the
+same three also time out on untouched `main` under the same conditions. They are not caused by
+this release.
+
+### 9.4 Summary
+
+* **No cursor regression.** The practice-surface regression, the visual-runtime suite and both
+  engine variants of the Audio Vision WebKit script all pass.
+* **No audio-lifecycle regression.** `playbackAcceptance` (10/10) and `audioRender` (25/25) pass,
+  and the smoke pass reports no console or page errors.
+* **Preview / Play Along / Wait For You** are all exercised and pass in Chromium **and** WebKit.
+* **Score switching** passes (`changing scores resets Wait For You`; `the second arrangement is
+  the active score`).
+* The only two failures anywhere are **byte-identical on untouched `main`** and are recorded as
+  pre-existing.
 
 ---
 
