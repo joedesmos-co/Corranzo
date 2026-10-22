@@ -1,0 +1,1066 @@
+{
+  "generatedAt": "2026-10-21T21:55:49.057Z",
+  "onsetTolerance": 0.12,
+  "rows": [
+    {
+      "id": "guitarset-jazz2-solo",
+      "kind": "solo",
+      "truthNotes": 78,
+      "audioSeconds": 34.9,
+      "modelMs": 47077,
+      "modelNotes": 105,
+      "tempoBpm": 68,
+      "tempoSource": "estimate",
+      "model": {
+        "score": {
+          "predicted": 105,
+          "reference": 78,
+          "matched": 75,
+          "falsePositives": 30,
+          "missed": 3,
+          "pitchPrecision": 0.714,
+          "pitchRecall": 0.962,
+          "eventF1": 0.82,
+          "onsetMaeMs": 16,
+          "onsetMedianMs": 12,
+          "durationMaeMs": 66
+        }
+      },
+      "arrangements": {
+        "baseline": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "melodyRecall": 0.935,
+          "invented": 0.211,
+          "density": 2.58,
+          "xmlNotes": 90,
+          "parsedNotes": 186
+        },
+        "cleanupOnly": {
+          "score": {
+            "predicted": 83,
+            "reference": 78,
+            "matched": 64,
+            "falsePositives": 19,
+            "missed": 14,
+            "pitchPrecision": 0.771,
+            "pitchRecall": 0.821,
+            "eventF1": 0.795,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 49,
+            "durationMaeMs": 77
+          },
+          "invented": 0.181,
+          "xmlNotes": 83
+        },
+        "holdOnly": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 168
+          },
+          "durationMaeMs": 168,
+          "xmlNotes": 90
+        },
+        "noCorroboration": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "melodyRecall": 0.935,
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "budget20": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "melodyRecall": 0.935,
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "budget15": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "melodyRecall": 0.935,
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "budget15NoCorroboration": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "melodyRecall": 0.935,
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "cleanupAmp": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "cleanupAmpStrict": {
+          "score": {
+            "predicted": 90,
+            "reference": 78,
+            "matched": 68,
+            "falsePositives": 22,
+            "missed": 10,
+            "pitchPrecision": 0.756,
+            "pitchRecall": 0.872,
+            "eventF1": 0.81,
+            "onsetMaeMs": 53,
+            "onsetMedianMs": 50,
+            "durationMaeMs": 93
+          },
+          "invented": 0.211,
+          "xmlNotes": 90
+        },
+        "improved": {
+          "score": {
+            "predicted": 83,
+            "reference": 78,
+            "matched": 64,
+            "falsePositives": 19,
+            "missed": 14,
+            "pitchPrecision": 0.771,
+            "pitchRecall": 0.821,
+            "eventF1": 0.795,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 49,
+            "durationMaeMs": 167
+          },
+          "melodyRecall": 0.909,
+          "invented": 0.181,
+          "density": 2.38,
+          "xmlNotes": 83,
+          "parsedNotes": 180
+        }
+      }
+    },
+    {
+      "id": "guitarset-jazz1-solo",
+      "kind": "solo",
+      "truthNotes": 65,
+      "audioSeconds": 14.4,
+      "modelMs": 19166,
+      "modelNotes": 67,
+      "tempoBpm": 199,
+      "tempoSource": "estimate",
+      "model": {
+        "score": {
+          "predicted": 67,
+          "reference": 65,
+          "matched": 60,
+          "falsePositives": 7,
+          "missed": 5,
+          "pitchPrecision": 0.896,
+          "pitchRecall": 0.923,
+          "eventF1": 0.909,
+          "onsetMaeMs": 12,
+          "onsetMedianMs": 7,
+          "durationMaeMs": 42
+        }
+      },
+      "arrangements": {
+        "baseline": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "melodyRecall": 0.953,
+          "invented": 0.09,
+          "density": 4.65,
+          "xmlNotes": 67,
+          "parsedNotes": 146
+        },
+        "cleanupOnly": {
+          "score": {
+            "predicted": 60,
+            "reference": 65,
+            "matched": 53,
+            "falsePositives": 7,
+            "missed": 12,
+            "pitchPrecision": 0.883,
+            "pitchRecall": 0.815,
+            "eventF1": 0.848,
+            "onsetMaeMs": 25,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "invented": 0.083,
+          "xmlNotes": 60
+        },
+        "holdOnly": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 90
+          },
+          "durationMaeMs": 90,
+          "xmlNotes": 67
+        },
+        "noCorroboration": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "melodyRecall": 0.953,
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "budget20": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "melodyRecall": 0.953,
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "budget15": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "melodyRecall": 0.953,
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "budget15NoCorroboration": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "melodyRecall": 0.953,
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "cleanupAmp": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "cleanupAmpStrict": {
+          "score": {
+            "predicted": 67,
+            "reference": 65,
+            "matched": 59,
+            "falsePositives": 8,
+            "missed": 6,
+            "pitchPrecision": 0.881,
+            "pitchRecall": 0.908,
+            "eventF1": 0.894,
+            "onsetMaeMs": 24,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 45
+          },
+          "invented": 0.09,
+          "xmlNotes": 67
+        },
+        "improved": {
+          "score": {
+            "predicted": 60,
+            "reference": 65,
+            "matched": 53,
+            "falsePositives": 7,
+            "missed": 12,
+            "pitchPrecision": 0.883,
+            "pitchRecall": 0.815,
+            "eventF1": 0.848,
+            "onsetMaeMs": 25,
+            "onsetMedianMs": 22,
+            "durationMaeMs": 117
+          },
+          "melodyRecall": 0.859,
+          "invented": 0.083,
+          "density": 4.17,
+          "xmlNotes": 60,
+          "parsedNotes": 134
+        }
+      }
+    },
+    {
+      "id": "guitarset-ss3-comp",
+      "kind": "comp",
+      "truthNotes": 184,
+      "audioSeconds": 45.7,
+      "modelMs": 132990,
+      "modelNotes": 275,
+      "tempoBpm": 86,
+      "tempoSource": "estimate",
+      "model": {
+        "score": {
+          "predicted": 275,
+          "reference": 184,
+          "matched": 154,
+          "falsePositives": 121,
+          "missed": 30,
+          "pitchPrecision": 0.56,
+          "pitchRecall": 0.837,
+          "eventF1": 0.671,
+          "onsetMaeMs": 13,
+          "onsetMedianMs": 8,
+          "durationMaeMs": 253
+        }
+      },
+      "arrangements": {
+        "baseline": {
+          "score": {
+            "predicted": 202,
+            "reference": 184,
+            "matched": 105,
+            "falsePositives": 97,
+            "missed": 79,
+            "pitchPrecision": 0.52,
+            "pitchRecall": 0.571,
+            "eventF1": 0.544,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 308
+          },
+          "melodyRecall": 0.658,
+          "invented": 0.213,
+          "density": 4.42,
+          "xmlNotes": 202,
+          "parsedNotes": 428
+        },
+        "cleanupOnly": {
+          "score": {
+            "predicted": 159,
+            "reference": 184,
+            "matched": 97,
+            "falsePositives": 62,
+            "missed": 87,
+            "pitchPrecision": 0.61,
+            "pitchRecall": 0.527,
+            "eventF1": 0.566,
+            "onsetMaeMs": 45,
+            "onsetMedianMs": 41,
+            "durationMaeMs": 211
+          },
+          "invented": 0.189,
+          "xmlNotes": 159
+        },
+        "holdOnly": {
+          "score": {
+            "predicted": 202,
+            "reference": 184,
+            "matched": 105,
+            "falsePositives": 97,
+            "missed": 79,
+            "pitchPrecision": 0.52,
+            "pitchRecall": 0.571,
+            "eventF1": 0.544,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 309
+          },
+          "durationMaeMs": 309,
+          "xmlNotes": 202
+        },
+        "noCorroboration": {
+          "score": {
+            "predicted": 202,
+            "reference": 184,
+            "matched": 105,
+            "falsePositives": 97,
+            "missed": 79,
+            "pitchPrecision": 0.52,
+            "pitchRecall": 0.571,
+            "eventF1": 0.544,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 308
+          },
+          "melodyRecall": 0.658,
+          "invented": 0.213,
+          "xmlNotes": 202
+        },
+        "budget20": {
+          "score": {
+            "predicted": 202,
+            "reference": 184,
+            "matched": 105,
+            "falsePositives": 97,
+            "missed": 79,
+            "pitchPrecision": 0.52,
+            "pitchRecall": 0.571,
+            "eventF1": 0.544,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 308
+          },
+          "melodyRecall": 0.658,
+          "invented": 0.213,
+          "xmlNotes": 202
+        },
+        "budget15": {
+          "score": {
+            "predicted": 200,
+            "reference": 184,
+            "matched": 103,
+            "falsePositives": 97,
+            "missed": 81,
+            "pitchPrecision": 0.515,
+            "pitchRecall": 0.56,
+            "eventF1": 0.536,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 310
+          },
+          "melodyRecall": 0.642,
+          "invented": 0.215,
+          "xmlNotes": 200
+        },
+        "budget15NoCorroboration": {
+          "score": {
+            "predicted": 200,
+            "reference": 184,
+            "matched": 103,
+            "falsePositives": 97,
+            "missed": 81,
+            "pitchPrecision": 0.515,
+            "pitchRecall": 0.56,
+            "eventF1": 0.536,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 310
+          },
+          "melodyRecall": 0.642,
+          "invented": 0.215,
+          "xmlNotes": 200
+        },
+        "cleanupAmp": {
+          "score": {
+            "predicted": 195,
+            "reference": 184,
+            "matched": 103,
+            "falsePositives": 92,
+            "missed": 81,
+            "pitchPrecision": 0.528,
+            "pitchRecall": 0.56,
+            "eventF1": 0.544,
+            "onsetMaeMs": 44,
+            "onsetMedianMs": 38,
+            "durationMaeMs": 279
+          },
+          "invented": 0.205,
+          "xmlNotes": 195
+        },
+        "cleanupAmpStrict": {
+          "score": {
+            "predicted": 202,
+            "reference": 184,
+            "matched": 105,
+            "falsePositives": 97,
+            "missed": 79,
+            "pitchPrecision": 0.52,
+            "pitchRecall": 0.571,
+            "eventF1": 0.544,
+            "onsetMaeMs": 43,
+            "onsetMedianMs": 37,
+            "durationMaeMs": 300
+          },
+          "invented": 0.213,
+          "xmlNotes": 202
+        },
+        "improved": {
+          "score": {
+            "predicted": 159,
+            "reference": 184,
+            "matched": 97,
+            "falsePositives": 62,
+            "missed": 87,
+            "pitchPrecision": 0.61,
+            "pitchRecall": 0.527,
+            "eventF1": 0.566,
+            "onsetMaeMs": 45,
+            "onsetMedianMs": 41,
+            "durationMaeMs": 209
+          },
+          "melodyRecall": 0.592,
+          "invented": 0.189,
+          "density": 3.48,
+          "xmlNotes": 159,
+          "parsedNotes": 350
+        }
+      }
+    },
+    {
+      "id": "guitarset-bn2-comp",
+      "kind": "comp",
+      "truthNotes": 239,
+      "audioSeconds": 29.3,
+      "modelMs": 45718,
+      "modelNotes": 248,
+      "tempoBpm": 129,
+      "tempoSource": "estimate",
+      "model": {
+        "score": {
+          "predicted": 248,
+          "reference": 239,
+          "matched": 181,
+          "falsePositives": 67,
+          "missed": 58,
+          "pitchPrecision": 0.73,
+          "pitchRecall": 0.757,
+          "eventF1": 0.743,
+          "onsetMaeMs": 11,
+          "onsetMedianMs": 7,
+          "durationMaeMs": 74
+        }
+      },
+      "arrangements": {
+        "baseline": {
+          "score": {
+            "predicted": 168,
+            "reference": 239,
+            "matched": 123,
+            "falsePositives": 45,
+            "missed": 116,
+            "pitchPrecision": 0.732,
+            "pitchRecall": 0.515,
+            "eventF1": 0.604,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "melodyRecall": 0.882,
+          "invented": 0.101,
+          "density": 5.73,
+          "xmlNotes": 168,
+          "parsedNotes": 360
+        },
+        "cleanupOnly": {
+          "score": {
+            "predicted": 134,
+            "reference": 239,
+            "matched": 101,
+            "falsePositives": 33,
+            "missed": 138,
+            "pitchPrecision": 0.754,
+            "pitchRecall": 0.423,
+            "eventF1": 0.542,
+            "onsetMaeMs": 27,
+            "onsetMedianMs": 24,
+            "durationMaeMs": 75
+          },
+          "invented": 0.112,
+          "xmlNotes": 134
+        },
+        "holdOnly": {
+          "score": {
+            "predicted": 168,
+            "reference": 239,
+            "matched": 123,
+            "falsePositives": 45,
+            "missed": 116,
+            "pitchPrecision": 0.732,
+            "pitchRecall": 0.515,
+            "eventF1": 0.604,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 105
+          },
+          "durationMaeMs": 105,
+          "xmlNotes": 168
+        },
+        "noCorroboration": {
+          "score": {
+            "predicted": 168,
+            "reference": 239,
+            "matched": 123,
+            "falsePositives": 45,
+            "missed": 116,
+            "pitchPrecision": 0.732,
+            "pitchRecall": 0.515,
+            "eventF1": 0.604,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "melodyRecall": 0.882,
+          "invented": 0.101,
+          "xmlNotes": 168
+        },
+        "budget20": {
+          "score": {
+            "predicted": 168,
+            "reference": 239,
+            "matched": 123,
+            "falsePositives": 45,
+            "missed": 116,
+            "pitchPrecision": 0.732,
+            "pitchRecall": 0.515,
+            "eventF1": 0.604,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "melodyRecall": 0.882,
+          "invented": 0.101,
+          "xmlNotes": 168
+        },
+        "budget15": {
+          "score": {
+            "predicted": 167,
+            "reference": 239,
+            "matched": 122,
+            "falsePositives": 45,
+            "missed": 117,
+            "pitchPrecision": 0.731,
+            "pitchRecall": 0.51,
+            "eventF1": 0.601,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "melodyRecall": 0.871,
+          "invented": 0.102,
+          "xmlNotes": 167
+        },
+        "budget15NoCorroboration": {
+          "score": {
+            "predicted": 167,
+            "reference": 239,
+            "matched": 122,
+            "falsePositives": 45,
+            "missed": 117,
+            "pitchPrecision": 0.731,
+            "pitchRecall": 0.51,
+            "eventF1": 0.601,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "melodyRecall": 0.871,
+          "invented": 0.102,
+          "xmlNotes": 167
+        },
+        "cleanupAmp": {
+          "score": {
+            "predicted": 166,
+            "reference": 239,
+            "matched": 122,
+            "falsePositives": 44,
+            "missed": 117,
+            "pitchPrecision": 0.735,
+            "pitchRecall": 0.51,
+            "eventF1": 0.602,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "invented": 0.096,
+          "xmlNotes": 166
+        },
+        "cleanupAmpStrict": {
+          "score": {
+            "predicted": 168,
+            "reference": 239,
+            "matched": 123,
+            "falsePositives": 45,
+            "missed": 116,
+            "pitchPrecision": 0.732,
+            "pitchRecall": 0.515,
+            "eventF1": 0.604,
+            "onsetMaeMs": 29,
+            "onsetMedianMs": 25,
+            "durationMaeMs": 86
+          },
+          "invented": 0.101,
+          "xmlNotes": 168
+        },
+        "improved": {
+          "score": {
+            "predicted": 134,
+            "reference": 239,
+            "matched": 101,
+            "falsePositives": 33,
+            "missed": 138,
+            "pitchPrecision": 0.754,
+            "pitchRecall": 0.423,
+            "eventF1": 0.542,
+            "onsetMaeMs": 27,
+            "onsetMedianMs": 24,
+            "durationMaeMs": 118
+          },
+          "melodyRecall": 0.765,
+          "invented": 0.112,
+          "density": 4.57,
+          "xmlNotes": 134,
+          "parsedNotes": 308
+        }
+      }
+    },
+    {
+      "id": "guitarset-funk3-comp",
+      "kind": "comp",
+      "truthNotes": 492,
+      "audioSeconds": 34.3,
+      "modelMs": 58031,
+      "modelNotes": 449,
+      "tempoBpm": 74,
+      "tempoSource": "estimate",
+      "model": {
+        "score": {
+          "predicted": 449,
+          "reference": 492,
+          "matched": 375,
+          "falsePositives": 74,
+          "missed": 117,
+          "pitchPrecision": 0.835,
+          "pitchRecall": 0.762,
+          "eventF1": 0.797,
+          "onsetMaeMs": 10,
+          "onsetMedianMs": 7,
+          "durationMaeMs": 65
+        }
+      },
+      "arrangements": {
+        "baseline": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 84
+          },
+          "melodyRecall": 0.181,
+          "invented": 0.051,
+          "density": 6.27,
+          "xmlNotes": 215,
+          "parsedNotes": 438
+        },
+        "cleanupOnly": {
+          "score": {
+            "predicted": 158,
+            "reference": 492,
+            "matched": 124,
+            "falsePositives": 34,
+            "missed": 368,
+            "pitchPrecision": 0.785,
+            "pitchRecall": 0.252,
+            "eventF1": 0.382,
+            "onsetMaeMs": 55,
+            "onsetMedianMs": 57,
+            "durationMaeMs": 90
+          },
+          "invented": 0.07,
+          "xmlNotes": 158
+        },
+        "holdOnly": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 91
+          },
+          "durationMaeMs": 91,
+          "xmlNotes": 215
+        },
+        "noCorroboration": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 84
+          },
+          "melodyRecall": 0.181,
+          "invented": 0.051,
+          "xmlNotes": 215
+        },
+        "budget20": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 84
+          },
+          "melodyRecall": 0.181,
+          "invented": 0.051,
+          "xmlNotes": 215
+        },
+        "budget15": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 84
+          },
+          "melodyRecall": 0.181,
+          "invented": 0.051,
+          "xmlNotes": 215
+        },
+        "budget15NoCorroboration": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 84
+          },
+          "melodyRecall": 0.181,
+          "invented": 0.051,
+          "xmlNotes": 215
+        },
+        "cleanupAmp": {
+          "score": {
+            "predicted": 214,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 44,
+            "missed": 322,
+            "pitchPrecision": 0.794,
+            "pitchRecall": 0.346,
+            "eventF1": 0.482,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 83
+          },
+          "invented": 0.051,
+          "xmlNotes": 214
+        },
+        "cleanupAmpStrict": {
+          "score": {
+            "predicted": 215,
+            "reference": 492,
+            "matched": 170,
+            "falsePositives": 45,
+            "missed": 322,
+            "pitchPrecision": 0.791,
+            "pitchRecall": 0.346,
+            "eventF1": 0.481,
+            "onsetMaeMs": 52,
+            "onsetMedianMs": 53,
+            "durationMaeMs": 85
+          },
+          "invented": 0.051,
+          "xmlNotes": 215
+        },
+        "improved": {
+          "score": {
+            "predicted": 158,
+            "reference": 492,
+            "matched": 124,
+            "falsePositives": 34,
+            "missed": 368,
+            "pitchPrecision": 0.785,
+            "pitchRecall": 0.252,
+            "eventF1": 0.382,
+            "onsetMaeMs": 55,
+            "onsetMedianMs": 57,
+            "durationMaeMs": 126
+          },
+          "melodyRecall": 0.268,
+          "invented": 0.07,
+          "density": 4.61,
+          "xmlNotes": 158,
+          "parsedNotes": 326
+        }
+      }
+    }
+  ],
+  "summary": {
+    "recordings": 5,
+    "modelEventF1": 0.788,
+    "arrangementBaselineF1": 0.667,
+    "noCorroborationF1": 0.667,
+    "budget20F1": 0.667,
+    "budget15F1": 0.664,
+    "budget15NoCorroborationF1": 0.664,
+    "noCorroborationMelody": 0.722,
+    "budget15Melody": 0.716,
+    "budget15Notes": 147.8,
+    "baselineNotes": 148.4,
+    "budget15Invented": 0.134,
+    "cleanupAmpF1": 0.666,
+    "cleanupAmpStrictF1": 0.667,
+    "cleanupAmpInvented": 0.131,
+    "cleanupAmpStrictInvented": 0.133,
+    "arrangementImprovedF1": 0.627,
+    "baselineInvented": 0.133,
+    "improvedInvented": 0.127,
+    "baselineDurationMaeMs": 123.2,
+    "improvedDurationMaeMs": 147.4,
+    "baselineMelodyRecall": 0.722,
+    "improvedMelodyRecall": 0.679
+  }
+}

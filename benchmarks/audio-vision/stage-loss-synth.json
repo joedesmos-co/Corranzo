@@ -1,0 +1,727 @@
+{
+  "generatedAt": "2026-10-21T21:39:24.448Z",
+  "onsetTolerance": 0.12,
+  "sources": "synth",
+  "rows": [
+    {
+      "id": "synth-reference",
+      "kind": "synth",
+      "license": "original (synthesized in-repo)",
+      "truthNotes": 51,
+      "melodyAnchors": 22,
+      "s0": {
+        "predicted": 105,
+        "reference": 51,
+        "matched": 51,
+        "falsePositives": 54,
+        "missed": 0,
+        "pitchPrecision": 0.486,
+        "pitchRecall": 1,
+        "eventF1": 0.654,
+        "onsetMaeMs": 4,
+        "onsetMedianMs": 3,
+        "durationMaeMs": 371,
+        "notes": 105
+      },
+      "s1": {
+        "predicted": 89,
+        "reference": 51,
+        "matched": 47,
+        "falsePositives": 42,
+        "missed": 4,
+        "pitchPrecision": 0.528,
+        "pitchRecall": 0.922,
+        "eventF1": 0.671,
+        "onsetMaeMs": 6,
+        "onsetMedianMs": 3,
+        "durationMaeMs": 396,
+        "suppressed": 16
+      },
+      "suppressionAblation": {
+        "off": {
+          "predicted": 105,
+          "reference": 51,
+          "matched": 51,
+          "falsePositives": 54,
+          "missed": 0,
+          "pitchPrecision": 0.486,
+          "pitchRecall": 1,
+          "eventF1": 0.654,
+          "onsetMaeMs": 4,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 371
+        },
+        "ratio1_5": {
+          "predicted": 89,
+          "reference": 51,
+          "matched": 47,
+          "falsePositives": 42,
+          "missed": 4,
+          "pitchPrecision": 0.528,
+          "pitchRecall": 0.922,
+          "eventF1": 0.671,
+          "onsetMaeMs": 6,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 396
+        },
+        "ratio3": {
+          "predicted": 105,
+          "reference": 51,
+          "matched": 51,
+          "falsePositives": 54,
+          "missed": 0,
+          "pitchPrecision": 0.486,
+          "pitchRecall": 1,
+          "eventF1": 0.654,
+          "onsetMaeMs": 6,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 392
+        },
+        "ratio6": {
+          "predicted": 105,
+          "reference": 51,
+          "matched": 51,
+          "falsePositives": 54,
+          "missed": 0,
+          "pitchPrecision": 0.486,
+          "pitchRecall": 1,
+          "eventF1": 0.654,
+          "onsetMaeMs": 6,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 392
+        },
+        "damage": {
+          "ratio1_5": {
+            "dropped": 16,
+            "droppedGenuine": 4,
+            "droppedInvented": 12
+          },
+          "ratio3": {
+            "dropped": 0,
+            "droppedGenuine": 0,
+            "droppedInvented": 0
+          },
+          "ratio6": {
+            "dropped": 0,
+            "droppedGenuine": 0,
+            "droppedInvented": 0
+          }
+        }
+      },
+      "cleanupAblation": {
+        "off": {
+          "predicted": 89,
+          "reference": 51,
+          "matched": 47,
+          "falsePositives": 42,
+          "missed": 4,
+          "pitchPrecision": 0.528,
+          "pitchRecall": 0.922,
+          "eventF1": 0.671,
+          "onsetMaeMs": 6,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 396
+        },
+        "on": {
+          "predicted": 72,
+          "reference": 51,
+          "matched": 46,
+          "falsePositives": 26,
+          "missed": 5,
+          "pitchPrecision": 0.639,
+          "pitchRecall": 0.902,
+          "eventF1": 0.748,
+          "onsetMaeMs": 4,
+          "onsetMedianMs": 3,
+          "durationMaeMs": 342
+        },
+        "removed": 17,
+        "droppedGenuine": 2,
+        "droppedInvented": 15
+      },
+      "s1b": {
+        "predicted": 72,
+        "reference": 51,
+        "matched": 47,
+        "falsePositives": 25,
+        "missed": 4,
+        "pitchPrecision": 0.653,
+        "pitchRecall": 0.922,
+        "eventF1": 0.764,
+        "onsetMaeMs": 6,
+        "onsetMedianMs": 3,
+        "durationMaeMs": 396,
+        "notes": 72,
+        "falsePositiveKinds": {
+          "harmonic": 6,
+          "duplicate": 0,
+          "other": 18
+        }
+      },
+      "s2": {
+        "predicted": 72,
+        "reference": 51,
+        "matched": 47,
+        "falsePositives": 25,
+        "missed": 4,
+        "pitchPrecision": 0.653,
+        "pitchRecall": 0.922,
+        "eventF1": 0.764,
+        "onsetMaeMs": 33,
+        "onsetMedianMs": 24,
+        "durationMaeMs": 396,
+        "notes": 72,
+        "gridShiftMs": 0
+      },
+      "s3": {
+        "melodyAnchorRecall": {
+          "recall": 0,
+          "maeMs": null,
+          "anchors": 22
+        },
+        "chordWindows": 40,
+        "chordsWithHeardVoicing": 35,
+        "bassFrames": 516,
+        "sections": 2,
+        "tempoBpm": 99,
+        "tempoSource": "estimate",
+        "tempoAmbiguous": false,
+        "beat0": 0,
+        "beatPeriod": 0.6061
+      },
+      "targets": {
+        "solo-piano": {
+          "easy": {
+            "durationAblation": {
+              "off": {
+                "predicted": 43,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 11,
+                "missed": 19,
+                "pitchPrecision": 0.744,
+                "pitchRecall": 0.627,
+                "eventF1": 0.681,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 171
+              },
+              "on": {
+                "predicted": 43,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 11,
+                "missed": 19,
+                "pitchPrecision": 0.744,
+                "pitchRecall": 0.627,
+                "eventF1": 0.681,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 149
+              },
+              "changed": 6
+            },
+            "s4": {
+              "predicted": 53,
+              "reference": 51,
+              "matched": 38,
+              "falsePositives": 15,
+              "missed": 13,
+              "pitchPrecision": 0.717,
+              "pitchRecall": 0.745,
+              "eventF1": 0.731,
+              "onsetMaeMs": 35,
+              "onsetMedianMs": 36,
+              "durationMaeMs": 270
+            },
+            "s5": {
+              "predicted": 43,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 11,
+              "missed": 19,
+              "pitchPrecision": 0.744,
+              "pitchRecall": 0.627,
+              "eventF1": 0.681,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 171
+            },
+            "melodyAnchorRecall": {
+              "recall": 0.955,
+              "maeMs": 29,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 1,
+              "maeMs": 32,
+              "anchors": 22
+            },
+            "xmlNotes": 43,
+            "xmlParsedNotes": 52,
+            "densityPerSecond": 1.79,
+            "inventedRate": 0.209,
+            "handAccuracy": 1,
+            "tinyDurations": 0,
+            "ledgerRisk": 1,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          },
+          "intermediate": {
+            "durationAblation": {
+              "off": {
+                "predicted": 43,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 11,
+                "missed": 19,
+                "pitchPrecision": 0.744,
+                "pitchRecall": 0.627,
+                "eventF1": 0.681,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 171
+              },
+              "on": {
+                "predicted": 43,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 11,
+                "missed": 19,
+                "pitchPrecision": 0.744,
+                "pitchRecall": 0.627,
+                "eventF1": 0.681,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 149
+              },
+              "changed": 6
+            },
+            "s4": {
+              "predicted": 60,
+              "reference": 51,
+              "matched": 40,
+              "falsePositives": 20,
+              "missed": 11,
+              "pitchPrecision": 0.667,
+              "pitchRecall": 0.784,
+              "eventF1": 0.721,
+              "onsetMaeMs": 36,
+              "onsetMedianMs": 42,
+              "durationMaeMs": 302
+            },
+            "s5": {
+              "predicted": 43,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 11,
+              "missed": 19,
+              "pitchPrecision": 0.744,
+              "pitchRecall": 0.627,
+              "eventF1": 0.681,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 171
+            },
+            "melodyAnchorRecall": {
+              "recall": 0.955,
+              "maeMs": 29,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 0.909,
+              "maeMs": 33,
+              "anchors": 22
+            },
+            "xmlNotes": 43,
+            "xmlParsedNotes": 52,
+            "densityPerSecond": 1.79,
+            "inventedRate": 0.209,
+            "handAccuracy": 1,
+            "tinyDurations": 0,
+            "ledgerRisk": 1,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          },
+          "advanced": {
+            "durationAblation": {
+              "off": {
+                "predicted": 64,
+                "reference": 51,
+                "matched": 43,
+                "falsePositives": 21,
+                "missed": 8,
+                "pitchPrecision": 0.672,
+                "pitchRecall": 0.843,
+                "eventF1": 0.748,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 24,
+                "durationMaeMs": 340
+              },
+              "on": {
+                "predicted": 64,
+                "reference": 51,
+                "matched": 43,
+                "falsePositives": 21,
+                "missed": 8,
+                "pitchPrecision": 0.672,
+                "pitchRecall": 0.843,
+                "eventF1": 0.748,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 24,
+                "durationMaeMs": 337
+              },
+              "changed": 9
+            },
+            "s4": {
+              "predicted": 67,
+              "reference": 51,
+              "matched": 44,
+              "falsePositives": 23,
+              "missed": 7,
+              "pitchPrecision": 0.657,
+              "pitchRecall": 0.863,
+              "eventF1": 0.746,
+              "onsetMaeMs": 34,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 369
+            },
+            "s5": {
+              "predicted": 64,
+              "reference": 51,
+              "matched": 43,
+              "falsePositives": 21,
+              "missed": 8,
+              "pitchPrecision": 0.672,
+              "pitchRecall": 0.843,
+              "eventF1": 0.748,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 24,
+              "durationMaeMs": 340
+            },
+            "melodyAnchorRecall": {
+              "recall": 1,
+              "maeMs": 31,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 1,
+              "maeMs": 32,
+              "anchors": 22
+            },
+            "xmlNotes": 64,
+            "xmlParsedNotes": 77,
+            "densityPerSecond": 2.67,
+            "inventedRate": 0.266,
+            "handAccuracy": 0.926,
+            "tinyDurations": 0,
+            "ledgerRisk": 4,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          }
+        },
+        "solo-guitar": {
+          "easy": {
+            "durationAblation": {
+              "off": {
+                "predicted": 44,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 12,
+                "missed": 19,
+                "pitchPrecision": 0.727,
+                "pitchRecall": 0.627,
+                "eventF1": 0.674,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 171
+              },
+              "on": {
+                "predicted": 44,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 12,
+                "missed": 19,
+                "pitchPrecision": 0.727,
+                "pitchRecall": 0.627,
+                "eventF1": 0.674,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 168
+              },
+              "changed": 3
+            },
+            "s4": {
+              "predicted": 56,
+              "reference": 51,
+              "matched": 37,
+              "falsePositives": 19,
+              "missed": 14,
+              "pitchPrecision": 0.661,
+              "pitchRecall": 0.725,
+              "eventF1": 0.692,
+              "onsetMaeMs": 34,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 277
+            },
+            "s5": {
+              "predicted": 44,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 12,
+              "missed": 19,
+              "pitchPrecision": 0.727,
+              "pitchRecall": 0.627,
+              "eventF1": 0.674,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 171
+            },
+            "melodyAnchorRecall": {
+              "recall": 0.955,
+              "maeMs": 29,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 1,
+              "maeMs": 32,
+              "anchors": 22
+            },
+            "xmlNotes": 44,
+            "xmlParsedNotes": 106,
+            "densityPerSecond": 1.83,
+            "inventedRate": 0.227,
+            "handAccuracy": null,
+            "tinyDurations": 0,
+            "ledgerRisk": 0,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          },
+          "intermediate": {
+            "durationAblation": {
+              "off": {
+                "predicted": 44,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 12,
+                "missed": 19,
+                "pitchPrecision": 0.727,
+                "pitchRecall": 0.627,
+                "eventF1": 0.674,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 171
+              },
+              "on": {
+                "predicted": 44,
+                "reference": 51,
+                "matched": 32,
+                "falsePositives": 12,
+                "missed": 19,
+                "pitchPrecision": 0.727,
+                "pitchRecall": 0.627,
+                "eventF1": 0.674,
+                "onsetMaeMs": 33,
+                "onsetMedianMs": 30,
+                "durationMaeMs": 168
+              },
+              "changed": 3
+            },
+            "s4": {
+              "predicted": 66,
+              "reference": 51,
+              "matched": 44,
+              "falsePositives": 22,
+              "missed": 7,
+              "pitchPrecision": 0.667,
+              "pitchRecall": 0.863,
+              "eventF1": 0.752,
+              "onsetMaeMs": 35,
+              "onsetMedianMs": 36,
+              "durationMaeMs": 343
+            },
+            "s5": {
+              "predicted": 44,
+              "reference": 51,
+              "matched": 32,
+              "falsePositives": 12,
+              "missed": 19,
+              "pitchPrecision": 0.727,
+              "pitchRecall": 0.627,
+              "eventF1": 0.674,
+              "onsetMaeMs": 33,
+              "onsetMedianMs": 30,
+              "durationMaeMs": 171
+            },
+            "melodyAnchorRecall": {
+              "recall": 0.955,
+              "maeMs": 29,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 1,
+              "maeMs": 32,
+              "anchors": 22
+            },
+            "xmlNotes": 44,
+            "xmlParsedNotes": 106,
+            "densityPerSecond": 1.83,
+            "inventedRate": 0.227,
+            "handAccuracy": null,
+            "tinyDurations": 0,
+            "ledgerRisk": 0,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          },
+          "advanced": {
+            "durationAblation": {
+              "off": {
+                "predicted": 64,
+                "reference": 51,
+                "matched": 44,
+                "falsePositives": 20,
+                "missed": 7,
+                "pitchPrecision": 0.688,
+                "pitchRecall": 0.863,
+                "eventF1": 0.765,
+                "onsetMaeMs": 35,
+                "onsetMedianMs": 36,
+                "durationMaeMs": 343
+              },
+              "on": {
+                "predicted": 64,
+                "reference": 51,
+                "matched": 44,
+                "falsePositives": 20,
+                "missed": 7,
+                "pitchPrecision": 0.688,
+                "pitchRecall": 0.863,
+                "eventF1": 0.765,
+                "onsetMaeMs": 35,
+                "onsetMedianMs": 36,
+                "durationMaeMs": 343
+              },
+              "changed": 4
+            },
+            "s4": {
+              "predicted": 66,
+              "reference": 51,
+              "matched": 44,
+              "falsePositives": 22,
+              "missed": 7,
+              "pitchPrecision": 0.667,
+              "pitchRecall": 0.863,
+              "eventF1": 0.752,
+              "onsetMaeMs": 35,
+              "onsetMedianMs": 36,
+              "durationMaeMs": 343
+            },
+            "s5": {
+              "predicted": 64,
+              "reference": 51,
+              "matched": 44,
+              "falsePositives": 20,
+              "missed": 7,
+              "pitchPrecision": 0.688,
+              "pitchRecall": 0.863,
+              "eventF1": 0.765,
+              "onsetMaeMs": 35,
+              "onsetMedianMs": 36,
+              "durationMaeMs": 343
+            },
+            "melodyAnchorRecall": {
+              "recall": 1,
+              "maeMs": 31,
+              "anchors": 22
+            },
+            "bassAnchorRecall": {
+              "recall": 1,
+              "maeMs": 32,
+              "anchors": 22
+            },
+            "xmlNotes": 64,
+            "xmlParsedNotes": 158,
+            "densityPerSecond": 2.67,
+            "inventedRate": 0.266,
+            "handAccuracy": null,
+            "tinyDurations": 0,
+            "ledgerRisk": 0,
+            "validity": {
+              "measures": 10,
+              "overfull": 0,
+              "underfull": 0,
+              "valid": true
+            },
+            "scoreClock": {
+              "beat0": 0,
+              "period": 0.6061
+            }
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "recordings": 1,
+    "s0": {
+      "eventF1": 0.654,
+      "pitchRecall": 1,
+      "onsetMaeMs": 4
+    },
+    "s1": {
+      "eventF1": 0.671
+    },
+    "s2": {
+      "eventF1": 0.764
+    },
+    "pianoIntermediate": {
+      "eventF1": 0.681,
+      "density": 1.79,
+      "invented": 0.209
+    },
+    "guitarIntermediate": {
+      "eventF1": 0.674
+    },
+    "xmlValid": true
+  }
+}

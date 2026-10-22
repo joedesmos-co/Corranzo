@@ -1,0 +1,4783 @@
+{
+ "generatedAt": "2026-10-21T23:48:07.673Z",
+ "onsetTolerance": 0.12,
+ "sources": "micreal",
+ "summary": {
+  "recordings": 49,
+  "s0": {
+   "eventF1": 0.575,
+   "pitchRecall": 0.675,
+   "onsetMaeMs": 29.146
+  },
+  "s1": {
+   "eventF1": 0.598
+  },
+  "s2": {
+   "eventF1": 0.593
+  },
+  "pianoIntermediate": {
+   "eventF1": 0.535,
+   "density": 4.898,
+   "invented": 0.228
+  },
+  "guitarIntermediate": {
+   "eventF1": 0.524
+  },
+  "xmlValid": true
+ },
+ "rows": [
+  {
+   "id": "piano-mozart-single",
+   "kind": "micreal",
+   "truthNotes": 13,
+   "melodyAnchors": 6,
+   "s0": {
+    "predicted": 22,
+    "reference": 13,
+    "matched": 0,
+    "falsePositives": 22,
+    "missed": 13,
+    "pitchPrecision": 0,
+    "pitchRecall": 0,
+    "eventF1": 0,
+    "onsetMaeMs": null,
+    "onsetMedianMs": null,
+    "durationMaeMs": null,
+    "notes": 22
+   },
+   "s1": {
+    "predicted": 20,
+    "reference": 13,
+    "matched": 0,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0,
+    "pitchRecall": 0,
+    "eventF1": 0,
+    "onsetMaeMs": null,
+    "onsetMedianMs": null,
+    "durationMaeMs": null,
+    "suppressed": 2
+   },
+   "s1b": {
+    "predicted": 20,
+    "reference": 13,
+    "matched": 0,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0,
+    "pitchRecall": 0,
+    "eventF1": 0,
+    "onsetMaeMs": null,
+    "onsetMedianMs": null,
+    "durationMaeMs": null,
+    "notes": 20,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 20
+    }
+   },
+   "s2": {
+    "predicted": 20,
+    "reference": 13,
+    "matched": 0,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0,
+    "pitchRecall": 0,
+    "eventF1": 0,
+    "onsetMaeMs": null,
+    "onsetMedianMs": null,
+    "durationMaeMs": null,
+    "notes": 20,
+    "gridShiftMs": -279
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 13,
+     "reference": 13,
+     "matched": 0,
+     "falsePositives": 13,
+     "missed": 13,
+     "pitchPrecision": 0,
+     "pitchRecall": 0,
+     "eventF1": 0,
+     "onsetMaeMs": null,
+     "onsetMedianMs": null,
+     "durationMaeMs": null
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.167,
+     "maeMs": 206,
+     "anchors": 6
+    },
+    "inventedRate": 0.615,
+    "densityPerSecond": 4.33,
+    "xmlNotes": 13,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-mozart-dyad",
+   "kind": "micreal",
+   "truthNotes": 17,
+   "melodyAnchors": 6,
+   "s0": {
+    "predicted": 28,
+    "reference": 17,
+    "matched": 2,
+    "falsePositives": 26,
+    "missed": 15,
+    "pitchPrecision": 0.071,
+    "pitchRecall": 0.118,
+    "eventF1": 0.089,
+    "onsetMaeMs": 62,
+    "onsetMedianMs": 112,
+    "durationMaeMs": 446,
+    "notes": 28
+   },
+   "s1": {
+    "predicted": 26,
+    "reference": 17,
+    "matched": 1,
+    "falsePositives": 25,
+    "missed": 16,
+    "pitchPrecision": 0.038,
+    "pitchRecall": 0.059,
+    "eventF1": 0.047,
+    "onsetMaeMs": 112,
+    "onsetMedianMs": 112,
+    "durationMaeMs": 553,
+    "suppressed": 2
+   },
+   "s1b": {
+    "predicted": 26,
+    "reference": 17,
+    "matched": 1,
+    "falsePositives": 25,
+    "missed": 16,
+    "pitchPrecision": 0.038,
+    "pitchRecall": 0.059,
+    "eventF1": 0.047,
+    "onsetMaeMs": 112,
+    "onsetMedianMs": 112,
+    "durationMaeMs": 553,
+    "notes": 26,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 0,
+     "other": 23
+    }
+   },
+   "s2": {
+    "predicted": 26,
+    "reference": 17,
+    "matched": 2,
+    "falsePositives": 24,
+    "missed": 15,
+    "pitchPrecision": 0.077,
+    "pitchRecall": 0.118,
+    "eventF1": 0.093,
+    "onsetMaeMs": 107,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 331,
+    "notes": 26,
+    "gridShiftMs": 156
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 16,
+     "reference": 17,
+     "matched": 1,
+     "falsePositives": 15,
+     "missed": 16,
+     "pitchPrecision": 0.063,
+     "pitchRecall": 0.059,
+     "eventF1": 0.061,
+     "onsetMaeMs": 111,
+     "onsetMedianMs": 111,
+     "durationMaeMs": 61
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.167,
+     "maeMs": 182,
+     "anchors": 6
+    },
+    "inventedRate": 0.625,
+    "densityPerSecond": 5.33,
+    "xmlNotes": 16,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-mozart-triad",
+   "kind": "micreal",
+   "truthNotes": 14,
+   "melodyAnchors": 5,
+   "s0": {
+    "predicted": 21,
+    "reference": 14,
+    "matched": 1,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0.048,
+    "pitchRecall": 0.071,
+    "eventF1": 0.057,
+    "onsetMaeMs": 111,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 239,
+    "notes": 21
+   },
+   "s1": {
+    "predicted": 21,
+    "reference": 14,
+    "matched": 1,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0.048,
+    "pitchRecall": 0.071,
+    "eventF1": 0.057,
+    "onsetMaeMs": 111,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 239,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 21,
+    "reference": 14,
+    "matched": 1,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0.048,
+    "pitchRecall": 0.071,
+    "eventF1": 0.057,
+    "onsetMaeMs": 111,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 239,
+    "notes": 21,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 0,
+     "other": 18
+    }
+   },
+   "s2": {
+    "predicted": 21,
+    "reference": 14,
+    "matched": 1,
+    "falsePositives": 20,
+    "missed": 13,
+    "pitchPrecision": 0.048,
+    "pitchRecall": 0.071,
+    "eventF1": 0.057,
+    "onsetMaeMs": 80,
+    "onsetMedianMs": 80,
+    "durationMaeMs": 182,
+    "notes": 21,
+    "gridShiftMs": -504
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 14,
+     "reference": 14,
+     "matched": 0,
+     "falsePositives": 14,
+     "missed": 14,
+     "pitchPrecision": 0,
+     "pitchRecall": 0,
+     "eventF1": 0,
+     "onsetMaeMs": null,
+     "onsetMedianMs": null,
+     "durationMaeMs": null
+    },
+    "melodyAnchorRecall": {
+     "recall": 0,
+     "maeMs": null,
+     "anchors": 5
+    },
+    "inventedRate": 0.571,
+    "densityPerSecond": 4.67,
+    "xmlNotes": 14,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-mozart-dense",
+   "kind": "micreal",
+   "truthNotes": 17,
+   "melodyAnchors": 5,
+   "s0": {
+    "predicted": 26,
+    "reference": 17,
+    "matched": 2,
+    "falsePositives": 24,
+    "missed": 15,
+    "pitchPrecision": 0.077,
+    "pitchRecall": 0.118,
+    "eventF1": 0.093,
+    "onsetMaeMs": 58,
+    "onsetMedianMs": 63,
+    "durationMaeMs": 248,
+    "notes": 26
+   },
+   "s1": {
+    "predicted": 21,
+    "reference": 17,
+    "matched": 2,
+    "falsePositives": 19,
+    "missed": 15,
+    "pitchPrecision": 0.095,
+    "pitchRecall": 0.118,
+    "eventF1": 0.105,
+    "onsetMaeMs": 58,
+    "onsetMedianMs": 63,
+    "durationMaeMs": 248,
+    "suppressed": 5
+   },
+   "s1b": {
+    "predicted": 21,
+    "reference": 17,
+    "matched": 2,
+    "falsePositives": 19,
+    "missed": 15,
+    "pitchPrecision": 0.095,
+    "pitchRecall": 0.118,
+    "eventF1": 0.105,
+    "onsetMaeMs": 58,
+    "onsetMedianMs": 63,
+    "durationMaeMs": 248,
+    "notes": 21,
+    "falsePositiveKinds": {
+     "harmonic": 1,
+     "duplicate": 0,
+     "other": 18
+    }
+   },
+   "s2": {
+    "predicted": 21,
+    "reference": 17,
+    "matched": 1,
+    "falsePositives": 20,
+    "missed": 16,
+    "pitchPrecision": 0.048,
+    "pitchRecall": 0.059,
+    "eventF1": 0.053,
+    "onsetMaeMs": 75,
+    "onsetMedianMs": 75,
+    "durationMaeMs": 336,
+    "notes": 21,
+    "gridShiftMs": 384
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 10,
+     "reference": 17,
+     "matched": 1,
+     "falsePositives": 9,
+     "missed": 16,
+     "pitchPrecision": 0.1,
+     "pitchRecall": 0.059,
+     "eventF1": 0.074,
+     "onsetMaeMs": 75,
+     "onsetMedianMs": 75,
+     "durationMaeMs": 336
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.2,
+     "maeMs": 132,
+     "anchors": 5
+    },
+    "inventedRate": 0.6,
+    "densityPerSecond": 3.33,
+    "xmlNotes": 10,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-schubert-single",
+   "kind": "micreal",
+   "truthNotes": 19,
+   "melodyAnchors": 10,
+   "s0": {
+    "predicted": 33,
+    "reference": 19,
+    "matched": 3,
+    "falsePositives": 30,
+    "missed": 16,
+    "pitchPrecision": 0.091,
+    "pitchRecall": 0.158,
+    "eventF1": 0.115,
+    "onsetMaeMs": 70,
+    "onsetMedianMs": 75,
+    "durationMaeMs": 340,
+    "notes": 33
+   },
+   "s1": {
+    "predicted": 29,
+    "reference": 19,
+    "matched": 1,
+    "falsePositives": 28,
+    "missed": 18,
+    "pitchPrecision": 0.034,
+    "pitchRecall": 0.053,
+    "eventF1": 0.042,
+    "onsetMaeMs": 75,
+    "onsetMedianMs": 75,
+    "durationMaeMs": 542,
+    "suppressed": 4
+   },
+   "s1b": {
+    "predicted": 29,
+    "reference": 19,
+    "matched": 1,
+    "falsePositives": 28,
+    "missed": 18,
+    "pitchPrecision": 0.034,
+    "pitchRecall": 0.053,
+    "eventF1": 0.042,
+    "onsetMaeMs": 75,
+    "onsetMedianMs": 75,
+    "durationMaeMs": 542,
+    "notes": 29,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 27
+    }
+   },
+   "s2": {
+    "predicted": 29,
+    "reference": 19,
+    "matched": 2,
+    "falsePositives": 27,
+    "missed": 17,
+    "pitchPrecision": 0.069,
+    "pitchRecall": 0.105,
+    "eventF1": 0.083,
+    "onsetMaeMs": 73,
+    "onsetMedianMs": 108,
+    "durationMaeMs": 429,
+    "notes": 29,
+    "gridShiftMs": 44
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 19,
+     "reference": 19,
+     "matched": 1,
+     "falsePositives": 18,
+     "missed": 18,
+     "pitchPrecision": 0.053,
+     "pitchRecall": 0.053,
+     "eventF1": 0.053,
+     "onsetMaeMs": 38,
+     "onsetMedianMs": 38,
+     "durationMaeMs": 555
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.2,
+     "maeMs": 137,
+     "anchors": 10
+    },
+    "inventedRate": 0.474,
+    "densityPerSecond": 6.33,
+    "xmlNotes": 19,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-schubert-triad",
+   "kind": "micreal",
+   "truthNotes": 27,
+   "melodyAnchors": 14,
+   "s0": {
+    "predicted": 39,
+    "reference": 27,
+    "matched": 5,
+    "falsePositives": 34,
+    "missed": 22,
+    "pitchPrecision": 0.128,
+    "pitchRecall": 0.185,
+    "eventF1": 0.152,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 436,
+    "notes": 39
+   },
+   "s1": {
+    "predicted": 34,
+    "reference": 27,
+    "matched": 5,
+    "falsePositives": 29,
+    "missed": 22,
+    "pitchPrecision": 0.147,
+    "pitchRecall": 0.185,
+    "eventF1": 0.164,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 436,
+    "suppressed": 5
+   },
+   "s1b": {
+    "predicted": 34,
+    "reference": 27,
+    "matched": 5,
+    "falsePositives": 29,
+    "missed": 22,
+    "pitchPrecision": 0.147,
+    "pitchRecall": 0.185,
+    "eventF1": 0.164,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 436,
+    "notes": 34,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 3,
+     "other": 26
+    }
+   },
+   "s2": {
+    "predicted": 34,
+    "reference": 27,
+    "matched": 8,
+    "falsePositives": 26,
+    "missed": 19,
+    "pitchPrecision": 0.235,
+    "pitchRecall": 0.296,
+    "eventF1": 0.262,
+    "onsetMaeMs": 60,
+    "onsetMedianMs": 75,
+    "durationMaeMs": 437,
+    "notes": 34,
+    "gridShiftMs": 204
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 17,
+     "reference": 27,
+     "matched": 4,
+     "falsePositives": 13,
+     "missed": 23,
+     "pitchPrecision": 0.235,
+     "pitchRecall": 0.148,
+     "eventF1": 0.182,
+     "onsetMaeMs": 63,
+     "onsetMedianMs": 79,
+     "durationMaeMs": 440
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.214,
+     "maeMs": 131,
+     "anchors": 14
+    },
+    "inventedRate": 0.235,
+    "densityPerSecond": 5.67,
+    "xmlNotes": 17,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-schubert-dense",
+   "kind": "micreal",
+   "truthNotes": 30,
+   "melodyAnchors": 15,
+   "s0": {
+    "predicted": 33,
+    "reference": 30,
+    "matched": 6,
+    "falsePositives": 27,
+    "missed": 24,
+    "pitchPrecision": 0.182,
+    "pitchRecall": 0.2,
+    "eventF1": 0.19,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 53,
+    "durationMaeMs": 269,
+    "notes": 33
+   },
+   "s1": {
+    "predicted": 29,
+    "reference": 30,
+    "matched": 6,
+    "falsePositives": 23,
+    "missed": 24,
+    "pitchPrecision": 0.207,
+    "pitchRecall": 0.2,
+    "eventF1": 0.203,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 53,
+    "durationMaeMs": 269,
+    "suppressed": 4
+   },
+   "s1b": {
+    "predicted": 29,
+    "reference": 30,
+    "matched": 6,
+    "falsePositives": 23,
+    "missed": 24,
+    "pitchPrecision": 0.207,
+    "pitchRecall": 0.2,
+    "eventF1": 0.203,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 53,
+    "durationMaeMs": 269,
+    "notes": 29,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 3,
+     "other": 20
+    }
+   },
+   "s2": {
+    "predicted": 29,
+    "reference": 30,
+    "matched": 5,
+    "falsePositives": 24,
+    "missed": 25,
+    "pitchPrecision": 0.172,
+    "pitchRecall": 0.167,
+    "eventF1": 0.169,
+    "onsetMaeMs": 41,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 232,
+    "notes": 29,
+    "gridShiftMs": -145
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 21,
+     "reference": 30,
+     "matched": 4,
+     "falsePositives": 17,
+     "missed": 26,
+     "pitchPrecision": 0.19,
+     "pitchRecall": 0.133,
+     "eventF1": 0.157,
+     "onsetMaeMs": 51,
+     "onsetMedianMs": 77,
+     "durationMaeMs": 152
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.267,
+     "maeMs": 97,
+     "anchors": 15
+    },
+    "inventedRate": 0.333,
+    "densityPerSecond": 7,
+    "xmlNotes": 21,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-mozart2-triad",
+   "kind": "micreal",
+   "truthNotes": 15,
+   "melodyAnchors": 6,
+   "s0": {
+    "predicted": 24,
+    "reference": 15,
+    "matched": 4,
+    "falsePositives": 20,
+    "missed": 11,
+    "pitchPrecision": 0.167,
+    "pitchRecall": 0.267,
+    "eventF1": 0.205,
+    "onsetMaeMs": 38,
+    "onsetMedianMs": 40,
+    "durationMaeMs": 409,
+    "notes": 24
+   },
+   "s1": {
+    "predicted": 21,
+    "reference": 15,
+    "matched": 4,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.19,
+    "pitchRecall": 0.267,
+    "eventF1": 0.222,
+    "onsetMaeMs": 49,
+    "onsetMedianMs": 61,
+    "durationMaeMs": 417,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 21,
+    "reference": 15,
+    "matched": 4,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.19,
+    "pitchRecall": 0.267,
+    "eventF1": 0.222,
+    "onsetMaeMs": 49,
+    "onsetMedianMs": 61,
+    "durationMaeMs": 417,
+    "notes": 21,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 16
+    }
+   },
+   "s2": {
+    "predicted": 21,
+    "reference": 15,
+    "matched": 4,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.19,
+    "pitchRecall": 0.267,
+    "eventF1": 0.222,
+    "onsetMaeMs": 44,
+    "onsetMedianMs": 67,
+    "durationMaeMs": 396,
+    "notes": 21,
+    "gridShiftMs": -504
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 14,
+     "reference": 15,
+     "matched": 4,
+     "falsePositives": 10,
+     "missed": 11,
+     "pitchPrecision": 0.286,
+     "pitchRecall": 0.267,
+     "eventF1": 0.276,
+     "onsetMaeMs": 44,
+     "onsetMedianMs": 67,
+     "durationMaeMs": 396
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.333,
+     "maeMs": 50,
+     "anchors": 6
+    },
+    "inventedRate": 0.643,
+    "densityPerSecond": 4.67,
+    "xmlNotes": 14,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-schubert2-single",
+   "kind": "micreal",
+   "truthNotes": 20,
+   "melodyAnchors": 10,
+   "s0": {
+    "predicted": 39,
+    "reference": 20,
+    "matched": 2,
+    "falsePositives": 37,
+    "missed": 18,
+    "pitchPrecision": 0.051,
+    "pitchRecall": 0.1,
+    "eventF1": 0.068,
+    "onsetMaeMs": 93,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 284,
+    "notes": 39
+   },
+   "s1": {
+    "predicted": 34,
+    "reference": 20,
+    "matched": 2,
+    "falsePositives": 32,
+    "missed": 18,
+    "pitchPrecision": 0.059,
+    "pitchRecall": 0.1,
+    "eventF1": 0.074,
+    "onsetMaeMs": 93,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 284,
+    "suppressed": 5
+   },
+   "s1b": {
+    "predicted": 34,
+    "reference": 20,
+    "matched": 2,
+    "falsePositives": 32,
+    "missed": 18,
+    "pitchPrecision": 0.059,
+    "pitchRecall": 0.1,
+    "eventF1": 0.074,
+    "onsetMaeMs": 93,
+    "onsetMedianMs": 111,
+    "durationMaeMs": 284,
+    "notes": 34,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 0,
+     "other": 30
+    }
+   },
+   "s2": {
+    "predicted": 34,
+    "reference": 20,
+    "matched": 2,
+    "falsePositives": 32,
+    "missed": 18,
+    "pitchPrecision": 0.059,
+    "pitchRecall": 0.1,
+    "eventF1": 0.074,
+    "onsetMaeMs": 75,
+    "onsetMedianMs": 108,
+    "durationMaeMs": 289,
+    "notes": 34,
+    "gridShiftMs": 7
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 18,
+     "reference": 20,
+     "matched": 2,
+     "falsePositives": 16,
+     "missed": 18,
+     "pitchPrecision": 0.111,
+     "pitchRecall": 0.1,
+     "eventF1": 0.105,
+     "onsetMaeMs": 75,
+     "onsetMedianMs": 108,
+     "durationMaeMs": 289
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.3,
+     "maeMs": 159,
+     "anchors": 10
+    },
+    "inventedRate": 0.667,
+    "densityPerSecond": 6,
+    "xmlNotes": 18,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "piano-schubert2-triad",
+   "kind": "micreal",
+   "truthNotes": 27,
+   "melodyAnchors": 14,
+   "s0": {
+    "predicted": 36,
+    "reference": 27,
+    "matched": 3,
+    "falsePositives": 33,
+    "missed": 24,
+    "pitchPrecision": 0.083,
+    "pitchRecall": 0.111,
+    "eventF1": 0.095,
+    "onsetMaeMs": 106,
+    "onsetMedianMs": 114,
+    "durationMaeMs": 246,
+    "notes": 36
+   },
+   "s1": {
+    "predicted": 30,
+    "reference": 27,
+    "matched": 2,
+    "falsePositives": 28,
+    "missed": 25,
+    "pitchPrecision": 0.067,
+    "pitchRecall": 0.074,
+    "eventF1": 0.07,
+    "onsetMaeMs": 115,
+    "onsetMedianMs": 117,
+    "durationMaeMs": 221,
+    "suppressed": 6
+   },
+   "s1b": {
+    "predicted": 30,
+    "reference": 27,
+    "matched": 2,
+    "falsePositives": 28,
+    "missed": 25,
+    "pitchPrecision": 0.067,
+    "pitchRecall": 0.074,
+    "eventF1": 0.07,
+    "onsetMaeMs": 115,
+    "onsetMedianMs": 117,
+    "durationMaeMs": 221,
+    "notes": 30,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 0,
+     "other": 26
+    }
+   },
+   "s2": {
+    "predicted": 30,
+    "reference": 27,
+    "matched": 0,
+    "falsePositives": 30,
+    "missed": 27,
+    "pitchPrecision": 0,
+    "pitchRecall": 0,
+    "eventF1": 0,
+    "onsetMaeMs": null,
+    "onsetMedianMs": null,
+    "durationMaeMs": null,
+    "notes": 30,
+    "gridShiftMs": 338
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 21,
+     "reference": 27,
+     "matched": 0,
+     "falsePositives": 21,
+     "missed": 27,
+     "pitchPrecision": 0,
+     "pitchRecall": 0,
+     "eventF1": 0,
+     "onsetMaeMs": null,
+     "onsetMedianMs": null,
+     "durationMaeMs": null
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.143,
+     "maeMs": 221,
+     "anchors": 14
+    },
+    "inventedRate": 0.381,
+    "densityPerSecond": 7,
+    "xmlNotes": 21,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-jazz-single",
+   "kind": "micreal",
+   "truthNotes": 6,
+   "melodyAnchors": 6,
+   "s0": {
+    "predicted": 7,
+    "reference": 6,
+    "matched": 5,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.714,
+    "pitchRecall": 0.833,
+    "eventF1": 0.769,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 20,
+    "notes": 7
+   },
+   "s1": {
+    "predicted": 6,
+    "reference": 6,
+    "matched": 5,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.833,
+    "eventF1": 0.833,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 20,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 6,
+    "reference": 6,
+    "matched": 5,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.833,
+    "eventF1": 0.833,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 20,
+    "notes": 6,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 6,
+    "reference": 6,
+    "matched": 5,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.833,
+    "eventF1": 0.833,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 30,
+    "durationMaeMs": 31,
+    "notes": 6,
+    "gridShiftMs": 1114
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 6,
+     "reference": 6,
+     "matched": 5,
+     "falsePositives": 1,
+     "missed": 1,
+     "pitchPrecision": 0.833,
+     "pitchRecall": 0.833,
+     "eventF1": 0.833,
+     "onsetMaeMs": 27,
+     "onsetMedianMs": 30,
+     "durationMaeMs": 31
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.833,
+     "maeMs": 27,
+     "anchors": 6
+    },
+    "inventedRate": 0.167,
+    "densityPerSecond": 2,
+    "xmlNotes": 6,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-jazz-dyad",
+   "kind": "micreal",
+   "truthNotes": 8,
+   "melodyAnchors": 7,
+   "s0": {
+    "predicted": 8,
+    "reference": 8,
+    "matched": 7,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.875,
+    "eventF1": 0.875,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 48,
+    "notes": 8
+   },
+   "s1": {
+    "predicted": 8,
+    "reference": 8,
+    "matched": 7,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.875,
+    "eventF1": 0.875,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 48,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 8,
+    "reference": 8,
+    "matched": 7,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.875,
+    "eventF1": 0.875,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 48,
+    "notes": 8,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 8,
+    "reference": 8,
+    "matched": 7,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.875,
+    "eventF1": 0.875,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 44,
+    "notes": 8,
+    "gridShiftMs": 1
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 8,
+     "reference": 8,
+     "matched": 7,
+     "falsePositives": 1,
+     "missed": 1,
+     "pitchPrecision": 0.875,
+     "pitchRecall": 0.875,
+     "eventF1": 0.875,
+     "onsetMaeMs": 27,
+     "onsetMedianMs": 28,
+     "durationMaeMs": 44
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.857,
+     "maeMs": 26,
+     "anchors": 7
+    },
+    "inventedRate": 0.125,
+    "densityPerSecond": 2.67,
+    "xmlNotes": 8,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-bossa-single",
+   "kind": "micreal",
+   "truthNotes": 6,
+   "melodyAnchors": 6,
+   "s0": {
+    "predicted": 15,
+    "reference": 6,
+    "matched": 6,
+    "falsePositives": 9,
+    "missed": 0,
+    "pitchPrecision": 0.4,
+    "pitchRecall": 1,
+    "eventF1": 0.571,
+    "onsetMaeMs": 14,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 1313,
+    "notes": 15
+   },
+   "s1": {
+    "predicted": 14,
+    "reference": 6,
+    "matched": 6,
+    "falsePositives": 8,
+    "missed": 0,
+    "pitchPrecision": 0.429,
+    "pitchRecall": 1,
+    "eventF1": 0.6,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 1386,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 14,
+    "reference": 6,
+    "matched": 6,
+    "falsePositives": 8,
+    "missed": 0,
+    "pitchPrecision": 0.429,
+    "pitchRecall": 1,
+    "eventF1": 0.6,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 1386,
+    "notes": 14,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 6
+    }
+   },
+   "s2": {
+    "predicted": 14,
+    "reference": 6,
+    "matched": 6,
+    "falsePositives": 8,
+    "missed": 0,
+    "pitchPrecision": 0.429,
+    "pitchRecall": 1,
+    "eventF1": 0.6,
+    "onsetMaeMs": 43,
+    "onsetMedianMs": 50,
+    "durationMaeMs": 1384,
+    "notes": 14,
+    "gridShiftMs": -14
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 11,
+     "reference": 6,
+     "matched": 5,
+     "falsePositives": 6,
+     "missed": 1,
+     "pitchPrecision": 0.455,
+     "pitchRecall": 0.833,
+     "eventF1": 0.588,
+     "onsetMaeMs": 45,
+     "onsetMedianMs": 50,
+     "durationMaeMs": 1367
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.833,
+     "maeMs": 45,
+     "anchors": 6
+    },
+    "inventedRate": 0.455,
+    "densityPerSecond": 3.67,
+    "xmlNotes": 11,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-bossa-chord",
+   "kind": "micreal",
+   "truthNotes": 12,
+   "melodyAnchors": 9,
+   "s0": {
+    "predicted": 20,
+    "reference": 12,
+    "matched": 8,
+    "falsePositives": 12,
+    "missed": 4,
+    "pitchPrecision": 0.4,
+    "pitchRecall": 0.667,
+    "eventF1": 0.5,
+    "onsetMaeMs": 21,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 86,
+    "notes": 20
+   },
+   "s1": {
+    "predicted": 16,
+    "reference": 12,
+    "matched": 8,
+    "falsePositives": 8,
+    "missed": 4,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 0.667,
+    "eventF1": 0.571,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 168,
+    "suppressed": 4
+   },
+   "s1b": {
+    "predicted": 16,
+    "reference": 12,
+    "matched": 8,
+    "falsePositives": 8,
+    "missed": 4,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 0.667,
+    "eventF1": 0.571,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 168,
+    "notes": 16,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 5
+    }
+   },
+   "s2": {
+    "predicted": 16,
+    "reference": 12,
+    "matched": 8,
+    "falsePositives": 8,
+    "missed": 4,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 0.667,
+    "eventF1": 0.571,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 43,
+    "durationMaeMs": 176,
+    "notes": 16,
+    "gridShiftMs": 1744
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 13,
+     "reference": 12,
+     "matched": 7,
+     "falsePositives": 6,
+     "missed": 5,
+     "pitchPrecision": 0.538,
+     "pitchRecall": 0.583,
+     "eventF1": 0.56,
+     "onsetMaeMs": 42,
+     "onsetMedianMs": 35,
+     "durationMaeMs": 197
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.556,
+     "maeMs": 30,
+     "anchors": 9
+    },
+    "inventedRate": 0.231,
+    "densityPerSecond": 4.33,
+    "xmlNotes": 13,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-rock-single",
+   "kind": "micreal",
+   "truthNotes": 7,
+   "melodyAnchors": 7,
+   "s0": {
+    "predicted": 8,
+    "reference": 7,
+    "matched": 6,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.75,
+    "pitchRecall": 0.857,
+    "eventF1": 0.8,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 52,
+    "notes": 8
+   },
+   "s1": {
+    "predicted": 8,
+    "reference": 7,
+    "matched": 6,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.75,
+    "pitchRecall": 0.857,
+    "eventF1": 0.8,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 52,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 8,
+    "reference": 7,
+    "matched": 6,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.75,
+    "pitchRecall": 0.857,
+    "eventF1": 0.8,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 52,
+    "notes": 8,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 8,
+    "reference": 7,
+    "matched": 5,
+    "falsePositives": 3,
+    "missed": 2,
+    "pitchPrecision": 0.625,
+    "pitchRecall": 0.714,
+    "eventF1": 0.667,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 21,
+    "durationMaeMs": 52,
+    "notes": 8,
+    "gridShiftMs": -12
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 8,
+     "reference": 7,
+     "matched": 5,
+     "falsePositives": 3,
+     "missed": 2,
+     "pitchPrecision": 0.625,
+     "pitchRecall": 0.714,
+     "eventF1": 0.667,
+     "onsetMaeMs": 19,
+     "onsetMedianMs": 21,
+     "durationMaeMs": 52
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.857,
+     "maeMs": 38,
+     "anchors": 7
+    },
+    "inventedRate": 0.125,
+    "densityPerSecond": 2.67,
+    "xmlNotes": 8,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-rock-dyad",
+   "kind": "micreal",
+   "truthNotes": 15,
+   "melodyAnchors": 15,
+   "s0": {
+    "predicted": 16,
+    "reference": 15,
+    "matched": 14,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.933,
+    "eventF1": 0.903,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 8,
+    "durationMaeMs": 21,
+    "notes": 16
+   },
+   "s1": {
+    "predicted": 15,
+    "reference": 15,
+    "matched": 14,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.933,
+    "pitchRecall": 0.933,
+    "eventF1": 0.933,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 28,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 15,
+    "reference": 15,
+    "matched": 14,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.933,
+    "pitchRecall": 0.933,
+    "eventF1": 0.933,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 28,
+    "notes": 15,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 15,
+    "reference": 15,
+    "matched": 13,
+    "falsePositives": 2,
+    "missed": 2,
+    "pitchPrecision": 0.867,
+    "pitchRecall": 0.867,
+    "eventF1": 0.867,
+    "onsetMaeMs": 58,
+    "onsetMedianMs": 52,
+    "durationMaeMs": 79,
+    "notes": 15,
+    "gridShiftMs": -8
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 14,
+     "reference": 15,
+     "matched": 12,
+     "falsePositives": 2,
+     "missed": 3,
+     "pitchPrecision": 0.857,
+     "pitchRecall": 0.8,
+     "eventF1": 0.828,
+     "onsetMaeMs": 63,
+     "onsetMedianMs": 79,
+     "durationMaeMs": 72
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.867,
+     "maeMs": 68,
+     "anchors": 15
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 4.67,
+    "xmlNotes": 14,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-power-dyad",
+   "kind": "micreal",
+   "truthNotes": 19,
+   "melodyAnchors": 9,
+   "s0": {
+    "predicted": 20,
+    "reference": 19,
+    "matched": 15,
+    "falsePositives": 5,
+    "missed": 4,
+    "pitchPrecision": 0.75,
+    "pitchRecall": 0.789,
+    "eventF1": 0.769,
+    "onsetMaeMs": 22,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 156,
+    "notes": 20
+   },
+   "s1": {
+    "predicted": 16,
+    "reference": 19,
+    "matched": 14,
+    "falsePositives": 2,
+    "missed": 5,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.737,
+    "eventF1": 0.8,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 150,
+    "suppressed": 4
+   },
+   "s1b": {
+    "predicted": 16,
+    "reference": 19,
+    "matched": 14,
+    "falsePositives": 2,
+    "missed": 5,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.737,
+    "eventF1": 0.8,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 20,
+    "durationMaeMs": 150,
+    "notes": 16,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 2
+    }
+   },
+   "s2": {
+    "predicted": 16,
+    "reference": 19,
+    "matched": 14,
+    "falsePositives": 2,
+    "missed": 5,
+    "pitchPrecision": 0.875,
+    "pitchRecall": 0.737,
+    "eventF1": 0.8,
+    "onsetMaeMs": 38,
+    "onsetMedianMs": 33,
+    "durationMaeMs": 174,
+    "notes": 16,
+    "gridShiftMs": 51
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 13,
+     "reference": 19,
+     "matched": 11,
+     "falsePositives": 2,
+     "missed": 8,
+     "pitchPrecision": 0.846,
+     "pitchRecall": 0.579,
+     "eventF1": 0.688,
+     "onsetMaeMs": 38,
+     "onsetMedianMs": 33,
+     "durationMaeMs": 182
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.556,
+     "maeMs": 125,
+     "anchors": 9
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 4.33,
+    "xmlNotes": 13,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-power-dense",
+   "kind": "micreal",
+   "truthNotes": 24,
+   "melodyAnchors": 10,
+   "s0": {
+    "predicted": 35,
+    "reference": 24,
+    "matched": 18,
+    "falsePositives": 17,
+    "missed": 6,
+    "pitchPrecision": 0.514,
+    "pitchRecall": 0.75,
+    "eventF1": 0.61,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 224,
+    "notes": 35
+   },
+   "s1": {
+    "predicted": 30,
+    "reference": 24,
+    "matched": 17,
+    "falsePositives": 13,
+    "missed": 7,
+    "pitchPrecision": 0.567,
+    "pitchRecall": 0.708,
+    "eventF1": 0.63,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 215,
+    "suppressed": 5
+   },
+   "s1b": {
+    "predicted": 30,
+    "reference": 24,
+    "matched": 17,
+    "falsePositives": 13,
+    "missed": 7,
+    "pitchPrecision": 0.567,
+    "pitchRecall": 0.708,
+    "eventF1": 0.63,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 215,
+    "notes": 30,
+    "falsePositiveKinds": {
+     "harmonic": 6,
+     "duplicate": 3,
+     "other": 4
+    }
+   },
+   "s2": {
+    "predicted": 30,
+    "reference": 24,
+    "matched": 17,
+    "falsePositives": 13,
+    "missed": 7,
+    "pitchPrecision": 0.567,
+    "pitchRecall": 0.708,
+    "eventF1": 0.63,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 41,
+    "durationMaeMs": 214,
+    "notes": 30,
+    "gridShiftMs": 163
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 19,
+     "reference": 24,
+     "matched": 10,
+     "falsePositives": 9,
+     "missed": 14,
+     "pitchPrecision": 0.526,
+     "pitchRecall": 0.417,
+     "eventF1": 0.465,
+     "onsetMaeMs": 33,
+     "onsetMedianMs": 38,
+     "durationMaeMs": 200
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.4,
+     "maeMs": 25,
+     "anchors": 10
+    },
+    "inventedRate": 0.105,
+    "densityPerSecond": 6.33,
+    "xmlNotes": 19,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-funk-triad",
+   "kind": "micreal",
+   "truthNotes": 39,
+   "melodyAnchors": 18,
+   "s0": {
+    "predicted": 30,
+    "reference": 39,
+    "matched": 25,
+    "falsePositives": 5,
+    "missed": 14,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.641,
+    "eventF1": 0.725,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 16,
+    "durationMaeMs": 70,
+    "notes": 30
+   },
+   "s1": {
+    "predicted": 29,
+    "reference": 39,
+    "matched": 25,
+    "falsePositives": 4,
+    "missed": 14,
+    "pitchPrecision": 0.862,
+    "pitchRecall": 0.641,
+    "eventF1": 0.735,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 63,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 29,
+    "reference": 39,
+    "matched": 25,
+    "falsePositives": 4,
+    "missed": 14,
+    "pitchPrecision": 0.862,
+    "pitchRecall": 0.641,
+    "eventF1": 0.735,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 63,
+    "notes": 29,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 29,
+    "reference": 39,
+    "matched": 25,
+    "falsePositives": 4,
+    "missed": 14,
+    "pitchPrecision": 0.862,
+    "pitchRecall": 0.641,
+    "eventF1": 0.735,
+    "onsetMaeMs": 49,
+    "onsetMedianMs": 37,
+    "durationMaeMs": 71,
+    "notes": 29,
+    "gridShiftMs": 32
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 21,
+     "reference": 39,
+     "matched": 20,
+     "falsePositives": 1,
+     "missed": 19,
+     "pitchPrecision": 0.952,
+     "pitchRecall": 0.513,
+     "eventF1": 0.667,
+     "onsetMaeMs": 53,
+     "onsetMedianMs": 44,
+     "durationMaeMs": 83
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.722,
+     "maeMs": 88,
+     "anchors": 18
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 7,
+    "xmlNotes": 21,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-funk-dense",
+   "kind": "micreal",
+   "truthNotes": 43,
+   "melodyAnchors": 19,
+   "s0": {
+    "predicted": 29,
+    "reference": 43,
+    "matched": 25,
+    "falsePositives": 4,
+    "missed": 18,
+    "pitchPrecision": 0.862,
+    "pitchRecall": 0.581,
+    "eventF1": 0.694,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 9,
+    "durationMaeMs": 71,
+    "notes": 29
+   },
+   "s1": {
+    "predicted": 28,
+    "reference": 43,
+    "matched": 26,
+    "falsePositives": 2,
+    "missed": 17,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.605,
+    "eventF1": 0.732,
+    "onsetMaeMs": 29,
+    "onsetMedianMs": 17,
+    "durationMaeMs": 64,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 28,
+    "reference": 43,
+    "matched": 26,
+    "falsePositives": 2,
+    "missed": 17,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.605,
+    "eventF1": 0.732,
+    "onsetMaeMs": 29,
+    "onsetMedianMs": 17,
+    "durationMaeMs": 64,
+    "notes": 28,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 28,
+    "reference": 43,
+    "matched": 26,
+    "falsePositives": 2,
+    "missed": 17,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.605,
+    "eventF1": 0.732,
+    "onsetMaeMs": 40,
+    "onsetMedianMs": 39,
+    "durationMaeMs": 78,
+    "notes": 28,
+    "gridShiftMs": -86
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 23,
+     "reference": 43,
+     "matched": 21,
+     "falsePositives": 2,
+     "missed": 22,
+     "pitchPrecision": 0.913,
+     "pitchRecall": 0.488,
+     "eventF1": 0.636,
+     "onsetMaeMs": 44,
+     "onsetMedianMs": 40,
+     "durationMaeMs": 76
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.526,
+     "maeMs": 91,
+     "anchors": 19
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 7.67,
+    "xmlNotes": 23,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-strum-triad",
+   "kind": "micreal",
+   "truthNotes": 36,
+   "melodyAnchors": 22,
+   "s0": {
+    "predicted": 59,
+    "reference": 36,
+    "matched": 30,
+    "falsePositives": 29,
+    "missed": 6,
+    "pitchPrecision": 0.508,
+    "pitchRecall": 0.833,
+    "eventF1": 0.632,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 179,
+    "notes": 59
+   },
+   "s1": {
+    "predicted": 52,
+    "reference": 36,
+    "matched": 30,
+    "falsePositives": 22,
+    "missed": 6,
+    "pitchPrecision": 0.577,
+    "pitchRecall": 0.833,
+    "eventF1": 0.682,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 179,
+    "suppressed": 7
+   },
+   "s1b": {
+    "predicted": 52,
+    "reference": 36,
+    "matched": 30,
+    "falsePositives": 22,
+    "missed": 6,
+    "pitchPrecision": 0.577,
+    "pitchRecall": 0.833,
+    "eventF1": 0.682,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 15,
+    "durationMaeMs": 179,
+    "notes": 52,
+    "falsePositiveKinds": {
+     "harmonic": 6,
+     "duplicate": 13,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 52,
+    "reference": 36,
+    "matched": 31,
+    "falsePositives": 21,
+    "missed": 5,
+    "pitchPrecision": 0.596,
+    "pitchRecall": 0.861,
+    "eventF1": 0.705,
+    "onsetMaeMs": 36,
+    "onsetMedianMs": 32,
+    "durationMaeMs": 203,
+    "notes": 52,
+    "gridShiftMs": 598
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 37,
+     "reference": 36,
+     "matched": 21,
+     "falsePositives": 16,
+     "missed": 15,
+     "pitchPrecision": 0.568,
+     "pitchRecall": 0.583,
+     "eventF1": 0.575,
+     "onsetMaeMs": 36,
+     "onsetMedianMs": 32,
+     "durationMaeMs": 220
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.773,
+     "maeMs": 49,
+     "anchors": 22
+    },
+    "inventedRate": 0.027,
+    "densityPerSecond": 12.33,
+    "xmlNotes": 37,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-strum-dense",
+   "kind": "micreal",
+   "truthNotes": 36,
+   "melodyAnchors": 21,
+   "s0": {
+    "predicted": 51,
+    "reference": 36,
+    "matched": 26,
+    "falsePositives": 25,
+    "missed": 10,
+    "pitchPrecision": 0.51,
+    "pitchRecall": 0.722,
+    "eventF1": 0.598,
+    "onsetMaeMs": 22,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 352,
+    "notes": 51
+   },
+   "s1": {
+    "predicted": 42,
+    "reference": 36,
+    "matched": 25,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.595,
+    "pitchRecall": 0.694,
+    "eventF1": 0.641,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 359,
+    "suppressed": 9
+   },
+   "s1b": {
+    "predicted": 42,
+    "reference": 36,
+    "matched": 25,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.595,
+    "pitchRecall": 0.694,
+    "eventF1": 0.641,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 359,
+    "notes": 42,
+    "falsePositiveKinds": {
+     "harmonic": 4,
+     "duplicate": 6,
+     "other": 5
+    }
+   },
+   "s2": {
+    "predicted": 42,
+    "reference": 36,
+    "matched": 25,
+    "falsePositives": 17,
+    "missed": 11,
+    "pitchPrecision": 0.595,
+    "pitchRecall": 0.694,
+    "eventF1": 0.641,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 354,
+    "notes": 42,
+    "gridShiftMs": 232
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 35,
+     "reference": 36,
+     "matched": 21,
+     "falsePositives": 14,
+     "missed": 15,
+     "pitchPrecision": 0.6,
+     "pitchRecall": 0.583,
+     "eventF1": 0.592,
+     "onsetMaeMs": 21,
+     "onsetMedianMs": 15,
+     "durationMaeMs": 410
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.762,
+     "maeMs": 49,
+     "anchors": 21
+    },
+    "inventedRate": 0.029,
+    "densityPerSecond": 11.67,
+    "xmlNotes": 35,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg07-single",
+   "kind": "micreal",
+   "truthNotes": 12,
+   "melodyAnchors": 12,
+   "s0": {
+    "predicted": 25,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 13,
+    "missed": 0,
+    "pitchPrecision": 0.48,
+    "pitchRecall": 1,
+    "eventF1": 0.649,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 30,
+    "notes": 25
+   },
+   "s1": {
+    "predicted": 24,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 12,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 30,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 24,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 12,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 30,
+    "notes": 24,
+    "falsePositiveKinds": {
+     "harmonic": 5,
+     "duplicate": 0,
+     "other": 7
+    }
+   },
+   "s2": {
+    "predicted": 24,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 12,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 45,
+    "notes": 24,
+    "gridShiftMs": 0
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 21,
+     "reference": 12,
+     "matched": 12,
+     "falsePositives": 9,
+     "missed": 0,
+     "pitchPrecision": 0.571,
+     "pitchRecall": 1,
+     "eventF1": 0.727,
+     "onsetMaeMs": 20,
+     "onsetMedianMs": 28,
+     "durationMaeMs": 45
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 20,
+     "anchors": 12
+    },
+    "inventedRate": 0.048,
+    "densityPerSecond": 7,
+    "xmlNotes": 21,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg07-dyad",
+   "kind": "micreal",
+   "truthNotes": 9,
+   "melodyAnchors": 5,
+   "s0": {
+    "predicted": 13,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 5,
+    "missed": 1,
+    "pitchPrecision": 0.615,
+    "pitchRecall": 0.889,
+    "eventF1": 0.727,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 72,
+    "notes": 13
+   },
+   "s1": {
+    "predicted": 10,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.889,
+    "eventF1": 0.842,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 72,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 10,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.889,
+    "eventF1": 0.842,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 72,
+    "notes": 10,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 2
+    }
+   },
+   "s2": {
+    "predicted": 10,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.889,
+    "eventF1": 0.842,
+    "onsetMaeMs": 41,
+    "onsetMedianMs": 76,
+    "durationMaeMs": 43,
+    "notes": 10,
+    "gridShiftMs": 328
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 9,
+     "reference": 9,
+     "matched": 7,
+     "falsePositives": 2,
+     "missed": 2,
+     "pitchPrecision": 0.778,
+     "pitchRecall": 0.778,
+     "eventF1": 0.778,
+     "onsetMaeMs": 47,
+     "onsetMedianMs": 76,
+     "durationMaeMs": 47
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.6,
+     "maeMs": 55,
+     "anchors": 5
+    },
+    "inventedRate": 0.111,
+    "densityPerSecond": 3,
+    "xmlNotes": 9,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg01-triad",
+   "kind": "micreal",
+   "truthNotes": 10,
+   "melodyAnchors": 8,
+   "s0": {
+    "predicted": 17,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 8,
+    "missed": 1,
+    "pitchPrecision": 0.529,
+    "pitchRecall": 0.9,
+    "eventF1": 0.667,
+    "onsetMaeMs": 7,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 103,
+    "notes": 17
+   },
+   "s1": {
+    "predicted": 15,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.6,
+    "pitchRecall": 0.9,
+    "eventF1": 0.72,
+    "onsetMaeMs": 7,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 103,
+    "suppressed": 2
+   },
+   "s1b": {
+    "predicted": 15,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.6,
+    "pitchRecall": 0.9,
+    "eventF1": 0.72,
+    "onsetMaeMs": 7,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 103,
+    "notes": 15,
+    "falsePositiveKinds": {
+     "harmonic": 3,
+     "duplicate": 0,
+     "other": 3
+    }
+   },
+   "s2": {
+    "predicted": 15,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.6,
+    "pitchRecall": 0.9,
+    "eventF1": 0.72,
+    "onsetMaeMs": 11,
+    "onsetMedianMs": 11,
+    "durationMaeMs": 115,
+    "notes": 15,
+    "gridShiftMs": 370
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 13,
+     "reference": 10,
+     "matched": 7,
+     "falsePositives": 6,
+     "missed": 3,
+     "pitchPrecision": 0.538,
+     "pitchRecall": 0.7,
+     "eventF1": 0.609,
+     "onsetMaeMs": 14,
+     "onsetMedianMs": 15,
+     "durationMaeMs": 142
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.75,
+     "maeMs": 15,
+     "anchors": 8
+    },
+    "inventedRate": 0.231,
+    "densityPerSecond": 4.33,
+    "xmlNotes": 13,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg01-dense",
+   "kind": "micreal",
+   "truthNotes": 11,
+   "melodyAnchors": 8,
+   "s0": {
+    "predicted": 12,
+    "reference": 11,
+    "matched": 10,
+    "falsePositives": 2,
+    "missed": 1,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.909,
+    "eventF1": 0.87,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 22,
+    "notes": 12
+   },
+   "s1": {
+    "predicted": 11,
+    "reference": 11,
+    "matched": 10,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.909,
+    "pitchRecall": 0.909,
+    "eventF1": 0.909,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 22,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 11,
+    "reference": 11,
+    "matched": 10,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.909,
+    "pitchRecall": 0.909,
+    "eventF1": 0.909,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 22,
+    "notes": 11,
+    "falsePositiveKinds": {
+     "harmonic": 1,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 11,
+    "reference": 11,
+    "matched": 10,
+    "falsePositives": 1,
+    "missed": 1,
+    "pitchPrecision": 0.909,
+    "pitchRecall": 0.909,
+    "eventF1": 0.909,
+    "onsetMaeMs": 11,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 48,
+    "notes": 11,
+    "gridShiftMs": 373
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 9,
+     "reference": 11,
+     "matched": 8,
+     "falsePositives": 1,
+     "missed": 3,
+     "pitchPrecision": 0.889,
+     "pitchRecall": 0.727,
+     "eventF1": 0.8,
+     "onsetMaeMs": 14,
+     "onsetMedianMs": 15,
+     "durationMaeMs": 52
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.75,
+     "maeMs": 19,
+     "anchors": 8
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 3,
+    "xmlNotes": 9,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg02-dense",
+   "kind": "micreal",
+   "truthNotes": 45,
+   "melodyAnchors": 8,
+   "s0": {
+    "predicted": 37,
+    "reference": 45,
+    "matched": 32,
+    "falsePositives": 5,
+    "missed": 13,
+    "pitchPrecision": 0.865,
+    "pitchRecall": 0.711,
+    "eventF1": 0.78,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 98,
+    "notes": 37
+   },
+   "s1": {
+    "predicted": 30,
+    "reference": 45,
+    "matched": 26,
+    "falsePositives": 4,
+    "missed": 19,
+    "pitchPrecision": 0.867,
+    "pitchRecall": 0.578,
+    "eventF1": 0.693,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 94,
+    "suppressed": 7
+   },
+   "s1b": {
+    "predicted": 30,
+    "reference": 45,
+    "matched": 26,
+    "falsePositives": 4,
+    "missed": 19,
+    "pitchPrecision": 0.867,
+    "pitchRecall": 0.578,
+    "eventF1": 0.693,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 94,
+    "notes": 30,
+    "falsePositiveKinds": {
+     "harmonic": 1,
+     "duplicate": 3,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 30,
+    "reference": 45,
+    "matched": 27,
+    "falsePositives": 3,
+    "missed": 18,
+    "pitchPrecision": 0.9,
+    "pitchRecall": 0.6,
+    "eventF1": 0.72,
+    "onsetMaeMs": 58,
+    "onsetMedianMs": 32,
+    "durationMaeMs": 141,
+    "notes": 30,
+    "gridShiftMs": 5
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 17,
+     "reference": 45,
+     "matched": 16,
+     "falsePositives": 1,
+     "missed": 29,
+     "pitchPrecision": 0.941,
+     "pitchRecall": 0.356,
+     "eventF1": 0.516,
+     "onsetMaeMs": 60,
+     "onsetMedianMs": 87,
+     "durationMaeMs": 178
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.625,
+     "maeMs": 54,
+     "anchors": 8
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 5.67,
+    "xmlNotes": 17,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg05-dyad",
+   "kind": "micreal",
+   "truthNotes": 13,
+   "melodyAnchors": 7,
+   "s0": {
+    "predicted": 15,
+    "reference": 13,
+    "matched": 11,
+    "falsePositives": 4,
+    "missed": 2,
+    "pitchPrecision": 0.733,
+    "pitchRecall": 0.846,
+    "eventF1": 0.786,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 38,
+    "notes": 15
+   },
+   "s1": {
+    "predicted": 11,
+    "reference": 13,
+    "matched": 11,
+    "falsePositives": 0,
+    "missed": 2,
+    "pitchPrecision": 1,
+    "pitchRecall": 0.846,
+    "eventF1": 0.917,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 38,
+    "suppressed": 4
+   },
+   "s1b": {
+    "predicted": 11,
+    "reference": 13,
+    "matched": 11,
+    "falsePositives": 0,
+    "missed": 2,
+    "pitchPrecision": 1,
+    "pitchRecall": 0.846,
+    "eventF1": 0.917,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 6,
+    "durationMaeMs": 38,
+    "notes": 11,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 11,
+    "reference": 13,
+    "matched": 11,
+    "falsePositives": 0,
+    "missed": 2,
+    "pitchPrecision": 1,
+    "pitchRecall": 0.846,
+    "eventF1": 0.917,
+    "onsetMaeMs": 12,
+    "onsetMedianMs": 11,
+    "durationMaeMs": 55,
+    "notes": 11,
+    "gridShiftMs": -5
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 11,
+     "reference": 13,
+     "matched": 11,
+     "falsePositives": 0,
+     "missed": 2,
+     "pitchPrecision": 1,
+     "pitchRecall": 0.846,
+     "eventF1": 0.917,
+     "onsetMaeMs": 12,
+     "onsetMedianMs": 11,
+     "durationMaeMs": 55
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.857,
+     "maeMs": 12,
+     "anchors": 7
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 3.67,
+    "xmlNotes": 11,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg10-dense",
+   "kind": "micreal",
+   "truthNotes": 10,
+   "melodyAnchors": 3,
+   "s0": {
+    "predicted": 15,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.6,
+    "pitchRecall": 0.9,
+    "eventF1": 0.72,
+    "onsetMaeMs": 63,
+    "onsetMedianMs": 56,
+    "durationMaeMs": 778,
+    "notes": 15
+   },
+   "s1": {
+    "predicted": 12,
+    "reference": 10,
+    "matched": 8,
+    "falsePositives": 4,
+    "missed": 2,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.8,
+    "eventF1": 0.727,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 43,
+    "durationMaeMs": 1070,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 12,
+    "reference": 10,
+    "matched": 8,
+    "falsePositives": 4,
+    "missed": 2,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.8,
+    "eventF1": 0.727,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 43,
+    "durationMaeMs": 1070,
+    "notes": 12,
+    "falsePositiveKinds": {
+     "harmonic": 1,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 12,
+    "reference": 10,
+    "matched": 7,
+    "falsePositives": 5,
+    "missed": 3,
+    "pitchPrecision": 0.583,
+    "pitchRecall": 0.7,
+    "eventF1": 0.636,
+    "onsetMaeMs": 59,
+    "onsetMedianMs": 43,
+    "durationMaeMs": 1145,
+    "notes": 12,
+    "gridShiftMs": 43
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 8,
+     "reference": 10,
+     "matched": 5,
+     "falsePositives": 3,
+     "missed": 5,
+     "pitchPrecision": 0.625,
+     "pitchRecall": 0.5,
+     "eventF1": 0.556,
+     "onsetMaeMs": 58,
+     "onsetMedianMs": 43,
+     "durationMaeMs": 974
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.667,
+     "maeMs": 127,
+     "anchors": 3
+    },
+    "inventedRate": 0.125,
+    "densityPerSecond": 2.67,
+    "xmlNotes": 8,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg03-dense",
+   "kind": "micreal",
+   "truthNotes": 10,
+   "melodyAnchors": 4,
+   "s0": {
+    "predicted": 20,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 11,
+    "missed": 1,
+    "pitchPrecision": 0.45,
+    "pitchRecall": 0.9,
+    "eventF1": 0.6,
+    "onsetMaeMs": 44,
+    "onsetMedianMs": 49,
+    "durationMaeMs": 628,
+    "notes": 20
+   },
+   "s1": {
+    "predicted": 17,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 8,
+    "missed": 1,
+    "pitchPrecision": 0.529,
+    "pitchRecall": 0.9,
+    "eventF1": 0.667,
+    "onsetMaeMs": 44,
+    "onsetMedianMs": 49,
+    "durationMaeMs": 628,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 17,
+    "reference": 10,
+    "matched": 9,
+    "falsePositives": 8,
+    "missed": 1,
+    "pitchPrecision": 0.529,
+    "pitchRecall": 0.9,
+    "eventF1": 0.667,
+    "onsetMaeMs": 44,
+    "onsetMedianMs": 49,
+    "durationMaeMs": 628,
+    "notes": 17,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 2,
+     "other": 4
+    }
+   },
+   "s2": {
+    "predicted": 17,
+    "reference": 10,
+    "matched": 8,
+    "falsePositives": 9,
+    "missed": 2,
+    "pitchPrecision": 0.471,
+    "pitchRecall": 0.8,
+    "eventF1": 0.593,
+    "onsetMaeMs": 37,
+    "onsetMedianMs": 42,
+    "durationMaeMs": 546,
+    "notes": 17,
+    "gridShiftMs": -1
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 15,
+     "reference": 10,
+     "matched": 6,
+     "falsePositives": 9,
+     "missed": 4,
+     "pitchPrecision": 0.4,
+     "pitchRecall": 0.6,
+     "eventF1": 0.48,
+     "onsetMaeMs": 34,
+     "onsetMedianMs": 42,
+     "durationMaeMs": 491
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 28,
+     "anchors": 4
+    },
+    "inventedRate": 0.133,
+    "densityPerSecond": 5,
+    "xmlNotes": 15,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg04-dyad",
+   "kind": "micreal",
+   "truthNotes": 17,
+   "melodyAnchors": 14,
+   "s0": {
+    "predicted": 19,
+    "reference": 17,
+    "matched": 15,
+    "falsePositives": 4,
+    "missed": 2,
+    "pitchPrecision": 0.789,
+    "pitchRecall": 0.882,
+    "eventF1": 0.833,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 42,
+    "notes": 19
+   },
+   "s1": {
+    "predicted": 16,
+    "reference": 17,
+    "matched": 15,
+    "falsePositives": 1,
+    "missed": 2,
+    "pitchPrecision": 0.938,
+    "pitchRecall": 0.882,
+    "eventF1": 0.909,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 42,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 16,
+    "reference": 17,
+    "matched": 15,
+    "falsePositives": 1,
+    "missed": 2,
+    "pitchPrecision": 0.938,
+    "pitchRecall": 0.882,
+    "eventF1": 0.909,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 5,
+    "durationMaeMs": 42,
+    "notes": 16,
+    "falsePositiveKinds": {
+     "harmonic": 1,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 16,
+    "reference": 17,
+    "matched": 15,
+    "falsePositives": 1,
+    "missed": 2,
+    "pitchPrecision": 0.938,
+    "pitchRecall": 0.882,
+    "eventF1": 0.909,
+    "onsetMaeMs": 53,
+    "onsetMedianMs": 56,
+    "durationMaeMs": 88,
+    "notes": 16,
+    "gridShiftMs": 135
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 14,
+     "reference": 17,
+     "matched": 13,
+     "falsePositives": 1,
+     "missed": 4,
+     "pitchPrecision": 0.929,
+     "pitchRecall": 0.765,
+     "eventF1": 0.839,
+     "onsetMaeMs": 52,
+     "onsetMedianMs": 55,
+     "durationMaeMs": 101
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.857,
+     "maeMs": 52,
+     "anchors": 14
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 4.67,
+    "xmlNotes": 14,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg06-dense",
+   "kind": "micreal",
+   "truthNotes": 48,
+   "melodyAnchors": 8,
+   "s0": {
+    "predicted": 39,
+    "reference": 48,
+    "matched": 31,
+    "falsePositives": 8,
+    "missed": 17,
+    "pitchPrecision": 0.795,
+    "pitchRecall": 0.646,
+    "eventF1": 0.713,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 115,
+    "notes": 39
+   },
+   "s1": {
+    "predicted": 36,
+    "reference": 48,
+    "matched": 30,
+    "falsePositives": 6,
+    "missed": 18,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.625,
+    "eventF1": 0.714,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 111,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 36,
+    "reference": 48,
+    "matched": 30,
+    "falsePositives": 6,
+    "missed": 18,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.625,
+    "eventF1": 0.714,
+    "onsetMaeMs": 31,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 111,
+    "notes": 36,
+    "falsePositiveKinds": {
+     "harmonic": 5,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 36,
+    "reference": 48,
+    "matched": 31,
+    "falsePositives": 5,
+    "missed": 17,
+    "pitchPrecision": 0.861,
+    "pitchRecall": 0.646,
+    "eventF1": 0.738,
+    "onsetMaeMs": 63,
+    "onsetMedianMs": 57,
+    "durationMaeMs": 139,
+    "notes": 36,
+    "gridShiftMs": 114
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 17,
+     "reference": 48,
+     "matched": 12,
+     "falsePositives": 5,
+     "missed": 36,
+     "pitchPrecision": 0.706,
+     "pitchRecall": 0.25,
+     "eventF1": 0.369,
+     "onsetMaeMs": 52,
+     "onsetMedianMs": 57,
+     "durationMaeMs": 182
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.5,
+     "maeMs": 39,
+     "anchors": 8
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 5.67,
+    "xmlNotes": 17,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg08-triad",
+   "kind": "micreal",
+   "truthNotes": 7,
+   "melodyAnchors": 3,
+   "s0": {
+    "predicted": 5,
+    "reference": 7,
+    "matched": 4,
+    "falsePositives": 1,
+    "missed": 3,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.571,
+    "eventF1": 0.667,
+    "onsetMaeMs": 26,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 349,
+    "notes": 5
+   },
+   "s1": {
+    "predicted": 5,
+    "reference": 7,
+    "matched": 4,
+    "falsePositives": 1,
+    "missed": 3,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.571,
+    "eventF1": 0.667,
+    "onsetMaeMs": 26,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 349,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 5,
+    "reference": 7,
+    "matched": 4,
+    "falsePositives": 1,
+    "missed": 3,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.571,
+    "eventF1": 0.667,
+    "onsetMaeMs": 26,
+    "onsetMedianMs": 4,
+    "durationMaeMs": 349,
+    "notes": 5,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 5,
+    "reference": 7,
+    "matched": 4,
+    "falsePositives": 1,
+    "missed": 3,
+    "pitchPrecision": 0.8,
+    "pitchRecall": 0.571,
+    "eventF1": 0.667,
+    "onsetMaeMs": 51,
+    "onsetMedianMs": 37,
+    "durationMaeMs": 342,
+    "notes": 5,
+    "gridShiftMs": 94
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 4,
+     "reference": 7,
+     "matched": 3,
+     "falsePositives": 1,
+     "missed": 4,
+     "pitchPrecision": 0.75,
+     "pitchRecall": 0.429,
+     "eventF1": 0.545,
+     "onsetMaeMs": 56,
+     "onsetMedianMs": 37,
+     "durationMaeMs": 446
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.333,
+     "maeMs": 94,
+     "anchors": 3
+    },
+    "inventedRate": 0.25,
+    "densityPerSecond": 1.33,
+    "xmlNotes": 4,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg09-dyad",
+   "kind": "micreal",
+   "truthNotes": 9,
+   "melodyAnchors": 5,
+   "s0": {
+    "predicted": 11,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.889,
+    "eventF1": 0.8,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 34,
+    "notes": 11
+   },
+   "s1": {
+    "predicted": 11,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.889,
+    "eventF1": 0.8,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 34,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 11,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.889,
+    "eventF1": 0.8,
+    "onsetMaeMs": 10,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 34,
+    "notes": 11,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 2
+    }
+   },
+   "s2": {
+    "predicted": 11,
+    "reference": 9,
+    "matched": 8,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.889,
+    "eventF1": 0.8,
+    "onsetMaeMs": 22,
+    "onsetMedianMs": 28,
+    "durationMaeMs": 17,
+    "notes": 11,
+    "gridShiftMs": 1097
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 9,
+     "reference": 9,
+     "matched": 6,
+     "falsePositives": 3,
+     "missed": 3,
+     "pitchPrecision": 0.667,
+     "pitchRecall": 0.667,
+     "eventF1": 0.667,
+     "onsetMaeMs": 24,
+     "onsetMedianMs": 28,
+     "durationMaeMs": 15
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.4,
+     "maeMs": 28,
+     "anchors": 5
+    },
+    "inventedRate": 0.222,
+    "densityPerSecond": 3,
+    "xmlNotes": 9,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg11-dense",
+   "kind": "micreal",
+   "truthNotes": 14,
+   "melodyAnchors": 8,
+   "s0": {
+    "predicted": 19,
+    "reference": 14,
+    "matched": 10,
+    "falsePositives": 9,
+    "missed": 4,
+    "pitchPrecision": 0.526,
+    "pitchRecall": 0.714,
+    "eventF1": 0.606,
+    "onsetMaeMs": 33,
+    "onsetMedianMs": 17,
+    "durationMaeMs": 167,
+    "notes": 19
+   },
+   "s1": {
+    "predicted": 19,
+    "reference": 14,
+    "matched": 10,
+    "falsePositives": 9,
+    "missed": 4,
+    "pitchPrecision": 0.526,
+    "pitchRecall": 0.714,
+    "eventF1": 0.606,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 258,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 19,
+    "reference": 14,
+    "matched": 10,
+    "falsePositives": 9,
+    "missed": 4,
+    "pitchPrecision": 0.526,
+    "pitchRecall": 0.714,
+    "eventF1": 0.606,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 258,
+    "notes": 19,
+    "falsePositiveKinds": {
+     "harmonic": 2,
+     "duplicate": 0,
+     "other": 5
+    }
+   },
+   "s2": {
+    "predicted": 19,
+    "reference": 14,
+    "matched": 9,
+    "falsePositives": 10,
+    "missed": 5,
+    "pitchPrecision": 0.474,
+    "pitchRecall": 0.643,
+    "eventF1": 0.545,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 9,
+    "durationMaeMs": 169,
+    "notes": 19,
+    "gridShiftMs": 925
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 14,
+     "reference": 14,
+     "matched": 8,
+     "falsePositives": 6,
+     "missed": 6,
+     "pitchPrecision": 0.571,
+     "pitchRecall": 0.571,
+     "eventF1": 0.571,
+     "onsetMaeMs": 21,
+     "onsetMedianMs": 10,
+     "durationMaeMs": 174
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.75,
+     "maeMs": 26,
+     "anchors": 8
+    },
+    "inventedRate": 0.214,
+    "densityPerSecond": 4.67,
+    "xmlNotes": 14,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-eg12-triad",
+   "kind": "micreal",
+   "truthNotes": 12,
+   "melodyAnchors": 4,
+   "s0": {
+    "predicted": 13,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 1,
+    "missed": 0,
+    "pitchPrecision": 0.923,
+    "pitchRecall": 1,
+    "eventF1": 0.96,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 9,
+    "durationMaeMs": 45,
+    "notes": 13
+   },
+   "s1": {
+    "predicted": 12,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 0,
+    "missed": 0,
+    "pitchPrecision": 1,
+    "pitchRecall": 1,
+    "eventF1": 1,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 9,
+    "durationMaeMs": 45,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 12,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 0,
+    "missed": 0,
+    "pitchPrecision": 1,
+    "pitchRecall": 1,
+    "eventF1": 1,
+    "onsetMaeMs": 6,
+    "onsetMedianMs": 9,
+    "durationMaeMs": 45,
+    "notes": 12,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 12,
+    "reference": 12,
+    "matched": 12,
+    "falsePositives": 0,
+    "missed": 0,
+    "pitchPrecision": 1,
+    "pitchRecall": 1,
+    "eventF1": 1,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 35,
+    "durationMaeMs": 46,
+    "notes": 12,
+    "gridShiftMs": 0
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 8,
+     "reference": 12,
+     "matched": 8,
+     "falsePositives": 0,
+     "missed": 4,
+     "pitchPrecision": 1,
+     "pitchRecall": 0.667,
+     "eventF1": 0.8,
+     "onsetMaeMs": 18,
+     "onsetMedianMs": 35,
+     "durationMaeMs": 52
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.75,
+     "maeMs": 12,
+     "anchors": 4
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 2.67,
+    "xmlNotes": 8,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-jazz-single",
+   "kind": "micreal",
+   "truthNotes": 19,
+   "melodyAnchors": 18,
+   "s0": {
+    "predicted": 28,
+    "reference": 19,
+    "matched": 16,
+    "falsePositives": 12,
+    "missed": 3,
+    "pitchPrecision": 0.571,
+    "pitchRecall": 0.842,
+    "eventF1": 0.681,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 7,
+    "durationMaeMs": 111,
+    "notes": 28
+   },
+   "s1": {
+    "predicted": 22,
+    "reference": 19,
+    "matched": 16,
+    "falsePositives": 6,
+    "missed": 3,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.842,
+    "eventF1": 0.78,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 7,
+    "durationMaeMs": 111,
+    "suppressed": 6
+   },
+   "s1b": {
+    "predicted": 22,
+    "reference": 19,
+    "matched": 16,
+    "falsePositives": 6,
+    "missed": 3,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.842,
+    "eventF1": 0.78,
+    "onsetMaeMs": 8,
+    "onsetMedianMs": 7,
+    "durationMaeMs": 111,
+    "notes": 22,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 5,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 22,
+    "reference": 19,
+    "matched": 16,
+    "falsePositives": 6,
+    "missed": 3,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.842,
+    "eventF1": 0.78,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 26,
+    "durationMaeMs": 132,
+    "notes": 22,
+    "gridShiftMs": -3
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 18,
+     "reference": 19,
+     "matched": 12,
+     "falsePositives": 6,
+     "missed": 7,
+     "pitchPrecision": 0.667,
+     "pitchRecall": 0.632,
+     "eventF1": 0.649,
+     "onsetMaeMs": 29,
+     "onsetMedianMs": 27,
+     "durationMaeMs": 147
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.722,
+     "maeMs": 45,
+     "anchors": 18
+    },
+    "inventedRate": 0.056,
+    "densityPerSecond": 6,
+    "xmlNotes": 18,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-jazz-dyad",
+   "kind": "micreal",
+   "truthNotes": 16,
+   "melodyAnchors": 14,
+   "s0": {
+    "predicted": 22,
+    "reference": 16,
+    "matched": 13,
+    "falsePositives": 9,
+    "missed": 3,
+    "pitchPrecision": 0.591,
+    "pitchRecall": 0.813,
+    "eventF1": 0.684,
+    "onsetMaeMs": 21,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 115,
+    "notes": 22
+   },
+   "s1": {
+    "predicted": 20,
+    "reference": 16,
+    "matched": 13,
+    "falsePositives": 7,
+    "missed": 3,
+    "pitchPrecision": 0.65,
+    "pitchRecall": 0.813,
+    "eventF1": 0.722,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 123,
+    "suppressed": 2
+   },
+   "s1b": {
+    "predicted": 20,
+    "reference": 16,
+    "matched": 13,
+    "falsePositives": 7,
+    "missed": 3,
+    "pitchPrecision": 0.65,
+    "pitchRecall": 0.813,
+    "eventF1": 0.722,
+    "onsetMaeMs": 18,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 123,
+    "notes": 20,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 5,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 20,
+    "reference": 16,
+    "matched": 13,
+    "falsePositives": 7,
+    "missed": 3,
+    "pitchPrecision": 0.65,
+    "pitchRecall": 0.813,
+    "eventF1": 0.722,
+    "onsetMaeMs": 28,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 130,
+    "notes": 20,
+    "gridShiftMs": 148
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 19,
+     "reference": 16,
+     "matched": 13,
+     "falsePositives": 6,
+     "missed": 3,
+     "pitchPrecision": 0.684,
+     "pitchRecall": 0.813,
+     "eventF1": 0.743,
+     "onsetMaeMs": 28,
+     "onsetMedianMs": 24,
+     "durationMaeMs": 130
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.857,
+     "maeMs": 26,
+     "anchors": 14
+    },
+    "inventedRate": 0.053,
+    "densityPerSecond": 6.33,
+    "xmlNotes": 19,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-rock-triad-b",
+   "kind": "micreal",
+   "truthNotes": 18,
+   "melodyAnchors": 17,
+   "s0": {
+    "predicted": 21,
+    "reference": 18,
+    "matched": 14,
+    "falsePositives": 7,
+    "missed": 4,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.778,
+    "eventF1": 0.718,
+    "onsetMaeMs": 35,
+    "onsetMedianMs": 19,
+    "durationMaeMs": 58,
+    "notes": 21
+   },
+   "s1": {
+    "predicted": 21,
+    "reference": 18,
+    "matched": 14,
+    "falsePositives": 7,
+    "missed": 4,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.778,
+    "eventF1": 0.718,
+    "onsetMaeMs": 15,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 58,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 21,
+    "reference": 18,
+    "matched": 14,
+    "falsePositives": 7,
+    "missed": 4,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.778,
+    "eventF1": 0.718,
+    "onsetMaeMs": 15,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 58,
+    "notes": 21,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 6
+    }
+   },
+   "s2": {
+    "predicted": 21,
+    "reference": 18,
+    "matched": 14,
+    "falsePositives": 7,
+    "missed": 4,
+    "pitchPrecision": 0.667,
+    "pitchRecall": 0.778,
+    "eventF1": 0.718,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 16,
+    "durationMaeMs": 62,
+    "notes": 21,
+    "gridShiftMs": 35
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 21,
+     "reference": 18,
+     "matched": 14,
+     "falsePositives": 7,
+     "missed": 4,
+     "pitchPrecision": 0.667,
+     "pitchRecall": 0.778,
+     "eventF1": 0.718,
+     "onsetMaeMs": 19,
+     "onsetMedianMs": 16,
+     "durationMaeMs": 62
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.824,
+     "maeMs": 19,
+     "anchors": 17
+    },
+    "inventedRate": 0.286,
+    "densityPerSecond": 7,
+    "xmlNotes": 21,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-bossa-triad",
+   "kind": "micreal",
+   "truthNotes": 22,
+   "melodyAnchors": 11,
+   "s0": {
+    "predicted": 24,
+    "reference": 22,
+    "matched": 19,
+    "falsePositives": 5,
+    "missed": 3,
+    "pitchPrecision": 0.792,
+    "pitchRecall": 0.864,
+    "eventF1": 0.826,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 13,
+    "durationMaeMs": 70,
+    "notes": 24
+   },
+   "s1": {
+    "predicted": 18,
+    "reference": 22,
+    "matched": 16,
+    "falsePositives": 2,
+    "missed": 6,
+    "pitchPrecision": 0.889,
+    "pitchRecall": 0.727,
+    "eventF1": 0.8,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 107,
+    "suppressed": 6
+   },
+   "s1b": {
+    "predicted": 18,
+    "reference": 22,
+    "matched": 16,
+    "falsePositives": 2,
+    "missed": 6,
+    "pitchPrecision": 0.889,
+    "pitchRecall": 0.727,
+    "eventF1": 0.8,
+    "onsetMaeMs": 20,
+    "onsetMedianMs": 14,
+    "durationMaeMs": 107,
+    "notes": 18,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 1,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 18,
+    "reference": 22,
+    "matched": 16,
+    "falsePositives": 2,
+    "missed": 6,
+    "pitchPrecision": 0.889,
+    "pitchRecall": 0.727,
+    "eventF1": 0.8,
+    "onsetMaeMs": 16,
+    "onsetMedianMs": 16,
+    "durationMaeMs": 89,
+    "notes": 18,
+    "gridShiftMs": 438
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 16,
+     "reference": 22,
+     "matched": 15,
+     "falsePositives": 1,
+     "missed": 7,
+     "pitchPrecision": 0.938,
+     "pitchRecall": 0.682,
+     "eventF1": 0.789,
+     "onsetMaeMs": 17,
+     "onsetMedianMs": 16,
+     "durationMaeMs": 93
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.818,
+     "maeMs": 38,
+     "anchors": 11
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 5.33,
+    "xmlNotes": 16,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-bossa-dense",
+   "kind": "micreal",
+   "truthNotes": 25,
+   "melodyAnchors": 11,
+   "s0": {
+    "predicted": 27,
+    "reference": 25,
+    "matched": 20,
+    "falsePositives": 7,
+    "missed": 5,
+    "pitchPrecision": 0.741,
+    "pitchRecall": 0.8,
+    "eventF1": 0.769,
+    "onsetMaeMs": 17,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 77,
+    "notes": 27
+   },
+   "s1": {
+    "predicted": 24,
+    "reference": 25,
+    "matched": 20,
+    "falsePositives": 4,
+    "missed": 5,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.8,
+    "eventF1": 0.816,
+    "onsetMaeMs": 17,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 77,
+    "suppressed": 3
+   },
+   "s1b": {
+    "predicted": 24,
+    "reference": 25,
+    "matched": 20,
+    "falsePositives": 4,
+    "missed": 5,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.8,
+    "eventF1": 0.816,
+    "onsetMaeMs": 17,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 77,
+    "notes": 24,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 4,
+     "other": 0
+    }
+   },
+   "s2": {
+    "predicted": 24,
+    "reference": 25,
+    "matched": 20,
+    "falsePositives": 4,
+    "missed": 5,
+    "pitchPrecision": 0.833,
+    "pitchRecall": 0.8,
+    "eventF1": 0.816,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 83,
+    "notes": 24,
+    "gridShiftMs": 186
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 20,
+     "reference": 25,
+     "matched": 17,
+     "falsePositives": 3,
+     "missed": 8,
+     "pitchPrecision": 0.85,
+     "pitchRecall": 0.68,
+     "eventF1": 0.756,
+     "onsetMaeMs": 27,
+     "onsetMedianMs": 26,
+     "durationMaeMs": 93
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.636,
+     "maeMs": 55,
+     "anchors": 11
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 6.67,
+    "xmlNotes": 20,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-funk-single",
+   "kind": "micreal",
+   "truthNotes": 5,
+   "melodyAnchors": 5,
+   "s0": {
+    "predicted": 9,
+    "reference": 5,
+    "matched": 5,
+    "falsePositives": 4,
+    "missed": 0,
+    "pitchPrecision": 0.556,
+    "pitchRecall": 1,
+    "eventF1": 0.714,
+    "onsetMaeMs": 19,
+    "onsetMedianMs": 18,
+    "durationMaeMs": 28,
+    "notes": 9
+   },
+   "s1": {
+    "predicted": 9,
+    "reference": 5,
+    "matched": 5,
+    "falsePositives": 4,
+    "missed": 0,
+    "pitchPrecision": 0.556,
+    "pitchRecall": 1,
+    "eventF1": 0.714,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 44,
+    "durationMaeMs": 339,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 9,
+    "reference": 5,
+    "matched": 5,
+    "falsePositives": 4,
+    "missed": 0,
+    "pitchPrecision": 0.556,
+    "pitchRecall": 1,
+    "eventF1": 0.714,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 44,
+    "durationMaeMs": 339,
+    "notes": 9,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 2
+    }
+   },
+   "s2": {
+    "predicted": 9,
+    "reference": 5,
+    "matched": 5,
+    "falsePositives": 4,
+    "missed": 0,
+    "pitchPrecision": 0.556,
+    "pitchRecall": 1,
+    "eventF1": 0.714,
+    "onsetMaeMs": 54,
+    "onsetMedianMs": 44,
+    "durationMaeMs": 341,
+    "notes": 9,
+    "gridShiftMs": 44
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 9,
+     "reference": 5,
+     "matched": 5,
+     "falsePositives": 4,
+     "missed": 0,
+     "pitchPrecision": 0.556,
+     "pitchRecall": 1,
+     "eventF1": 0.714,
+     "onsetMaeMs": 54,
+     "onsetMedianMs": 44,
+     "durationMaeMs": 341
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 29,
+     "anchors": 5
+    },
+    "inventedRate": 0.222,
+    "densityPerSecond": 3,
+    "xmlNotes": 9,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-rock-dense",
+   "kind": "micreal",
+   "truthNotes": 46,
+   "melodyAnchors": 13,
+   "s0": {
+    "predicted": 55,
+    "reference": 46,
+    "matched": 40,
+    "falsePositives": 15,
+    "missed": 6,
+    "pitchPrecision": 0.727,
+    "pitchRecall": 0.87,
+    "eventF1": 0.792,
+    "onsetMaeMs": 15,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 90,
+    "notes": 55
+   },
+   "s1": {
+    "predicted": 41,
+    "reference": 46,
+    "matched": 37,
+    "falsePositives": 4,
+    "missed": 9,
+    "pitchPrecision": 0.902,
+    "pitchRecall": 0.804,
+    "eventF1": 0.851,
+    "onsetMaeMs": 14,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 93,
+    "suppressed": 14
+   },
+   "s1b": {
+    "predicted": 41,
+    "reference": 46,
+    "matched": 37,
+    "falsePositives": 4,
+    "missed": 9,
+    "pitchPrecision": 0.902,
+    "pitchRecall": 0.804,
+    "eventF1": 0.851,
+    "onsetMaeMs": 14,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 93,
+    "notes": 41,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 2,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 41,
+    "reference": 46,
+    "matched": 36,
+    "falsePositives": 5,
+    "missed": 10,
+    "pitchPrecision": 0.878,
+    "pitchRecall": 0.783,
+    "eventF1": 0.828,
+    "onsetMaeMs": 33,
+    "onsetMedianMs": 22,
+    "durationMaeMs": 109,
+    "notes": 41,
+    "gridShiftMs": -4
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 26,
+     "reference": 46,
+     "matched": 22,
+     "falsePositives": 4,
+     "missed": 24,
+     "pitchPrecision": 0.846,
+     "pitchRecall": 0.478,
+     "eventF1": 0.611,
+     "onsetMaeMs": 34,
+     "onsetMedianMs": 20,
+     "durationMaeMs": 84
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.231,
+     "maeMs": 42,
+     "anchors": 13
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 8.67,
+    "xmlNotes": 26,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-rock-triad",
+   "kind": "micreal",
+   "truthNotes": 51,
+   "melodyAnchors": 14,
+   "s0": {
+    "predicted": 44,
+    "reference": 51,
+    "matched": 40,
+    "falsePositives": 4,
+    "missed": 11,
+    "pitchPrecision": 0.909,
+    "pitchRecall": 0.784,
+    "eventF1": 0.842,
+    "onsetMaeMs": 13,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 61,
+    "notes": 44
+   },
+   "s1": {
+    "predicted": 42,
+    "reference": 51,
+    "matched": 39,
+    "falsePositives": 3,
+    "missed": 12,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.765,
+    "eventF1": 0.839,
+    "onsetMaeMs": 13,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 62,
+    "suppressed": 2
+   },
+   "s1b": {
+    "predicted": 42,
+    "reference": 51,
+    "matched": 39,
+    "falsePositives": 3,
+    "missed": 12,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.765,
+    "eventF1": 0.839,
+    "onsetMaeMs": 13,
+    "onsetMedianMs": 10,
+    "durationMaeMs": 62,
+    "notes": 42,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 2,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 42,
+    "reference": 51,
+    "matched": 39,
+    "falsePositives": 3,
+    "missed": 12,
+    "pitchPrecision": 0.929,
+    "pitchRecall": 0.765,
+    "eventF1": 0.839,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 68,
+    "notes": 42,
+    "gridShiftMs": 197
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 25,
+     "reference": 51,
+     "matched": 23,
+     "falsePositives": 2,
+     "missed": 28,
+     "pitchPrecision": 0.92,
+     "pitchRecall": 0.451,
+     "eventF1": 0.605,
+     "onsetMaeMs": 23,
+     "onsetMedianMs": 27,
+     "durationMaeMs": 64
+    },
+    "melodyAnchorRecall": {
+     "recall": 0,
+     "maeMs": null,
+     "anchors": 14
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 8.33,
+    "xmlNotes": 25,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "acoustic-fresh-ss-single",
+   "kind": "micreal",
+   "truthNotes": 12,
+   "melodyAnchors": 9,
+   "s0": {
+    "predicted": 12,
+    "reference": 12,
+    "matched": 9,
+    "falsePositives": 3,
+    "missed": 3,
+    "pitchPrecision": 0.75,
+    "pitchRecall": 0.75,
+    "eventF1": 0.75,
+    "onsetMaeMs": 15,
+    "onsetMedianMs": 11,
+    "durationMaeMs": 31,
+    "notes": 12
+   },
+   "s1": {
+    "predicted": 11,
+    "reference": 12,
+    "matched": 9,
+    "falsePositives": 2,
+    "missed": 3,
+    "pitchPrecision": 0.818,
+    "pitchRecall": 0.75,
+    "eventF1": 0.783,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 145,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 11,
+    "reference": 12,
+    "matched": 9,
+    "falsePositives": 2,
+    "missed": 3,
+    "pitchPrecision": 0.818,
+    "pitchRecall": 0.75,
+    "eventF1": 0.783,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 12,
+    "durationMaeMs": 145,
+    "notes": 11,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 11,
+    "reference": 12,
+    "matched": 10,
+    "falsePositives": 1,
+    "missed": 2,
+    "pitchPrecision": 0.909,
+    "pitchRecall": 0.833,
+    "eventF1": 0.87,
+    "onsetMaeMs": 46,
+    "onsetMedianMs": 37,
+    "durationMaeMs": 152,
+    "notes": 11,
+    "gridShiftMs": -12
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 10,
+     "reference": 12,
+     "matched": 10,
+     "falsePositives": 0,
+     "missed": 2,
+     "pitchPrecision": 1,
+     "pitchRecall": 0.833,
+     "eventF1": 0.909,
+     "onsetMaeMs": 46,
+     "onsetMedianMs": 37,
+     "durationMaeMs": 152
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.889,
+     "maeMs": 53,
+     "anchors": 9
+    },
+    "inventedRate": 0,
+    "densityPerSecond": 3.33,
+    "xmlNotes": 10,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-gtechs-low",
+   "kind": "micreal",
+   "truthNotes": 2,
+   "melodyAnchors": 2,
+   "s0": {
+    "predicted": 8,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 7,
+    "missed": 1,
+    "pitchPrecision": 0.125,
+    "pitchRecall": 0.5,
+    "eventF1": 0.2,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 47,
+    "durationMaeMs": 2583,
+    "notes": 8
+   },
+   "s1": {
+    "predicted": 7,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.143,
+    "pitchRecall": 0.5,
+    "eventF1": 0.222,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 47,
+    "durationMaeMs": 2583,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 7,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.143,
+    "pitchRecall": 0.5,
+    "eventF1": 0.222,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 47,
+    "durationMaeMs": 2583,
+    "notes": 7,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 6
+    }
+   },
+   "s2": {
+    "predicted": 7,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 6,
+    "missed": 1,
+    "pitchPrecision": 0.143,
+    "pitchRecall": 0.5,
+    "eventF1": 0.222,
+    "onsetMaeMs": 47,
+    "onsetMedianMs": 47,
+    "durationMaeMs": 2463,
+    "notes": 7,
+    "gridShiftMs": 3974
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 6,
+     "reference": 2,
+     "matched": 1,
+     "falsePositives": 5,
+     "missed": 1,
+     "pitchPrecision": 0.167,
+     "pitchRecall": 0.5,
+     "eventF1": 0.25,
+     "onsetMaeMs": 47,
+     "onsetMedianMs": 47,
+     "durationMaeMs": 2463
+    },
+    "melodyAnchorRecall": {
+     "recall": 0.5,
+     "maeMs": 47,
+     "anchors": 2
+    },
+    "inventedRate": 0.833,
+    "densityPerSecond": 2,
+    "xmlNotes": 6,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-gtechs-mid",
+   "kind": "micreal",
+   "truthNotes": 1,
+   "melodyAnchors": 1,
+   "s0": {
+    "predicted": 2,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 1,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 1019,
+    "notes": 2
+   },
+   "s1": {
+    "predicted": 2,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 1,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 1019,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 2,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 1,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 1019,
+    "notes": 2,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 1
+    }
+   },
+   "s2": {
+    "predicted": 2,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 1,
+    "missed": 0,
+    "pitchPrecision": 0.5,
+    "pitchRecall": 1,
+    "eventF1": 0.667,
+    "onsetMaeMs": 24,
+    "onsetMedianMs": 24,
+    "durationMaeMs": 918,
+    "notes": 2,
+    "gridShiftMs": -24
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 2,
+     "reference": 1,
+     "matched": 1,
+     "falsePositives": 1,
+     "missed": 0,
+     "pitchPrecision": 0.5,
+     "pitchRecall": 1,
+     "eventF1": 0.667,
+     "onsetMaeMs": 24,
+     "onsetMedianMs": 24,
+     "durationMaeMs": 918
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 24,
+     "anchors": 1
+    },
+    "inventedRate": 0.5,
+    "densityPerSecond": 0.67,
+    "xmlNotes": 2,
+    "validity": {
+     "measures": 1,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-gtechs-high",
+   "kind": "micreal",
+   "truthNotes": 1,
+   "melodyAnchors": 1,
+   "s0": {
+    "predicted": 5,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 4,
+    "missed": 0,
+    "pitchPrecision": 0.2,
+    "pitchRecall": 1,
+    "eventF1": 0.333,
+    "onsetMaeMs": 36,
+    "onsetMedianMs": 36,
+    "durationMaeMs": 441,
+    "notes": 5
+   },
+   "s1": {
+    "predicted": 4,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 0,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 1,
+    "eventF1": 0.4,
+    "onsetMaeMs": 36,
+    "onsetMedianMs": 36,
+    "durationMaeMs": 441,
+    "suppressed": 1
+   },
+   "s1b": {
+    "predicted": 4,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 0,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 1,
+    "eventF1": 0.4,
+    "onsetMaeMs": 36,
+    "onsetMedianMs": 36,
+    "durationMaeMs": 441,
+    "notes": 4,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 3
+    }
+   },
+   "s2": {
+    "predicted": 4,
+    "reference": 1,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 0,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 1,
+    "eventF1": 0.4,
+    "onsetMaeMs": 36,
+    "onsetMedianMs": 36,
+    "durationMaeMs": 438,
+    "notes": 4,
+    "gridShiftMs": -36
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 4,
+     "reference": 1,
+     "matched": 1,
+     "falsePositives": 3,
+     "missed": 0,
+     "pitchPrecision": 0.25,
+     "pitchRecall": 1,
+     "eventF1": 0.4,
+     "onsetMaeMs": 36,
+     "onsetMedianMs": 36,
+     "durationMaeMs": 438
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 36,
+     "anchors": 1
+    },
+    "inventedRate": 0.75,
+    "densityPerSecond": 1.33,
+    "xmlNotes": 4,
+    "validity": {
+     "measures": 3,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  },
+  {
+   "id": "electric-gtechs-quiet",
+   "kind": "micreal",
+   "truthNotes": 2,
+   "melodyAnchors": 1,
+   "s0": {
+    "predicted": 4,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 0.5,
+    "eventF1": 0.333,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 418,
+    "notes": 4
+   },
+   "s1": {
+    "predicted": 4,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 0.5,
+    "eventF1": 0.333,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 418,
+    "suppressed": 0
+   },
+   "s1b": {
+    "predicted": 4,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 0.5,
+    "eventF1": 0.333,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 418,
+    "notes": 4,
+    "falsePositiveKinds": {
+     "harmonic": 0,
+     "duplicate": 0,
+     "other": 3
+    }
+   },
+   "s2": {
+    "predicted": 4,
+    "reference": 2,
+    "matched": 1,
+    "falsePositives": 3,
+    "missed": 1,
+    "pitchPrecision": 0.25,
+    "pitchRecall": 0.5,
+    "eventF1": 0.333,
+    "onsetMaeMs": 27,
+    "onsetMedianMs": 27,
+    "durationMaeMs": 458,
+    "notes": 4,
+    "gridShiftMs": -27
+   },
+   "pianoIntermediate": {
+    "s5": {
+     "predicted": 4,
+     "reference": 2,
+     "matched": 1,
+     "falsePositives": 3,
+     "missed": 1,
+     "pitchPrecision": 0.25,
+     "pitchRecall": 0.5,
+     "eventF1": 0.333,
+     "onsetMaeMs": 27,
+     "onsetMedianMs": 27,
+     "durationMaeMs": 458
+    },
+    "melodyAnchorRecall": {
+     "recall": 1,
+     "maeMs": 27,
+     "anchors": 1
+    },
+    "inventedRate": 0.75,
+    "densityPerSecond": 1.33,
+    "xmlNotes": 4,
+    "validity": {
+     "measures": 2,
+     "overfull": 0,
+     "underfull": 0,
+     "valid": true
+    }
+   }
+  }
+ ]
+}

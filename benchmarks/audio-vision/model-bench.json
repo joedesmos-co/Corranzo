@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-10-21T21:36:22.508Z",
+  "reference": {
+    "id": "synth-reference",
+    "notes": 51,
+    "bpm": 100,
+    "audioSeconds": 24
+  },
+  "routes": [
+    {
+      "id": "basic-pitch",
+      "label": "Basic Pitch (in use today)",
+      "model": "public/neural-model (TensorFlow.js graph model)",
+      "modelBytes": 916929,
+      "licence": "Apache-2.0 (Spotify AB) - code and weights",
+      "checkpointRights": "vendored in-repo; the npm package ships the same weights",
+      "runtimeMs": 32743,
+      "realtimeFactor": 0.73,
+      "heapDeltaMb": 28.1,
+      "rssMb": 249.3,
+      "browserWorker": true,
+      "zeroCost": true,
+      "score": {
+        "predicted": 107,
+        "reference": 51,
+        "matched": 51,
+        "falsePositives": 56,
+        "missed": 0,
+        "pitchPrecision": 0.477,
+        "pitchRecall": 1,
+        "eventF1": 0.646,
+        "onsetMaeMs": 4,
+        "onsetMedianMs": 3,
+        "durationMaeMs": 313
+      },
+      "melodyAnchorRecall": {
+        "recall": 1,
+        "maeMs": 5,
+        "anchors": 22
+      },
+      "inventedRate": 0.402
+    },
+    {
+      "id": "hft-transformer",
+      "label": "hFT-Transformer (Sony, ISMIR 2023) - benchmark only",
+      "model": "checkpoint/checkpoint/MAESTRO-V3/model_016_003.pkl",
+      "modelBytes": 20540269,
+      "licence": "MIT (code)",
+      "checkpointRights": "checkpoint distributed via the project's GitHub release; trained on MAESTRO (CC BY-NC-SA 3.0) - commercial use needs a rights check",
+      "runtimeMs": null,
+      "realtimeFactor": null,
+      "browserWorker": false,
+      "zeroCost": false,
+      "score": {
+        "predicted": 44,
+        "reference": 51,
+        "matched": 40,
+        "falsePositives": 4,
+        "missed": 11,
+        "pitchPrecision": 0.909,
+        "pitchRecall": 0.784,
+        "eventF1": 0.842,
+        "onsetMaeMs": 4,
+        "onsetMedianMs": 4,
+        "durationMaeMs": 42
+      },
+      "melodyAnchorRecall": {
+        "recall": 0.909,
+        "maeMs": 4,
+        "anchors": 22
+      },
+      "inventedRate": 0
+    }
+  ]
+}

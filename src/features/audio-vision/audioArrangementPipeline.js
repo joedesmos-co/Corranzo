@@ -19,6 +19,8 @@ import { arrangeSoloGuitar } from './soloGuitar.js'
 import { simplifyForDifficulty } from './difficulty.js'
 import { buildArrangementMusicXml } from './arrangementMusicXml.js'
 import { spectralSecondOpinion, scoreAgreement, AGREEMENT_WINDOW_SECONDS } from './agreementScore.js'
+import { dropRingingRedetections } from './noteCleanup.js'
+import { holdNotesUntilNextOnset } from './arrangementDurations.js'
 
 export const CONFIDENCE_THRESHOLD_ARRANGE = 0.35
 export const CONFIDENCE_THRESHOLD_PARTIAL = 0.2
@@ -113,7 +115,27 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
  * long recording is never silently truncated (Phase 7).
  */
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
-  const { targetPart, difficulty, title, excerpt = null, tempoOverride = null } = options
+  const {
+    targetPart, difficulty, title, excerpt = null, tempoOverride = null,
+    // The transcription-level experiments, individually switchable so their
+    // effect can be measured exactly (and so a future experiment can turn one
+    // on without touching the others).
+    //
+    // cleanupRedetections and holdNoteDurations are OFF: both looked good on
+    // the synthesized reference and both FAILED on real recordings
+    // (GuitarSet: the cleanup removed 157 genuine notes on one performance,
+    // and holding notes until the next onset made the duration error 123 ms ->
+    // 147 ms). They stay here, measured and rejected, so the decision can be
+    // re-checked when better evidence exists.
+    cleanupRedetections = false,
+    holdNoteDurations = false,
+    // The onset-corroboration gate: measured on the synthesized reference it
+    // helps (+0.08 event F1); measured on real GuitarSet performances it
+    // HURTS (-0.06 to -0.09), because the flux detector misses a soft pick
+    // and the gate then drops a real note. The default follows the real
+    // recordings.
+    corroborateNotes = false,
+  } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
   }
@@ -192,6 +214,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     // M3: reviewer's tempo correction propagates to beats -> quantization ->
     // arrangement -> MusicXML -> preview -> practice checkpoints.
     tempoOverride: Number.isFinite(tempoOverride) && tempoOverride > 0 ? tempoOverride : null,
+    corroborateNotes,
   })
   analysis.stereo = stereoSlice
     ? {
@@ -245,6 +268,23 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     analysis.predictedNotes = filtered.notes
   }
   transcribed.suppressedHarmonics = suppressedHarmonics
+  // Re-detection cleanup (BP path only): the model reports note FRAMES, so a
+  // sustained note can be reported again while it is still sounding. The
+  // earlier note of the same pitch ends exactly where the new one starts, and
+  // the pair together covers one longer note - that is a split sustain, not a
+  // new note. A genuine repeat has a gap (the note was lifted) and is kept.
+  // Measured on the independent synthesized reference: 14 notes removed, 13
+  // of them invented and 1 genuine; the transcription's event F1 rises
+  // 0.711 -> 0.777. The count is reported, never silent.
+  let removedRedetections = 0
+  if (analysis.pitchSource === 'basic-pitch' && cleanupRedetections) {
+    const cleaned = dropRingingRedetections(analysis.predictedNotes, {
+      onsetTimes: (analysis.onsets ?? []).map((o) => o.seconds),
+    })
+    removedRedetections = cleaned.removed
+    analysis.predictedNotes = cleaned.notes
+  }
+  transcribed.removedRedetections = removedRedetections
   // Melody contour from DETECTED salient frames — decides which simultaneous
   // note is the melody (evidence), so thinning protects the real line.
   const melodyContour = buildMelodyContour(analysis.melody, {
@@ -276,6 +316,17 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   } else {
     arranged = arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty, melodyContour })
   }
+  // NOTE DURATIONS: a note sounds until the next note in its own part replaces
+  // it. The model's frame-based durations are systematically short for
+  // accompaniment (measured: 348 ms mean error; a held chord came out as a
+  // staccato), and the onsets - which are accurate to 5 ms - are the reliable
+  // evidence. This changes how long a note is WRITTEN, never which notes are
+  // written.
+  const heldDurations = holdNotesUntilNextOnset(arranged.events.map((e) => ({ ...e })), {
+    maxBeats: 8,
+    enabled: holdNoteDurations,
+  })
+  arranged.events = heldDurations.events
   const simplified = simplifyForDifficulty(
     arranged.events.map((e) => ({ ...e, quantizedStartBeat: e.startBeat, quantizedDurBeats: e.durBeats })),
     difficulty,

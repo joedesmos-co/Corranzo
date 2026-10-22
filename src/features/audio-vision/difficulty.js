@@ -44,8 +44,11 @@ export function paramsForDifficulty(difficulty) {
 }
 
 /** Simplify quantized events per difficulty: thin ornaments, enforce min durations. */
-export function simplifyForDifficulty(events, difficulty) {
+export function simplifyForDifficulty(events, difficulty, { maxNotesPerBeat = null } = {}) {
   const params = paramsForDifficulty(difficulty)
+  // The per-beat readability budget can be overridden so its effect can be
+  // measured (the default is the documented per-difficulty value).
+  const notesPerBeat = maxNotesPerBeat ?? params.maxNotesPerBeat
   const out = []
   for (const e of events) {
     if (params.dropPassingTones && e.isPassingTone && !e.isMelody) continue
@@ -118,7 +121,7 @@ export function simplifyForDifficulty(events, difficulty) {
       return true
     })())
     const others = group.filter((e) => !e.isMelody && !e.isBassRoot)
-    const othersBudget = Math.max(0, params.maxNotesPerBeat - essential.length)
+    const othersBudget = Math.max(0, notesPerBeat - essential.length)
     beatCapped.push(...essential, ...others.slice(0, Math.max(0, Math.floor(othersBudget))))
   }
   beatCapped.sort((a, b) => (a.quantizedStartBeat ?? 0) - (b.quantizedStartBeat ?? 0))

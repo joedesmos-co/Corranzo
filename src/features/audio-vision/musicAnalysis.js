@@ -88,7 +88,7 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
  * Analyze mono 22050 Hz samples. views: { harmonic, percussive } magnitude frames (optional).
  * predictNotes: async (samples) => [{ midi, startSeconds, endSeconds }] | null (Basic Pitch).
  */
-export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null } = {}) {
+export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null, corroborateNotes = true } = {}) {
   const totalSeconds = samples.length / sampleRate
   const report = (stage, fraction) => {
     try { onProgress?.({ stage, fraction }) } catch { /* noop */ }
@@ -187,7 +187,7 @@ export async function analyzeMusic(samples, sampleRate, { views = null, predictN
       predictedNotes = []
     }
   }
-  if (predictedNotes.length) {
+  if (predictedNotes.length && corroborateNotes) {
     // ONSET CORROBORATION (independent evidence, not taste).
     //
     // The pitch model claims a note at a time. The spectral-flux onset detector
