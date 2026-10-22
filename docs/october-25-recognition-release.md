@@ -388,10 +388,44 @@ real `node_modules` — they were resource artefacts of a shared Vite optimizer 
 same three also time out on untouched `main` under the same conditions. They are not caused by
 this release.
 
+### 9.5 Live verification (after deployment)
+
+Deployed version **`11dba36c-194d-437f-a394-a618d0c80eac`** (2026-10-22T20:59:24Z). The live
+bundle hash `index-B5aW878H.js` equals the local `dist/` hash, and a clean rebuild of `dist/`
+reproduces it **byte-for-byte** — so the live code is exactly the code in this branch.
+
+| live check | result |
+|---|---|
+| bundle hash | live `index-B5aW878H.js` == local == reproducible from HEAD |
+| routes `/`, `/privacy`, `/terms`, `/contact`, `/beta`, `/ads.txt` | all HTTP 200 |
+| `scripts/browser-smoke-pass.mjs` against `https://corranzo.com/` | **19 / 19 passed** (cold load, PDF-only import → Practice, piano + guitar, repeated instrument switches, Visual + Score views, the Wait For You dock, the deferred Hear It control, the progress filters, reload persistence, no horizontal overflow on desktop / iPad / mobile, no console errors, no page errors) |
+| `scripts/browser-practice-surface-regression.mjs` against `https://corranzo.com/` | **11 / 11 passed** (the Play Along cursor produced 157 continuous frames, never teleported — max jump 2.09 — and never moved backwards; Pause during instrument loading; Zoom fit page / fit width; Resize; Scroll keeps the cursor locked; Page change; Tempo; no page exceptions) |
+| deployment list | the new version is current; the previous production version `d3c68ba1-4c85-494e-8f70-cc20937e7f45` is preserved for rollback |
+
+**One live failure was investigated and ruled out.** The first live smoke run reported
+`PDF-only import reaches Practice: Playback or PDF score was not ready`. The check waits
+**30 s** for the practice transport and then re-reads `isVisible()` — a race. The evidence:
+
+| build | live @30 s | live @120 s | local @30 s | local @120 s |
+|---|---|---|---|---|
+| old (`main`, `index-nKtwCllR.js`) | **19/19 PASS** (30026 ms) | — | 19/19 PASS (30026 ms) | 19/19 PASS (120019 ms) |
+| new (this release, `index-B5aW878H.js`) | 18/19 **FAIL** once → **19/19 PASS** on re-run (30027 ms) | **19/19 PASS** (120025 ms) | 19/19 PASS (30025 ms) | 19/19 PASS (120026 ms) |
+
+The old and the new build are **identical** in import time at both budgets (30026 vs 30025 ms;
+120019 vs 120026 ms) — the import duration is unchanged by this release. The `src/features/pdf`,
+`src/features/omr` and `src/features/import` trees are **byte-identical** between the two
+builds (`git diff main HEAD -- src/features/pdf src/features/omr src/features/import` is empty).
+The failure was confirmed by a reversible live A/B: rolling the deployment back to the previous
+production version and re-running gave 19/19 PASS, and rolling forward to the new version and
+re-running also gave 19/19 PASS. It is a flaky boundary check in the smoke script, not a
+regression.
+
+
 ### 9.4 Summary
 
 * **No cursor regression.** The practice-surface regression, the visual-runtime suite and both
-  engine variants of the Audio Vision WebKit script all pass.
+  engine variants of the Audio Vision WebKit script all pass — locally and against the live
+  deployment.
 * **No audio-lifecycle regression.** `playbackAcceptance` (10/10) and `audioRender` (25/25) pass,
   and the smoke pass reports no console or page errors.
 * **Preview / Play Along / Wait For You** are all exercised and pass in Chromium **and** WebKit.
@@ -425,12 +459,17 @@ this release.
 
 ## 11. Rollback
 
-* **Code**: revert the two integration commits, or reset the branch to `bd62f519c2`.
-* **Deployment**: `npx wrangler rollback <version-id>` — the pre-release version is
-  `d3c68ba1-4c85-494e-8f70-cc20937e7f45` (2026-10-21T19:49:36Z).
-* **Mic feature flag**: the V3 engine has a live rollback switch
+* **Deployed version:** `11dba36c-194d-437f-a394-a618d0c80eac` (2026-10-22T20:59:24Z).
+* **Previous production version (the rollback target):** `d3c68ba1-4c85-494e-8f70-cc20937e7f45`
+  (2026-10-21T19:49:36Z) — still in the deployment list. `npx wrangler rollback d3c68ba1-4c85-494e-8f70-cc20937e7f45`
+  restores it; `npx wrangler rollback 11dba36c-194d-437f-a394-a618d0c80eac` rolls forward again.
+  **This exact A/B was performed during verification** and both directions were confirmed
+  live.
+* **Code:** the release is two commits on `main` (`495a440f2a`, `09a3c36e9c`) plus two report
+  commits; reverting them, or resetting to `bd62f519c2`, restores the previous behaviour exactly.
+* **Mic feature flag:** the V3 engine has a live rollback switch
   (`window.__SCOREFLOW_FLAGS__.micEngineV3 = false` or the
   `scoreflow.flags.micEngineV3` localStorage key); the neural recogniser has its own
-  (`micNeural`, default OFF).
-* **Audio Vision**: `corroborateNotes: true` restores the previous transcription behaviour
+  (`micNeural`, default OFF, and explicit `false` is honoured so it can never turn itself on).
+* **Audio Vision:** `corroborateNotes: true` restores the previous transcription behaviour
   without a redeploy, and the option is present in the shipped code for exactly that reason.
