@@ -23,6 +23,20 @@ No cursor, notehead, feedback or practice-control behaviour was touched.
 The spectral recognizer remains the default; the neural recognizer remains
 experimental and OFF by default.
 
+## Chord completion status (read this before shipping chords)
+
+- With the **v2 collection path** (V3 performance expectations off, or a
+  score without expectations): real piano chords now COMPLETE — browser
+  verified ("Heard C4 + E4 + G4 — all tones matched"). The fixes are in
+  the mic-owned modules listed above; no UI change is needed.
+- With the **default V3 path**: the v2 evidence is complete (all three
+  tones detected every frame) but the V3 match result does not emit
+  COMPLETE, so the checkpoint does not advance. This is in the shared V3
+  layer (`src/features/microphone-input/v3/`), which this worktree did
+  not modify. **Product decision needed**: either the V3 chord decision
+  is fixed, or the mic path is switched to the v2 collection for chord
+  checkpoints. Until then, do not promise chord completion to users.
+
 ## UI contract (what to show, and when)
 
 The production path exposes these states today (all via the existing

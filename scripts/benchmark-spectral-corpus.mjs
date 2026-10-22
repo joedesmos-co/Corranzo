@@ -65,6 +65,9 @@ function arg(name, fallback = null) {
 }
 
 const MANIFESTS = (arg('manifests', 'mic-accuracy,mic-polyphony,mic-real,mic-composites')).split(',')
+// Experiment switch: a FIXED noise floor (as the calibration would derive)
+// instead of the adaptive analyser floor. 0 = legacy adaptive behaviour.
+const FIXED_FLOOR = Number(arg('fixed-floor', '0'))
 const SPLIT = arg('split', null)
 const JSON_OUT = arg('json', null)
 
@@ -174,7 +177,7 @@ function replayExpectation(clip, samples, sampleRate, expectedMidis) {
       buffer: new Float32Array(samples.subarray(end - fft, end)),
       sampleRate,
       expectedMidis,
-      noiseFloor: analyzer.noiseFloor,
+      noiseFloor: FIXED_FLOOR > 0 ? { floor: FIXED_FLOOR, alpha: 0.0001 } : analyzer.noiseFloor,
       state: v2State,
       centsTolerance: SETTINGS.micCentsTolerance,
       gateOptions: profile?.gate ?? null,

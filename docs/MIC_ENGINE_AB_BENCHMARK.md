@@ -58,11 +58,22 @@ in this window.
 
 ## Root cause of the spectral chord gap (browser-confirmed)
 
-The production chord path collected **one monophonic pitch per frame**, and
-two monophonic-only guards dropped frames that carried valid POLYPHONIC v2
-evidence. The collection's single pending-index counter also rotated when
-several expected tones arrived in one frame, so no tone ever reached its
-stable-hit count.
+Two DISTINCT chord paths exist in the shipped product:
+
+**(a) V3 performance-expectation path (default, V3 is ON).** The hook
+builds a performance expectation from the checkpoint, so the V3 engine
+owns the chord decision. Browser-measured on the real C-major triad: the
+v2 engine detects all three tones every frame (`det=[60,64,67]`), the
+feedback says "3/3 matched", and the checkpoint still never advances —
+the V3 match result does not emit COMPLETE for the chord. The remaining
+blocker lives in the shared V3 layer, not in the microphone code.
+
+**(b) V2 collection path (fallback: V3 off, or no expectation could be
+built — imported scores without performance expectations).** This path
+collected **one monophonic pitch per frame**, two monophonic-only guards
+dropped frames carrying valid POLYPHONIC v2 evidence, and the collection's
+single pending-index counter rotated when several expected tones arrived
+in one frame, so no tone ever reached its stable-hit count.
 
 Fixes shipped in this window (mic-owned modules only):
 1. `micChordPolyphonyEvidence.chordCollectionEvidenceMidis` — the tones to
@@ -71,13 +82,14 @@ Fixes shipped in this window (mic-owned modules only):
 2. `waitForYouMicChordCollection` — per-expected-tone hit counters, so
    polyphonic evidence can accumulate; a wrong note still clears progress.
 3. `useWaitForYouMicInput` — the two monophonic-only guards no longer
-   discard frames that carry chord polyphonic evidence.
+   discard frames that carry chord polyphonic evidence, and a chord is no
+   longer confirmed by MONOPHONIC clarity (the autocorrelation clarity of
+   three simultaneous tones is low by construction, so the old gate
+   rejected every real chord).
 
-**Known remaining cause (not fixed here)**: in the browser the adaptive
-analyser noise floor closes the gate on SUSTAINED chords (the v2 engine
-reported zero detections while the chord was ringing), so the polyphonic
-evidence never appears in the first place. The fix belongs in the gate /
-noise-floor handling, not in the collection.
+Browser-verified result: with the v2 path (`?v3=0`) the real C-major triad
+now completes — "Heard C4 + E4 + G4 — all tones matched" (real MediaStream
+injection, real capture code, real v2 detector, real checkpoint).
 
 ## Recommendation
 

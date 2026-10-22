@@ -1187,10 +1187,22 @@ export default function useWaitForYouMicInput({
         }
         if (sequencePreview.outcome === MATCH_OUTCOME.COMPLETE) {
           const pitchCents = frame.midiFloat != null ? frame.midiFloat * 100 : null
+          // A chord cannot be confirmed by MONOPHONIC clarity: the
+          // autocorrelation clarity of three simultaneous tones is low by
+          // construction, so the old gate rejected every real chord
+          // (browser-measured: the collection reaches "3/3 matched" and
+          // the checkpoint never advances). The collection's own stable
+          // hits (2 per tone) plus the wrong-streak limit ARE the
+          // confidence for a chord; the key must also be stable, so it is
+          // built from the evidence set instead of the fluctuating
+          // monophonic pitch.
+          const chordEvidenceKey = [...new Set(evidenceMidis)].sort((left, right) => left - right).join(',')
+          if (typeof window !== 'undefined') {
+          }
           if (
             confirmConfidentMatch(
-              `${currentCheckpoint.id}:sequence:${frame.midi}`,
-              frameConfident,
+              `${currentCheckpoint.id}:sequence:${chordEvidenceKey}`,
+              frameConfident || chordPolyphonicEvidence.length > 0,
               { pitchCents, threshold: 1 },
             )
           ) {

@@ -85,6 +85,7 @@ function LiveProductionMic({ microphone }) {
       v3Enabled: mic?.micEngineV3Enabled ?? null,
       micEngineMode: mic?.micEngineMode ?? null,
       calibration: mic?.calibration ?? null,
+      feedback: mic?.inputFeedback ? { message: mic.inputFeedback.message, outcome: mic.inputFeedback.outcome, matchedCount: mic.inputFeedback.matchedCount } : null,
       debug: mic?.liveFrame ?? null,
       trace: typeof mic?.exportMicTrace === 'function' ? mic.exportMicTrace() : null,
     }

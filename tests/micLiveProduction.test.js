@@ -111,6 +111,43 @@ describe('production mic live injection (v2 score-informed)', () => {
     expect(results.feedbackOutcome).toBe('correct')
   }, 180_000)
 
+  it('completes a real piano chord on the v2 collection path', async () => {
+    // Regression for the Step 5 launch-sprint fix: the chord collection
+    // consumed ONE monophonic pitch per frame and kept a single pending
+    // index, so a real three-note chord never completed (browser-measured:
+    // "3/3 matched" but the checkpoint never advanced). With the v2
+    // fallback path (V3 performance expectations off) the production
+    // recognizer now completes the chord.
+    const clip = loadPolyphonyClip('real-c-major-triad.wav')
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/mic-live/live.html?v3=0`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples, sampleRate }) => window.__liveApi.inject({
+        samples,
+        sampleRate,
+        expectedMidis: [60, 64, 67],
+        checkpointId: 'prod-chord-v2',
+      }),
+      { samples: clip.samples, sampleRate: clip.sampleRate },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.wrong > 0),
+      null,
+      { timeout: 120_000, polling: 1000 },
+    )
+    const results = await page.evaluate(() => window.__liveResults)
+    console.log('PROD-CHORD-V2', JSON.stringify({
+      matched: results.matched?.length ?? 0,
+      wrong: results.wrong,
+      outcome: results.feedbackOutcome,
+      mode: results.micEngineMode,
+    }))
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.matched.length).toBeGreaterThanOrEqual(1)
+    expect(results.feedbackOutcome).toBe('correct')
+  }, 240_000)
+
   it('never falsely completes or mis-reports a chord in the production path', async () => {
     // The real C-major triad currently does NOT complete in the v2
     // collection path: the adaptive analyser noise floor closes the gate
