@@ -43,31 +43,7 @@ if (!NOTES_PATH) {
 
 const { clips } = JSON.parse(readFileSync(NOTES_PATH, 'utf8'))
 
-function wrongExpectations(expected, truthMidis = null) {
-  const truth = truthMidis ? new Set(truthMidis) : null
-  // A scenario is only meaningful when its MUTATED pitches never sound
-  // in the clip: otherwise a "false" complete is just the piece's own
-  // true notes matching (dense performances contain dozens of pitches).
-  // Scenarios colliding with truth are skipped, never counted.
-  const scenarios = []
-  const consider = (name, mutated) => {
-    if (truth && mutated.some((midi) => truth.has(midi))) {
-      return
-    }
-    scenarios.push({ name, expected: mutated })
-  }
-  for (const midi of expected) {
-    consider(`neighbor+1-of-${midi}`, expected.map((value) => (value === midi ? value + 1 : value)))
-    consider(`neighbor-1-of-${midi}`, expected.map((value) => (value === midi ? value - 1 : value)))
-    consider(`octave-up-of-${midi}`, expected.map((value) => (value === midi ? value + 12 : value)))
-  }
-  if (expected.length > 1) {
-    consider('wrong-chord-same-count', expected.map((value) => value + 2))
-  } else {
-    consider('wrong-single-plus-2', expected.map((value) => value + 2))
-  }
-  return scenarios
-}
+import { wrongExpectations } from './lib/micFalseAwardScenarios.mjs'
 
 const report = []
 for (const clip of clips) {

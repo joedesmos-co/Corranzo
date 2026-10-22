@@ -57,6 +57,7 @@ import {
   updateMicAttackRelease,
 } from './micAttackLatch.js'
 import { isMusicalMicFrame, micMusicalRejectReason } from './micMusicalAcceptance.js'
+import { chordCollectionEvidenceMidis } from '../microphone-input/micChordPolyphonyEvidence.js'
 import { MIC_CALIBRATION_STATUS } from '../microphone-input/micCalibration.js'
 import { MIC_CALIBRATION_STATUS_LABELS } from '../microphone-input/micCalibration.js'
 import {
@@ -964,6 +965,17 @@ export default function useWaitForYouMicInput({
         return
       }
 
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch
+      // (the v2 score-informed engine reports several expected tones at
+      // once). The monophonic-only guards below dropped those frames
+      // before the chord collection could use them, so real chords never
+      // completed (browser-measured on the real C-major triad). Every fed
+      // tone is an EXPECTED pitch (the v2 scorer only scores expected
+      // notes), so the wrong-streak protection is unchanged.
+      const chordPolyphonicEvidence = isMicChordCollection
+        ? chordCollectionEvidenceMidis(frame, expectedMidis)
+        : []
+
       const recognitionTimeMs = performanceMode === PERFORMANCE_MODE.PLAY_ALONG
         ? Math.max(0, Number(performanceTimeMs) || 0)
         : timestampMs
@@ -1000,8 +1012,13 @@ export default function useWaitForYouMicInput({
             })
             musicalTimingRef.current = timingOnly.state
           }
-          resetMatchConfirm()
-          return
+          // A ringing previous note must not swallow POLYPHONIC chord
+          // evidence: the collection's own stable-hit logic decides
+          // whether the chord is really there.
+          if (!chordPolyphonicEvidence.length) {
+            resetMatchConfirm()
+            return
+          }
         }
       }
 
@@ -1109,7 +1126,12 @@ export default function useWaitForYouMicInput({
         return
       }
 
-      if ((frame.midi == null || !frame.gateOpen) && !guitarShapeQuietCollect && !rollingChordQuietCollect) {
+      // Chords can carry POLYPHONIC evidence without a monophonic pitch
+      // (the v2 score-informed engine reports several expected tones at
+      // once). The old monophonic-only guard dropped those frames before
+      // the chord collection could use them, so real chords never
+      // completed (browser-measured on the real C-major triad).
+      if ((frame.midi == null || !frame.gateOpen) && !chordPolyphonicEvidence.length && !guitarShapeQuietCollect && !rollingChordQuietCollect) {
         return
       }
 
@@ -1125,7 +1147,31 @@ export default function useWaitForYouMicInput({
       // sequential collector only when V3 is disabled or an expectation could
       // not be constructed, so the rollback path remains operational.
       if (isMicChordCollection && !v3Evaluation) {
-        const sequencePreview = evaluateMicMatch(frame.midi)
+        // Chord collection now consumes the v2 POLYPHONIC evidence for
+        // this frame (plus the monophonic pitch): the collection is
+        // designed to accumulate expected tones over a window, but it was
+        // fed one pitch per frame, so real chords often never completed
+        // (browser-measured: the real C-major triad never completes).
+        // Every fed tone is an EXPECTED pitch (the v2 scorer only scores
+        // expected notes), so the wrong-streak protection is unchanged.
+        const evidenceMidis = chordCollectionEvidenceMidis(frame, expectedMidis)
+        const playedMidis = evidenceMidis.length ? evidenceMidis : [frame.midi]
+        let sequencePreview = null
+        for (const playedMidi of playedMidis) {
+          const preview = evaluateMicMatch(playedMidi)
+          if (!preview) {
+            continue
+          }
+          // A complete chord wins immediately; otherwise keep the most
+          // informative outcome (progress beats wrong).
+          if (preview.outcome === MATCH_OUTCOME.COMPLETE) {
+            sequencePreview = preview
+            break
+          }
+          if (!sequencePreview || preview.outcome === MATCH_OUTCOME.CHORD_PROGRESS) {
+            sequencePreview = preview
+          }
+        }
         matchResultForTrace = sequencePreview
         if (!sequencePreview) {
           return

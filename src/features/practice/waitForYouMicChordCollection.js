@@ -18,6 +18,9 @@ export function createMicChordCollectionState() {
     matchedIndices: new Set(),
     pendingIndex: null,
     pendingHits: 0,
+    // Per-expected-tone hit counters (polyphonic evidence: several
+    // expected tones can be heard in the same frame).
+    pendingHitsByIndex: new Map(),
     wrongStreak: 0,
     windowStartMs: null,
     timeoutId: null,
@@ -32,6 +35,9 @@ export function resetMicChordCollectionProgress(state) {
   state.matchedIndices.clear()
   state.pendingIndex = null
   state.pendingHits = 0
+  if (state.pendingHitsByIndex) {
+    state.pendingHitsByIndex.clear()
+  }
   state.wrongStreak = 0
   state.lastPlayedMidi = null
 }
@@ -229,6 +235,12 @@ export function evaluateMicChordCollection({
 
     state.pendingIndex = null
     state.pendingHits = 0
+    // A genuinely wrong note interrupts the chord attempt: pending
+    // per-tone progress is dropped so a stray tone cannot complete a
+    // chord later (same safety as the single-pending counter).
+    if (state.pendingHitsByIndex) {
+      state.pendingHitsByIndex.clear()
+    }
     state.wrongStreak += 1
 
     if (state.wrongStreak >= wrongLimit) {
@@ -256,14 +268,23 @@ export function evaluateMicChordCollection({
 
   state.wrongStreak = 0
 
-  if (state.pendingIndex === matchIndex) {
-    state.pendingHits += 1
-  } else {
-    state.pendingIndex = matchIndex
-    state.pendingHits = 1
+  // Per-tone hit counters (Step 5 launch sprint): the collection used a
+  // single pending index, so POLYPHONIC evidence (several expected tones
+  // heard in the same frame) rotated the counter and no tone ever
+  // reached its stable-hit count — real chords never completed
+  // (browser-measured on the real C-major triad). Each expected tone now
+  // accumulates its own hits; switching between expected tones no longer
+  // discards progress, while a wrong note still clears it (above).
+  if (!state.pendingHitsByIndex) {
+    state.pendingHitsByIndex = new Map()
   }
+  const priorHits = state.pendingHitsByIndex.get(matchIndex) ?? 0
+  const nextHits = priorHits + 1
+  state.pendingHitsByIndex.set(matchIndex, nextHits)
+  state.pendingIndex = matchIndex
+  state.pendingHits = nextHits
 
-  if (state.pendingHits < stableRequired) {
+  if (nextHits < stableRequired) {
     return buildProgressResult({
       expected,
       state,
@@ -275,6 +296,7 @@ export function evaluateMicChordCollection({
   state.matchedIndices.add(matchIndex)
   state.pendingIndex = null
   state.pendingHits = 0
+  state.pendingHitsByIndex.delete(matchIndex)
 
   if (state.matchedIndices.size >= expected.length) {
     resetMicChordCollectionState(state)
