@@ -84,6 +84,43 @@ function evaluateOnce(target, heard, extra = {}) {
 }
 
 describe('Mic V3 Piano recognition', () => {
+  // Octave-relation guard (measured on six real clips): a harmonic of the
+  // played note satisfies an octave expectation, but the engine's own
+  // confidence for such a ghost is low (0.28-0.46) while a genuinely
+  // struck note reads 0.57-0.91.
+  it('rejects an octave expectation satisfied only by the played note\u2019s harmonic', () => {
+    const target = expectation([72])
+    const result = evaluateOnce(target, [72], {
+      frame: { midiFloat: 60.2, clarity: 0.35, confidences: [0.35], ratios: [1.6] },
+    })
+    expect(result.decision.advance).toBe(false)
+    expect(result.decision.outcome).toBe(RECOGNITION_OUTCOME.REJECTED)
+  })
+
+  it('still accepts a genuine note when the monophonic estimator flipped an octave', () => {
+    const target = expectation([72])
+    const result = evaluateOnce(target, [72], {
+      frame: { midiFloat: 60.2, clarity: 0.7, confidences: [0.7], ratios: [3.2] },
+    })
+    expect(result.decision.advance).toBe(true)
+  })
+
+  it('does not penalise the played note itself (dominant agrees)', () => {
+    const target = expectation([60])
+    const result = evaluateOnce(target, [60], {
+      frame: { midiFloat: 60.05, clarity: 0.3, confidences: [0.34], ratios: [1.6] },
+    })
+    expect(result.decision.advance).toBe(true)
+  })
+
+  it('leaves chord expectations untouched by the single-note guard', () => {
+    const target = expectation([60, 64])
+    const result = evaluateOnce(target, [60, 64], {
+      frame: { midiFloat: 60.1, clarity: 0.4, confidences: [0.45, 0.45], ratios: [1.7, 1.7] },
+    })
+    expect(result.decision.advance).toBe(true)
+  })
+
   it('requires every independently detected tone for dyads, triads, and four-note chords', () => {
     for (const midis of [[60, 64], [60, 64, 67], [55, 59, 62, 65]]) {
       const target = expectation(midis)
