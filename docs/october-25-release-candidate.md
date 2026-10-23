@@ -300,4 +300,55 @@ dynamic import in `audioImport.js`.
 
 ## 5. Deployment and rollback
 
-_To be completed only after all essential regressions pass._
+| item | value |
+|---|---|
+| source commit | `a11e55c28313c6c55d95b788fe2589c9e27cc26b` (`release/oct25-candidate`, based on `main` @ `57e04123a8`) |
+| local build | success; `dist/assets/index-DLDqtFXm.js` |
+| local bundle SHA-256 | `0fd016e49d45fedeaf1acec0f5a4418963358b26593da9f8a812b9a08bab626a` |
+| deployed Worker version | `d42dd9b4-c2de-42c5-bbb9-94869eb8d314` |
+| deployment id | `a030b0d5-88a3-4b31-9a53-8b4bcb05646a` |
+| deployed at | 2026-10-23T14:53:28Z |
+| live bundle before | `index-B5aW878H.js` |
+| live bundle after | `index-DLDqtFXm.js` — SHA-256 matches the local file exactly |
+| live routes | `/`, `/privacy`, `/terms`, `/contact` → HTTP 200 |
+| rollback target | version `e27c48d7-b327-482f-ad2d-ca773f31f75c` (deployment `16c29981-2268-4670-8a82-a4a6f26e6dd4`, 2026-10-22T21:45:15Z) |
+
+Rollback command:
+
+```
+npx wrangler rollback e27c48d7-b327-482f-ad2d-ca773f31f75c
+```
+
+The previous version remains in the Cloudflare deployment list. The Mic V3
+engine keeps its existing live rollback switch; the neural model remains off.
+
+### Live acceptance
+
+A Chromium run against `https://corranzo.com/` (not localhost) completed
+**18 / 18 checks**: upload, arrangement, Remove, saved-score persistence,
+reload/regeneration, guitar TAB, different recording, and Practice Engine
+playback, with 0 console errors and 0 page errors. The log is preserved in
+`tmp/oct25-release/live-note-corrections.log`.
+
+---
+
+## 6. What still blocks a claim of complete recognition
+
+* **Not all four engines are complete.** Guitar Vision and Piano Vision remain
+  excluded; no model or licensing changes were made.
+* **Guitar octave ghosts remain.** A guitar's 2nd partial is strong enough to
+  look like a true note; the production accuracy corpus still shows two false
+  expectations on `real-guitar-g3`.
+* **The full six-string open-strum completion is still missing** in the
+  production expectation path (pre-existing; unchanged).
+* **No physical microphone was used.** Every mic number is injected at the
+  MediaStream boundary. A real-device session is still required before any
+  physical-mic claim.
+* **The MIDI WFY cursor-lock assertion is still red** (`cursor=32.37 box=0`),
+  byte-identical on untouched `main` per the previous release report. The
+  separate WebKit cursor acceptance passes (present, moving, on the notation
+  staff).
+* **Undo after reopening is not exposed** in the saved-score view; the saved
+  score is already corrected. The review/undo surface is available while the
+  arrangement is open in Create from Audio, and re-arranging from the same
+  file loads the record.
