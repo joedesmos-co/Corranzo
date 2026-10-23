@@ -21,6 +21,7 @@ import { buildArrangementMusicXml } from './arrangementMusicXml.js'
 import { spectralSecondOpinion, scoreAgreement, AGREEMENT_WINDOW_SECONDS } from './agreementScore.js'
 import { dropRingingRedetections } from './noteCleanup.js'
 import { holdNotesUntilNextOnset } from './arrangementDurations.js'
+import { applyNoteCorrections, parseNoteCorrections, noteKey, serializeNoteCorrections } from './noteCorrections.js'
 
 export const CONFIDENCE_THRESHOLD_ARRANGE = 0.35
 export const CONFIDENCE_THRESHOLD_PARTIAL = 0.2
@@ -135,6 +136,11 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     // and the gate then drops a real note. The default follows the real
     // recordings.
     corroborateNotes = false,
+    // The musician's per-note edits from the review panel. Kept separate
+    // from the transcription (the evidence) and from the arrangement (what
+    // gets written): the score is always "the arrangement minus what the
+    // musician removed", never a mutation of the transcription itself.
+    corrections = null,
   } = options
   if (!Object.values(PART_INSTRUMENTS).includes(targetPart)) {
     return { ok: false, code: 'unsupported-part', message: 'V1 supports solo piano and solo guitar only.' }
@@ -331,8 +337,31 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     arranged.events.map((e) => ({ ...e, quantizedStartBeat: e.startBeat, quantizedDurBeats: e.durBeats })),
     difficulty,
   ).map((e) => ({ ...e, startBeat: e.quantizedStartBeat ?? e.startBeat, durBeats: e.quantizedDurBeats ?? e.durBeats }))
+  // USER CORRECTIONS (review panel -> per-note removal). Applied to the
+  // arrangement, keyed by pitch + time, so re-running the arrangement with
+  // the same notes keeps the edit and nothing else moves. The events carry
+  // their own correction key so the review UI does not have to reconstruct it.
+  const parsedCorrections = parseNoteCorrections(corrections)
+  const beatOrigin = analysis.beats.beats[0] ?? 0
+  const beatPeriod = analysis.beats.beatPeriodSeconds
+  const timeOfArrangedEvent = (e) => beatOrigin + (e.startBeat ?? 0) * beatPeriod
+  // Annotate the FULL arrangement once, then derive the corrected view from
+  // it. The review panel gets both: `arrangementEvents` (everything the
+  // arranger wrote, so an edit can be undone) and `model.parts[0].events`
+  // (what the score actually contains).
+  const annotatedEvents = simplified.map((e) => ({
+    ...e,
+    correctionKey: noteKey(e, { timeSeconds: timeOfArrangedEvent(e) }),
+  }))
+  const corrected = applyNoteCorrections(annotatedEvents, parsedCorrections, { timeOf: timeOfArrangedEvent })
+  const correctedEvents = corrected.events
+  const notation = {
+    bpm: analysis.tempo.bpm,
+    beatsPerMeasure: analysis.meter?.beatsPerMeasure ?? 4,
+    title: title ?? file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement',
+  }
   const model = createArrangementModel({ targetPart, difficulty })
-  model.parts[0].events = simplified
+  model.parts[0].events = correctedEvents
   model.parts[0].warnings = arranged.warnings ?? []
   model.uncertainRegions = uncertainRegions
   model.transcriptionAgreement = agreement
@@ -341,7 +370,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   // means invented detail in dense mixes, not virtuosity. The warning feeds
   // the severe-warning penalty inside confidence (no silent inflation).
   const beatCount = Math.max(1, analysis.beats.beats.length)
-  const notesPerBeat = simplified.length / beatCount
+  const notesPerBeat = correctedEvents.length / beatCount
   if (notesPerBeat > 6) {
     model.parts[0].warnings.push({
       kind: 'dense-arrangement',
@@ -350,7 +379,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   }
   const confidence = scoreArrangementConfidence({
     analysis,
-    arrangedEvents: simplified,
+    arrangedEvents: correctedEvents,
     separationQuality: views.quality,
     warnings: model.parts[0].warnings,
   })
@@ -372,11 +401,11 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   await yieldToPaint()
   if (cancelled()) return { ok: false, code: 'cancelled', message: 'Analysis cancelled.' }
   const musicXml = buildArrangementMusicXml({
-    events: simplified,
+    events: correctedEvents,
     targetPart,
-    bpm: analysis.tempo.bpm,
-    beatsPerMeasure: analysis.meter?.beatsPerMeasure ?? 4,
-    title: title ?? file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement',
+    bpm: notation.bpm,
+    beatsPerMeasure: notation.beatsPerMeasure,
+    title: notation.title,
     warnings: model.parts[0].warnings,
   })
   model.complexity = measureComplexity(simplified.map((e) => ({ ...e, startSeconds: e.startBeat })))
@@ -403,6 +432,10 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     partial: verdict.partial,
     excerpt: excerptReport,
     suppressedHarmonics,
+    corrections: serializeNoteCorrections(parsedCorrections),
+    correctionsApplied: corrected.removedCount,
+    arrangementEvents: annotatedEvents,
+    notation,
     uncertainRegions,
     transcriptionAgreement: agreement,
     durationSeconds: imported.durationSeconds,

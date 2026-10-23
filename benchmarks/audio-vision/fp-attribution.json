@@ -1,0 +1,1243 @@
+{
+  "generatedAt": "2026-10-23T00:03:59.889Z",
+  "tolerance": 0.12,
+  "rows": [
+    {
+      "id": "guitarset-ss3-comp",
+      "density": "dense",
+      "audioSeconds": 45.7,
+      "referenceNotes": 184,
+      "modelNotes": 275,
+      "suppressed": 29,
+      "transcribedNotes": 246,
+      "arrangementNotes": 192,
+      "counts": {
+        "true": 110,
+        "duplicate": 0,
+        "transcriptionFp": 7,
+        "arrangementAdded": 0,
+        "wrongPitch": 43,
+        "lateEcho": 32
+      },
+      "missed": {
+        "neverTranscribed": 39,
+        "droppedByArrangement": 0,
+        "pitchChanged": 35
+      },
+      "harmonicRelation": {
+        "octave": 18,
+        "fifth": 4,
+        "fourthOrOther": 3,
+        "unrelated": 25
+      },
+      "wrongPitchIntervals": {
+        "octave": 6,
+        "step": 9,
+        "thirdOrFourth": 14,
+        "other": 14,
+        "exact": 0,
+        "details": [
+          {
+            "at": 1.22,
+            "got": 58,
+            "ref": 62,
+            "delta": -4
+          },
+          {
+            "at": 2.27,
+            "got": 53,
+            "ref": 58,
+            "delta": -5
+          },
+          {
+            "at": 4.01,
+            "got": 57,
+            "ref": 65,
+            "delta": -8
+          },
+          {
+            "at": 5.41,
+            "got": 61,
+            "ref": 63,
+            "delta": -2
+          },
+          {
+            "at": 6.63,
+            "got": 55,
+            "ref": 70,
+            "delta": -15
+          },
+          {
+            "at": 7.85,
+            "got": 62,
+            "ref": 70,
+            "delta": -8
+          },
+          {
+            "at": 8.2,
+            "got": 82,
+            "ref": 69,
+            "delta": 13
+          },
+          {
+            "at": 10.47,
+            "got": 62,
+            "ref": 65,
+            "delta": -3
+          },
+          {
+            "at": 12.21,
+            "got": 55,
+            "ref": 58,
+            "delta": -3
+          },
+          {
+            "at": 12.91,
+            "got": 58,
+            "ref": 65,
+            "delta": -7
+          },
+          {
+            "at": 13.43,
+            "got": 58,
+            "ref": 65,
+            "delta": -7
+          },
+          {
+            "at": 13.95,
+            "got": 55,
+            "ref": 51,
+            "delta": 4
+          }
+        ]
+      },
+      "lateEchoTiming": {
+        "under200ms": 12,
+        "200to300ms": 7,
+        "over300ms": 13
+      },
+      "lateEchoEvidence": {
+        "attackAtTruth": 31,
+        "attackAtModel": 19,
+        "both": 18,
+        "total": 32
+      },
+      "falseRate": 0.427,
+      "missedRate": 0.402,
+      "examples": {
+        "wrongPitch": [
+          {
+            "at": 1.22,
+            "got": 58,
+            "reference": [
+              62
+            ]
+          },
+          {
+            "at": 2.27,
+            "got": 53,
+            "reference": [
+              70,
+              65,
+              58
+            ]
+          },
+          {
+            "at": 4.01,
+            "got": 57,
+            "reference": [
+              65,
+              69
+            ]
+          },
+          {
+            "at": 5.41,
+            "got": 61,
+            "reference": [
+              63
+            ]
+          },
+          {
+            "at": 6.63,
+            "got": 55,
+            "reference": [
+              70
+            ]
+          },
+          {
+            "at": 7.67,
+            "got": 55,
+            "reference": [
+              67
+            ]
+          }
+        ],
+        "lateEcho": [
+          {
+            "at": 0.52,
+            "midi": 58,
+            "referenceAt": 0.68
+          },
+          {
+            "at": 0.87,
+            "midi": 58,
+            "referenceAt": 0.68
+          },
+          {
+            "at": 1.92,
+            "midi": 58,
+            "referenceAt": 2.19
+          },
+          {
+            "at": 2.27,
+            "midi": 62,
+            "referenceAt": 1.94
+          },
+          {
+            "at": 5.41,
+            "midi": 55,
+            "referenceAt": 5.74
+          },
+          {
+            "at": 6.63,
+            "midi": 67,
+            "referenceAt": 6.95
+          }
+        ],
+        "transcriptionFp": [
+          {
+            "at": 17.62,
+            "midi": 62
+          },
+          {
+            "at": 23.02,
+            "midi": 53
+          },
+          {
+            "at": 24.77,
+            "midi": 62
+          },
+          {
+            "at": 27.03,
+            "midi": 41
+          },
+          {
+            "at": 38.55,
+            "midi": 34
+          },
+          {
+            "at": 43.78,
+            "midi": 60
+          }
+        ],
+        "arrangementAdded": []
+      },
+      "missedExamples": [
+        {
+          "at": 1.17,
+          "reference": 62,
+          "got": [
+            58
+          ]
+        },
+        {
+          "at": 2.19,
+          "reference": 58,
+          "got": [
+            53,
+            62
+          ]
+        },
+        {
+          "at": 4,
+          "reference": 69,
+          "got": [
+            57,
+            65
+          ]
+        },
+        {
+          "at": 6.48,
+          "reference": 69,
+          "got": [
+            62
+          ]
+        },
+        {
+          "at": 6.66,
+          "reference": 70,
+          "got": [
+            55,
+            67
+          ]
+        },
+        {
+          "at": 7.93,
+          "reference": 70,
+          "got": [
+            62,
+            67
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitarset-bn2-comp",
+      "density": "dense",
+      "audioSeconds": 29.3,
+      "referenceNotes": 239,
+      "modelNotes": 248,
+      "suppressed": 23,
+      "transcribedNotes": 225,
+      "arrangementNotes": 165,
+      "counts": {
+        "true": 123,
+        "duplicate": 10,
+        "transcriptionFp": 4,
+        "arrangementAdded": 0,
+        "wrongPitch": 22,
+        "lateEcho": 6
+      },
+      "missed": {
+        "neverTranscribed": 70,
+        "droppedByArrangement": 0,
+        "pitchChanged": 46
+      },
+      "harmonicRelation": {
+        "octave": 8,
+        "fifth": 4,
+        "fourthOrOther": 2,
+        "unrelated": 12
+      },
+      "wrongPitchIntervals": {
+        "octave": 1,
+        "step": 6,
+        "thirdOrFourth": 9,
+        "other": 6,
+        "exact": 0,
+        "details": [
+          {
+            "at": 0.56,
+            "got": 55,
+            "ref": 52,
+            "delta": 3
+          },
+          {
+            "at": 1.02,
+            "got": 55,
+            "ref": 52,
+            "delta": 3
+          },
+          {
+            "at": 1.72,
+            "got": 44,
+            "ref": 45,
+            "delta": -1
+          },
+          {
+            "at": 8.58,
+            "got": 45,
+            "ref": 49,
+            "delta": -4
+          },
+          {
+            "at": 11.02,
+            "got": 54,
+            "ref": 62,
+            "delta": -8
+          },
+          {
+            "at": 13.58,
+            "got": 59,
+            "ref": 54,
+            "delta": 5
+          },
+          {
+            "at": 13.81,
+            "got": 47,
+            "ref": 57,
+            "delta": -10
+          },
+          {
+            "at": 14.28,
+            "got": 47,
+            "ref": 48,
+            "delta": -1
+          },
+          {
+            "at": 14.51,
+            "got": 57,
+            "ref": 59,
+            "delta": -2
+          },
+          {
+            "at": 14.63,
+            "got": 64,
+            "ref": 59,
+            "delta": 5
+          },
+          {
+            "at": 15.44,
+            "got": 55,
+            "ref": 52,
+            "delta": 3
+          },
+          {
+            "at": 15.67,
+            "got": 55,
+            "ref": 52,
+            "delta": 3
+          }
+        ]
+      },
+      "lateEchoTiming": {
+        "under200ms": 0,
+        "200to300ms": 3,
+        "over300ms": 3
+      },
+      "lateEchoEvidence": {
+        "attackAtTruth": 4,
+        "attackAtModel": 5,
+        "both": 4,
+        "total": 6
+      },
+      "falseRate": 0.255,
+      "missedRate": 0.485,
+      "examples": {
+        "wrongPitch": [
+          {
+            "at": 0.56,
+            "got": 55,
+            "reference": [
+              59,
+              52,
+              67,
+              61
+            ]
+          },
+          {
+            "at": 1.02,
+            "got": 55,
+            "reference": [
+              62,
+              67,
+              59,
+              52
+            ]
+          },
+          {
+            "at": 1.72,
+            "got": 44,
+            "reference": [
+              67,
+              61,
+              45,
+              55
+            ]
+          },
+          {
+            "at": 8.58,
+            "got": 45,
+            "reference": [
+              55,
+              49
+            ]
+          },
+          {
+            "at": 11.02,
+            "got": 54,
+            "reference": [
+              62
+            ]
+          },
+          {
+            "at": 13.58,
+            "got": 59,
+            "reference": [
+              54
+            ]
+          }
+        ],
+        "lateEcho": [
+          {
+            "at": 5.91,
+            "midi": 55,
+            "referenceAt": 5.61
+          },
+          {
+            "at": 6.14,
+            "midi": 55,
+            "referenceAt": 5.78
+          },
+          {
+            "at": 6.6,
+            "midi": 55,
+            "referenceAt": 6.3
+          },
+          {
+            "at": 9.86,
+            "midi": 58,
+            "referenceAt": 9.61
+          },
+          {
+            "at": 10.09,
+            "midi": 58,
+            "referenceAt": 10.33
+          },
+          {
+            "at": 17.53,
+            "midi": 55,
+            "referenceAt": 17.2
+          }
+        ],
+        "transcriptionFp": [
+          {
+            "at": 14.4,
+            "midi": 56
+          },
+          {
+            "at": 21.49,
+            "midi": 47
+          },
+          {
+            "at": 23.35,
+            "midi": 45
+          },
+          {
+            "at": 28.7,
+            "midi": 59
+          }
+        ],
+        "arrangementAdded": []
+      },
+      "missedExamples": [
+        {
+          "at": 0.7,
+          "reference": 62,
+          "got": [
+            52,
+            67
+          ]
+        },
+        {
+          "at": 0.7,
+          "reference": 59,
+          "got": [
+            52,
+            67
+          ]
+        },
+        {
+          "at": 0.91,
+          "reference": 62,
+          "got": [
+            52,
+            67,
+            55
+          ]
+        },
+        {
+          "at": 0.92,
+          "reference": 59,
+          "got": [
+            52,
+            67,
+            55
+          ]
+        },
+        {
+          "at": 1.15,
+          "reference": 62,
+          "got": [
+            52,
+            67
+          ]
+        },
+        {
+          "at": 1.63,
+          "reference": 61,
+          "got": [
+            67,
+            44
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitarset-funk3-comp",
+      "density": "dense",
+      "audioSeconds": 34.3,
+      "referenceNotes": 492,
+      "modelNotes": 449,
+      "suppressed": 50,
+      "transcribedNotes": 399,
+      "arrangementNotes": 223,
+      "counts": {
+        "true": 187,
+        "duplicate": 0,
+        "transcriptionFp": 1,
+        "arrangementAdded": 0,
+        "wrongPitch": 11,
+        "lateEcho": 24
+      },
+      "missed": {
+        "neverTranscribed": 140,
+        "droppedByArrangement": 0,
+        "pitchChanged": 165
+      },
+      "harmonicRelation": {
+        "octave": 5,
+        "fifth": 0,
+        "fourthOrOther": 2,
+        "unrelated": 5
+      },
+      "wrongPitchIntervals": {
+        "octave": 1,
+        "step": 4,
+        "thirdOrFourth": 4,
+        "other": 2,
+        "exact": 0,
+        "details": [
+          {
+            "at": 2.03,
+            "got": 59,
+            "ref": 56,
+            "delta": 3
+          },
+          {
+            "at": 3.85,
+            "got": 55,
+            "ref": 56,
+            "delta": -1
+          },
+          {
+            "at": 4.46,
+            "got": 45,
+            "ref": 46,
+            "delta": -1
+          },
+          {
+            "at": 13.99,
+            "got": 66,
+            "ref": 70,
+            "delta": -4
+          },
+          {
+            "at": 15.41,
+            "got": 52,
+            "ref": 61,
+            "delta": -9
+          },
+          {
+            "at": 19.26,
+            "got": 55,
+            "ref": 60,
+            "delta": -5
+          },
+          {
+            "at": 21.08,
+            "got": 59,
+            "ref": 65,
+            "delta": -6
+          },
+          {
+            "at": 21.69,
+            "got": 55,
+            "ref": 53,
+            "delta": 2
+          },
+          {
+            "at": 23.51,
+            "got": 58,
+            "ref": 60,
+            "delta": -2
+          },
+          {
+            "at": 32.23,
+            "got": 52,
+            "ref": 56,
+            "delta": -4
+          }
+        ]
+      },
+      "lateEchoTiming": {
+        "under200ms": 8,
+        "200to300ms": 9,
+        "over300ms": 7
+      },
+      "lateEchoEvidence": {
+        "attackAtTruth": 24,
+        "attackAtModel": 14,
+        "both": 14,
+        "total": 24
+      },
+      "falseRate": 0.161,
+      "missedRate": 0.62,
+      "examples": {
+        "wrongPitch": [
+          {
+            "at": 2.03,
+            "got": 59,
+            "reference": [
+              68,
+              56
+            ]
+          },
+          {
+            "at": 3.85,
+            "got": 55,
+            "reference": [
+              60,
+              56,
+              68,
+              72,
+              72,
+              68
+            ]
+          },
+          {
+            "at": 4.46,
+            "got": 45,
+            "reference": [
+              53,
+              46
+            ]
+          },
+          {
+            "at": 13.99,
+            "got": 66,
+            "reference": [
+              73,
+              70,
+              61,
+              54
+            ]
+          },
+          {
+            "at": 15.41,
+            "got": 52,
+            "reference": [
+              61,
+              66,
+              70,
+              75
+            ]
+          },
+          {
+            "at": 19.26,
+            "got": 55,
+            "reference": [
+              60,
+              68
+            ]
+          }
+        ],
+        "lateEcho": [
+          {
+            "at": 1.42,
+            "midi": 65,
+            "referenceAt": 1.67
+          },
+          {
+            "at": 1.82,
+            "midi": 65,
+            "referenceAt": 1.67
+          },
+          {
+            "at": 3.45,
+            "midi": 56,
+            "referenceAt": 3.78
+          },
+          {
+            "at": 3.45,
+            "midi": 60,
+            "referenceAt": 3.78
+          },
+          {
+            "at": 4.46,
+            "midi": 58,
+            "referenceAt": 4.77
+          },
+          {
+            "at": 5.68,
+            "midi": 58,
+            "referenceAt": 5.92
+          }
+        ],
+        "transcriptionFp": [
+          {
+            "at": 24.53,
+            "midi": 44
+          }
+        ],
+        "arrangementAdded": []
+      },
+      "missedExamples": [
+        {
+          "at": 0.01,
+          "reference": 56,
+          "got": [
+            49,
+            65
+          ]
+        },
+        {
+          "at": 0.01,
+          "reference": 61,
+          "got": [
+            49,
+            65
+          ]
+        },
+        {
+          "at": 0.41,
+          "reference": 61,
+          "got": [
+            49,
+            65
+          ]
+        },
+        {
+          "at": 0.41,
+          "reference": 56,
+          "got": [
+            49,
+            65
+          ]
+        },
+        {
+          "at": 0.78,
+          "reference": 61,
+          "got": [
+            49,
+            56
+          ]
+        },
+        {
+          "at": 1.67,
+          "reference": 61,
+          "got": [
+            56,
+            65
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitarset-jazz2-solo",
+      "density": "sparse",
+      "audioSeconds": 34.9,
+      "referenceNotes": 78,
+      "modelNotes": 105,
+      "suppressed": 3,
+      "transcribedNotes": 102,
+      "arrangementNotes": 95,
+      "counts": {
+        "true": 71,
+        "duplicate": 0,
+        "transcriptionFp": 11,
+        "arrangementAdded": 0,
+        "wrongPitch": 7,
+        "lateEcho": 6
+      },
+      "missed": {
+        "neverTranscribed": 4,
+        "droppedByArrangement": 0,
+        "pitchChanged": 3
+      },
+      "harmonicRelation": {
+        "octave": 1,
+        "fifth": 0,
+        "fourthOrOther": 0,
+        "unrelated": 17
+      },
+      "wrongPitchIntervals": {
+        "octave": 0,
+        "step": 5,
+        "thirdOrFourth": 0,
+        "other": 2,
+        "exact": 0,
+        "details": [
+          {
+            "at": 6.62,
+            "got": 58,
+            "ref": 59,
+            "delta": -1
+          },
+          {
+            "at": 15,
+            "got": 64,
+            "ref": 65,
+            "delta": -1
+          },
+          {
+            "at": 18.31,
+            "got": 66,
+            "ref": 68,
+            "delta": -2
+          },
+          {
+            "at": 24.93,
+            "got": 58,
+            "ref": 57,
+            "delta": 1
+          },
+          {
+            "at": 27.13,
+            "got": 64,
+            "ref": 63,
+            "delta": 1
+          },
+          {
+            "at": 31.76,
+            "got": 44,
+            "ref": 72,
+            "delta": -28
+          },
+          {
+            "at": 32.65,
+            "got": 44,
+            "ref": 72,
+            "delta": -28
+          }
+        ]
+      },
+      "lateEchoTiming": {
+        "under200ms": 2,
+        "200to300ms": 1,
+        "over300ms": 3
+      },
+      "lateEchoEvidence": {
+        "attackAtTruth": 6,
+        "attackAtModel": 3,
+        "both": 3,
+        "total": 6
+      },
+      "falseRate": 0.253,
+      "missedRate": 0.09,
+      "examples": {
+        "wrongPitch": [
+          {
+            "at": 6.62,
+            "got": 58,
+            "reference": [
+              59
+            ]
+          },
+          {
+            "at": 15,
+            "got": 64,
+            "reference": [
+              65
+            ]
+          },
+          {
+            "at": 18.31,
+            "got": 66,
+            "reference": [
+              68
+            ]
+          },
+          {
+            "at": 24.93,
+            "got": 58,
+            "reference": [
+              57
+            ]
+          },
+          {
+            "at": 27.13,
+            "got": 64,
+            "reference": [
+              63,
+              61
+            ]
+          },
+          {
+            "at": 31.76,
+            "got": 44,
+            "reference": [
+              72
+            ]
+          }
+        ],
+        "lateEcho": [
+          {
+            "at": 9.26,
+            "midi": 58,
+            "referenceAt": 8.89
+          },
+          {
+            "at": 10.37,
+            "midi": 58,
+            "referenceAt": 10.72
+          },
+          {
+            "at": 15.22,
+            "midi": 65,
+            "referenceAt": 15.05
+          },
+          {
+            "at": 15.88,
+            "midi": 65,
+            "referenceAt": 16.2
+          },
+          {
+            "at": 22.5,
+            "midi": 61,
+            "referenceAt": 22.8
+          },
+          {
+            "at": 32.21,
+            "midi": 70,
+            "referenceAt": 32.07
+          }
+        ],
+        "transcriptionFp": [
+          {
+            "at": 0,
+            "midi": 58
+          },
+          {
+            "at": 1.1,
+            "midi": 61
+          },
+          {
+            "at": 9.93,
+            "midi": 58
+          },
+          {
+            "at": 10.59,
+            "midi": 60
+          },
+          {
+            "at": 13.9,
+            "midi": 59
+          },
+          {
+            "at": 14.56,
+            "midi": 99
+          }
+        ],
+        "arrangementAdded": []
+      },
+      "missedExamples": [
+        {
+          "at": 6.54,
+          "reference": 59,
+          "got": [
+            58
+          ]
+        },
+        {
+          "at": 18.56,
+          "reference": 65,
+          "got": [
+            65
+          ]
+        },
+        {
+          "at": 27.06,
+          "reference": 63,
+          "got": [
+            61,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "guitarset-jazz1-solo",
+      "density": "sparse",
+      "audioSeconds": 14.4,
+      "referenceNotes": 65,
+      "modelNotes": 67,
+      "suppressed": 1,
+      "transcribedNotes": 66,
+      "arrangementNotes": 65,
+      "counts": {
+        "true": 60,
+        "duplicate": 0,
+        "transcriptionFp": 1,
+        "arrangementAdded": 0,
+        "wrongPitch": 2,
+        "lateEcho": 2
+      },
+      "missed": {
+        "neverTranscribed": 5,
+        "droppedByArrangement": 0,
+        "pitchChanged": 0
+      },
+      "harmonicRelation": {
+        "octave": 0,
+        "fifth": 0,
+        "fourthOrOther": 0,
+        "unrelated": 3
+      },
+      "wrongPitchIntervals": {
+        "octave": 0,
+        "step": 2,
+        "thirdOrFourth": 0,
+        "other": 0,
+        "exact": 0,
+        "details": [
+          {
+            "at": 11.98,
+            "got": 51,
+            "ref": 52,
+            "delta": -1
+          },
+          {
+            "at": 13.79,
+            "got": 66,
+            "ref": 67,
+            "delta": -1
+          }
+        ]
+      },
+      "lateEchoTiming": {
+        "under200ms": 0,
+        "200to300ms": 1,
+        "over300ms": 1
+      },
+      "lateEchoEvidence": {
+        "attackAtTruth": 1,
+        "attackAtModel": 1,
+        "both": 1,
+        "total": 2
+      },
+      "falseRate": 0.077,
+      "missedRate": 0.077,
+      "examples": {
+        "wrongPitch": [
+          {
+            "at": 11.98,
+            "got": 51,
+            "reference": [
+              52
+            ]
+          },
+          {
+            "at": 13.79,
+            "got": 66,
+            "reference": [
+              67
+            ]
+          }
+        ],
+        "lateEcho": [
+          {
+            "at": 0.3,
+            "midi": 66,
+            "referenceAt": 0.01
+          },
+          {
+            "at": 5.13,
+            "midi": 62,
+            "referenceAt": 4.78
+          }
+        ],
+        "transcriptionFp": [
+          {
+            "at": 8.59,
+            "midi": 63
+          }
+        ],
+        "arrangementAdded": []
+      },
+      "missedExamples": []
+    }
+  ],
+  "summary": {
+    "dense": {
+      "recordings": 3,
+      "arrangementNotes": 580,
+      "trueNotes": 420,
+      "inventedNotes": 160,
+      "inventedRate": 0.276,
+      "missedNotes": 495,
+      "missedRate": 0.541,
+      "byBucket": {
+        "true": 420,
+        "duplicate": 10,
+        "transcriptionFp": 12,
+        "arrangementAdded": 0,
+        "wrongPitch": 76,
+        "lateEcho": 62
+      },
+      "missedByBucket": {
+        "neverTranscribed": 249,
+        "droppedByArrangement": 0,
+        "pitchChanged": 246
+      },
+      "harmonics": {
+        "octave": 31,
+        "fifth": 8,
+        "fourthOrOther": 7,
+        "unrelated": 42
+      },
+      "wrongPitchIntervals": {
+        "octave": 8,
+        "step": 19,
+        "thirdOrFourth": 27,
+        "other": 22
+      },
+      "lateEchoTiming": {
+        "under200ms": 20,
+        "200to300ms": 19,
+        "over300ms": 23
+      },
+      "lateEchoEvidence": {
+        "total": 62,
+        "attackAtTruth": 59,
+        "attackAtModel": 38,
+        "both": 36
+      }
+    },
+    "sparse": {
+      "recordings": 2,
+      "arrangementNotes": 160,
+      "trueNotes": 131,
+      "inventedNotes": 29,
+      "inventedRate": 0.181,
+      "missedNotes": 12,
+      "missedRate": 0.084,
+      "byBucket": {
+        "true": 131,
+        "duplicate": 0,
+        "transcriptionFp": 12,
+        "arrangementAdded": 0,
+        "wrongPitch": 9,
+        "lateEcho": 8
+      },
+      "missedByBucket": {
+        "neverTranscribed": 9,
+        "droppedByArrangement": 0,
+        "pitchChanged": 3
+      },
+      "harmonics": {
+        "octave": 1,
+        "fifth": 0,
+        "fourthOrOther": 0,
+        "unrelated": 20
+      },
+      "wrongPitchIntervals": {
+        "octave": 0,
+        "step": 7,
+        "thirdOrFourth": 0,
+        "other": 2
+      },
+      "lateEchoTiming": {
+        "under200ms": 2,
+        "200to300ms": 2,
+        "over300ms": 4
+      },
+      "lateEchoEvidence": {
+        "total": 8,
+        "attackAtTruth": 7,
+        "attackAtModel": 4,
+        "both": 4
+      }
+    }
+  }
+}

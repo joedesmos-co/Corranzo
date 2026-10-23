@@ -158,6 +158,75 @@ byte-for-byte afterwards, md5 verified) because that in-progress edit crashes
 the practice view with `Cannot read properties of undefined (reading
 'effectiveTempo')` - a failure of their change, not of this one.
 
+## Dense material: where the wrong notes actually come from
+
+The aggregate F1 hides the mechanism, so every arrangement note on three dense
+GuitarSet comps and two sparse solos was put in exactly one bucket against the
+JAMS truth (`scripts/audio-vision-fp-attribution.mjs`):
+
+| bucket | dense (3 comps) | sparse (2 solos) |
+|---|---|---|
+| true (pitch and onset match) | 420 | 131 |
+| duplicate (same pitch moments later) | 10 | 0 |
+| transcription false positive (carried from the model) | 12 | 12 |
+| **wrong pitch** (a real event at that time, wrong note) | **76** | 9 |
+| **late echo** (same pitch, different time) | **62** | 8 |
+| **added by the arranger** | **0** | **0** |
+| missed: never transcribed | 249 | 9 |
+| missed: dropped by the arranger | 0 | 0 |
+| missed: pitch changed | 246 | 3 |
+
+Read it as a musician would:
+
+* **The arranger invents nothing.** Zero notes were created between the
+  transcription and the score on any take. Every wrong note was already in the
+  transcription.
+* **The dense problem is pitch and time attribution, not note count.** 76
+  wrong-pitch + 62 late-echo notes out of 580 - the rhythm is right and the
+  note is real, but it is written at another pitch or another beat. Of the
+  wrong pitches, 41 % are an octave displacement, 25 % a step, 35 % a third or
+  fourth (adjacent guitar strings are a fourth/fifth apart, which is exactly
+  what a string confusion looks like).
+* **No filter can remove them safely.** Six were implemented and measured on
+  the same five takes: chord-outlier (drop non-chord tones with no attack),
+  the same without the attack requirement, weak-ghost, strong-voices,
+  duplicate-collapse, voicing sanity (semitone clashes and doubled octaves),
+  and all of them after arranging where the melody/bass roles are explicit.
+  Every one either removed nothing (the voicings are already clean) or removed
+  real notes and lowered the F1 by up to 0.14. They are kept in
+  `scripts/audio-vision-dense-filters.mjs` with the numbers.
+
+### The melody-policy experiment (measured, then rejected)
+
+A promising variant was measured: in a thick texture the salience contour can
+nominate an inner voice as the line, so "the top voice is the melody" was
+expected to help. It did on the dense takes (event F1 0.572 -> 0.593, melody
+recall 0.566 -> 0.704) and cost almost nothing on the sparse ones in the A/B
+harness. The clean production implementation was then measured on the real
+stage ledger, and it **regressed** the sparse takes badly (jazz1 F1 0.923 ->
+0.828): mixing the two policies at different onsets makes the melodic line
+inconsistent. The A/B harness had a broken per-onset lookup that hid this.
+The experiment was reverted - this is exactly why a variant is not adopted on
+the strength of one harness.
+
+### What the review flow does instead
+
+The realistic answer for dense material is the musician: the review now lists
+every note and lets them remove the wrong ones, with the edit stored
+separately and surviving a rebuild
+(`docs/audio-vision-note-corrections.md`). A wrong note the model is sure of
+is visible in the list; a note the musician removes is gone from the score,
+the preview and practice, and nothing else moves.
+
+### The next lever (identified, not yet used)
+
+`selectTexture` computes a per-onset texture (`melody-only`, `melody-block`,
+`melody-broken`, ...) from the density and the chord confidence, and the
+events carry it - but **nothing consumes it**: the number of voices kept is a
+constant per difficulty. Making the texture actually govern the voicing is
+the next evidence-backed way to make a dense comp playable without an
+arbitrary per-measure cap.
+
 ## What is still weak (and honest about it)
 
 * **Density on dense material.** 2.1 notes/s on a guitar solo, 4.2-6.5 on a

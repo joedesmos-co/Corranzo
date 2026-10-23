@@ -3,6 +3,14 @@
  * decode via Web Audio, prediction via lazily-loaded Basic Pitch (fallback: null → spectral).
  */
 import { useCallback, useRef, useState } from 'react'
+import { buildArrangementMusicXml } from './arrangementMusicXml.js'
+import {
+  addRemoval,
+  clearRemovals,
+  parseNoteCorrections,
+  serializeNoteCorrections,
+  undoRemoval,
+} from './noteCorrections.js'
 import { flushSync } from 'react-dom'
 import { runAudioArrangementPipeline } from './audioArrangementPipeline.js'
 import { PART_INSTRUMENTS, DIFFICULTIES } from './arrangementModel.js'
@@ -204,6 +212,57 @@ export function useAudioArrangement({ onReady = null } = {}) {
     }
   }, [])
 
+  // Per-note review edits. The three layers stay separate: the arrangement
+  // events are kept whole in `result.arrangementEvents`, the musician's edits
+  // live in `result.corrections`, and the score (`result.musicXml` plus
+  // `result.model.parts[0].events`) is always derived from both. Removing a
+  // note therefore cannot drift: undoing it restores the exact original set,
+  // and a note that is not in the correction list is never touched.
+  const rebuildWithCorrections = useCallback((previous, corrections) => {
+    if (!previous?.ok || !previous.arrangementEvents || !previous.notation) return previous
+    const removed = new Set(corrections.removed)
+    const kept = previous.arrangementEvents.filter((event) => !removed.has(event.correctionKey))
+    const musicXml = buildArrangementMusicXml({
+      events: kept,
+      targetPart: previous.model.targetPart,
+      bpm: previous.notation.bpm,
+      beatsPerMeasure: previous.notation.beatsPerMeasure,
+      title: previous.notation.title,
+      warnings: previous.model.parts[0]?.warnings ?? [],
+    })
+    return {
+      ...previous,
+      musicXml,
+      corrections: serializeNoteCorrections(corrections),
+      correctionsApplied: corrections.removed.length,
+      model: {
+        ...previous.model,
+        parts: [{ ...previous.model.parts[0], events: kept }],
+      },
+    }
+  }, [])
+
+  const removeNote = useCallback((correctionKey) => {
+    setResult((previous) => {
+      if (!previous?.ok || !correctionKey) return previous
+      return rebuildWithCorrections(previous, addRemoval(parseNoteCorrections(previous.corrections), correctionKey))
+    })
+  }, [rebuildWithCorrections])
+
+  const undoNoteRemoval = useCallback((correctionKey) => {
+    setResult((previous) => {
+      if (!previous?.ok || !correctionKey) return previous
+      return rebuildWithCorrections(previous, undoRemoval(parseNoteCorrections(previous.corrections), correctionKey))
+    })
+  }, [rebuildWithCorrections])
+
+  const clearNoteCorrections = useCallback(() => {
+    setResult((previous) => {
+      if (!previous?.ok) return previous
+      return rebuildWithCorrections(previous, clearRemovals(parseNoteCorrections(previous.corrections)))
+    })
+  }, [rebuildWithCorrections])
+
   const openInPractice = useCallback(() => {
     if (!result?.ok || !result?.musicXml) return null
     const payload = {
@@ -256,6 +315,9 @@ export function useAudioArrangement({ onReady = null } = {}) {
     arrangeWithTempo,
     cancel,
     openInPractice,
+    removeNote,
+    undoNoteRemoval,
+    clearNoteCorrections,
     reset: () => {
       cancelledRef.current = true
       setPhase('idle')

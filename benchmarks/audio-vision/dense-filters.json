@@ -1,0 +1,969 @@
+{
+ "generatedAt": "2026-10-23T00:14:03.157Z",
+ "rows": [
+  {
+   "id": "guitarset-ss3-comp",
+   "density": "dense",
+   "referenceNotes": 184,
+   "variants": {
+    "off": {
+     "notes": 192,
+     "removed": 0,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.642,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "strongVoices": {
+     "notes": 192,
+     "removed": 9,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.633,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "arrChordOutlier": {
+     "notes": 192,
+     "removed": 0,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.642,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "arrDuplicate": {
+     "notes": 173,
+     "removed": 19,
+     "eventF1": 0.583,
+     "pitchPrecision": 0.601,
+     "pitchRecall": 0.565,
+     "melodyRecall": 0.608,
+     "bassRecall": 0.758,
+     "invented": 0.208,
+     "density": 3.78
+    },
+    "arrGhost": {
+     "notes": 192,
+     "removed": 0,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.642,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "voicingSanity": {
+     "notes": 192,
+     "removed": 0,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.642,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "melody_highest": {
+     "notes": 208,
+     "removed": 0,
+     "eventF1": 0.633,
+     "pitchPrecision": 0.596,
+     "pitchRecall": 0.674,
+     "melodyRecall": 0.8,
+     "bassRecall": 0.792,
+     "invented": 0.207,
+     "density": 4.55
+    },
+    "melody_highest_thin": {
+     "notes": 208,
+     "removed": 9,
+     "eventF1": 0.638,
+     "pitchPrecision": 0.601,
+     "pitchRecall": 0.679,
+     "melodyRecall": 0.783,
+     "bassRecall": 0.792,
+     "invented": 0.202,
+     "density": 4.55
+    },
+    "melody_contour_thin": {
+     "notes": 192,
+     "removed": 9,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.633,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "melody_adaptive": {
+     "notes": 192,
+     "removed": 0,
+     "eventF1": 0.59,
+     "pitchPrecision": 0.578,
+     "pitchRecall": 0.603,
+     "melodyRecall": 0.65,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "melody_adaptive_thin": {
+     "notes": 192,
+     "removed": 9,
+     "eventF1": 0.585,
+     "pitchPrecision": 0.573,
+     "pitchRecall": 0.598,
+     "melodyRecall": 0.633,
+     "bassRecall": 0.792,
+     "invented": 0.208,
+     "density": 4.2
+    },
+    "melody_adaptive2": {
+     "notes": 201,
+     "removed": 0,
+     "eventF1": 0.618,
+     "pitchPrecision": 0.592,
+     "pitchRecall": 0.647,
+     "melodyRecall": 0.717,
+     "bassRecall": 0.792,
+     "invented": 0.199,
+     "density": 4.4
+    },
+    "melody_adaptive3": {
+     "notes": 194,
+     "removed": 0,
+     "eventF1": 0.603,
+     "pitchPrecision": 0.588,
+     "pitchRecall": 0.62,
+     "melodyRecall": 0.683,
+     "bassRecall": 0.792,
+     "invented": 0.196,
+     "density": 4.24
+    }
+   }
+  },
+  {
+   "id": "guitarset-bn2-comp",
+   "density": "dense",
+   "referenceNotes": 239,
+   "variants": {
+    "off": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    },
+    "strongVoices": {
+     "notes": 166,
+     "removed": 21,
+     "eventF1": 0.607,
+     "pitchPrecision": 0.741,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.871,
+     "bassRecall": 0.765,
+     "invented": 0.108,
+     "density": 5.66
+    },
+    "arrChordOutlier": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    },
+    "arrDuplicate": {
+     "notes": 144,
+     "removed": 21,
+     "eventF1": 0.564,
+     "pitchPrecision": 0.75,
+     "pitchRecall": 0.452,
+     "melodyRecall": 0.835,
+     "bassRecall": 0.718,
+     "invented": 0.104,
+     "density": 4.91
+    },
+    "arrGhost": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    },
+    "voicingSanity": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    },
+    "melody_highest": {
+     "notes": 168,
+     "removed": 0,
+     "eventF1": 0.6,
+     "pitchPrecision": 0.726,
+     "pitchRecall": 0.51,
+     "melodyRecall": 0.906,
+     "bassRecall": 0.753,
+     "invented": 0.125,
+     "density": 5.73
+    },
+    "melody_highest_thin": {
+     "notes": 169,
+     "removed": 21,
+     "eventF1": 0.613,
+     "pitchPrecision": 0.74,
+     "pitchRecall": 0.523,
+     "melodyRecall": 0.918,
+     "bassRecall": 0.765,
+     "invented": 0.112,
+     "density": 5.77
+    },
+    "melody_contour_thin": {
+     "notes": 166,
+     "removed": 21,
+     "eventF1": 0.607,
+     "pitchPrecision": 0.741,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.871,
+     "bassRecall": 0.765,
+     "invented": 0.108,
+     "density": 5.66
+    },
+    "melody_adaptive": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    },
+    "melody_adaptive_thin": {
+     "notes": 166,
+     "removed": 21,
+     "eventF1": 0.607,
+     "pitchPrecision": 0.741,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.882,
+     "bassRecall": 0.765,
+     "invented": 0.108,
+     "density": 5.66
+    },
+    "melody_adaptive2": {
+     "notes": 166,
+     "removed": 0,
+     "eventF1": 0.607,
+     "pitchPrecision": 0.741,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.906,
+     "bassRecall": 0.753,
+     "invented": 0.108,
+     "density": 5.66
+    },
+    "melody_adaptive3": {
+     "notes": 165,
+     "removed": 0,
+     "eventF1": 0.609,
+     "pitchPrecision": 0.745,
+     "pitchRecall": 0.515,
+     "melodyRecall": 0.906,
+     "bassRecall": 0.753,
+     "invented": 0.103,
+     "density": 5.63
+    }
+   }
+  },
+  {
+   "id": "guitarset-funk3-comp",
+   "density": "dense",
+   "referenceNotes": 492,
+   "variants": {
+    "off": {
+     "notes": 223,
+     "removed": 0,
+     "eventF1": 0.523,
+     "pitchPrecision": 0.839,
+     "pitchRecall": 0.38,
+     "melodyRecall": 0.174,
+     "bassRecall": 0.775,
+     "invented": 0.054,
+     "density": 6.5
+    },
+    "strongVoices": {
+     "notes": 216,
+     "removed": 86,
+     "eventF1": 0.508,
+     "pitchPrecision": 0.833,
+     "pitchRecall": 0.366,
+     "melodyRecall": 0.167,
+     "bassRecall": 0.768,
+     "invented": 0.056,
+     "density": 6.3
+    },
+    "arrChordOutlier": {
+     "notes": 223,
+     "removed": 0,
+     "eventF1": 0.523,
+     "pitchPrecision": 0.839,
+     "pitchRecall": 0.38,
+     "melodyRecall": 0.174,
+     "bassRecall": 0.775,
+     "invented": 0.054,
+     "density": 6.5
+    },
+    "arrDuplicate": {
+     "notes": 207,
+     "removed": 16,
+     "eventF1": 0.504,
+     "pitchPrecision": 0.85,
+     "pitchRecall": 0.358,
+     "melodyRecall": 0.167,
+     "bassRecall": 0.739,
+     "invented": 0.048,
+     "density": 6.04
+    },
+    "arrGhost": {
+     "notes": 223,
+     "removed": 0,
+     "eventF1": 0.523,
+     "pitchPrecision": 0.839,
+     "pitchRecall": 0.38,
+     "melodyRecall": 0.174,
+     "bassRecall": 0.775,
+     "invented": 0.054,
+     "density": 6.5
+    },
+    "voicingSanity": {
+     "notes": 223,
+     "removed": 0,
+     "eventF1": 0.523,
+     "pitchPrecision": 0.839,
+     "pitchRecall": 0.38,
+     "melodyRecall": 0.174,
+     "bassRecall": 0.775,
+     "invented": 0.054,
+     "density": 6.5
+    },
+    "melody_highest": {
+     "notes": 233,
+     "removed": 0,
+     "eventF1": 0.546,
+     "pitchPrecision": 0.85,
+     "pitchRecall": 0.402,
+     "melodyRecall": 0.406,
+     "bassRecall": 0.768,
+     "invented": 0.056,
+     "density": 6.8
+    },
+    "melody_highest_thin": {
+     "notes": 230,
+     "removed": 86,
+     "eventF1": 0.54,
+     "pitchPrecision": 0.848,
+     "pitchRecall": 0.396,
+     "melodyRecall": 0.261,
+     "bassRecall": 0.775,
+     "invented": 0.052,
+     "density": 6.71
+    },
+    "melody_contour_thin": {
+     "notes": 216,
+     "removed": 86,
+     "eventF1": 0.508,
+     "pitchPrecision": 0.833,
+     "pitchRecall": 0.366,
+     "melodyRecall": 0.167,
+     "bassRecall": 0.768,
+     "invented": 0.056,
+     "density": 6.3
+    },
+    "melody_adaptive": {
+     "notes": 227,
+     "removed": 0,
+     "eventF1": 0.534,
+     "pitchPrecision": 0.846,
+     "pitchRecall": 0.39,
+     "melodyRecall": 0.297,
+     "bassRecall": 0.775,
+     "invented": 0.057,
+     "density": 6.62
+    },
+    "melody_adaptive_thin": {
+     "notes": 216,
+     "removed": 86,
+     "eventF1": 0.511,
+     "pitchPrecision": 0.838,
+     "pitchRecall": 0.368,
+     "melodyRecall": 0.181,
+     "bassRecall": 0.775,
+     "invented": 0.056,
+     "density": 6.3
+    },
+    "melody_adaptive2": {
+     "notes": 229,
+     "removed": 0,
+     "eventF1": 0.535,
+     "pitchPrecision": 0.843,
+     "pitchRecall": 0.392,
+     "melodyRecall": 0.341,
+     "bassRecall": 0.768,
+     "invented": 0.061,
+     "density": 6.68
+    },
+    "melody_adaptive3": {
+     "notes": 227,
+     "removed": 0,
+     "eventF1": 0.531,
+     "pitchPrecision": 0.841,
+     "pitchRecall": 0.388,
+     "melodyRecall": 0.333,
+     "bassRecall": 0.775,
+     "invented": 0.062,
+     "density": 6.62
+    }
+   }
+  },
+  {
+   "id": "guitarset-jazz2-solo",
+   "density": "sparse",
+   "referenceNotes": 78,
+   "variants": {
+    "off": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    },
+    "strongVoices": {
+     "notes": 94,
+     "removed": 2,
+     "eventF1": 0.826,
+     "pitchPrecision": 0.755,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.202,
+     "density": 2.69
+    },
+    "arrChordOutlier": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    },
+    "arrDuplicate": {
+     "notes": 90,
+     "removed": 5,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.767,
+     "pitchRecall": 0.885,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.189,
+     "density": 2.58
+    },
+    "arrGhost": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    },
+    "voicingSanity": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    },
+    "melody_highest": {
+     "notes": 99,
+     "removed": 0,
+     "eventF1": 0.814,
+     "pitchPrecision": 0.727,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.974,
+     "bassRecall": 0.974,
+     "invented": 0.232,
+     "density": 2.84
+    },
+    "melody_highest_thin": {
+     "notes": 98,
+     "removed": 2,
+     "eventF1": 0.818,
+     "pitchPrecision": 0.735,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.974,
+     "bassRecall": 0.974,
+     "invented": 0.224,
+     "density": 2.81
+    },
+    "melody_contour_thin": {
+     "notes": 94,
+     "removed": 2,
+     "eventF1": 0.826,
+     "pitchPrecision": 0.755,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.202,
+     "density": 2.69
+    },
+    "melody_adaptive": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    },
+    "melody_adaptive_thin": {
+     "notes": 94,
+     "removed": 2,
+     "eventF1": 0.826,
+     "pitchPrecision": 0.755,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.202,
+     "density": 2.69
+    },
+    "melody_adaptive2": {
+     "notes": 98,
+     "removed": 0,
+     "eventF1": 0.818,
+     "pitchPrecision": 0.735,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.974,
+     "bassRecall": 0.974,
+     "invented": 0.224,
+     "density": 2.81
+    },
+    "melody_adaptive3": {
+     "notes": 95,
+     "removed": 0,
+     "eventF1": 0.821,
+     "pitchPrecision": 0.747,
+     "pitchRecall": 0.91,
+     "melodyRecall": 0.961,
+     "bassRecall": 0.961,
+     "invented": 0.211,
+     "density": 2.72
+    }
+   }
+  },
+  {
+   "id": "guitarset-jazz1-solo",
+   "density": "sparse",
+   "referenceNotes": 65,
+   "variants": {
+    "off": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "strongVoices": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "arrChordOutlier": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "arrDuplicate": {
+     "notes": 62,
+     "removed": 3,
+     "eventF1": 0.929,
+     "pitchPrecision": 0.952,
+     "pitchRecall": 0.908,
+     "melodyRecall": 0.938,
+     "bassRecall": 0.938,
+     "invented": 0.048,
+     "density": 4.31
+    },
+    "arrGhost": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "voicingSanity": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "melody_highest": {
+     "notes": 66,
+     "removed": 0,
+     "eventF1": 0.916,
+     "pitchPrecision": 0.909,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.076,
+     "density": 4.58
+    },
+    "melody_highest_thin": {
+     "notes": 66,
+     "removed": 0,
+     "eventF1": 0.916,
+     "pitchPrecision": 0.909,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.076,
+     "density": 4.58
+    },
+    "melody_contour_thin": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "melody_adaptive": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "melody_adaptive_thin": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    },
+    "melody_adaptive2": {
+     "notes": 66,
+     "removed": 0,
+     "eventF1": 0.916,
+     "pitchPrecision": 0.909,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.076,
+     "density": 4.58
+    },
+    "melody_adaptive3": {
+     "notes": 65,
+     "removed": 0,
+     "eventF1": 0.923,
+     "pitchPrecision": 0.923,
+     "pitchRecall": 0.923,
+     "melodyRecall": 0.953,
+     "bassRecall": 0.953,
+     "invented": 0.062,
+     "density": 4.51
+    }
+   }
+  }
+ ],
+ "summary": {
+  "dense": {
+   "off": {
+    "eventF1": 0.572,
+    "notes": 193,
+    "melodyRecall": 0.566,
+    "bassRecall": 0.773,
+    "invented": 0.122,
+    "density": 5.443
+   },
+   "strongVoices": {
+    "eventF1": 0.567,
+    "notes": 191,
+    "melodyRecall": 0.557,
+    "bassRecall": 0.775,
+    "invented": 0.124,
+    "density": 5.387
+   },
+   "arrChordOutlier": {
+    "eventF1": 0.572,
+    "notes": 193,
+    "melodyRecall": 0.566,
+    "bassRecall": 0.773,
+    "invented": 0.122,
+    "density": 5.443
+   },
+   "arrDuplicate": {
+    "eventF1": 0.55,
+    "notes": 175,
+    "melodyRecall": 0.537,
+    "bassRecall": 0.738,
+    "invented": 0.12,
+    "density": 4.91
+   },
+   "arrGhost": {
+    "eventF1": 0.572,
+    "notes": 193,
+    "melodyRecall": 0.566,
+    "bassRecall": 0.773,
+    "invented": 0.122,
+    "density": 5.443
+   },
+   "voicingSanity": {
+    "eventF1": 0.572,
+    "notes": 193,
+    "melodyRecall": 0.566,
+    "bassRecall": 0.773,
+    "invented": 0.122,
+    "density": 5.443
+   },
+   "melody_highest": {
+    "eventF1": 0.593,
+    "notes": 203,
+    "melodyRecall": 0.704,
+    "bassRecall": 0.771,
+    "invented": 0.129,
+    "density": 5.693
+   },
+   "melody_highest_thin": {
+    "eventF1": 0.597,
+    "notes": 202,
+    "melodyRecall": 0.654,
+    "bassRecall": 0.777,
+    "invented": 0.122,
+    "density": 5.677
+   },
+   "melody_contour_thin": {
+    "eventF1": 0.567,
+    "notes": 191,
+    "melodyRecall": 0.557,
+    "bassRecall": 0.775,
+    "invented": 0.124,
+    "density": 5.387
+   },
+   "melody_adaptive": {
+    "eventF1": 0.578,
+    "notes": 195,
+    "melodyRecall": 0.61,
+    "bassRecall": 0.773,
+    "invented": 0.123,
+    "density": 5.483
+   },
+   "melody_adaptive_thin": {
+    "eventF1": 0.568,
+    "notes": 191,
+    "melodyRecall": 0.565,
+    "bassRecall": 0.777,
+    "invented": 0.124,
+    "density": 5.387
+   },
+   "melody_adaptive2": {
+    "eventF1": 0.587,
+    "notes": 199,
+    "melodyRecall": 0.655,
+    "bassRecall": 0.771,
+    "invented": 0.123,
+    "density": 5.58
+   },
+   "melody_adaptive3": {
+    "eventF1": 0.581,
+    "notes": 195,
+    "melodyRecall": 0.641,
+    "bassRecall": 0.773,
+    "invented": 0.12,
+    "density": 5.497
+   }
+  },
+  "sparse": {
+   "off": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   },
+   "strongVoices": {
+    "eventF1": 0.875,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.132,
+    "density": 3.6
+   },
+   "arrChordOutlier": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   },
+   "arrDuplicate": {
+    "eventF1": 0.875,
+    "notes": 76,
+    "melodyRecall": 0.95,
+    "bassRecall": 0.95,
+    "invented": 0.119,
+    "density": 3.445
+   },
+   "arrGhost": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   },
+   "voicingSanity": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   },
+   "melody_highest": {
+    "eventF1": 0.865,
+    "notes": 83,
+    "melodyRecall": 0.964,
+    "bassRecall": 0.964,
+    "invented": 0.154,
+    "density": 3.71
+   },
+   "melody_highest_thin": {
+    "eventF1": 0.867,
+    "notes": 82,
+    "melodyRecall": 0.964,
+    "bassRecall": 0.964,
+    "invented": 0.15,
+    "density": 3.695
+   },
+   "melody_contour_thin": {
+    "eventF1": 0.875,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.132,
+    "density": 3.6
+   },
+   "melody_adaptive": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   },
+   "melody_adaptive_thin": {
+    "eventF1": 0.875,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.132,
+    "density": 3.6
+   },
+   "melody_adaptive2": {
+    "eventF1": 0.867,
+    "notes": 82,
+    "melodyRecall": 0.964,
+    "bassRecall": 0.964,
+    "invented": 0.15,
+    "density": 3.695
+   },
+   "melody_adaptive3": {
+    "eventF1": 0.872,
+    "notes": 80,
+    "melodyRecall": 0.957,
+    "bassRecall": 0.957,
+    "invented": 0.137,
+    "density": 3.615
+   }
+  }
+ }
+}
