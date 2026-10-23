@@ -20,6 +20,23 @@ const DIFFICULTY_HELP = {
   [DIFFICULTIES.INTERMEDIATE]: 'More harmony and rhythmic detail.',
   [DIFFICULTIES.ADVANCED]: 'Fullest detail that stays playable.',
 }
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+/** MIDI 60 -> "C4" (the octave a musician reads, not the MIDI number). */
+function noteName(midi) {
+  const value = Math.round(Number(midi))
+  if (!Number.isFinite(value)) return '?'
+  return `${NOTE_NAMES[((value % 12) + 12) % 12]}${Math.floor(value / 12) - 1}`
+}
+
+function notePosition(event, beatsPerMeasure = 4) {
+  const beats = Math.max(1, Math.round(beatsPerMeasure))
+  const startBeat = Math.max(0, Number(event.startBeat) || 0)
+  const bar = Math.floor((startBeat + 1e-9) / beats) + 1
+  const beat = Math.round((startBeat - (bar - 1) * beats) * 100) / 100
+  return { bar, beat: beat + 1 }
+}
+
 function formatClock(seconds) {
   if (!Number.isFinite(seconds)) return '–'
   const m = Math.floor(seconds / 60)
@@ -289,6 +306,100 @@ export default function CreateFromAudio({ onArrangementReady = null, uploadsDisa
                 {result.model.parts[0].warnings.slice(0, 8).map((w, i) => (
                   <li key={i}>{w.kind.replace(/-/g, ' ')}{w.detail ? ` — ${w.detail}` : ''}</li>
                 ))}
+              </ul>
+            </details>
+          )}
+          {/* PER-NOTE CORRECTION: the review can remove a note the transcription
+              got wrong. The edit is a separate record (pitch + written beat +
+              occurrence), so the score rebuilds without exactly that note,
+              nothing else moves, and a re-run keeps the edit. The arrangement
+              events themselves are never mutated. */}
+          {((result.model.parts[0].events?.length ?? 0) > 0 || (result.removedEvents?.length ?? 0) > 0) && (
+            <details className="audio-vision-note-review">
+              <summary>
+                Review notes ({result.model.parts[0].events.length}
+                {result.removedEvents?.length > 0 ? ` · ${result.removedEvents.length} removed` : ''})
+              </summary>
+              <p className="audio-vision-hint">
+                Remove a note the transcription got wrong. The score, the preview and the
+                practice checkpoints rebuild without it — the rest of the arrangement is
+                untouched, and the edit is kept with this arrangement.
+              </p>
+              {result.correctionsStale > 0 && (
+                <p className="audio-vision-hint" role="note">
+                  {result.correctionsStale} saved removal{result.correctionsStale === 1 ? '' : 's'} no longer
+                  match this arrangement and {result.correctionsStale === 1 ? 'is' : 'are'} inert.
+                </p>
+              )}
+              {result.removedEvents?.length > 0 && (
+                <div className="audio-vision-note-removed">
+                  <p className="audio-vision-hint">
+                    <strong>Removed by you ({result.removedEvents.length})</strong>
+                  </p>
+                  <ul className="audio-vision-note-list" style={{ maxHeight: '140px', overflowY: 'auto', paddingLeft: 0, listStyle: 'none' }}>
+                    {result.removedEvents.map((event) => {
+                      const { bar, beat } = notePosition(event, result.notation?.beatsPerMeasure)
+                      return (
+                        <li
+                          key={event.correctionKey}
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', padding: '0.15rem 0' }}
+                        >
+                          <span>
+                            <strong>{noteName(event.midi)}</strong>
+                            <span className="audio-vision-hint">
+                              {' '}· bar {bar} · beat {beat}
+                              {event.hand ? ` · ${event.hand}` : ''}
+                              {event.role ? ` · ${event.role}` : ''}
+                            </span>
+                          </span>
+                          <button
+                            className="cz-text-link"
+                            onClick={() => flow.undoNoteRemoval(event.correctionKey)}
+                            aria-label={`Undo removal of ${noteName(event.midi)} at bar ${bar} beat ${beat}`}
+                          >
+                            Undo
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <button className="cz-text-link" onClick={flow.undoLastNoteRemoval}>
+                      Undo last
+                    </button>
+                    <button className="cz-text-link" onClick={flow.clearNoteCorrections}>
+                      Clear all {result.removedEvents.length} removal{result.removedEvents.length === 1 ? '' : 's'}
+                    </button>
+                  </div>
+                </div>
+              )}
+              <ul className="audio-vision-note-list" style={{ maxHeight: '260px', overflowY: 'auto', paddingLeft: 0, listStyle: 'none' }}>
+                {result.model.parts[0].events.map((event, index) => {
+                  const { bar, beat } = notePosition(event, result.notation?.beatsPerMeasure)
+                  return (
+                    <li
+                      key={event.correctionKey ?? `${event.midi}-${event.startBeat}-${index}`}
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', padding: '0.15rem 0' }}
+                    >
+                      <span>
+                        <strong>{noteName(event.midi)}</strong>
+                        <span className="audio-vision-hint">
+                          {' '}· bar {bar} · beat {beat}
+                          {event.hand ? ` · ${event.hand}` : ''}
+                          {event.role ? ` · ${event.role}` : ''}
+                        </span>
+                      </span>
+                      <button
+                        className="cz-text-link"
+                        onClick={() => flow.removeNote(event.correctionKey)}
+                        aria-label={`Remove ${noteName(event.midi)} at bar ${bar} beat ${beat}`}
+                        disabled={!event.correctionKey}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  )
+                })}
               </ul>
             </details>
           )}

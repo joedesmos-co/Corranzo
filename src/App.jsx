@@ -1003,6 +1003,14 @@ export default function App() {
           excerpt: payload.excerpt ?? null,
           uncertainRegions: Array.isArray(payload.uncertainRegions) ? payload.uncertainRegions.length : 0,
           transcriptionAgreement: Number.isFinite(payload.transcriptionAgreement) ? payload.transcriptionAgreement : null,
+          // The musician's edit record travels with the saved score but stays
+          // separate from the transcription evidence: the MusicXML bytes are
+          // already corrected, and this record says what was removed.
+          corrections: payload.corrections ?? null,
+          correctionsApplied: payload.correctionsApplied ?? 0,
+          correctionsStale: payload.correctionsStale ?? 0,
+          originalNoteCount: payload.originalNoteCount ?? null,
+          removedNoteCount: payload.removedNoteCount ?? 0,
         },
       },
     })

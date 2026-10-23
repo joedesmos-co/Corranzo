@@ -15,8 +15,15 @@ import {
 export const PIANO_RECOGNITION_DEFAULTS = Object.freeze({
   rollingWindowMs: 720,
   sustainWindowMs: 1600,
-  dominantWrongToneMinClarity: 0.5,
+  dominantWrongToneMinClarity: 0.35,
   octaveSafeWrongToneCents: 55,
+  /**
+   * A single-note expectation whose score-informed confidence is below
+   * this bar cannot override a dominant pitch that disagrees by an
+   * octave or more (measured separation: ghosts 0.28-0.46, true notes
+   * 0.57-0.91). See unexpectedMidis.
+   */
+  octaveGhostMinExpectedConfidence: 0.5,
 })
 
 function finite(value, fallback = null) {
@@ -133,6 +140,37 @@ function unexpectedMidis(frame, expected, options) {
     centsToNearestPitchClass(dominant, expected) > options.octaveSafeWrongToneCents
   ) {
     unexpected.push(Math.round(dominant))
+    return uniqueMidis(unexpected)
+  }
+  // Dominant-disagreement guard for a SINGLE expected note (measured):
+  // a harmonic of the played note satisfies the score-informed evidence
+  // for an octave (or whole-tone) expectation, but the engine's own
+  // confidence for such a ghost is low — measured 0.28-0.46 across six
+  // real piano/guitar clips — while a genuinely struck note reads
+  // 0.57-0.91. The dominant pitch in every one of those false accepts was
+  // the played note, an octave below the expectation.
+  //
+  // Octave-away dominants are normally treated as SAFE because the
+  // monophonic estimator can flip octaves; a genuine flip keeps the
+  // expected note's confidence high, so only the low-confidence case is
+  // rejected. Chords (expected.length !== 1) are untouched: their
+  // completion is owned by the chord/V3 path and main's fixes.
+  if (dominant != null && expected.length === 1) {
+    const expectedMidi = expected[0]
+    const cents = centsToNearestPitchClass(dominant, expected)
+    const octaveApart = Math.abs(Math.round(dominant) - expectedMidi) >= 12
+    const materiallyDifferent = octaveApart || cents > options.octaveSafeWrongToneCents
+    const expectedNote = (frame?.v2Notes ?? []).find((note) => note.midi === expectedMidi)
+    const expectedConfidence = Number.isFinite(expectedNote?.confidence)
+      ? expectedNote.confidence
+      : null
+    if (
+      materiallyDifferent &&
+      expectedConfidence != null &&
+      expectedConfidence < options.octaveGhostMinExpectedConfidence
+    ) {
+      unexpected.push(Math.round(dominant))
+    }
   }
   return uniqueMidis(unexpected)
 }
