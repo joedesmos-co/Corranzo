@@ -1,0 +1,16 @@
+{
+ "browser": "Chromium (Playwright headless)",
+ "fixture": "benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf",
+ "events": 116,
+ "tab_staves": 2,
+ "ports": "digital PDF text route, JS only",
+ "rhythm_recovered": true,
+ "playable": true,
+ "onsets": 32,
+ "measures_complete": 8,
+ "measures_total": 8,
+ "runtime_ms": 204,
+ "engraved": true,
+ "xml_bytes": 34962,
+ "note": "Durations are measure-validated quarters; beam/flag verification is not ported and each note carries an unverified footnote."
+}
