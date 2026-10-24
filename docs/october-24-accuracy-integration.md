@@ -189,3 +189,27 @@ corrections, save/restore and Practice Engine remain intact.
 * Rhythm slashes (TAB-only layouts) unimplemented; rests not emitted; ties not
   detected; multi-voice unresolved; large layouts at 0 % measures.
 * The PDF.js text path is Apache-2.0 and viable; the raster path is not.
+
+---
+
+## 7. Deployment
+
+| item | value |
+|---|---|
+| source commit | `b0dcff7b0e` (accuracy integration; built after the docs commit) |
+| bundle | `dist/assets/index-DRzsCFhE.js` |
+| bundle SHA-256 | `f23a60c89eaa1b34d06e2124eacf440633656b13a70a0aca417f8f87ec58668a` |
+| Worker version | `6113726f-aa90-4708-beb7-146930119397` |
+| Deployment id | `a5e05cb3-b1aa-4fff-b441-5759b7d90e41` (2026-10-24T20:07:30Z) |
+| live bundle | `index-DRzsCFhE.js`, SHA-256 matches local |
+| live routes | `/`, `/privacy`, `/terms`, `/contact` → 200 |
+| rollback target | `d42dd9b4-c2de-42c5-bbb9-94869eb8d314` (the previous production version) |
+
+Rollback:
+
+```
+npx wrangler rollback d42dd9b4-c2de-42c5-bbb9-94869eb8d314
+```
+
+The built bundle passed the Audio Vision correction flow on `vite preview`
+(18/18) and the same flow against the live URL after deployment.
