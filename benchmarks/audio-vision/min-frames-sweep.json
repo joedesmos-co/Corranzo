@@ -1,0 +1,523 @@
+{
+  "generatedAt": "2026-10-24T23:18:04.901Z",
+  "rows": [
+    {
+      "id": "guitarset-ss3-comp",
+      "density": "dense",
+      "referenceNotes": 184,
+      "variants": {
+        "0.65/0.5/3": {
+          "modelNotes": 204,
+          "notes": 170,
+          "eventF1": 0.678,
+          "pitchPrecision": 0.706,
+          "pitchRecall": 0.652,
+          "missed": 64,
+          "falsePositives": 50,
+          "melodyRecall": 0.675,
+          "bassRecall": 0.833,
+          "invented": 0.135,
+          "density": 3.72
+        },
+        "0.65/0.5/2": {
+          "modelNotes": 210,
+          "notes": 171,
+          "eventF1": 0.665,
+          "pitchPrecision": 0.69,
+          "pitchRecall": 0.641,
+          "missed": 66,
+          "falsePositives": 53,
+          "melodyRecall": 0.658,
+          "bassRecall": 0.817,
+          "invented": 0.152,
+          "density": 3.74
+        },
+        "0.65/0.5/1": {
+          "modelNotes": 219,
+          "notes": 172,
+          "eventF1": 0.657,
+          "pitchPrecision": 0.68,
+          "pitchRecall": 0.636,
+          "missed": 67,
+          "falsePositives": 55,
+          "melodyRecall": 0.658,
+          "bassRecall": 0.825,
+          "invented": 0.151,
+          "density": 3.76
+        },
+        "0.7/0.5/2": {
+          "modelNotes": 199,
+          "notes": 166,
+          "eventF1": 0.68,
+          "pitchPrecision": 0.717,
+          "pitchRecall": 0.647,
+          "missed": 65,
+          "falsePositives": 47,
+          "melodyRecall": 0.675,
+          "bassRecall": 0.825,
+          "invented": 0.139,
+          "density": 3.63
+        },
+        "0.6/0.5/2": {
+          "modelNotes": 220,
+          "notes": 176,
+          "eventF1": 0.65,
+          "pitchPrecision": 0.665,
+          "pitchRecall": 0.636,
+          "missed": 67,
+          "falsePositives": 59,
+          "melodyRecall": 0.658,
+          "bassRecall": 0.817,
+          "invented": 0.165,
+          "density": 3.85
+        }
+      }
+    },
+    {
+      "id": "guitarset-bn2-comp",
+      "density": "dense",
+      "referenceNotes": 239,
+      "variants": {
+        "0.65/0.5/3": {
+          "modelNotes": 177,
+          "notes": 138,
+          "eventF1": 0.663,
+          "pitchPrecision": 0.906,
+          "pitchRecall": 0.523,
+          "missed": 114,
+          "falsePositives": 13,
+          "melodyRecall": 0.882,
+          "bassRecall": 0.753,
+          "invented": 0.022,
+          "density": 4.71
+        },
+        "0.65/0.5/2": {
+          "modelNotes": 180,
+          "notes": 139,
+          "eventF1": 0.656,
+          "pitchPrecision": 0.892,
+          "pitchRecall": 0.519,
+          "missed": 115,
+          "falsePositives": 15,
+          "melodyRecall": 0.882,
+          "bassRecall": 0.753,
+          "invented": 0.029,
+          "density": 4.74
+        },
+        "0.65/0.5/1": {
+          "modelNotes": 183,
+          "notes": 141,
+          "eventF1": 0.653,
+          "pitchPrecision": 0.879,
+          "pitchRecall": 0.519,
+          "missed": 115,
+          "falsePositives": 17,
+          "melodyRecall": 0.882,
+          "bassRecall": 0.741,
+          "invented": 0.035,
+          "density": 4.81
+        },
+        "0.7/0.5/2": {
+          "modelNotes": 175,
+          "notes": 137,
+          "eventF1": 0.66,
+          "pitchPrecision": 0.905,
+          "pitchRecall": 0.519,
+          "missed": 115,
+          "falsePositives": 13,
+          "melodyRecall": 0.882,
+          "bassRecall": 0.753,
+          "invented": 0.029,
+          "density": 4.67
+        },
+        "0.6/0.5/2": {
+          "modelNotes": 185,
+          "notes": 144,
+          "eventF1": 0.653,
+          "pitchPrecision": 0.868,
+          "pitchRecall": 0.523,
+          "missed": 114,
+          "falsePositives": 19,
+          "melodyRecall": 0.882,
+          "bassRecall": 0.753,
+          "invented": 0.035,
+          "density": 4.91
+        }
+      }
+    },
+    {
+      "id": "guitarset-funk3-comp",
+      "density": "dense",
+      "referenceNotes": 492,
+      "variants": {
+        "0.65/0.5/3": {
+          "modelNotes": 337,
+          "notes": 201,
+          "eventF1": 0.514,
+          "pitchPrecision": 0.886,
+          "pitchRecall": 0.362,
+          "missed": 314,
+          "falsePositives": 23,
+          "melodyRecall": 0.152,
+          "bassRecall": 0.761,
+          "invented": 0.03,
+          "density": 5.86
+        },
+        "0.65/0.5/2": {
+          "modelNotes": 340,
+          "notes": 203,
+          "eventF1": 0.515,
+          "pitchPrecision": 0.882,
+          "pitchRecall": 0.364,
+          "missed": 313,
+          "falsePositives": 24,
+          "melodyRecall": 0.159,
+          "bassRecall": 0.761,
+          "invented": 0.034,
+          "density": 5.92
+        },
+        "0.65/0.5/1": {
+          "modelNotes": 343,
+          "notes": 203,
+          "eventF1": 0.518,
+          "pitchPrecision": 0.887,
+          "pitchRecall": 0.366,
+          "missed": 312,
+          "falsePositives": 23,
+          "melodyRecall": 0.181,
+          "bassRecall": 0.768,
+          "invented": 0.03,
+          "density": 5.92
+        },
+        "0.7/0.5/2": {
+          "modelNotes": 323,
+          "notes": 193,
+          "eventF1": 0.502,
+          "pitchPrecision": 0.891,
+          "pitchRecall": 0.35,
+          "missed": 320,
+          "falsePositives": 21,
+          "melodyRecall": 0.159,
+          "bassRecall": 0.754,
+          "invented": 0.031,
+          "density": 5.63
+        },
+        "0.6/0.5/2": {
+          "modelNotes": 355,
+          "notes": 212,
+          "eventF1": 0.523,
+          "pitchPrecision": 0.868,
+          "pitchRecall": 0.374,
+          "missed": 308,
+          "falsePositives": 28,
+          "melodyRecall": 0.159,
+          "bassRecall": 0.783,
+          "invented": 0.033,
+          "density": 6.18
+        }
+      }
+    },
+    {
+      "id": "guitarset-jazz2-solo",
+      "density": "sparse",
+      "referenceNotes": 78,
+      "variants": {
+        "0.65/0.5/3": {
+          "modelNotes": 91,
+          "notes": 89,
+          "eventF1": 0.85,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "missed": 7,
+          "falsePositives": 18,
+          "melodyRecall": 0.961,
+          "bassRecall": 0.961,
+          "invented": 0.157,
+          "density": 2.55
+        },
+        "0.65/0.5/2": {
+          "modelNotes": 92,
+          "notes": 89,
+          "eventF1": 0.85,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "missed": 7,
+          "falsePositives": 18,
+          "melodyRecall": 0.961,
+          "bassRecall": 0.961,
+          "invented": 0.157,
+          "density": 2.55
+        },
+        "0.65/0.5/1": {
+          "modelNotes": 95,
+          "notes": 89,
+          "eventF1": 0.85,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "missed": 7,
+          "falsePositives": 18,
+          "melodyRecall": 0.961,
+          "bassRecall": 0.961,
+          "invented": 0.157,
+          "density": 2.55
+        },
+        "0.7/0.5/2": {
+          "modelNotes": 89,
+          "notes": 88,
+          "eventF1": 0.867,
+          "pitchPrecision": 0.818,
+          "pitchRecall": 0.923,
+          "missed": 6,
+          "falsePositives": 16,
+          "melodyRecall": 0.961,
+          "bassRecall": 0.961,
+          "invented": 0.148,
+          "density": 2.52
+        },
+        "0.6/0.5/2": {
+          "modelNotes": 93,
+          "notes": 89,
+          "eventF1": 0.85,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "missed": 7,
+          "falsePositives": 18,
+          "melodyRecall": 0.961,
+          "bassRecall": 0.961,
+          "invented": 0.157,
+          "density": 2.55
+        }
+      }
+    },
+    {
+      "id": "guitarset-jazz1-solo",
+      "density": "sparse",
+      "referenceNotes": 65,
+      "variants": {
+        "0.65/0.5/3": {
+          "modelNotes": 64,
+          "notes": 64,
+          "eventF1": 0.915,
+          "pitchPrecision": 0.922,
+          "pitchRecall": 0.908,
+          "missed": 6,
+          "falsePositives": 5,
+          "melodyRecall": 0.938,
+          "bassRecall": 0.938,
+          "invented": 0.047,
+          "density": 4.44
+        },
+        "0.65/0.5/2": {
+          "modelNotes": 66,
+          "notes": 66,
+          "eventF1": 0.901,
+          "pitchPrecision": 0.894,
+          "pitchRecall": 0.908,
+          "missed": 6,
+          "falsePositives": 7,
+          "melodyRecall": 0.938,
+          "bassRecall": 0.938,
+          "invented": 0.061,
+          "density": 4.58
+        },
+        "0.65/0.5/1": {
+          "modelNotes": 72,
+          "notes": 68,
+          "eventF1": 0.902,
+          "pitchPrecision": 0.882,
+          "pitchRecall": 0.923,
+          "missed": 5,
+          "falsePositives": 8,
+          "melodyRecall": 0.953,
+          "bassRecall": 0.953,
+          "invented": 0.059,
+          "density": 4.72
+        },
+        "0.7/0.5/2": {
+          "modelNotes": 63,
+          "notes": 63,
+          "eventF1": 0.922,
+          "pitchPrecision": 0.937,
+          "pitchRecall": 0.908,
+          "missed": 6,
+          "falsePositives": 4,
+          "melodyRecall": 0.938,
+          "bassRecall": 0.938,
+          "invented": 0.048,
+          "density": 4.38
+        },
+        "0.6/0.5/2": {
+          "modelNotes": 67,
+          "notes": 67,
+          "eventF1": 0.894,
+          "pitchPrecision": 0.881,
+          "pitchRecall": 0.908,
+          "missed": 6,
+          "falsePositives": 8,
+          "melodyRecall": 0.938,
+          "bassRecall": 0.938,
+          "invented": 0.06,
+          "density": 4.65
+        }
+      }
+    }
+  ],
+  "summary": {
+    "dense": {
+      "0.65/0.5/3": {
+        "eventF1": 0.618,
+        "pitchPrecision": 0.833,
+        "pitchRecall": 0.512,
+        "notes": 169.667,
+        "modelNotes": 239.333,
+        "melodyRecall": 0.57,
+        "bassRecall": 0.782,
+        "invented": 0.062
+      },
+      "0.65/0.5/2": {
+        "eventF1": 0.612,
+        "pitchPrecision": 0.821,
+        "pitchRecall": 0.508,
+        "notes": 171,
+        "modelNotes": 243.333,
+        "melodyRecall": 0.566,
+        "bassRecall": 0.777,
+        "invented": 0.072
+      },
+      "0.65/0.5/1": {
+        "eventF1": 0.609,
+        "pitchPrecision": 0.815,
+        "pitchRecall": 0.507,
+        "notes": 172,
+        "modelNotes": 248.333,
+        "melodyRecall": 0.574,
+        "bassRecall": 0.778,
+        "invented": 0.072
+      },
+      "0.7/0.5/2": {
+        "eventF1": 0.614,
+        "pitchPrecision": 0.838,
+        "pitchRecall": 0.505,
+        "notes": 165.333,
+        "modelNotes": 232.333,
+        "melodyRecall": 0.572,
+        "bassRecall": 0.777,
+        "invented": 0.066
+      },
+      "0.6/0.5/2": {
+        "eventF1": 0.609,
+        "pitchPrecision": 0.8,
+        "pitchRecall": 0.511,
+        "notes": 177.333,
+        "modelNotes": 253.333,
+        "melodyRecall": 0.566,
+        "bassRecall": 0.784,
+        "invented": 0.078
+      }
+    },
+    "sparse": {
+      "0.65/0.5/3": {
+        "eventF1": 0.883,
+        "pitchPrecision": 0.86,
+        "pitchRecall": 0.909,
+        "notes": 76.5,
+        "modelNotes": 77.5,
+        "melodyRecall": 0.95,
+        "bassRecall": 0.95,
+        "invented": 0.102
+      },
+      "0.65/0.5/2": {
+        "eventF1": 0.876,
+        "pitchPrecision": 0.846,
+        "pitchRecall": 0.909,
+        "notes": 77.5,
+        "modelNotes": 79,
+        "melodyRecall": 0.95,
+        "bassRecall": 0.95,
+        "invented": 0.109
+      },
+      "0.65/0.5/1": {
+        "eventF1": 0.876,
+        "pitchPrecision": 0.84,
+        "pitchRecall": 0.917,
+        "notes": 78.5,
+        "modelNotes": 83.5,
+        "melodyRecall": 0.957,
+        "bassRecall": 0.957,
+        "invented": 0.108
+      },
+      "0.7/0.5/2": {
+        "eventF1": 0.895,
+        "pitchPrecision": 0.878,
+        "pitchRecall": 0.916,
+        "notes": 75.5,
+        "modelNotes": 76,
+        "melodyRecall": 0.95,
+        "bassRecall": 0.95,
+        "invented": 0.098
+      },
+      "0.6/0.5/2": {
+        "eventF1": 0.872,
+        "pitchPrecision": 0.84,
+        "pitchRecall": 0.909,
+        "notes": 78,
+        "modelNotes": 80,
+        "melodyRecall": 0.95,
+        "bassRecall": 0.95,
+        "invented": 0.109
+      }
+    },
+    "all": {
+      "0.65/0.5/3": {
+        "eventF1": 0.724,
+        "pitchPrecision": 0.844,
+        "pitchRecall": 0.671,
+        "notes": 132.4,
+        "modelNotes": 174.6,
+        "melodyRecall": 0.722,
+        "bassRecall": 0.849,
+        "invented": 0.078
+      },
+      "0.65/0.5/2": {
+        "eventF1": 0.717,
+        "pitchPrecision": 0.831,
+        "pitchRecall": 0.668,
+        "notes": 133.6,
+        "modelNotes": 177.6,
+        "melodyRecall": 0.72,
+        "bassRecall": 0.846,
+        "invented": 0.087
+      },
+      "0.65/0.5/1": {
+        "eventF1": 0.716,
+        "pitchPrecision": 0.825,
+        "pitchRecall": 0.671,
+        "notes": 134.6,
+        "modelNotes": 182.4,
+        "melodyRecall": 0.727,
+        "bassRecall": 0.85,
+        "invented": 0.086
+      },
+      "0.7/0.5/2": {
+        "eventF1": 0.726,
+        "pitchPrecision": 0.854,
+        "pitchRecall": 0.669,
+        "notes": 129.4,
+        "modelNotes": 169.8,
+        "melodyRecall": 0.723,
+        "bassRecall": 0.846,
+        "invented": 0.079
+      },
+      "0.6/0.5/2": {
+        "eventF1": 0.714,
+        "pitchPrecision": 0.816,
+        "pitchRecall": 0.67,
+        "notes": 137.6,
+        "modelNotes": 184,
+        "melodyRecall": 0.72,
+        "bassRecall": 0.85,
+        "invented": 0.09
+      }
+    }
+  }
+}

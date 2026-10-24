@@ -13,6 +13,7 @@
 import { describe, it, expect } from 'vitest'
 import { NOTE_EXTRACTION } from '../src/features/audio-vision/noteExtraction.js'
 import { harmonicSalience, dropHarmonicSiblings } from '../src/features/audio-vision/harmonicEvidence.js'
+import { suppressHarmonicDoubles } from '../src/features/audio-vision/arrangementModel.js'
 
 const SR = 22050
 
@@ -99,5 +100,45 @@ describe('harmonic evidence', () => {
     expect(off.removed).toBe(0)
     dropHarmonicSiblings(notes, { samples, sampleRate: SR })
     expect(JSON.stringify(notes)).toBe(snapshot)
+  })
+})
+
+describe('harmonic-double suppression stays amplitude-only in production', () => {
+  const pair = () => [
+    { midi: 60, startSeconds: 0, endSeconds: 0.5, amplitude: 0.9 },
+    { midi: 72, startSeconds: 0.005, endSeconds: 0.5, amplitude: 0.2 },
+  ]
+
+  it('without samples it removes the weak octave (the shipped rule)', () => {
+    const result = suppressHarmonicDoubles(pair())
+    expect(result.suppressed).toBe(1)
+    expect(result.notes.map((n) => n.midi)).toEqual([60])
+  })
+
+  it('with samples it keeps a quiet octave when the audio really plays both', () => {
+    // Two played notes: each pitch has its own full harmonic series, so the
+    // octave is a doubling, not a leak - even though it is quieter in the
+    // model's amplitudes.
+    const a = tone(60, 0.5, 5)
+    const b = tone(72, 0.5, 5)
+    const samples = new Float32Array(a.length)
+    for (let i = 0; i < a.length; i += 1) samples[i] = a[i] * 0.9 + b[i] * 0.5
+    const result = suppressHarmonicDoubles(pair(), { samples, sampleRate: SR, salienceRatio: 0.75 })
+    expect(result.notes.length).toBe(2)
+  })
+
+  it('with samples it still removes a leak that has no energy of its own', () => {
+    // A tone at 60 only: the octave bin is leakage, so it must go.
+    const samples = tone(60, 0.5, 5)
+    const result = suppressHarmonicDoubles(pair(), { samples, sampleRate: SR, salienceRatio: 0.75 })
+    expect(result.notes.length).toBe(1)
+    expect(result.notes[0].midi).toBe(60)
+  })
+
+  it('is a no-op difference when samples are not supplied (production path)', () => {
+    const a = suppressHarmonicDoubles(pair())
+    const b = suppressHarmonicDoubles(pair(), { samples: null, sampleRate: SR })
+    expect(b.suppressed).toBe(a.suppressed)
+    expect(b.notes.map((n) => n.midi)).toEqual(a.notes.map((n) => n.midi))
   })
 })

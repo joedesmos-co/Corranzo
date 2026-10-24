@@ -8,6 +8,7 @@
  * parts without rewriting the pipeline.
  */
 import { PROVENANCE } from './musicAnalysis.js'
+import { harmonicSalience } from './harmonicEvidence.js'
 
 export const PART_INSTRUMENTS = {
   SOLO_PIANO: 'solo-piano',
@@ -216,7 +217,29 @@ export function chooseMelodyMidi(midis, contourForBeat, { fallbackHighest = true
  * { notes, suppressed } — the count keeps the decision auditable, never
  * silent. The strongest note in a group is never dropped.
  */
-export function suppressHarmonicDoubles(notes, { windowSeconds = 0.06, minRatio = 1.5 } = {}) {
+/**
+ * Drop harmonic doubles: the octave/fifth sibling the pitch model reports for
+ * a note it already found.
+ *
+ * Amplitude alone is not enough. On a real instrument a quiet upper voice an
+ * octave above a loud note is GENUINE music, and the amplitude rule deletes
+ * it: measured on real GuitarSet performances the rule removed 53 real notes
+ * (37 of them on one dense comp) while the reference annotates them.
+ *
+ * So when the audio is available the rule also listens: a sibling survives if
+ * the audio has comparable harmonic salience at its OWN pitch (the fundamental
+ * plus its harmonics, odd partials included). A harmonic leak has almost no
+ * energy at its own fundamental; a played octave has a whole harmonic series
+ * there. Supplying no samples keeps the old behaviour exactly.
+ */
+export function suppressHarmonicDoubles(notes, {
+  windowSeconds = 0.06,
+  minRatio = 1.5,
+  samples = null,
+  sampleRate = 22050,
+  salienceRatio = 0.75,
+  salienceOf = null,
+} = {}) {
   const sorted = [...(notes ?? [])].sort((a, b) => a.startSeconds - b.startSeconds)
   const drop = new Set()
   for (let i = 0; i < sorted.length; i += 1) {
@@ -232,9 +255,26 @@ export function suppressHarmonicDoubles(notes, { windowSeconds = 0.06, minRatio 
       if (anchor.midi === other.midi) continue
       const interval = Math.abs(anchor.midi - other.midi) % 12
       if (interval !== 0 && interval !== 7) continue
-      if (ampAnchor >= ampOther * minRatio) {
+      // Which one is the weaker claim?
+      const jIsWeaker = ampAnchor >= ampOther * minRatio
+      const iIsWeaker = ampOther >= ampAnchor * minRatio
+      if (!jIsWeaker && !iIsWeaker) continue
+      // Independent evidence before deleting music: a real note has its own
+      // harmonic series in the audio; a leak does not.
+      if (samples || salienceOf) {
+        const read = (note) => (salienceOf
+          ? salienceOf(note)
+          : harmonicSalience(samples, sampleRate, note.startSeconds, Math.round(note.midi)))
+        const salienceAnchor = read(anchor)
+        const salienceOther = read(other)
+        const strong = Math.max(salienceAnchor, salienceOther)
+        const weak = Math.min(salienceAnchor, salienceOther)
+        // Keep the weaker note when the audio supports it as a played note.
+        if (strong > 0 && weak >= strong * salienceRatio) continue
+      }
+      if (jIsWeaker) {
         drop.add(j)
-      } else if (ampOther >= ampAnchor * minRatio) {
+      } else if (iIsWeaker) {
         drop.add(i)
         break
       }

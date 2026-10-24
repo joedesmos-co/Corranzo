@@ -261,6 +261,10 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   const transcribed = createTranscribedContent({ analysis, viewsQuality: views.quality })
   // Harmonic-double suppression (BP path only: amplitude-gated). Count is
   // reported, never silent; arrangement-grade effect measured on frozen eval.
+  // A spectral second opinion was measured too (suppressHarmonicDoubles accepts
+  // { samples }): with the calibrated extraction it recovers 2 real notes out
+  // of 1810 and leaves the score unchanged, so production keeps the amplitude
+  // rule and the evidence stays in docs/audio-vision-missed-notes.md.
   let suppressedHarmonics = 0
   if (analysis.pitchSource === 'basic-pitch' && analysis.predictedNotes.some((n) => n.amplitude != null)) {
     const filtered = suppressHarmonicDoubles(analysis.predictedNotes)

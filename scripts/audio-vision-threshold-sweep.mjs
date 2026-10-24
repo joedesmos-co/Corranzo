@@ -156,7 +156,8 @@ for (const recording of RECORDINGS) {
     }
   }
   report.rows.push(row)
-  const shipped = row.variants['0.5/0.3/5']
+  const baselineKey = process.env.SWEEP_BASELINE ?? '0.5/0.3/5'
+  const shipped = row.variants[baselineKey] ?? Object.values(row.variants)[0]
   const best = Object.entries(row.variants).sort((a, b) => b[1].eventF1 - a[1].eventF1)[0]
   console.log(`${row.id} (${recording.density}) shipped F1=${shipped.eventF1} notes=${shipped.modelNotes} -> best ${best[0]} F1=${best[1].eventF1} notes=${best[1].modelNotes}`)
   if (global.gc) global.gc()
@@ -188,7 +189,7 @@ for (const density of ['dense', 'sparse', 'all']) {
 }
 writeFileSync(resolveOut(jsonOut), JSON.stringify(report, null, 2))
 
-const shippedKey = '0.5/0.3/5'
+const shippedKey = process.env.SWEEP_BASELINE ?? '0.5/0.3/5'
 for (const density of ['dense', 'sparse', 'all']) {
   const table = report.summary[density]
   if (!table) continue

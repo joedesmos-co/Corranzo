@@ -1,0 +1,3307 @@
+{
+  "generatedAt": "2026-10-24T23:15:21.402Z",
+  "set": "micreal",
+  "rows": [
+    {
+      "id": "piano-mozart-single",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 13,
+      "modelNotes": 21,
+      "amplitudeOnly": {
+        "notes": 21,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 13,
+          "matched": 0,
+          "falsePositives": 16,
+          "missed": 13,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.167,
+        "invented": 0.75
+      },
+      "spectral": {
+        "notes": 21,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 13,
+          "matched": 0,
+          "falsePositives": 16,
+          "missed": 13,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.167,
+        "invented": 0.75
+      }
+    },
+    {
+      "id": "piano-mozart-dyad",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 17,
+      "modelNotes": 19,
+      "amplitudeOnly": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.053,
+          "recall": 0.059,
+          "f1": 0.056
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 17,
+          "matched": 1,
+          "falsePositives": 15,
+          "missed": 16,
+          "pitchPrecision": 0.063,
+          "pitchRecall": 0.059,
+          "eventF1": 0.061,
+          "onsetMaeMs": 111,
+          "onsetMedianMs": 111,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.167,
+        "invented": 0.563
+      },
+      "spectral": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.053,
+          "recall": 0.059,
+          "f1": 0.056
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 17,
+          "matched": 1,
+          "falsePositives": 15,
+          "missed": 16,
+          "pitchPrecision": 0.063,
+          "pitchRecall": 0.059,
+          "eventF1": 0.061,
+          "onsetMaeMs": 111,
+          "onsetMedianMs": 111,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.167,
+        "invented": 0.563
+      }
+    },
+    {
+      "id": "piano-mozart-triad",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 14,
+      "modelNotes": 17,
+      "amplitudeOnly": {
+        "notes": 17,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.059,
+          "recall": 0.071,
+          "f1": 0.065
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 14,
+          "matched": 0,
+          "falsePositives": 12,
+          "missed": 14,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0.5
+      },
+      "spectral": {
+        "notes": 17,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.059,
+          "recall": 0.071,
+          "f1": 0.065
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 14,
+          "matched": 0,
+          "falsePositives": 12,
+          "missed": 14,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0.5
+      }
+    },
+    {
+      "id": "piano-mozart-dense",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 17,
+      "modelNotes": 20,
+      "amplitudeOnly": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.05,
+          "recall": 0.059,
+          "f1": 0.054
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 17,
+          "matched": 1,
+          "falsePositives": 9,
+          "missed": 16,
+          "pitchPrecision": 0.1,
+          "pitchRecall": 0.059,
+          "eventF1": 0.074,
+          "onsetMaeMs": 75,
+          "onsetMedianMs": 75,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0.7
+      },
+      "spectral": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.05,
+          "recall": 0.059,
+          "f1": 0.054
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 17,
+          "matched": 1,
+          "falsePositives": 9,
+          "missed": 16,
+          "pitchPrecision": 0.1,
+          "pitchRecall": 0.059,
+          "eventF1": 0.074,
+          "onsetMaeMs": 75,
+          "onsetMedianMs": 75,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0.7
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 19,
+      "modelNotes": 19,
+      "amplitudeOnly": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.053,
+          "recall": 0.053,
+          "f1": 0.053
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 19,
+          "matched": 2,
+          "falsePositives": 14,
+          "missed": 17,
+          "pitchPrecision": 0.125,
+          "pitchRecall": 0.105,
+          "eventF1": 0.114,
+          "onsetMaeMs": 73,
+          "onsetMedianMs": 108,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.1,
+        "invented": 0.5
+      },
+      "spectral": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.053,
+          "recall": 0.053,
+          "f1": 0.053
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 19,
+          "matched": 2,
+          "falsePositives": 14,
+          "missed": 17,
+          "pitchPrecision": 0.125,
+          "pitchRecall": 0.105,
+          "eventF1": 0.114,
+          "onsetMaeMs": 73,
+          "onsetMedianMs": 108,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.1,
+        "invented": 0.5
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 27,
+      "modelNotes": 26,
+      "amplitudeOnly": {
+        "notes": 25,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 3,
+          "precision": 0.12,
+          "recall": 0.111,
+          "f1": 0.115
+        },
+        "arrangement": {
+          "predicted": 14,
+          "reference": 27,
+          "matched": 4,
+          "falsePositives": 10,
+          "missed": 23,
+          "pitchPrecision": 0.286,
+          "pitchRecall": 0.148,
+          "eventF1": 0.195,
+          "onsetMaeMs": 60,
+          "onsetMedianMs": 79,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.214,
+        "invented": 0.286
+      },
+      "spectral": {
+        "notes": 25,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 3,
+          "precision": 0.12,
+          "recall": 0.111,
+          "f1": 0.115
+        },
+        "arrangement": {
+          "predicted": 14,
+          "reference": 27,
+          "matched": 4,
+          "falsePositives": 10,
+          "missed": 23,
+          "pitchPrecision": 0.286,
+          "pitchRecall": 0.148,
+          "eventF1": 0.195,
+          "onsetMaeMs": 60,
+          "onsetMedianMs": 79,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.214,
+        "invented": 0.286
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 30,
+      "modelNotes": 20,
+      "amplitudeOnly": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.2,
+          "recall": 0.133,
+          "f1": 0.16
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 30,
+          "matched": 2,
+          "falsePositives": 14,
+          "missed": 28,
+          "pitchPrecision": 0.125,
+          "pitchRecall": 0.067,
+          "eventF1": 0.087,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 73,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0.438
+      },
+      "spectral": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.2,
+          "recall": 0.133,
+          "f1": 0.16
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 30,
+          "matched": 2,
+          "falsePositives": 14,
+          "missed": 28,
+          "pitchPrecision": 0.125,
+          "pitchRecall": 0.067,
+          "eventF1": 0.087,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 73,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0.438
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 15,
+      "modelNotes": 18,
+      "amplitudeOnly": {
+        "notes": 18,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.222,
+          "recall": 0.267,
+          "f1": 0.242
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 15,
+          "matched": 4,
+          "falsePositives": 9,
+          "missed": 11,
+          "pitchPrecision": 0.308,
+          "pitchRecall": 0.267,
+          "eventF1": 0.286,
+          "onsetMaeMs": 44,
+          "onsetMedianMs": 67,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.333,
+        "invented": 0.615
+      },
+      "spectral": {
+        "notes": 18,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.222,
+          "recall": 0.267,
+          "f1": 0.242
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 15,
+          "matched": 4,
+          "falsePositives": 9,
+          "missed": 11,
+          "pitchPrecision": 0.308,
+          "pitchRecall": 0.267,
+          "eventF1": 0.286,
+          "onsetMaeMs": 44,
+          "onsetMedianMs": 67,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.333,
+        "invented": 0.615
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 20,
+      "modelNotes": 25,
+      "amplitudeOnly": {
+        "notes": 25,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 18,
+          "reference": 20,
+          "matched": 0,
+          "falsePositives": 18,
+          "missed": 20,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0.778
+      },
+      "spectral": {
+        "notes": 25,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 18,
+          "reference": 20,
+          "matched": 0,
+          "falsePositives": 18,
+          "missed": 20,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0.778
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "density": "n/a",
+      "instrument": "piano",
+      "referenceNotes": 27,
+      "modelNotes": 26,
+      "amplitudeOnly": {
+        "notes": 26,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 27,
+          "matched": 0,
+          "falsePositives": 20,
+          "missed": 27,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.143,
+        "invented": 0.5
+      },
+      "spectral": {
+        "notes": 26,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 0,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 27,
+          "matched": 0,
+          "falsePositives": 20,
+          "missed": 27,
+          "pitchPrecision": 0,
+          "pitchRecall": 0,
+          "eventF1": 0,
+          "onsetMaeMs": null,
+          "onsetMedianMs": null,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.143,
+        "invented": 0.5
+      }
+    },
+    {
+      "id": "acoustic-jazz-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 6,
+      "modelNotes": 6,
+      "amplitudeOnly": {
+        "notes": 6,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 5,
+          "precision": 0.833,
+          "recall": 0.833,
+          "f1": 0.833
+        },
+        "arrangement": {
+          "predicted": 6,
+          "reference": 6,
+          "matched": 5,
+          "falsePositives": 1,
+          "missed": 1,
+          "pitchPrecision": 0.833,
+          "pitchRecall": 0.833,
+          "eventF1": 0.833,
+          "onsetMaeMs": 27,
+          "onsetMedianMs": 30,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.833,
+        "invented": 0.167
+      },
+      "spectral": {
+        "notes": 6,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 5,
+          "precision": 0.833,
+          "recall": 0.833,
+          "f1": 0.833
+        },
+        "arrangement": {
+          "predicted": 6,
+          "reference": 6,
+          "matched": 5,
+          "falsePositives": 1,
+          "missed": 1,
+          "pitchPrecision": 0.833,
+          "pitchRecall": 0.833,
+          "eventF1": 0.833,
+          "onsetMaeMs": 27,
+          "onsetMedianMs": 30,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.833,
+        "invented": 0.167
+      }
+    },
+    {
+      "id": "acoustic-jazz-dyad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 8,
+      "modelNotes": 9,
+      "amplitudeOnly": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 7,
+          "precision": 0.778,
+          "recall": 0.875,
+          "f1": 0.824
+        },
+        "arrangement": {
+          "predicted": 9,
+          "reference": 8,
+          "matched": 7,
+          "falsePositives": 2,
+          "missed": 1,
+          "pitchPrecision": 0.778,
+          "pitchRecall": 0.875,
+          "eventF1": 0.824,
+          "onsetMaeMs": 45,
+          "onsetMedianMs": 31,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0.111
+      },
+      "spectral": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 7,
+          "precision": 0.778,
+          "recall": 0.875,
+          "f1": 0.824
+        },
+        "arrangement": {
+          "predicted": 9,
+          "reference": 8,
+          "matched": 7,
+          "falsePositives": 2,
+          "missed": 1,
+          "pitchPrecision": 0.778,
+          "pitchRecall": 0.875,
+          "eventF1": 0.824,
+          "onsetMaeMs": 45,
+          "onsetMedianMs": 31,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0.111
+      }
+    },
+    {
+      "id": "acoustic-bossa-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 6,
+      "modelNotes": 11,
+      "amplitudeOnly": {
+        "notes": 11,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 6,
+          "precision": 0.545,
+          "recall": 1,
+          "f1": 0.706
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 6,
+          "matched": 6,
+          "falsePositives": 4,
+          "missed": 0,
+          "pitchPrecision": 0.6,
+          "pitchRecall": 1,
+          "eventF1": 0.75,
+          "onsetMaeMs": 43,
+          "onsetMedianMs": 50,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.3
+      },
+      "spectral": {
+        "notes": 11,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 6,
+          "precision": 0.545,
+          "recall": 1,
+          "f1": 0.706
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 6,
+          "matched": 6,
+          "falsePositives": 4,
+          "missed": 0,
+          "pitchPrecision": 0.6,
+          "pitchRecall": 1,
+          "eventF1": 0.75,
+          "onsetMaeMs": 43,
+          "onsetMedianMs": 50,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.3
+      }
+    },
+    {
+      "id": "acoustic-bossa-chord",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 12,
+      "modelNotes": 15,
+      "amplitudeOnly": {
+        "notes": 15,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.533,
+          "recall": 0.667,
+          "f1": 0.593
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 12,
+          "matched": 7,
+          "falsePositives": 5,
+          "missed": 5,
+          "pitchPrecision": 0.583,
+          "pitchRecall": 0.583,
+          "eventF1": 0.583,
+          "onsetMaeMs": 42,
+          "onsetMedianMs": 35,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.556,
+        "invented": 0.167
+      },
+      "spectral": {
+        "notes": 15,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.533,
+          "recall": 0.667,
+          "f1": 0.593
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 12,
+          "matched": 7,
+          "falsePositives": 5,
+          "missed": 5,
+          "pitchPrecision": 0.583,
+          "pitchRecall": 0.583,
+          "eventF1": 0.583,
+          "onsetMaeMs": 42,
+          "onsetMedianMs": 35,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.556,
+        "invented": 0.167
+      }
+    },
+    {
+      "id": "acoustic-rock-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 7,
+      "modelNotes": 7,
+      "amplitudeOnly": {
+        "notes": 7,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 6,
+          "precision": 0.857,
+          "recall": 0.857,
+          "f1": 0.857
+        },
+        "arrangement": {
+          "predicted": 7,
+          "reference": 7,
+          "matched": 6,
+          "falsePositives": 1,
+          "missed": 1,
+          "pitchPrecision": 0.857,
+          "pitchRecall": 0.857,
+          "eventF1": 0.857,
+          "onsetMaeMs": 19,
+          "onsetMedianMs": 21,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0.143
+      },
+      "spectral": {
+        "notes": 7,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 6,
+          "precision": 0.857,
+          "recall": 0.857,
+          "f1": 0.857
+        },
+        "arrangement": {
+          "predicted": 7,
+          "reference": 7,
+          "matched": 6,
+          "falsePositives": 1,
+          "missed": 1,
+          "pitchPrecision": 0.857,
+          "pitchRecall": 0.857,
+          "eventF1": 0.857,
+          "onsetMaeMs": 19,
+          "onsetMedianMs": 21,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0.143
+      }
+    },
+    {
+      "id": "acoustic-rock-dyad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 15,
+      "modelNotes": 14,
+      "amplitudeOnly": {
+        "notes": 14,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 14,
+          "precision": 1,
+          "recall": 0.933,
+          "f1": 0.966
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 15,
+          "matched": 12,
+          "falsePositives": 1,
+          "missed": 3,
+          "pitchPrecision": 0.923,
+          "pitchRecall": 0.8,
+          "eventF1": 0.857,
+          "onsetMaeMs": 63,
+          "onsetMedianMs": 79,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.867,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 14,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 14,
+          "precision": 1,
+          "recall": 0.933,
+          "f1": 0.966
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 15,
+          "matched": 12,
+          "falsePositives": 1,
+          "missed": 3,
+          "pitchPrecision": 0.923,
+          "pitchRecall": 0.8,
+          "eventF1": 0.857,
+          "onsetMaeMs": 63,
+          "onsetMedianMs": 79,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.867,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-power-dyad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 19,
+      "modelNotes": 16,
+      "amplitudeOnly": {
+        "notes": 16,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 14,
+          "precision": 0.875,
+          "recall": 0.737,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 19,
+          "matched": 10,
+          "falsePositives": 2,
+          "missed": 9,
+          "pitchPrecision": 0.833,
+          "pitchRecall": 0.526,
+          "eventF1": 0.645,
+          "onsetMaeMs": 34,
+          "onsetMedianMs": 45,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.444,
+        "invented": 0.083
+      },
+      "spectral": {
+        "notes": 16,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 14,
+          "precision": 0.875,
+          "recall": 0.737,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 19,
+          "matched": 10,
+          "falsePositives": 2,
+          "missed": 9,
+          "pitchPrecision": 0.833,
+          "pitchRecall": 0.526,
+          "eventF1": 0.645,
+          "onsetMaeMs": 34,
+          "onsetMedianMs": 45,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.444,
+        "invented": 0.083
+      }
+    },
+    {
+      "id": "acoustic-power-dense",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 24,
+      "modelNotes": 19,
+      "amplitudeOnly": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.632,
+          "recall": 0.5,
+          "f1": 0.558
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 24,
+          "matched": 7,
+          "falsePositives": 6,
+          "missed": 17,
+          "pitchPrecision": 0.538,
+          "pitchRecall": 0.292,
+          "eventF1": 0.378,
+          "onsetMaeMs": 37,
+          "onsetMedianMs": 43,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.632,
+          "recall": 0.5,
+          "f1": 0.558
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 24,
+          "matched": 7,
+          "falsePositives": 6,
+          "missed": 17,
+          "pitchPrecision": 0.538,
+          "pitchRecall": 0.292,
+          "eventF1": 0.378,
+          "onsetMaeMs": 37,
+          "onsetMedianMs": 43,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.2,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-funk-triad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 39,
+      "modelNotes": 20,
+      "amplitudeOnly": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 19,
+          "precision": 0.95,
+          "recall": 0.487,
+          "f1": 0.644
+        },
+        "arrangement": {
+          "predicted": 15,
+          "reference": 39,
+          "matched": 15,
+          "falsePositives": 0,
+          "missed": 24,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.385,
+          "eventF1": 0.556,
+          "onsetMaeMs": 54,
+          "onsetMedianMs": 49,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.556,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 19,
+          "precision": 0.95,
+          "recall": 0.487,
+          "f1": 0.644
+        },
+        "arrangement": {
+          "predicted": 15,
+          "reference": 39,
+          "matched": 15,
+          "falsePositives": 0,
+          "missed": 24,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.385,
+          "eventF1": 0.556,
+          "onsetMaeMs": 54,
+          "onsetMedianMs": 49,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.556,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-funk-dense",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 43,
+      "modelNotes": 20,
+      "amplitudeOnly": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 20,
+          "precision": 1,
+          "recall": 0.465,
+          "f1": 0.635
+        },
+        "arrangement": {
+          "predicted": 17,
+          "reference": 43,
+          "matched": 17,
+          "falsePositives": 0,
+          "missed": 26,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.395,
+          "eventF1": 0.567,
+          "onsetMaeMs": 29,
+          "onsetMedianMs": 20,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.474,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 20,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 20,
+          "precision": 1,
+          "recall": 0.465,
+          "f1": 0.635
+        },
+        "arrangement": {
+          "predicted": 17,
+          "reference": 43,
+          "matched": 17,
+          "falsePositives": 0,
+          "missed": 26,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.395,
+          "eventF1": 0.567,
+          "onsetMaeMs": 29,
+          "onsetMedianMs": 20,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.474,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-strum-triad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 36,
+      "modelNotes": 42,
+      "amplitudeOnly": {
+        "notes": 41,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 26,
+          "precision": 0.634,
+          "recall": 0.722,
+          "f1": 0.675
+        },
+        "arrangement": {
+          "predicted": 32,
+          "reference": 36,
+          "matched": 21,
+          "falsePositives": 11,
+          "missed": 15,
+          "pitchPrecision": 0.656,
+          "pitchRecall": 0.583,
+          "eventF1": 0.618,
+          "onsetMaeMs": 36,
+          "onsetMedianMs": 32,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.682,
+        "invented": 0.031
+      },
+      "spectral": {
+        "notes": 41,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 26,
+          "precision": 0.634,
+          "recall": 0.722,
+          "f1": 0.675
+        },
+        "arrangement": {
+          "predicted": 32,
+          "reference": 36,
+          "matched": 21,
+          "falsePositives": 11,
+          "missed": 15,
+          "pitchPrecision": 0.656,
+          "pitchRecall": 0.583,
+          "eventF1": 0.618,
+          "onsetMaeMs": 36,
+          "onsetMedianMs": 32,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.682,
+        "invented": 0.031
+      }
+    },
+    {
+      "id": "acoustic-strum-dense",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 36,
+      "modelNotes": 31,
+      "amplitudeOnly": {
+        "notes": 31,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 23,
+          "precision": 0.742,
+          "recall": 0.639,
+          "f1": 0.687
+        },
+        "arrangement": {
+          "predicted": 29,
+          "reference": 36,
+          "matched": 21,
+          "falsePositives": 8,
+          "missed": 15,
+          "pitchPrecision": 0.724,
+          "pitchRecall": 0.583,
+          "eventF1": 0.646,
+          "onsetMaeMs": 18,
+          "onsetMedianMs": 14,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.667,
+        "invented": 0.069
+      },
+      "spectral": {
+        "notes": 31,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 23,
+          "precision": 0.742,
+          "recall": 0.639,
+          "f1": 0.687
+        },
+        "arrangement": {
+          "predicted": 29,
+          "reference": 36,
+          "matched": 21,
+          "falsePositives": 8,
+          "missed": 15,
+          "pitchPrecision": 0.724,
+          "pitchRecall": 0.583,
+          "eventF1": 0.646,
+          "onsetMaeMs": 18,
+          "onsetMedianMs": 14,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.667,
+        "invented": 0.069
+      }
+    },
+    {
+      "id": "electric-eg07-single",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 12,
+      "modelNotes": 17,
+      "amplitudeOnly": {
+        "notes": 17,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.706,
+          "recall": 1,
+          "f1": 0.828
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 12,
+          "matched": 12,
+          "falsePositives": 4,
+          "missed": 0,
+          "pitchPrecision": 0.75,
+          "pitchRecall": 1,
+          "eventF1": 0.857,
+          "onsetMaeMs": 20,
+          "onsetMedianMs": 28,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.063
+      },
+      "spectral": {
+        "notes": 17,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.706,
+          "recall": 1,
+          "f1": 0.828
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 12,
+          "matched": 12,
+          "falsePositives": 4,
+          "missed": 0,
+          "pitchPrecision": 0.75,
+          "pitchRecall": 1,
+          "eventF1": 0.857,
+          "onsetMaeMs": 20,
+          "onsetMedianMs": 28,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.063
+      }
+    },
+    {
+      "id": "electric-eg07-dyad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 9,
+      "modelNotes": 9,
+      "amplitudeOnly": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.889,
+          "recall": 0.889,
+          "f1": 0.889
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 9,
+          "matched": 7,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.875,
+          "pitchRecall": 0.778,
+          "eventF1": 0.824,
+          "onsetMaeMs": 47,
+          "onsetMedianMs": 76,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.6,
+        "invented": 0.125
+      },
+      "spectral": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.889,
+          "recall": 0.889,
+          "f1": 0.889
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 9,
+          "matched": 7,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.875,
+          "pitchRecall": 0.778,
+          "eventF1": 0.824,
+          "onsetMaeMs": 47,
+          "onsetMedianMs": 76,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.6,
+        "invented": 0.125
+      }
+    },
+    {
+      "id": "electric-eg01-triad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 10,
+      "modelNotes": 12,
+      "amplitudeOnly": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 9,
+          "precision": 0.75,
+          "recall": 0.9,
+          "f1": 0.818
+        },
+        "arrangement": {
+          "predicted": 11,
+          "reference": 10,
+          "matched": 8,
+          "falsePositives": 3,
+          "missed": 2,
+          "pitchPrecision": 0.727,
+          "pitchRecall": 0.8,
+          "eventF1": 0.762,
+          "onsetMaeMs": 12,
+          "onsetMedianMs": 15,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.875,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 9,
+          "precision": 0.75,
+          "recall": 0.9,
+          "f1": 0.818
+        },
+        "arrangement": {
+          "predicted": 11,
+          "reference": 10,
+          "matched": 8,
+          "falsePositives": 3,
+          "missed": 2,
+          "pitchPrecision": 0.727,
+          "pitchRecall": 0.8,
+          "eventF1": 0.762,
+          "onsetMaeMs": 12,
+          "onsetMedianMs": 15,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.875,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg01-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 11,
+      "modelNotes": 11,
+      "amplitudeOnly": {
+        "notes": 11,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 10,
+          "precision": 0.909,
+          "recall": 0.909,
+          "f1": 0.909
+        },
+        "arrangement": {
+          "predicted": 9,
+          "reference": 11,
+          "matched": 8,
+          "falsePositives": 1,
+          "missed": 3,
+          "pitchPrecision": 0.889,
+          "pitchRecall": 0.727,
+          "eventF1": 0.8,
+          "onsetMaeMs": 14,
+          "onsetMedianMs": 15,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 11,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 10,
+          "precision": 0.909,
+          "recall": 0.909,
+          "f1": 0.909
+        },
+        "arrangement": {
+          "predicted": 9,
+          "reference": 11,
+          "matched": 8,
+          "falsePositives": 1,
+          "missed": 3,
+          "pitchPrecision": 0.889,
+          "pitchRecall": 0.727,
+          "eventF1": 0.8,
+          "onsetMaeMs": 14,
+          "onsetMedianMs": 15,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg02-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 45,
+      "modelNotes": 16,
+      "amplitudeOnly": {
+        "notes": 16,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 16,
+          "precision": 1,
+          "recall": 0.356,
+          "f1": 0.525
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 45,
+          "matched": 13,
+          "falsePositives": 0,
+          "missed": 32,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.289,
+          "eventF1": 0.448,
+          "onsetMaeMs": 57,
+          "onsetMedianMs": 32,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.375,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 16,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 16,
+          "precision": 1,
+          "recall": 0.356,
+          "f1": 0.525
+        },
+        "arrangement": {
+          "predicted": 13,
+          "reference": 45,
+          "matched": 13,
+          "falsePositives": 0,
+          "missed": 32,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.289,
+          "eventF1": 0.448,
+          "onsetMaeMs": 57,
+          "onsetMedianMs": 32,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.375,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg05-dyad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 13,
+      "modelNotes": 12,
+      "amplitudeOnly": {
+        "notes": 11,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 11,
+          "precision": 1,
+          "recall": 0.846,
+          "f1": 0.917
+        },
+        "arrangement": {
+          "predicted": 11,
+          "reference": 13,
+          "matched": 11,
+          "falsePositives": 0,
+          "missed": 2,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.846,
+          "eventF1": 0.917,
+          "onsetMaeMs": 12,
+          "onsetMedianMs": 11,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 11,
+          "precision": 0.917,
+          "recall": 0.846,
+          "f1": 0.88
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 13,
+          "matched": 11,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.917,
+          "pitchRecall": 0.846,
+          "eventF1": 0.88,
+          "onsetMaeMs": 12,
+          "onsetMedianMs": 11,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.857,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg10-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 10,
+      "modelNotes": 11,
+      "amplitudeOnly": {
+        "notes": 10,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 1
+        },
+        "noteLevel": {
+          "matched": 7,
+          "precision": 0.7,
+          "recall": 0.7,
+          "f1": 0.7
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 10,
+          "matched": 5,
+          "falsePositives": 3,
+          "missed": 5,
+          "pitchPrecision": 0.625,
+          "pitchRecall": 0.5,
+          "eventF1": 0.556,
+          "onsetMaeMs": 58,
+          "onsetMedianMs": 43,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.667,
+        "invented": 0.125
+      },
+      "spectral": {
+        "notes": 10,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 1
+        },
+        "noteLevel": {
+          "matched": 7,
+          "precision": 0.7,
+          "recall": 0.7,
+          "f1": 0.7
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 10,
+          "matched": 5,
+          "falsePositives": 3,
+          "missed": 5,
+          "pitchPrecision": 0.625,
+          "pitchRecall": 0.5,
+          "eventF1": 0.556,
+          "onsetMaeMs": 58,
+          "onsetMedianMs": 43,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.667,
+        "invented": 0.125
+      }
+    },
+    {
+      "id": "electric-eg03-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 10,
+      "modelNotes": 12,
+      "amplitudeOnly": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.667,
+          "recall": 0.8,
+          "f1": 0.727
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 10,
+          "matched": 6,
+          "falsePositives": 4,
+          "missed": 4,
+          "pitchPrecision": 0.6,
+          "pitchRecall": 0.6,
+          "eventF1": 0.6,
+          "onsetMaeMs": 34,
+          "onsetMedianMs": 42,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.1
+      },
+      "spectral": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.667,
+          "recall": 0.8,
+          "f1": 0.727
+        },
+        "arrangement": {
+          "predicted": 10,
+          "reference": 10,
+          "matched": 6,
+          "falsePositives": 4,
+          "missed": 4,
+          "pitchPrecision": 0.6,
+          "pitchRecall": 0.6,
+          "eventF1": 0.6,
+          "onsetMaeMs": 34,
+          "onsetMedianMs": 42,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.1
+      }
+    },
+    {
+      "id": "electric-eg04-dyad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 17,
+      "modelNotes": 13,
+      "amplitudeOnly": {
+        "notes": 13,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 13,
+          "precision": 1,
+          "recall": 0.765,
+          "f1": 0.867
+        },
+        "arrangement": {
+          "predicted": 11,
+          "reference": 17,
+          "matched": 11,
+          "falsePositives": 0,
+          "missed": 6,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.647,
+          "eventF1": 0.786,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 56,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.714,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 13,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 13,
+          "precision": 1,
+          "recall": 0.765,
+          "f1": 0.867
+        },
+        "arrangement": {
+          "predicted": 11,
+          "reference": 17,
+          "matched": 11,
+          "falsePositives": 0,
+          "missed": 6,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.647,
+          "eventF1": 0.786,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 56,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.714,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg06-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 48,
+      "modelNotes": 31,
+      "amplitudeOnly": {
+        "notes": 31,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 25,
+          "precision": 0.806,
+          "recall": 0.521,
+          "f1": 0.633
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 48,
+          "matched": 11,
+          "falsePositives": 5,
+          "missed": 37,
+          "pitchPrecision": 0.688,
+          "pitchRecall": 0.229,
+          "eventF1": 0.344,
+          "onsetMaeMs": 53,
+          "onsetMedianMs": 57,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.375,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 31,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 25,
+          "precision": 0.806,
+          "recall": 0.521,
+          "f1": 0.633
+        },
+        "arrangement": {
+          "predicted": 16,
+          "reference": 48,
+          "matched": 11,
+          "falsePositives": 5,
+          "missed": 37,
+          "pitchPrecision": 0.688,
+          "pitchRecall": 0.229,
+          "eventF1": 0.344,
+          "onsetMaeMs": 53,
+          "onsetMedianMs": 57,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.375,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-eg08-triad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 7,
+      "modelNotes": 5,
+      "amplitudeOnly": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.8,
+          "recall": 0.571,
+          "f1": 0.667
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 7,
+          "matched": 3,
+          "falsePositives": 1,
+          "missed": 4,
+          "pitchPrecision": 0.75,
+          "pitchRecall": 0.429,
+          "eventF1": 0.545,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 37,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.333,
+        "invented": 0.25
+      },
+      "spectral": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 4,
+          "precision": 0.8,
+          "recall": 0.571,
+          "f1": 0.667
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 7,
+          "matched": 3,
+          "falsePositives": 1,
+          "missed": 4,
+          "pitchPrecision": 0.75,
+          "pitchRecall": 0.429,
+          "eventF1": 0.545,
+          "onsetMaeMs": 56,
+          "onsetMedianMs": 37,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.333,
+        "invented": 0.25
+      }
+    },
+    {
+      "id": "electric-eg09-dyad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 9,
+      "modelNotes": 9,
+      "amplitudeOnly": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.889,
+          "recall": 0.889,
+          "f1": 0.889
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 9,
+          "matched": 7,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.875,
+          "pitchRecall": 0.778,
+          "eventF1": 0.824,
+          "onsetMaeMs": 25,
+          "onsetMedianMs": 28,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.6,
+        "invented": 0.125
+      },
+      "spectral": {
+        "notes": 9,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.889,
+          "recall": 0.889,
+          "f1": 0.889
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 9,
+          "matched": 7,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.875,
+          "pitchRecall": 0.778,
+          "eventF1": 0.824,
+          "onsetMaeMs": 25,
+          "onsetMedianMs": 28,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.6,
+        "invented": 0.125
+      }
+    },
+    {
+      "id": "electric-eg11-dense",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 14,
+      "modelNotes": 14,
+      "amplitudeOnly": {
+        "notes": 14,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.571,
+          "recall": 0.571,
+          "f1": 0.571
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 14,
+          "matched": 6,
+          "falsePositives": 6,
+          "missed": 8,
+          "pitchPrecision": 0.5,
+          "pitchRecall": 0.429,
+          "eventF1": 0.462,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 30,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0.25
+      },
+      "spectral": {
+        "notes": 14,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 0.571,
+          "recall": 0.571,
+          "f1": 0.571
+        },
+        "arrangement": {
+          "predicted": 12,
+          "reference": 14,
+          "matched": 6,
+          "falsePositives": 6,
+          "missed": 8,
+          "pitchPrecision": 0.5,
+          "pitchRecall": 0.429,
+          "eventF1": 0.462,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 30,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0.25
+      }
+    },
+    {
+      "id": "electric-eg12-triad",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 12,
+      "modelNotes": 12,
+      "amplitudeOnly": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 12,
+          "matched": 8,
+          "falsePositives": 0,
+          "missed": 4,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.667,
+          "eventF1": 0.8,
+          "onsetMaeMs": 18,
+          "onsetMedianMs": 35,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 12,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 12,
+          "matched": 8,
+          "falsePositives": 0,
+          "missed": 4,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.667,
+          "eventF1": 0.8,
+          "onsetMaeMs": 18,
+          "onsetMedianMs": 35,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.75,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 19,
+      "modelNotes": 19,
+      "amplitudeOnly": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 17,
+          "precision": 0.895,
+          "recall": 0.895,
+          "f1": 0.895
+        },
+        "arrangement": {
+          "predicted": 18,
+          "reference": 19,
+          "matched": 17,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.944,
+          "pitchRecall": 0.895,
+          "eventF1": 0.919,
+          "onsetMaeMs": 28,
+          "onsetMedianMs": 23,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.944,
+        "invented": 0.056
+      },
+      "spectral": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 17,
+          "precision": 0.895,
+          "recall": 0.895,
+          "f1": 0.895
+        },
+        "arrangement": {
+          "predicted": 18,
+          "reference": 19,
+          "matched": 17,
+          "falsePositives": 1,
+          "missed": 2,
+          "pitchPrecision": 0.944,
+          "pitchRecall": 0.895,
+          "eventF1": 0.919,
+          "onsetMaeMs": 28,
+          "onsetMedianMs": 23,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.944,
+        "invented": 0.056
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-dyad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 16,
+      "modelNotes": 15,
+      "amplitudeOnly": {
+        "notes": 15,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.8,
+          "recall": 0.75,
+          "f1": 0.774
+        },
+        "arrangement": {
+          "predicted": 14,
+          "reference": 16,
+          "matched": 12,
+          "falsePositives": 2,
+          "missed": 4,
+          "pitchPrecision": 0.857,
+          "pitchRecall": 0.75,
+          "eventF1": 0.8,
+          "onsetMaeMs": 23,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.786,
+        "invented": 0.071
+      },
+      "spectral": {
+        "notes": 15,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 12,
+          "precision": 0.8,
+          "recall": 0.75,
+          "f1": 0.774
+        },
+        "arrangement": {
+          "predicted": 14,
+          "reference": 16,
+          "matched": 12,
+          "falsePositives": 2,
+          "missed": 4,
+          "pitchPrecision": 0.857,
+          "pitchRecall": 0.75,
+          "eventF1": 0.8,
+          "onsetMaeMs": 23,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.786,
+        "invented": 0.071
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad-b",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 18,
+      "modelNotes": 19,
+      "amplitudeOnly": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 17,
+          "precision": 0.895,
+          "recall": 0.944,
+          "f1": 0.919
+        },
+        "arrangement": {
+          "predicted": 19,
+          "reference": 18,
+          "matched": 17,
+          "falsePositives": 2,
+          "missed": 1,
+          "pitchPrecision": 0.895,
+          "pitchRecall": 0.944,
+          "eventF1": 0.919,
+          "onsetMaeMs": 21,
+          "onsetMedianMs": 16,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.053
+      },
+      "spectral": {
+        "notes": 19,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 17,
+          "precision": 0.895,
+          "recall": 0.944,
+          "f1": 0.919
+        },
+        "arrangement": {
+          "predicted": 19,
+          "reference": 18,
+          "matched": 17,
+          "falsePositives": 2,
+          "missed": 1,
+          "pitchPrecision": 0.895,
+          "pitchRecall": 0.944,
+          "eventF1": 0.919,
+          "onsetMaeMs": 21,
+          "onsetMedianMs": 16,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.053
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-triad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 22,
+      "modelNotes": 18,
+      "amplitudeOnly": {
+        "notes": 18,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 16,
+          "precision": 0.889,
+          "recall": 0.727,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 17,
+          "reference": 22,
+          "matched": 16,
+          "falsePositives": 1,
+          "missed": 6,
+          "pitchPrecision": 0.941,
+          "pitchRecall": 0.727,
+          "eventF1": 0.821,
+          "onsetMaeMs": 17,
+          "onsetMedianMs": 18,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.818,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 18,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 16,
+          "precision": 0.889,
+          "recall": 0.727,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 17,
+          "reference": 22,
+          "matched": 16,
+          "falsePositives": 1,
+          "missed": 6,
+          "pitchPrecision": 0.941,
+          "pitchRecall": 0.727,
+          "eventF1": 0.821,
+          "onsetMaeMs": 17,
+          "onsetMedianMs": 18,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.818,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-dense",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 25,
+      "modelNotes": 24,
+      "amplitudeOnly": {
+        "notes": 24,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 20,
+          "precision": 0.833,
+          "recall": 0.8,
+          "f1": 0.816
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 25,
+          "matched": 17,
+          "falsePositives": 3,
+          "missed": 8,
+          "pitchPrecision": 0.85,
+          "pitchRecall": 0.68,
+          "eventF1": 0.756,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.636,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 24,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 20,
+          "precision": 0.833,
+          "recall": 0.8,
+          "f1": 0.816
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 25,
+          "matched": 17,
+          "falsePositives": 3,
+          "missed": 8,
+          "pitchPrecision": 0.85,
+          "pitchRecall": 0.68,
+          "eventF1": 0.756,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.636,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-funk-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 5,
+      "modelNotes": 5,
+      "amplitudeOnly": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "arrangement": {
+          "predicted": 5,
+          "reference": 5,
+          "matched": 5,
+          "falsePositives": 0,
+          "missed": 0,
+          "pitchPrecision": 1,
+          "pitchRecall": 1,
+          "eventF1": 1,
+          "onsetMaeMs": 29,
+          "onsetMedianMs": 33,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "arrangement": {
+          "predicted": 5,
+          "reference": 5,
+          "matched": 5,
+          "falsePositives": 0,
+          "missed": 0,
+          "pitchPrecision": 1,
+          "pitchRecall": 1,
+          "eventF1": 1,
+          "onsetMaeMs": 29,
+          "onsetMedianMs": 33,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-dense",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 46,
+      "modelNotes": 35,
+      "amplitudeOnly": {
+        "notes": 34,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 31,
+          "precision": 0.912,
+          "recall": 0.674,
+          "f1": 0.775
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 46,
+          "matched": 16,
+          "falsePositives": 4,
+          "missed": 30,
+          "pitchPrecision": 0.8,
+          "pitchRecall": 0.348,
+          "eventF1": 0.485,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 14,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.308,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 34,
+        "suppressed": 1,
+        "damage": {
+          "dropped": 1,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 31,
+          "precision": 0.912,
+          "recall": 0.674,
+          "f1": 0.775
+        },
+        "arrangement": {
+          "predicted": 20,
+          "reference": 46,
+          "matched": 16,
+          "falsePositives": 4,
+          "missed": 30,
+          "pitchPrecision": 0.8,
+          "pitchRecall": 0.348,
+          "eventF1": 0.485,
+          "onsetMaeMs": 26,
+          "onsetMedianMs": 14,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.308,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 51,
+      "modelNotes": 37,
+      "amplitudeOnly": {
+        "notes": 37,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 36,
+          "precision": 0.973,
+          "recall": 0.706,
+          "f1": 0.818
+        },
+        "arrangement": {
+          "predicted": 22,
+          "reference": 51,
+          "matched": 21,
+          "falsePositives": 1,
+          "missed": 30,
+          "pitchPrecision": 0.955,
+          "pitchRecall": 0.412,
+          "eventF1": 0.575,
+          "onsetMaeMs": 24,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 37,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 36,
+          "precision": 0.973,
+          "recall": 0.706,
+          "f1": 0.818
+        },
+        "arrangement": {
+          "predicted": 22,
+          "reference": 51,
+          "matched": 21,
+          "falsePositives": 1,
+          "missed": 30,
+          "pitchPrecision": 0.955,
+          "pitchRecall": 0.412,
+          "eventF1": 0.575,
+          "onsetMaeMs": 24,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0,
+        "invented": 0
+      }
+    },
+    {
+      "id": "acoustic-fresh-ss-single",
+      "density": "n/a",
+      "instrument": "acoustic-guitar",
+      "referenceNotes": 12,
+      "modelNotes": 8,
+      "amplitudeOnly": {
+        "notes": 8,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 1,
+          "recall": 0.667,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 12,
+          "matched": 8,
+          "falsePositives": 0,
+          "missed": 4,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.667,
+          "eventF1": 0.8,
+          "onsetMaeMs": 45,
+          "onsetMedianMs": 29,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.778,
+        "invented": 0
+      },
+      "spectral": {
+        "notes": 8,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 8,
+          "precision": 1,
+          "recall": 0.667,
+          "f1": 0.8
+        },
+        "arrangement": {
+          "predicted": 8,
+          "reference": 12,
+          "matched": 8,
+          "falsePositives": 0,
+          "missed": 4,
+          "pitchPrecision": 1,
+          "pitchRecall": 0.667,
+          "eventF1": 0.8,
+          "onsetMaeMs": 45,
+          "onsetMedianMs": 29,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.778,
+        "invented": 0
+      }
+    },
+    {
+      "id": "electric-gtechs-low",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 2,
+      "modelNotes": 5,
+      "amplitudeOnly": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.2,
+          "recall": 0.5,
+          "f1": 0.286
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 2,
+          "matched": 1,
+          "falsePositives": 3,
+          "missed": 1,
+          "pitchPrecision": 0.25,
+          "pitchRecall": 0.5,
+          "eventF1": 0.333,
+          "onsetMaeMs": 47,
+          "onsetMedianMs": 47,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.5,
+        "invented": 0.5
+      },
+      "spectral": {
+        "notes": 5,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.2,
+          "recall": 0.5,
+          "f1": 0.286
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 2,
+          "matched": 1,
+          "falsePositives": 3,
+          "missed": 1,
+          "pitchPrecision": 0.25,
+          "pitchRecall": 0.5,
+          "eventF1": 0.333,
+          "onsetMaeMs": 47,
+          "onsetMedianMs": 47,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.5,
+        "invented": 0.5
+      }
+    },
+    {
+      "id": "electric-gtechs-mid",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 1,
+      "modelNotes": 3,
+      "amplitudeOnly": {
+        "notes": 3,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.333,
+          "recall": 1,
+          "f1": 0.5
+        },
+        "arrangement": {
+          "predicted": 3,
+          "reference": 1,
+          "matched": 1,
+          "falsePositives": 2,
+          "missed": 0,
+          "pitchPrecision": 0.333,
+          "pitchRecall": 1,
+          "eventF1": 0.5,
+          "onsetMaeMs": 24,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.667
+      },
+      "spectral": {
+        "notes": 3,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.333,
+          "recall": 1,
+          "f1": 0.5
+        },
+        "arrangement": {
+          "predicted": 3,
+          "reference": 1,
+          "matched": 1,
+          "falsePositives": 2,
+          "missed": 0,
+          "pitchPrecision": 0.333,
+          "pitchRecall": 1,
+          "eventF1": 0.5,
+          "onsetMaeMs": 24,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.667
+      }
+    },
+    {
+      "id": "electric-gtechs-high",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 1,
+      "modelNotes": 2,
+      "amplitudeOnly": {
+        "notes": 2,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.667
+        },
+        "arrangement": {
+          "predicted": 2,
+          "reference": 1,
+          "matched": 1,
+          "falsePositives": 1,
+          "missed": 0,
+          "pitchPrecision": 0.5,
+          "pitchRecall": 1,
+          "eventF1": 0.667,
+          "onsetMaeMs": 36,
+          "onsetMedianMs": 36,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.5
+      },
+      "spectral": {
+        "notes": 2,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.667
+        },
+        "arrangement": {
+          "predicted": 2,
+          "reference": 1,
+          "matched": 1,
+          "falsePositives": 1,
+          "missed": 0,
+          "pitchPrecision": 0.5,
+          "pitchRecall": 1,
+          "eventF1": 0.667,
+          "onsetMaeMs": 36,
+          "onsetMedianMs": 36,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.5
+      }
+    },
+    {
+      "id": "electric-gtechs-quiet",
+      "density": "n/a",
+      "instrument": "electric-guitar",
+      "referenceNotes": 2,
+      "modelNotes": 4,
+      "amplitudeOnly": {
+        "notes": 4,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.25,
+          "recall": 0.5,
+          "f1": 0.333
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 2,
+          "matched": 1,
+          "falsePositives": 3,
+          "missed": 1,
+          "pitchPrecision": 0.25,
+          "pitchRecall": 0.5,
+          "eventF1": 0.333,
+          "onsetMaeMs": 27,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.75
+      },
+      "spectral": {
+        "notes": 4,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 1,
+          "precision": 0.25,
+          "recall": 0.5,
+          "f1": 0.333
+        },
+        "arrangement": {
+          "predicted": 4,
+          "reference": 2,
+          "matched": 1,
+          "falsePositives": 3,
+          "missed": 1,
+          "pitchPrecision": 0.25,
+          "pitchRecall": 0.5,
+          "eventF1": 0.333,
+          "onsetMaeMs": 27,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 1,
+        "invented": 0.75
+      }
+    }
+  ],
+  "summary": {
+    "all": {
+      "recordings": 49,
+      "referenceNotes": 897,
+      "amplitudeOnly": {
+        "notePrecision": 0.62,
+        "noteRecall": 0.548,
+        "noteF1": 0.582,
+        "genuineDropped": 1,
+        "arrangementF1": 0.558,
+        "melodyRecall": 0.59,
+        "invented": 0.211
+      },
+      "spectral": {
+        "notePrecision": 0.619,
+        "noteRecall": 0.548,
+        "noteF1": 0.582,
+        "genuineDropped": 1,
+        "arrangementF1": 0.558,
+        "melodyRecall": 0.59,
+        "invented": 0.211
+      }
+    },
+    "byDensity": {
+      "n/a": {
+        "recordings": 49,
+        "referenceNotes": 897,
+        "amplitudeOnly": {
+          "notePrecision": 0.62,
+          "noteRecall": 0.548,
+          "noteF1": 0.582,
+          "genuineDropped": 1,
+          "arrangementF1": 0.558,
+          "melodyRecall": 0.59,
+          "invented": 0.211
+        },
+        "spectral": {
+          "notePrecision": 0.619,
+          "noteRecall": 0.548,
+          "noteF1": 0.582,
+          "genuineDropped": 1,
+          "arrangementF1": 0.558,
+          "melodyRecall": 0.59,
+          "invented": 0.211
+        }
+      }
+    },
+    "byInstrument": {
+      "piano": {
+        "recordings": 10,
+        "referenceNotes": 199,
+        "amplitudeOnly": {
+          "notePrecision": 0.071,
+          "noteRecall": 0.075,
+          "noteF1": 0.073,
+          "genuineDropped": 0,
+          "arrangementF1": 0.082,
+          "melodyRecall": 0.152,
+          "invented": 0.563
+        },
+        "spectral": {
+          "notePrecision": 0.071,
+          "noteRecall": 0.075,
+          "noteF1": 0.073,
+          "genuineDropped": 0,
+          "arrangementF1": 0.082,
+          "melodyRecall": 0.152,
+          "invented": 0.563
+        }
+      },
+      "acoustic-guitar": {
+        "recordings": 21,
+        "referenceNotes": 465,
+        "amplitudeOnly": {
+          "notePrecision": 0.83,
+          "noteRecall": 0.692,
+          "noteF1": 0.755,
+          "genuineDropped": 0,
+          "arrangementF1": 0.723,
+          "melodyRecall": 0.679,
+          "invented": 0.06
+        },
+        "spectral": {
+          "notePrecision": 0.83,
+          "noteRecall": 0.692,
+          "noteF1": 0.755,
+          "genuineDropped": 0,
+          "arrangementF1": 0.723,
+          "melodyRecall": 0.679,
+          "invented": 0.06
+        }
+      },
+      "electric-guitar": {
+        "recordings": 18,
+        "referenceNotes": 233,
+        "amplitudeOnly": {
+          "notePrecision": 0.791,
+          "noteRecall": 0.665,
+          "noteF1": 0.723,
+          "genuineDropped": 1,
+          "arrangementF1": 0.631,
+          "melodyRecall": 0.73,
+          "invented": 0.192
+        },
+        "spectral": {
+          "notePrecision": 0.787,
+          "noteRecall": 0.665,
+          "noteF1": 0.721,
+          "genuineDropped": 1,
+          "arrangementF1": 0.629,
+          "melodyRecall": 0.73,
+          "invented": 0.192
+        }
+      }
+    }
+  }
+}

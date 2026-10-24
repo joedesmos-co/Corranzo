@@ -1,0 +1,425 @@
+{
+  "generatedAt": "2026-10-24T23:03:18.704Z",
+  "set": "dev",
+  "rows": [
+    {
+      "id": "guitarset-ss3-comp",
+      "density": "dense",
+      "instrument": "guitar",
+      "referenceNotes": 184,
+      "modelNotes": 204,
+      "amplitudeOnly": {
+        "notes": 198,
+        "suppressed": 6,
+        "damage": {
+          "dropped": 6,
+          "genuine": 1
+        },
+        "noteLevel": {
+          "matched": 145,
+          "precision": 0.732,
+          "recall": 0.788,
+          "f1": 0.759
+        },
+        "arrangement": {
+          "predicted": 170,
+          "reference": 184,
+          "matched": 120,
+          "falsePositives": 50,
+          "missed": 64,
+          "pitchPrecision": 0.706,
+          "pitchRecall": 0.652,
+          "eventF1": 0.678,
+          "onsetMaeMs": 44,
+          "onsetMedianMs": 38,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.675,
+        "invented": 0.135
+      },
+      "spectral": {
+        "notes": 199,
+        "suppressed": 5,
+        "damage": {
+          "dropped": 5,
+          "genuine": 1
+        },
+        "noteLevel": {
+          "matched": 145,
+          "precision": 0.729,
+          "recall": 0.788,
+          "f1": 0.757
+        },
+        "arrangement": {
+          "predicted": 170,
+          "reference": 184,
+          "matched": 119,
+          "falsePositives": 51,
+          "missed": 65,
+          "pitchPrecision": 0.7,
+          "pitchRecall": 0.647,
+          "eventF1": 0.672,
+          "onsetMaeMs": 44,
+          "onsetMedianMs": 38,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.667,
+        "invented": 0.135
+      }
+    },
+    {
+      "id": "guitarset-bn2-comp",
+      "density": "dense",
+      "instrument": "guitar",
+      "referenceNotes": 239,
+      "modelNotes": 177,
+      "amplitudeOnly": {
+        "notes": 174,
+        "suppressed": 3,
+        "damage": {
+          "dropped": 3,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 156,
+          "precision": 0.897,
+          "recall": 0.653,
+          "f1": 0.755
+        },
+        "arrangement": {
+          "predicted": 138,
+          "reference": 239,
+          "matched": 125,
+          "falsePositives": 13,
+          "missed": 114,
+          "pitchPrecision": 0.906,
+          "pitchRecall": 0.523,
+          "eventF1": 0.663,
+          "onsetMaeMs": 28,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.882,
+        "invented": 0.022
+      },
+      "spectral": {
+        "notes": 174,
+        "suppressed": 3,
+        "damage": {
+          "dropped": 3,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 156,
+          "precision": 0.897,
+          "recall": 0.653,
+          "f1": 0.755
+        },
+        "arrangement": {
+          "predicted": 138,
+          "reference": 239,
+          "matched": 125,
+          "falsePositives": 13,
+          "missed": 114,
+          "pitchPrecision": 0.906,
+          "pitchRecall": 0.523,
+          "eventF1": 0.663,
+          "onsetMaeMs": 28,
+          "onsetMedianMs": 24,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.882,
+        "invented": 0.022
+      }
+    },
+    {
+      "id": "guitarset-funk3-comp",
+      "density": "dense",
+      "instrument": "guitar",
+      "referenceNotes": 492,
+      "modelNotes": 337,
+      "amplitudeOnly": {
+        "notes": 330,
+        "suppressed": 7,
+        "damage": {
+          "dropped": 7,
+          "genuine": 6
+        },
+        "noteLevel": {
+          "matched": 302,
+          "precision": 0.915,
+          "recall": 0.614,
+          "f1": 0.735
+        },
+        "arrangement": {
+          "predicted": 201,
+          "reference": 492,
+          "matched": 178,
+          "falsePositives": 23,
+          "missed": 314,
+          "pitchPrecision": 0.886,
+          "pitchRecall": 0.362,
+          "eventF1": 0.514,
+          "onsetMaeMs": 55,
+          "onsetMedianMs": 57,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.152,
+        "invented": 0.03
+      },
+      "spectral": {
+        "notes": 332,
+        "suppressed": 5,
+        "damage": {
+          "dropped": 5,
+          "genuine": 4
+        },
+        "noteLevel": {
+          "matched": 304,
+          "precision": 0.916,
+          "recall": 0.618,
+          "f1": 0.738
+        },
+        "arrangement": {
+          "predicted": 201,
+          "reference": 492,
+          "matched": 178,
+          "falsePositives": 23,
+          "missed": 314,
+          "pitchPrecision": 0.886,
+          "pitchRecall": 0.362,
+          "eventF1": 0.514,
+          "onsetMaeMs": 55,
+          "onsetMedianMs": 57,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.152,
+        "invented": 0.03
+      }
+    },
+    {
+      "id": "guitarset-jazz2-solo",
+      "density": "sparse",
+      "instrument": "guitar",
+      "referenceNotes": 78,
+      "modelNotes": 91,
+      "amplitudeOnly": {
+        "notes": 91,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 74,
+          "precision": 0.813,
+          "recall": 0.949,
+          "f1": 0.876
+        },
+        "arrangement": {
+          "predicted": 89,
+          "reference": 78,
+          "matched": 71,
+          "falsePositives": 18,
+          "missed": 7,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "eventF1": 0.85,
+          "onsetMaeMs": 52,
+          "onsetMedianMs": 50,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.961,
+        "invented": 0.157
+      },
+      "spectral": {
+        "notes": 91,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 74,
+          "precision": 0.813,
+          "recall": 0.949,
+          "f1": 0.876
+        },
+        "arrangement": {
+          "predicted": 89,
+          "reference": 78,
+          "matched": 71,
+          "falsePositives": 18,
+          "missed": 7,
+          "pitchPrecision": 0.798,
+          "pitchRecall": 0.91,
+          "eventF1": 0.85,
+          "onsetMaeMs": 52,
+          "onsetMedianMs": 50,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.961,
+        "invented": 0.157
+      }
+    },
+    {
+      "id": "guitarset-jazz1-solo",
+      "density": "sparse",
+      "instrument": "guitar",
+      "referenceNotes": 65,
+      "modelNotes": 64,
+      "amplitudeOnly": {
+        "notes": 64,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 59,
+          "precision": 0.922,
+          "recall": 0.908,
+          "f1": 0.915
+        },
+        "arrangement": {
+          "predicted": 64,
+          "reference": 65,
+          "matched": 59,
+          "falsePositives": 5,
+          "missed": 6,
+          "pitchPrecision": 0.922,
+          "pitchRecall": 0.908,
+          "eventF1": 0.915,
+          "onsetMaeMs": 31,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.938,
+        "invented": 0.047
+      },
+      "spectral": {
+        "notes": 64,
+        "suppressed": 0,
+        "damage": {
+          "dropped": 0,
+          "genuine": 0
+        },
+        "noteLevel": {
+          "matched": 59,
+          "precision": 0.922,
+          "recall": 0.908,
+          "f1": 0.915
+        },
+        "arrangement": {
+          "predicted": 64,
+          "reference": 65,
+          "matched": 59,
+          "falsePositives": 5,
+          "missed": 6,
+          "pitchPrecision": 0.922,
+          "pitchRecall": 0.908,
+          "eventF1": 0.915,
+          "onsetMaeMs": 31,
+          "onsetMedianMs": 27,
+          "durationMaeMs": null
+        },
+        "melodyRecall": 0.938,
+        "invented": 0.047
+      }
+    }
+  ],
+  "summary": {
+    "all": {
+      "recordings": 5,
+      "referenceNotes": 1058,
+      "amplitudeOnly": {
+        "notePrecision": 0.859,
+        "noteRecall": 0.696,
+        "noteF1": 0.769,
+        "genuineDropped": 7,
+        "arrangementF1": 0.724,
+        "melodyRecall": 0.722,
+        "invented": 0.078
+      },
+      "spectral": {
+        "notePrecision": 0.858,
+        "noteRecall": 0.698,
+        "noteF1": 0.77,
+        "genuineDropped": 5,
+        "arrangementF1": 0.723,
+        "melodyRecall": 0.72,
+        "invented": 0.078
+      }
+    },
+    "byDensity": {
+      "dense": {
+        "recordings": 3,
+        "referenceNotes": 915,
+        "amplitudeOnly": {
+          "notePrecision": 0.859,
+          "noteRecall": 0.659,
+          "noteF1": 0.746,
+          "genuineDropped": 7,
+          "arrangementF1": 0.618,
+          "melodyRecall": 0.57,
+          "invented": 0.062
+        },
+        "spectral": {
+          "notePrecision": 0.859,
+          "noteRecall": 0.661,
+          "noteF1": 0.747,
+          "genuineDropped": 5,
+          "arrangementF1": 0.616,
+          "melodyRecall": 0.567,
+          "invented": 0.062
+        }
+      },
+      "sparse": {
+        "recordings": 2,
+        "referenceNotes": 143,
+        "amplitudeOnly": {
+          "notePrecision": 0.858,
+          "noteRecall": 0.93,
+          "noteF1": 0.893,
+          "genuineDropped": 0,
+          "arrangementF1": 0.883,
+          "melodyRecall": 0.95,
+          "invented": 0.102
+        },
+        "spectral": {
+          "notePrecision": 0.858,
+          "noteRecall": 0.93,
+          "noteF1": 0.893,
+          "genuineDropped": 0,
+          "arrangementF1": 0.883,
+          "melodyRecall": 0.95,
+          "invented": 0.102
+        }
+      }
+    },
+    "byInstrument": {
+      "guitar": {
+        "recordings": 5,
+        "referenceNotes": 1058,
+        "amplitudeOnly": {
+          "notePrecision": 0.859,
+          "noteRecall": 0.696,
+          "noteF1": 0.769,
+          "genuineDropped": 7,
+          "arrangementF1": 0.724,
+          "melodyRecall": 0.722,
+          "invented": 0.078
+        },
+        "spectral": {
+          "notePrecision": 0.858,
+          "noteRecall": 0.698,
+          "noteF1": 0.77,
+          "genuineDropped": 5,
+          "arrangementF1": 0.723,
+          "melodyRecall": 0.72,
+          "invented": 0.078
+        }
+      }
+    }
+  }
+}

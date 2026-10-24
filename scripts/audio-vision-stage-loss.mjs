@@ -342,7 +342,10 @@ for (const entry of entries) {
   // S1 — the pipeline's own note set: harmonic-double suppression. The
   // ablation below shows what the suppression actually does to the music.
   // The notes keep the MODEL's field names here; scoring converts them.
-  const suppressed = suppressHarmonicDoubles(raw)
+  // Match the shipped pipeline (amplitude-only). AV_SUPPRESS_SPECTRAL=1 runs
+  // the measured spectral variant for research.
+  const spectralSuppression = process.env.AV_SUPPRESS_SPECTRAL === '1'
+  const suppressed = suppressHarmonicDoubles(raw, spectralSuppression ? { samples: mono, sampleRate: 22050 } : {})
   const s1Model = suppressed.notes
   const s1Notes = asScored(s1Model)
   const suppressionAblation = {
