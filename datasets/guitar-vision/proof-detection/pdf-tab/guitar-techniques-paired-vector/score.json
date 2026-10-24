@@ -11,6 +11,35 @@
  "measures_ref": 8,
  "measures_exact": 8,
  "measure_exactness": 1.0,
+ "timing": {
+  "ref_onsets": 32,
+  "pred_onsets": 32,
+  "onset_tp": 32,
+  "onset_fp": 0,
+  "onset_fn": 0,
+  "onset_precision": 1.0,
+  "onset_recall": 1.0,
+  "onset_f1": 1.0,
+  "duration_tp": 32,
+  "duration_fp": 0,
+  "duration_fn": 0,
+  "duration_precision": 1.0,
+  "duration_recall": 1.0,
+  "duration_f1": 1.0,
+  "complete_tp": 32,
+  "complete_fp": 0,
+  "complete_fn": 0,
+  "complete_precision": 1.0,
+  "complete_recall": 1.0,
+  "complete_f1": 1.0,
+  "measures_with_recovered_timing": 8,
+  "measures_valid": 8,
+  "ref_rests": 0,
+  "pred_rests": 0,
+  "missing_rests": 0,
+  "ref_ties": 2,
+  "pred_ties": 0
+ },
  "per_measure": {
   "1": {
    "tp": 4,
@@ -67,6 +96,88 @@
    "fn": 0,
    "pred": 4,
    "ref": 4
+  }
+ },
+ "per_measure_timing": {
+  "1": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "2": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "3": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "4": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "5": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "6": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "7": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
+  },
+  "8": {
+   "onsets_ref": 4,
+   "onsets_pred": 4,
+   "onset_tp": 4,
+   "duration_tp": 4,
+   "complete_tp": 4,
+   "pred_quarters": 4.0,
+   "expected_quarters": 4.0,
+   "measure_valid": true
   }
  }
 }

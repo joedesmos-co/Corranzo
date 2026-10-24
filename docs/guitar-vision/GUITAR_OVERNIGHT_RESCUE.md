@@ -889,3 +889,77 @@ RHYTHM: still not recovered. The PDF text layer carries fret digits
 only; durations must come from the notation staff (noteheads/stems/
 beams) which is a separate detector. Output marks rhythm_recovered=false.
 No rhythm is invented.
+
+### R24 — Rhythm recovered from notation evidence; reference-scored
+ARCHITECTURE (modular, five stages):
+  extract (pdfjs text+raster) -> TAB geometry -> string/fret events ->
+  rhythm layer -> MusicXML serializer.
+
+EVIDENCE CHAIN (no spacing guesses, no default durations):
+  1. Standard-notation noteheads are SMuFL text glyphs (U+E0A4 filled,
+     U+E0A2/E0A3 half, U+E0A0 whole), so their positions are EXACT.
+     They are assigned to the TAB staff they belong to by vertical
+     distance to the staff span (works for notation above or below).
+  2. Simultaneous noteheads are grouped into chord columns by glyph
+     width (0.6 x notehead width). A chord shares one stem, so every
+     tone is probed and the longest stem run wins.
+  3. Stems use a SINGLE-PIXEL column probe: the old detector required
+     25% ink in a 5px window, so genuine 1px stems (20%) were invisible.
+     Minimum stem length is staff-relative (1.6 x staff gap), not a
+     DPI-specific pixel constant.
+  4. Beams come from the beam mask along the stem column (0 beams =
+     quarter). Dots are accepted only when the dotted reading makes the
+     measure sum to the time signature; otherwise the plain reading wins.
+  5. Time signature is read from SMuFL timeSig0-9 glyphs (U+E080-E089),
+     rows forming numerator/denominator. No hardcoded 4/4.
+  6. Measure validation: each measure's recovered quarters must equal
+     beats x 4 / beat-type. Failure marks every onset in that measure
+     unconfident.
+  7. Strict pairing gate: rhythm is trusted only when notehead columns
+     and TAB onsets correspond 1:1 on a staff. Unequal counts (extra
+     voices, second notation staff) are matched greedily but EVERY
+     duration is marked unconfident - never presented as measured.
+
+REFERENCE-SCORED (string/fret + timing vs fixture MusicXML):
+  paired-chords : 116/116 SF F1 1.00 | onsets 32/32 F1 1.00 |
+                  durations 32/32 F1 1.00 | complete events 32/32 F1 1.00 |
+                  measures valid 8/8 | rests 0 | ties 0
+  techniques    :  32/32  SF F1 1.00 | onsets 32/32 F1 1.00 |
+                  durations 32/32 F1 1.00 | complete events 32/32 F1 1.00 |
+                  measures valid 8/8 | rests 0 | ties emitted 0 (ref 2)
+  tab-sparse    :  32/32  SF F1 1.00 | timing 0/32 (HONEST ABSTENTION:
+                  this PDF has NO notation noteheads at all, only a time
+                  signature, so no duration evidence exists)
+TOTAL string/fret preserved: 180/180, 24/24 measures.
+
+HONEST OUTPUT WHEN RHYTHM IS UNKNOWN:
+  - per note: placeholder <duration>, NO <type>, <footnote> "duration
+    not recovered (declared placeholder, not measured rhythm)"
+  - score metadata: rhythm-source = unrecovered-placeholder
+  - summary: rhythm_recovered=false, playable=false
+  When rhythm IS recovered, durations are real and <type>/<dot> are
+  emitted (score metadata rhythm-source = smufl-notehead+stem/beam).
+
+REAL / UNSEEN PDFs (no independent reference; structural only):
+  canon-in-d (739 events, 22 measures): 0 SMuFL noteheads -> rhythm
+    abstains (rhythm_recovered=false, 0/197 onsets confident).
+  gravity-falls-theme-tab (99 events), save-me-bts (290 events): 0
+    noteheads -> abstain.
+  home-undertale (139 events, 159 noteheads): multiple notation voices
+    per system (35 columns vs 24 onsets on staff 0) -> strict pairing
+    gate refuses; 0/129 confident. Correct behaviour, not a silent guess.
+  guitar-paired-scan: 0 text items -> 0 events, abstains.
+  guitar-standard-chords (notation only): 0 TAB staves -> 0 events,
+    correctly refuses (no TAB).
+
+REMAINING / NOT CLAIMED:
+  - rests: glyphs are detected (1 eighth rest in canon) but not yet
+    associated to measures or emitted; missing_rests is reported.
+  - ties: not detected. The techniques reference contains 2 tie markers
+    between DIFFERENT pitches (D4 -> A4) across a system break, so it is
+    not a same-pitch tie; we report missing ties rather than fake them.
+  - beams: detector wired but the three fixtures contain 0 beams, so
+    eighth/16th recovery is implemented but NOT reference-verified.
+  - dotted values: gated by measure validation, not exercised by any
+    reference fixture (all quarter).
+  - multi-voice real scores: refused by the pairing gate.

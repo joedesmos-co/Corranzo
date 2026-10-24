@@ -1,10 +1,12 @@
 """Complete PDF -> guitar TAB -> MusicXML pipeline (pdfjs-dist).
 
 Stages (each replaceable):
-  1. EXTRACT   proof_pdfjs_extract: text items + raster (Node, pdfjs-dist)
-  2. GEOMETRY  isolated 6-line TAB staves + barlines from pixels
+  1. EXTRACT   pdfjs-dist: text items + raster (Node, Apache-2.0)
+  2. GEOMETRY  six-line TAB staves + barlines from pixels
   3. EVENTS    digit -> (staff, string, fret), measure by barline interval
-  4. SERIALISE MusicXML (string/fret + honest duration abstention)
+  4. RHYTHM    SMuFL notehead glyph + stem/beam evidence + measure check
+  5. SERIALISE MusicXML (string/fret + recovered duration, or explicit
+               placeholder when rhythm evidence is insufficient)
 
 No SVG metadata, viewBox, fixture manifests, reference MusicXML or GT
 coordinates at inference. Only the uploaded PDF's own text layer + pixels.
@@ -18,8 +20,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-W = Path('/Users/ryland/Documents/scoreflow-guitar')
-EXTRACT = Path('/tmp/proof/pdfjs-extract.cjs')
+W = Path(__file__).resolve().parents[2]
+EXTRACT = Path(__file__).resolve().parent / 'pdfjs-extract-page.cjs'
 
 # General MIDI tuning of standard guitar, string 1 (high E) .. 6 (low E)
 TUNING = [64, 59, 55, 50, 45, 40]
@@ -106,18 +108,68 @@ def find_staves(u8):
 
 
 # ---------------------------------------------------------------- extract
+def _load_mod(name, filename):
+    import importlib.util as _ilu
+    spec = _ilu.spec_from_file_location(name, str(W / 'tools/guitar-vision' / filename))
+    m = _ilu.module_from_spec(spec)
+    sys.modules[name] = m
+    spec.loader.exec_module(m)
+    return m
+
+
+def node_modules_dir():
+    """Locate a node_modules that contains pdfjs-dist.
+
+    The research worktree may not have its own node_modules (the main
+    worktree holds the installed tree), so search in a stable order
+    instead of assuming one path. Returns None when nothing usable is
+    found, so callers can fail honestly with a clear message.
+    """
+    def ok(p):
+        return (p / 'pdfjs-dist' / 'legacy' / 'build' / 'pdf.mjs').exists()
+
+    cands = []
+    for part in os.environ.get('NODE_PATH', '').split(os.pathsep):
+        if part:
+            cands.append(Path(part))
+    cands.append(W / 'node_modules')
+    # git worktrees share one object store; the main worktree usually
+    # carries the installed modules.
+    for parent in [W, *W.parents]:
+        cands.append(parent / 'node_modules')
+    # common-dir parent: <main-worktree>/.git -> <main-worktree>
+    try:
+        common = subprocess.run(['git', 'rev-parse', '--git-common-dir'],
+                                cwd=str(W), capture_output=True, text=True, timeout=10)
+        if common.returncode == 0:
+            p = Path(common.stdout.strip())
+            p = p if p.is_absolute() else (W / p)
+            cands.append(p.resolve().parent / 'node_modules')
+    except Exception:
+        pass
+    seen = set()
+    for c in cands:
+        c = c.resolve()
+        if c in seen:
+            continue
+        seen.add(c)
+        if ok(c):
+            return c
+    return None
+
+
 def extract(pdf, png, dpi=150, page=0):
     """pdfjs-dist text items + page raster. Returns dict or None."""
-    script = Path('/tmp/proof/pdfjs-extract-page.cjs')
-    if not script.exists():
-        src = EXTRACT.read_text()
-        # generalise page index
-        src = src.replace("const page = await doc.getPage(1);",
-                          "const page = await doc.getPage(Number(process.argv[5] || 1));")
-        script.write_text(src)
-    r = subprocess.run(['node', str(script), str(pdf), str(png), str(dpi), str(page + 1)],
+    mods = node_modules_dir()
+    if mods is None:
+        return {'error': 'pdfjs-dist not found: no node_modules containing '
+                         'pdfjs-dist/legacy/build/pdf.mjs (set NODE_PATH)'}
+    if not EXTRACT.exists():
+        return {'error': f'extractor missing: {EXTRACT}'}
+    r = subprocess.run(['node', str(EXTRACT), str(pdf), str(png), str(dpi),
+                        str(page + 1), str(mods)],
                        capture_output=True, text=True, cwd=str(W),
-                       env={**os.environ, 'NODE_PATH': str(W / 'node_modules')})
+                       env={**os.environ, 'NODE_PATH': str(mods)})
     if r.returncode != 0:
         return {'error': r.stderr[-400:]}
     side = json.loads(Path(str(png) + '.json').read_text())
@@ -330,12 +382,472 @@ def assign_events(items, staves, barlines_by_staff, img_w, img_h):
     return events
 
 
+# ------------------------------------------------------------------ rhythm
+# SMuFL (Standard Music Font Layout) codepoints used as rhythm evidence.
+# These are text glyphs in the PDF, so their positions are exact - no
+# raster notehead detection is needed when the score embeds a music font.
+SMUFL_NOTEHEADS = {
+    '\ue0a0': ('whole', 4.0),
+    '\ue0a2': ('half', 2.0),
+    '\ue0a3': ('half', 2.0),
+    '\ue0a4': ('quarter', 1.0),   # filled head; beams decide shorter
+}
+SMUFL_RESTS = {
+    '\ue4e2': ('breve', 8.0),
+    '\ue4e3': ('whole', 4.0),
+    '\ue4e4': ('half', 2.0),
+    '\ue4e5': ('quarter', 1.0),
+    '\ue4e6': ('eighth', 0.5),
+    '\ue4e7': ('16th', 0.25),
+    '\ue4e8': ('32nd', 0.125),
+}
+
+
+def _glyph_box(it):
+    x0, y0, x1, y1 = it['bbox']
+    return {'kind_text': it['text'].strip(), 'box': [x0, y0, x1, y1],
+            'cx': (x0 + x1) / 2.0, 'cy': (y0 + y1) / 2.0,
+            'w': max(x1 - x0, 0.1), 'h': max(y1 - y0, 0.1)}
+
+
+def notation_noteheads(items):
+    """Noteheads from the standard-notation staff (SMuFL text items)."""
+    out = []
+    for it in items:
+        ch = (it.get('text') or '').strip()[:1]
+        if not ch or ch not in SMUFL_NOTEHEADS:
+            continue
+        kind, base = SMUFL_NOTEHEADS[ch]
+        g = _glyph_box(it)
+        g.pop('kind_text')
+        g.update({'kind': kind, 'base': base})
+        out.append(g)
+    out.sort(key=lambda n: n['cx'])
+    return out
+
+
+def notation_rests(items):
+    """Rest glyphs (also SMuFL text, so exact). Reported, not assumed."""
+    out = []
+    for it in items:
+        ch = (it.get('text') or '').strip()[:1]
+        if not ch or ch not in SMUFL_RESTS:
+            continue
+        kind, base = SMUFL_RESTS[ch]
+        g = _glyph_box(it)
+        g.pop('kind_text')
+        g.update({'kind': kind, 'base': base})
+        out.append(g)
+    out.sort(key=lambda n: n['cx'])
+    return out
+
+
+def time_signature(items, default=(4, 4)):
+    """Read the time signature from SMuFL timeSig0-9 glyphs.
+
+    Returns ((beats, beat_type), source). Rows of adjacent digits form a
+    number, and vertically adjacent numbers form numerator/denominator.
+    Nothing is assumed when no glyph is present: the caller records that
+    the default was used.
+    """
+    glyphs = []
+    for it in items:
+        ch = (it.get('text') or '').strip()[:1]
+        if not ch:
+            continue
+        cp = ord(ch)
+        if 0xE080 <= cp <= 0xE089:
+            g = _glyph_box(it)
+            g['digit'] = cp - 0xE080
+            glyphs.append(g)
+    if not glyphs:
+        return tuple(default), 'default'
+    h = float(np.median([g['h'] for g in glyphs]))
+    rows = []
+    for g in sorted(glyphs, key=lambda g: (g['cy'], g['cx'])):
+        for r in rows:
+            if abs(g['cy'] - r['cy']) <= 0.5 * h:
+                r['digits'].append(g)
+                r['cy'] = float(np.mean([d['cy'] for d in r['digits']]))
+                break
+        else:
+            rows.append({'cy': g['cy'], 'digits': [g]})
+    for r in rows:
+        r['digits'].sort(key=lambda g: g['cx'])
+        r['text'] = ''.join(str(d['digit']) for d in r['digits'])
+        r['x0'] = r['digits'][0]['box'][0]
+    rows.sort(key=lambda r: r['cy'])
+    pairs = []
+    for a, b in zip(rows, rows[1:]):
+        gap = b['cy'] - a['cy']
+        same_column = abs(a['x0'] - b['x0']) <= 0.8 * h
+        if same_column and 0.2 * h <= gap <= 1.8 * h:
+            pairs.append((a['text'], b['text']))
+    for num_s, den_s in pairs:
+        try:
+            num, den = int(num_s), int(den_s)
+        except ValueError:
+            continue
+        if 1 <= num <= 32 and 1 <= den <= 32:
+            return (num, den), 'smufl-glyphs'
+    return tuple(default), 'default'
+
+
+def _dist_to_span(y, top, bot):
+    if y < top:
+        return top - y
+    if y > bot:
+        return y - bot
+    return 0.0
+
+
+def assign_notation_to_staves(glyphs, staves):
+    """Attach notation glyphs to the TAB staff they belong to.
+
+    A notation system normally sits above its TAB staff, but the rule is
+    geometric rather than directional: each glyph goes to the nearest
+    staff by vertical distance to the staff span, with ties broken toward
+    the staff top below the glyph. This also copes with TAB-above-
+    notation layouts, unlike a fixed "always above" assumption.
+    """
+    per = {}
+    for g in glyphs:
+        best, best_key = None, None
+        for si, st in enumerate(staves):
+            d = _dist_to_span(g['cy'], st['top'], st['bot'])
+            # prefer above-system when distances are close
+            key = (round(d, 1), 0 if g['cy'] <= st['top'] else 1)
+            if best_key is None or key < best_key:
+                best, best_key = si, key
+        if best is not None:
+            per.setdefault(best, []).append(g)
+    return per
+
+
+def notehead_columns(noteheads):
+    """Group simultaneously sounding noteheads into chord columns.
+
+    The tolerance is derived from the notehead glyph width: chord tones
+    displaced to avoid a collision sit within ~0.6 glyph widths of each
+    other, while successive onsets are further apart. No page constants.
+    """
+    if not noteheads:
+        return []
+    width = float(np.median([n['w'] for n in noteheads]))
+    tol = max(2.0, 0.6 * width)
+    cols = []
+    for n in sorted(noteheads, key=lambda n: n['cx']):
+        if cols and (n['cx'] - cols[-1]['cx']) <= tol:
+            c = cols[-1]
+            c['members'].append(n)
+            c['x0'] = min(c['x0'], n['box'][0])
+            c['x1'] = max(c['x1'], n['box'][2])
+            c['y0'] = min(c['y0'], n['box'][1])
+            c['y1'] = max(c['y1'], n['box'][3])
+        else:
+            cols.append({'cx': n['cx'], 'x0': n['box'][0], 'x1': n['box'][2],
+                         'y0': n['box'][1], 'y1': n['box'][3],
+                         'members': [n]})
+    for c in cols:
+        c['width'] = c['x1'] - c['x0']
+    return cols
+
+
+def tab_onsets(events, digit_width):
+    """Group TAB digits that start together into onsets (chords)."""
+    tol = max(1.0, 0.15 * digit_width)
+    groups = {}
+    for e in events:
+        key = (e['staff'], e['measure'])
+        groups.setdefault(key, []).append(e)
+    onsets = []
+    for key in sorted(groups):
+        evs = sorted(groups[key], key=lambda e: e['x'])
+        cur = [evs[0]]
+        for e in evs[1:]:
+            if e['x'] - cur[-1]['x'] <= tol:
+                cur.append(e)
+            else:
+                onsets.append({'staff': key[0], 'measure': key[1],
+                               'x': float(np.mean([v['x'] for v in cur])),
+                               'events': cur})
+                cur = [e]
+        onsets.append({'staff': key[0], 'measure': key[1],
+                       'x': float(np.mean([v['x'] for v in cur])),
+                       'events': cur})
+    onsets.sort(key=lambda o: (o['staff'], o['measure'], o['x']))
+    return onsets
+
+
+def _stem_probe(ink, beam_mask, box, rhy, min_run=None):
+    """Stem evidence using a SINGLE-PIXEL column.
+
+    anchored_stem() requires 25% ink in a 5px window, which assumes a
+    2px stem. A real 150dpi engraving can draw a 1px stem (1/5 = 20%),
+    so thin-stemmed scores lose every stem. A vertical run of ink in one
+    column that is >= MIN_STEM_RUN long, adjacent to the notehead edge,
+    is a stem regardless of stroke width. Beams are then read from the
+    beam mask along that exact column.
+    """
+    x0, y0, x1, y1 = [int(round(v)) for v in box]
+    if min_run is None:
+        min_run = rhy.MIN_STEM_RUN
+    tol = rhy.STEM_SIDE_TOL
+    best = None
+    for edge in (x1, x0):
+        for xx in range(max(edge - tol, 0), min(edge + tol + 1, ink.shape[1])):
+            col = ink[:, xx]
+            up = rhy._bridged_run(col, y0, -1)
+            down = rhy._bridged_run(col, y1, 1)
+            if up >= down:
+                run, tip = up, y0 - up
+                span = (y0 - up, y0)
+            else:
+                run, tip = down, y1 + down
+                span = (y1, y1 + down)
+            if best is None or run > best['run']:
+                best = {'run': run, 'x': xx, 'tip': tip, 'span': span}
+    if best is None:
+        return {'stem': False, 'run': 0, 'beams': 0, 'dots': 0}
+    if best['run'] < min_run:
+        return {'stem': False, 'run': best['run'], 'beams': 0, 'dots': 0}
+    y_lo = max(min(best['span']) - 4, 0)
+    y_hi = min(max(best['span']) + 4, ink.shape[0] - 1)
+    xx = best['x']
+    col = beam_mask[y_lo:y_hi + 1, max(xx - 6, 0):xx + 7].any(axis=1)
+    rows = np.nonzero(col)[0]
+    groups, prev = 0, -99
+    for r in rows:
+        if r - prev > 3:
+            groups += 1
+        prev = r
+    return {'stem': True, 'run': int(best['run']), 'beams': int(groups),
+            'dots': 0, 'x': xx, 'span': best['span']}
+
+
+def _column_evidence(col, ink, beam_mask, rhy, min_run=None):
+    """Strongest stem/beam evidence among the chord's noteheads.
+
+    A chord shares one stem, but chord tones displaced to avoid a
+    collision sit a few pixels to the side, so the stem is not always on
+    the union box edge. Probe every tone and keep the longest run.
+    """
+    best = None
+    for m in col['members']:
+        ev = _stem_probe(ink, beam_mask, m['box'], rhy, min_run)
+        if best is None or ev['run'] > best['run']:
+            best = ev
+    return {'beams': best['beams'], 'dots': 0, 'stem': best['stem'],
+            'stem_run': best['run'], 'stem_box': best.get('x')}
+
+
+def _duration_from_evidence(col, ev, confident_enabled=True):
+    bases = sorted({m['base'] for m in col['members']}, reverse=True)
+    ambiguous = len(bases) > 1
+    base = bases[0]
+    beams = ev['beams']
+    dots = ev['dots']
+    if base >= 4.0:            # whole: hollow head, no stem required
+        dur, conf = 4.0, True
+    elif base >= 2.0:          # half: hollow head is itself evidence
+        dur, conf = 2.0, True
+    else:
+        dur = 1.0 / (2 ** min(beams, 3))
+        conf = ev['stem']
+    return {'duration': dur, 'duration_plain': dur,
+            'beams': beams, 'dots': dots, 'stem': ev['stem'],
+            'confident': bool(conf) and not ambiguous,
+            'ambiguous': ambiguous}
+
+
+def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
+                  default_time=(4, 4)):
+    """Attach onset durations derived from actual notation evidence.
+
+    Evidence chain: SMuFL notehead glyph (written value) -> raster stem
+    and beam count (shorter values) -> augmentation dots. Dots are
+    accepted only when the dotted reading makes the measure sum to the
+    time signature; a dotted reading that breaks the measure is rejected
+    in favour of the plain one, because stray blobs are common.
+
+    An onset with no notehead, no stem, or a measure that does not sum is
+    marked `confident = False`. Nothing is silently defaulted.
+    """
+    ts, ts_source = time_signature(items, default_time)
+    beats = ts[0] * 4.0 / ts[1]
+    noteheads = notation_noteheads(items)
+    rests = notation_rests(items)
+
+    widths = [it['bbox'][2] - it['bbox'][0] for it in items
+              if (it.get('text') or '').strip().isdigit()]
+    digit_width = float(np.median(widths)) if widths else 10.0
+
+    note_by_staff = assign_notation_to_staves(noteheads, staves)
+    rest_by_staff = assign_notation_to_staves(rests, staves)
+
+    onsets = tab_onsets(events, digit_width)
+    by_staff = {}
+    for o in onsets:
+        by_staff.setdefault(o['staff'], []).append(o)
+
+    raw = {}
+    staff_pairing = []
+    for si, os_ in by_staff.items():
+        cols = notehead_columns(note_by_staff.get(si, []))
+        # Stems are a musical length, not a pixel count: require ~1.6
+        # staff spaces. The absolute MIN_STEM_RUN is tuned for a 2px
+        # stroke at one DPI and rejects genuine 1px stems on crisp pages.
+        min_run = 1.6 * float(staves[si]['gap'])
+        # Pair onsets to columns. Equal counts is the common, exact case:
+        # both are left-to-right sequences of the same musical events.
+        pair = {}
+        exact = len(os_) == len(cols)
+        if exact:
+            for o, c in zip(os_, cols):
+                pair[id(o)] = c
+        else:
+            cap = max(8.0, 2.5 * digit_width)
+            used = set()
+            for o in os_:
+                best, bd = None, cap
+                for i, c in enumerate(cols):
+                    if i in used:
+                        continue
+                    d = abs(c['cx'] - o['x'])
+                    if d <= bd:
+                        best, bd = i, d
+                if best is not None:
+                    used.add(best)
+                    pair[id(o)] = cols[best]
+        for o in os_:
+            col = pair.get(id(o))
+            if col is None:
+                raw[(o['staff'], o['measure'], round(o['x'], 2))] = {
+                    'duration': None, 'duration_plain': None, 'beams': 0,
+                    'dots': 0, 'stem': False, 'confident': False,
+                    'ambiguous': False,
+                }
+                continue
+            ev = _column_evidence(col, ink, beam_mask, rhy, min_run)
+            r = _duration_from_evidence(col, ev)
+            if not exact:
+                # A greedy pairing across unequal counts is a guess about
+                # which notehead belongs to which digit. Never let that
+                # pass as measured rhythm.
+                r['confident'] = False
+                r['pairing'] = 'greedy'
+            else:
+                r['pairing'] = 'exact'
+            raw[(o['staff'], o['measure'], round(o['x'], 2))] = r
+        staff_pairing.append({'staff': si, 'onsets': len(os_),
+                              'columns': len(cols), 'exact': exact})
+        # keep the pairing for the event objects
+        for o in os_:
+            o['column'] = pair.get(id(o))
+
+    # Measure validation: a dotted reading must explain the measure.
+    by_measure = {}
+    for o in onsets:
+        by_measure.setdefault(o['measure'], []).append(o)
+    measure_report = {}
+    for m, os_ in sorted(by_measure.items()):
+        keys = [(o['staff'], m, round(o['x'], 2)) for o in os_]
+        plain = sum(raw[k]['duration_plain'] or 0.0 for k in keys)
+        dotted = sum((raw[k]['duration_plain'] or 0.0)
+                     * (1.5 ** min(raw[k]['dots'], 2)) for k in keys)
+        plain_ok = abs(plain - beats) <= 0.02
+        dotted_ok = abs(dotted - beats) <= 0.02
+        use_dots = dotted_ok and not plain_ok
+        for k in keys:
+            r = raw[k]
+            if r['duration_plain'] is None:
+                continue
+            if use_dots and r['dots']:
+                r['duration'] = r['duration_plain'] * (1.5 ** min(r['dots'], 2))
+            else:
+                r['duration'] = r['duration_plain']
+                r['dots'] = 0
+        total = sum(raw[k]['duration'] or 0.0 for k in keys)
+        complete = abs(total - beats) <= 0.02
+        if not complete:
+            for k in keys:
+                raw[k]['confident'] = False
+        measure_report[m] = {
+            'onsets': len(os_),
+            'quarters': round(total, 4),
+            'expected': beats,
+            'complete': complete,
+            'matches_time_signature': complete,
+            'dots_applied': sum(1 for k in keys if raw[k]['dots']),
+        }
+
+    for o in onsets:
+        r = raw[(o['staff'], o['measure'], round(o['x'], 2))]
+        for e in o['events']:
+            e['rhythm'] = dict(r)
+        o['rhythm'] = r
+
+    matched = sum(1 for o in onsets if raw[(o['staff'], o['measure'], round(o['x'], 2))]['duration'] is not None)
+    confident = sum(1 for o in onsets if raw[(o['staff'], o['measure'], round(o['x'], 2))]['confident'])
+    stats = {
+        'time_signature': f'{ts[0]}/{ts[1]}',
+        'time_signature_source': ts_source,
+        'measure_quarters': beats,
+        'noteheads': len(noteheads),
+        'rests_detected': len(rests),
+        'onsets': len(onsets),
+        'onsets_with_notation': matched,
+        'onsets_confident': confident,
+        'measures_complete': sum(1 for v in measure_report.values() if v['complete']),
+        'measures_total': len(measure_report),
+        'staff_pairing': staff_pairing,
+        'staffs_exact_pairing': sum(1 for p in staff_pairing if p['exact']),
+        'rests_emitted': 0,
+        'ties_detected': 0,
+        '_onsets': onsets,
+        '_rests': {k: v for k, v in rest_by_staff.items()},
+        '_measure_report': measure_report,
+    }
+    return events, stats
+
+
 # -------------------------------------------------------------- musicxml
-def to_musicxml(events, divisions=480, duration=480):
-    """Emit TAB MusicXML. duration is explicit but flagged: the text layer
-    carries no rhythm, so every note is written as a flagged default and
-    the summary records that rhythm is NOT recovered."""
+TYPE_BASES = [(4.0, 'whole'), (2.0, 'half'), (1.0, 'quarter'),
+              (0.5, 'eighth'), (0.25, '16th'), (0.125, '32nd')]
+
+
+def type_for_quarters(q):
+    """Written value -> (MusicXML type, dot count)."""
+    if q is None:
+        return None, 0
+    for base, name in TYPE_BASES:
+        for dots in (0, 1, 2):
+            if abs(q - base * (1.5 ** dots)) <= 0.011:
+                return name, dots
+    return None, 0
+
+
+def _midi_name(midi):
+    names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    name = names[midi % 12]
+    return name[0], (1 if '#' in name else 0), midi // 12 - 1
+
+
+def to_musicxml(events, divisions=480, default_duration=480,
+                time_sig=(4, 4), rhythm_source='none'):
+    """Emit six-line TAB MusicXML.
+
+    Recognised durations are written from the notation evidence. A note
+    with no recovered duration keeps a placeholder <duration> (MusicXML
+    requires the element) but carries NO <type> and an explicit
+    <footnote> plus a score-level miscellaneous field, so no consumer can
+    mistake it for measured rhythm.
+    """
     score = ET.Element('score-partwise', version='4.0')
+    ident = ET.SubElement(score, 'identification')
+    misc = ET.SubElement(ident, 'miscellaneous')
+    ET.SubElement(misc, 'miscellaneous-field', name='rhythm-source').text = rhythm_source
+    ET.SubElement(misc, 'miscellaneous-field', name='rhythm-time-signature').text =         f'{time_sig[0]}/{time_sig[1]}'
     pl = ET.SubElement(score, 'part-list')
     sp = ET.SubElement(pl, 'score-part', id='P1')
     ET.SubElement(sp, 'part-name').text = 'Guitar'
@@ -343,26 +855,30 @@ def to_musicxml(events, divisions=480, duration=480):
     by_measure = {}
     for e in events:
         by_measure.setdefault(e['measure'], []).append(e)
+    first_measure = min(by_measure) if by_measure else 1
     for m in sorted(by_measure):
         meas = ET.SubElement(part, 'measure', number=str(m))
         attrs = ET.SubElement(meas, 'attributes')
         ET.SubElement(attrs, 'divisions').text = str(divisions)
-        if m == sorted(by_measure)[0]:
-            # explicit six-line TAB staff (renders as TAB, not notation)
+        if m == first_measure:
             key = ET.SubElement(attrs, 'key')
             ET.SubElement(key, 'fifths').text = '0'
             time = ET.SubElement(attrs, 'time')
-            ET.SubElement(time, 'beats').text = '4'
-            ET.SubElement(time, 'beat-type').text = '4'
+            ET.SubElement(time, 'beats').text = str(time_sig[0])
+            ET.SubElement(time, 'beat-type').text = str(time_sig[1])
             clef = ET.SubElement(attrs, 'clef')
             ET.SubElement(clef, 'sign').text = 'TAB'
             ET.SubElement(clef, 'line').text = '5'
             sd = ET.SubElement(attrs, 'staff-details')
             ET.SubElement(sd, 'staff-lines').text = '6'
             for sn in range(1, 7):
+                midi = TUNING[sn - 1]
+                step, alter, octave = _midi_name(midi)
                 st_ = ET.SubElement(sd, 'staff-tuning', number=str(sn))
-                ET.SubElement(st_, 'tuning-step').text = 'E'
-                ET.SubElement(st_, 'tuning-octave').text = '2'
+                ET.SubElement(st_, 'tuning-step').text = step
+                if alter:
+                    ET.SubElement(st_, 'tuning-alter').text = str(alter)
+                ET.SubElement(st_, 'tuning-octave').text = str(octave)
         # group simultaneous notes (same x within a glyph width)
         notes = sorted(by_measure[m], key=lambda e: (e['x'], e['string']))
         prev_x = None
@@ -373,14 +889,27 @@ def to_musicxml(events, divisions=480, duration=480):
             prev_x = e['x']
             pitch = ET.SubElement(note, 'pitch')
             midi = TUNING[e['string'] - 1] + e['fret']
-            names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-            ET.SubElement(pitch, 'step').text = names[midi % 12][0]
-            if '#' in names[midi % 12]:
-                ET.SubElement(pitch, 'alter').text = '1'
-            ET.SubElement(pitch, 'octave').text = str(midi // 12 - 1)
-            ET.SubElement(note, 'duration').text = str(duration)
+            step, alter, octave = _midi_name(midi)
+            ET.SubElement(pitch, 'step').text = step
+            if alter:
+                ET.SubElement(pitch, 'alter').text = str(alter)
+            ET.SubElement(pitch, 'octave').text = str(octave)
+            rt = e.get('rhythm') or {}
+            q = rt.get('duration')
+            if q is None:
+                ET.SubElement(note, 'duration').text = str(default_duration)
+                ET.SubElement(note, 'footnote').text =                     'duration not recovered (declared placeholder, not measured rhythm)'
+            else:
+                ET.SubElement(note, 'duration').text = str(int(round(q * divisions)))
+                if not rt.get('confident'):
+                    ET.SubElement(note, 'footnote').text =                         'duration unverified (notation evidence incomplete)'
             ET.SubElement(note, 'voice').text = '1'
-            ET.SubElement(note, 'type').text = 'quarter'
+            if q is not None:
+                name, dots = type_for_quarters(q)
+                if name:
+                    ET.SubElement(note, 'type').text = name
+                    for _ in range(dots):
+                        ET.SubElement(note, 'dot')
             tech = ET.SubElement(note, 'notations')
             te = ET.SubElement(tech, 'technical')
             ET.SubElement(te, 'string').text = str(e['string'])
@@ -410,6 +939,33 @@ def main():
     staves = filter_staves_by_digits(staves, digits)
     barlines = {i: staff_barlines(u8, s) for i, s in enumerate(staves)}
     events = assign_events(ex['items'], staves, barlines, u8.shape[1], u8.shape[0])
+    # RHYTHM: notation-side evidence (SMuFL glyphs + raster stems/beams)
+    ts, ts_source = time_signature(ex['items'])
+    rhythm_stats = {'noteheads': 0, 'rests_detected': 0, 'onsets': 0,
+                    'onsets_with_notation': 0, 'onsets_confident': 0,
+                    'time_signature': f'{ts[0]}/{ts[1]}',
+                    'time_signature_source': ts_source,
+                    'measure_quarters': ts[0] * 4.0 / ts[1],
+                    'measures_complete': 0, 'measures_total': 0,
+                    'rests_emitted': 0, 'ties_detected': 0}
+    try:
+        _rhy = _load_mod('proof_rhythm_graph', 'proof-rhythm-graph.py')
+        # Use the SAME threshold that found the staff. A grey-stroke PDF
+        # detected via the Otsu fallback has stems invisible at <128, and
+        # mixing thresholds silently loses all stem evidence.
+        _ink = u8 <= thr_used
+        _, _bmask = _rhy.detect_stems_beams(u8)
+        events, rhythm_stats = attach_rhythm(
+            events, ex['items'], staves, _ink, _bmask, _rhy)
+        rhythm_stats.pop('_onsets', None)
+        rhythm_stats.pop('_rests', None)
+        rhythm_stats.pop('_measure_report', None)
+    except Exception as _e:
+        rhythm_stats['error'] = f'{type(_e).__name__}: {_e}'
+    recovered = (rhythm_stats.get('onsets', 0) > 0 and
+                 rhythm_stats.get('onsets_with_notation') == rhythm_stats.get('onsets') and
+                 rhythm_stats.get('measures_total', 0) > 0 and
+                 rhythm_stats.get('measures_complete') == rhythm_stats.get('measures_total'))
     summary = {
         'pdf': args.pdf, 'page': args.page, 'dpi': args.dpi,
         'text_items': len(ex['items']),
@@ -419,13 +975,21 @@ def main():
         'events': len(events),
         'events_by_measure': {str(m): sum(1 for e in events if e['measure'] == m)
                               for m in sorted({e['measure'] for e in events})},
-        'rhythm_recovered': False,
-        'rhythm_note': 'PDF text layer carries fret digits, not durations; '
-                       'all notes are emitted with an explicit default duration.',
+        'rhythm_recovered': bool(recovered),
+        'playable': bool(recovered),
+        'rhythm_stats': rhythm_stats,
+        'rhythm_note': ('durations derived from SMuFL notehead glyphs + '
+                        'raster stems/beams and validated against the time '
+                        'signature' if recovered
+                        else 'rhythm not fully recovered from notation; '
+                             'unmeasured durations are explicit placeholders, '
+                             'not recognised timing'),
     }
     (out / f'p{args.page}-summary.json').write_text(json.dumps(summary, indent=1))
     (out / f'p{args.page}-events.json').write_text(json.dumps(events, indent=1))
-    xml = to_musicxml(events)
+    xml = to_musicxml(events, time_sig=ts,
+                      rhythm_source=('smufl-notehead+stem/beam' if recovered
+                                     else 'unrecovered-placeholder'))
     ET.ElementTree(xml).write(out / f'p{args.page}-tab.musicxml', encoding='utf-8', xml_declaration=True)
     print(json.dumps(summary, indent=1))
     return 0

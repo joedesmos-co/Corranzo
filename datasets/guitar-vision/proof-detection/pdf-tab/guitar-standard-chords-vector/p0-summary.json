@@ -1,0 +1,30 @@
+{
+ "pdf": "benchmarks/omr-fixtures/guitar-standard-chords-vector/guitar-standard-chords-vector.pdf",
+ "page": 0,
+ "dpi": 150,
+ "text_items": 134,
+ "staff_bands": 13,
+ "tab_staves": [],
+ "barlines_per_staff": {},
+ "events": 0,
+ "events_by_measure": {},
+ "rhythm_recovered": false,
+ "playable": false,
+ "rhythm_stats": {
+  "time_signature": "4/4",
+  "time_signature_source": "smufl-glyphs",
+  "measure_quarters": 4.0,
+  "noteheads": 115,
+  "rests_detected": 0,
+  "onsets": 0,
+  "onsets_with_notation": 0,
+  "onsets_confident": 0,
+  "measures_complete": 0,
+  "measures_total": 0,
+  "staff_pairing": [],
+  "staffs_exact_pairing": 0,
+  "rests_emitted": 0,
+  "ties_detected": 0
+ },
+ "rhythm_note": "rhythm not fully recovered from notation; unmeasured durations are explicit placeholders, not recognised timing"
+}

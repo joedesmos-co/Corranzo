@@ -49,6 +49,36 @@
   "7": 4,
   "8": 4
  },
- "rhythm_recovered": false,
- "rhythm_note": "PDF text layer carries fret digits, not durations; all notes are emitted with an explicit default duration."
+ "rhythm_recovered": true,
+ "playable": true,
+ "rhythm_stats": {
+  "time_signature": "4/4",
+  "time_signature_source": "smufl-glyphs",
+  "measure_quarters": 4.0,
+  "noteheads": 32,
+  "rests_detected": 0,
+  "onsets": 32,
+  "onsets_with_notation": 32,
+  "onsets_confident": 32,
+  "measures_complete": 8,
+  "measures_total": 8,
+  "staff_pairing": [
+   {
+    "staff": 0,
+    "onsets": 16,
+    "columns": 16,
+    "exact": true
+   },
+   {
+    "staff": 1,
+    "onsets": 16,
+    "columns": 16,
+    "exact": true
+   }
+  ],
+  "staffs_exact_pairing": 2,
+  "rests_emitted": 0,
+  "ties_detected": 0
+ },
+ "rhythm_note": "durations derived from SMuFL notehead glyphs + raster stems/beams and validated against the time signature"
 }

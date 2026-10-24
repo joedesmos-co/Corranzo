@@ -111,5 +111,53 @@
   "22": 12
  },
  "rhythm_recovered": false,
- "rhythm_note": "PDF text layer carries fret digits, not durations; all notes are emitted with an explicit default duration."
+ "playable": false,
+ "rhythm_stats": {
+  "time_signature": "4/4",
+  "time_signature_source": "smufl-glyphs",
+  "measure_quarters": 4.0,
+  "noteheads": 0,
+  "rests_detected": 1,
+  "onsets": 197,
+  "onsets_with_notation": 0,
+  "onsets_confident": 0,
+  "measures_complete": 0,
+  "measures_total": 22,
+  "staff_pairing": [
+   {
+    "staff": 0,
+    "onsets": 40,
+    "columns": 0,
+    "exact": false
+   },
+   {
+    "staff": 1,
+    "onsets": 40,
+    "columns": 0,
+    "exact": false
+   },
+   {
+    "staff": 2,
+    "onsets": 50,
+    "columns": 0,
+    "exact": false
+   },
+   {
+    "staff": 3,
+    "onsets": 42,
+    "columns": 0,
+    "exact": false
+   },
+   {
+    "staff": 4,
+    "onsets": 25,
+    "columns": 0,
+    "exact": false
+   }
+  ],
+  "staffs_exact_pairing": 0,
+  "rests_emitted": 0,
+  "ties_detected": 0
+ },
+ "rhythm_note": "rhythm not fully recovered from notation; unmeasured durations are explicit placeholders, not recognised timing"
 }
