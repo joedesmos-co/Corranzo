@@ -1,7 +1,9 @@
 /**
  * A8 — Arrangement → MusicXML using Corranzo's existing schema subset
  * (compatible with features/musicxml/parseMusicXml.js and OMR emission).
- * Piano: grand staff (P1, 2 staves). Guitar: single staff + <technical> TAB.
+ * Piano: grand staff (P1, 2 staves). Guitar: standard notation staff (1) plus
+ * a matching six-line TAB staff (2) — both carry the same pitch/duration/ties
+ * so the timing map reads one musical truth; the TAB is a placement mirror.
  * Emits notes, pitches, durations, measures, time sig, tempo, rests, voices,
  * ties (sustain across barlines), instrument assignment, string/fret.
  */
@@ -27,13 +29,28 @@ function escapeXml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-function durationType(divisions) {
-  if (divisions >= 64) return 'whole'
-  if (divisions >= 32) return 'half'
-  if (divisions >= 16) return 'quarter'
-  if (divisions >= 8) return 'eighth'
-  if (divisions >= 4) return '16th'
-  return '32nd'
+// Every printed type/dot must agree with <duration>. An arbitrary 5/16
+// quarter duration cannot be labelled an eighth: engravers space by type.
+const WRITTEN_DURATIONS = [
+  [96, 'whole', true], [64, 'whole', false], [48, 'half', true],
+  [32, 'half', false], [24, 'quarter', true], [16, 'quarter', false],
+  [12, 'eighth', true], [8, 'eighth', false], [6, '16th', true],
+  [4, '16th', false], [3, '32nd', true], [2, '32nd', false], [1, '64th', false],
+]
+export function writtenDurationPieces(divisions) {
+  let remaining = Math.max(0, Math.round(divisions))
+  const pieces = []
+  for (const [duration, type, dot] of WRITTEN_DURATIONS) {
+    while (remaining >= duration) {
+      pieces.push({ divisions: duration, type, dot })
+      remaining -= duration
+    }
+  }
+  return pieces
+}
+function durationNotation(divisions) {
+  const piece = writtenDurationPieces(divisions)[0]
+  return `<type>${piece.type}</type>${piece.dot ? '<dot/>' : ''}`
 }
 
 /**
@@ -78,10 +95,7 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
       if (isPiano) {
         xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef>`
       } else {
-        // Guitar: standard notation staff + a six-line TAB staff in standard
-        // tuning, so the arrangement shows BOTH the notes and the fingering.
-        xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef>` +
-          `<clef number="2"><sign>TAB</sign><line>6</line></clef>` +
+        xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>TAB</sign><line>6</line></clef>` +
           guitarStaffDetails()
       }
       xml += `</attributes>\n`
@@ -159,7 +173,7 @@ function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = fa
   let s = `      <note>${chord ? '<chord/>' : ''}<pitch><step>${step}</step>`
   if (alter !== 0) s += `<alter>${alter}</alter>`
   s += `<octave>${octave}</octave></pitch>`
-  s += `<duration>${divisions}</duration><voice>${voice}</voice><type>${durationType(divisions)}</type>`
+  s += `<duration>${divisions}</duration><voice>${voice}</voice>${durationNotation(divisions)}`
   if (staff != null) s += `<staff>${staff}</staff>`
   if (tieStart) s += `<tie type="start"/>`
   if (tieStop) s += `<tie type="stop"/>`
@@ -177,10 +191,9 @@ function noteXml({ pitch, divisions, voice, staff, stringFret = null, chord = fa
 }
 
 function restXml(divisions, voice, staff = null) {
-  let s = `      <note><rest/><duration>${divisions}</duration><voice>${voice}</voice><type>${durationType(divisions)}</type>`
-  if (staff != null) s += `<staff>${staff}</staff>`
-  s += `</note>\n`
-  return s
+  return writtenDurationPieces(divisions).map(piece =>
+    `      <note><rest/><duration>${piece.divisions}</duration><voice>${voice}</voice>${durationNotation(piece.divisions)}${staff != null ? `<staff>${staff}</staff>` : ''}</note>\n`
+  ).join('')
 }
 
 /** Split a note into per-measure pieces (ties across barlines preserved). */
@@ -292,18 +305,19 @@ function emitStaffVoice(events, { measureIndex, beats, voice, staff, withTab }) 
     // Clip to the next onset only when the note is NOT tied forward; a tied
     // note's remainder belongs to the continuation in the next measure.
     const finalDur = tieStart ? dur : Math.min(dur, Math.max(1, nextOnsetDiv - group.onsetDiv))
-    group.members.forEach((e, mi) => {
+    const pieces = writtenDurationPieces(finalDur)
+    pieces.forEach((piece, pi) => group.members.forEach((e, mi) => {
       s += noteXml({
         pitch: midiToPitch(e.midi),
-        divisions: finalDur,
+        divisions: piece.divisions,
         voice,
         staff,
         stringFret: withTab && e.string != null ? { string: e.string, fret: e.fret } : null,
         chord: mi > 0,
-        tieStart: e.tieStart,
-        tieStop: e.tieStop,
+        tieStart: pi < pieces.length - 1 || Boolean(e.tieStart),
+        tieStop: pi > 0 || Boolean(e.tieStop),
       })
-    })
+    }))
     cursorDiv = group.onsetDiv + finalDur
   }
   const deficit = endDiv - cursorDiv
@@ -311,10 +325,39 @@ function emitStaffVoice(events, { measureIndex, beats, voice, staff, withTab }) 
   return s
 }
 
+function emitSingleStaffMeasure(measureEvents, m, beats, withTab) {
+  // Events arrive already prepared by prepareEventsForNotation (barline split +
+  // voice clipping carry tieStart/tieStop). Re-splitting them here would reset
+  // a tie-stop continuation's flag — which silently dropped ties before — so
+  // only split pieces that were NOT prepared (direct callers/tests).
+  const split = measureEvents
+    .map((e) => (e.prepared ? [e] : splitAcrossMeasures([e], m, beats)))
+    .flat()
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
+  return emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: null, withTab })
+}
+
+/**
+ * Guitar measure: standard notation staff (1) then a matching TAB staff (2)
+ * after a full-bar backup. Both carry the same pitch/duration/ties so the
+ * canonical timing map reads one musical truth; the TAB is a placement
+ * mirror for the eyes. Both staves keep string/fret technicals.
+ */
+function emitGuitarMeasure(measureEvents, m, beats) {
+  const split = measureEvents
+    .map((e) => (e.prepared ? [e] : splitAcrossMeasures([e], m, beats)))
+    .flat()
+    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
+  const staffOne = emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: 1, withTab: true })
+  const backup = `      <backup><duration>${beats * ARR_DIVISIONS}</duration></backup>\n`
+  const staffTwo = emitStaffVoice(split, { measureIndex: m, beats, voice: 2, staff: 2, withTab: true })
+  return staffOne + backup + staffTwo
+}
+
 /**
  * TAB staff declaration: six lines with standard tuning. String 1 is the
- * highest string (E4) — the same convention Corranzo's fretboard uses, so the
- * generated string/fret numbers stay truthful on the TAB.
+ * highest string (E4) — the same convention Corranzo's fretboard uses, so
+ * generated <technical> string/fret numbers stay truthful on the TAB.
  */
 function guitarStaffDetails() {
   const tunings = [
@@ -333,30 +376,6 @@ function guitarStaffDetails() {
   s += `</staff-details>`
   return s
 }
-
-/**
- * Guitar measure: standard notation staff (voice 1) then a matching TAB staff
- * (voice 2 after the backup). Both carry the same pitch/duration/ties so the
- * canonical timing map (and every practice mode) reads ONE musical truth; the
- * TAB copy is a placement mirror for the eyes.
- */
-function emitGuitarMeasure(measureEvents, m, beats) {
-  const split = measureEvents
-    .filter((e) => measureIndexOf(e.startBeat, beats) === m)
-    .sort((a, b) => a.startBeat - b.startBeat || a.midi - b.midi)
-  const upper = emitStaffVoice(split, { measureIndex: m, beats, voice: 1, staff: 1, withTab: true })
-  // emitStaffVoice always writes a full measure (beats * ARR_DIVISIONS), so
-  // the backup is exact and the TAB staff can never drift out of alignment.
-  const backupDivisions = beats * ARR_DIVISIONS
-  const lower = emitStaffVoice(split, { measureIndex: m, beats, voice: 2, staff: 2, withTab: true })
-  return (
-    upper +
-    `      <backup><duration>${backupDivisions}</duration></backup>\n` +
-    lower
-  )
-}
-
-
 
 export function pitchStepForTest(midi) {
   return midiToPitch(midi)

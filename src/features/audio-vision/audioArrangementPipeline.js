@@ -19,9 +19,13 @@ import { arrangeSoloGuitar } from './soloGuitar.js'
 import { simplifyForDifficulty } from './difficulty.js'
 import { buildArrangementMusicXml } from './arrangementMusicXml.js'
 import { spectralSecondOpinion, scoreAgreement, AGREEMENT_WINDOW_SECONDS } from './agreementScore.js'
-import { dropRingingRedetections } from './noteCleanup.js'
-import { holdNotesUntilNextOnset } from './arrangementDurations.js'
-import { applyNoteCorrections, parseNoteCorrections, noteKey, serializeNoteCorrections } from './noteCorrections.js'
+import {
+  annotateNoteKeys,
+  applyNoteCorrections,
+  parseNoteCorrections,
+  resolveCorrections,
+  serializeNoteCorrections,
+} from './noteCorrections.js'
 
 export const CONFIDENCE_THRESHOLD_ARRANGE = 0.35
 export const CONFIDENCE_THRESHOLD_PARTIAL = 0.2
@@ -118,23 +122,13 @@ export function refusalForConfidence(confidence, { totalSeconds }) {
 export async function runAudioArrangementPipeline(file, arrayBuffer, options, stages = {}) {
   const {
     targetPart, difficulty, title, excerpt = null, tempoOverride = null,
-    // The transcription-level experiments, individually switchable so their
-    // effect can be measured exactly (and so a future experiment can turn one
-    // on without touching the others).
-    //
-    // cleanupRedetections and holdNoteDurations are OFF: both looked good on
-    // the synthesized reference and both FAILED on real recordings
-    // (GuitarSet: the cleanup removed 157 genuine notes on one performance,
-    // and holding notes until the next onset made the duration error 123 ms ->
-    // 147 ms). They stay here, measured and rejected, so the decision can be
-    // re-checked when better evidence exists.
-    cleanupRedetections = false,
-    holdNoteDurations = false,
-    // The onset-corroboration gate: measured on the synthesized reference it
-    // helps (+0.08 event F1); measured on real GuitarSet performances it
-    // HURTS (-0.06 to -0.09), because the flux detector misses a soft pick
-    // and the gate then drops a real note. The default follows the real
-    // recordings.
+    // The onset-corroboration gate: it drops a short transcribed note that no
+    // spectral-flux detector heard attack. Measured on real recordings it
+    // HURTS (-0.036 event F1 on the five GuitarSet performances, and it
+    // deletes 37 genuine notes on the densest one), because the flux
+    // detector misses a soft pick and the gate then drops a REAL note. The
+    // default follows the real recordings; `corroborateNotes: true`
+    // reproduces the older behaviour.
     corroborateNotes = false,
     // The musician's per-note edits from the review panel. Kept separate
     // from the transcription (the evidence) and from the arrangement (what
@@ -274,23 +268,6 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     analysis.predictedNotes = filtered.notes
   }
   transcribed.suppressedHarmonics = suppressedHarmonics
-  // Re-detection cleanup (BP path only): the model reports note FRAMES, so a
-  // sustained note can be reported again while it is still sounding. The
-  // earlier note of the same pitch ends exactly where the new one starts, and
-  // the pair together covers one longer note - that is a split sustain, not a
-  // new note. A genuine repeat has a gap (the note was lifted) and is kept.
-  // Measured on the independent synthesized reference: 14 notes removed, 13
-  // of them invented and 1 genuine; the transcription's event F1 rises
-  // 0.711 -> 0.777. The count is reported, never silent.
-  let removedRedetections = 0
-  if (analysis.pitchSource === 'basic-pitch' && cleanupRedetections) {
-    const cleaned = dropRingingRedetections(analysis.predictedNotes, {
-      onsetTimes: (analysis.onsets ?? []).map((o) => o.seconds),
-    })
-    removedRedetections = cleaned.removed
-    analysis.predictedNotes = cleaned.notes
-  }
-  transcribed.removedRedetections = removedRedetections
   // Melody contour from DETECTED salient frames — decides which simultaneous
   // note is the melody (evidence), so thinning protects the real line.
   const melodyContour = buildMelodyContour(analysis.melody, {
@@ -322,38 +299,20 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   } else {
     arranged = arrangeSoloGuitar({ quantizedNotes: quantized, chords: analysis.chords, difficulty, melodyContour })
   }
-  // NOTE DURATIONS: a note sounds until the next note in its own part replaces
-  // it. The model's frame-based durations are systematically short for
-  // accompaniment (measured: 348 ms mean error; a held chord came out as a
-  // staccato), and the onsets - which are accurate to 5 ms - are the reliable
-  // evidence. This changes how long a note is WRITTEN, never which notes are
-  // written.
-  const heldDurations = holdNotesUntilNextOnset(arranged.events.map((e) => ({ ...e })), {
-    maxBeats: 8,
-    enabled: holdNoteDurations,
-  })
-  arranged.events = heldDurations.events
   const simplified = simplifyForDifficulty(
     arranged.events.map((e) => ({ ...e, quantizedStartBeat: e.startBeat, quantizedDurBeats: e.durBeats })),
     difficulty,
   ).map((e) => ({ ...e, startBeat: e.quantizedStartBeat ?? e.startBeat, durBeats: e.quantizedDurBeats ?? e.durBeats }))
-  // USER CORRECTIONS (review panel -> per-note removal). Applied to the
-  // arrangement, keyed by pitch + time, so re-running the arrangement with
-  // the same notes keeps the edit and nothing else moves. The events carry
-  // their own correction key so the review UI does not have to reconstruct it.
+  // USER CORRECTIONS (review panel -> per-note removal). The transcription
+  // evidence (`arrangementEvents`) stays whole and uncorrected; the score and
+  // the practice targets are derived from it minus the musician's removals.
+  // Keys use the written beat, not wall-clock seconds: a tempo rebuild keeps
+  // the same key for the same written note, and a stale key is inert.
+  const timeOfArrangedEvent = (event) => Number(event?.startBeat ?? 0)
   const parsedCorrections = parseNoteCorrections(corrections)
-  const beatOrigin = analysis.beats.beats[0] ?? 0
-  const beatPeriod = analysis.beats.beatPeriodSeconds
-  const timeOfArrangedEvent = (e) => beatOrigin + (e.startBeat ?? 0) * beatPeriod
-  // Annotate the FULL arrangement once, then derive the corrected view from
-  // it. The review panel gets both: `arrangementEvents` (everything the
-  // arranger wrote, so an edit can be undone) and `model.parts[0].events`
-  // (what the score actually contains).
-  const annotatedEvents = simplified.map((e) => ({
-    ...e,
-    correctionKey: noteKey(e, { timeSeconds: timeOfArrangedEvent(e) }),
-  }))
-  const corrected = applyNoteCorrections(annotatedEvents, parsedCorrections, { timeOf: timeOfArrangedEvent })
+  const arrangementEvents = annotateNoteKeys(simplified, { timeOf: timeOfArrangedEvent })
+  const correctionResolution = resolveCorrections(arrangementEvents, parsedCorrections, { timeOf: timeOfArrangedEvent })
+  const corrected = applyNoteCorrections(arrangementEvents, parsedCorrections, { timeOf: timeOfArrangedEvent })
   const correctedEvents = corrected.events
   const notation = {
     bpm: analysis.tempo.bpm,
@@ -408,7 +367,7 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     title: notation.title,
     warnings: model.parts[0].warnings,
   })
-  model.complexity = measureComplexity(simplified.map((e) => ({ ...e, startSeconds: e.startBeat })))
+  model.complexity = measureComplexity(correctedEvents.map((e) => ({ ...e, startSeconds: e.startBeat })))
   stages.onProgress?.({ stage: 'done', fraction: 1 })
   return {
     ok: true,
@@ -434,8 +393,27 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     suppressedHarmonics,
     corrections: serializeNoteCorrections(parsedCorrections),
     correctionsApplied: corrected.removedCount,
-    arrangementEvents: annotatedEvents,
+    correctionsStale: correctionResolution.stale.length,
+    staleCorrectionKeys: correctionResolution.stale,
+    // The uncorrected arrangement is retained as the transcription evidence:
+    // undo always restores the machine's full note set, and the review panel
+    // can distinguish "what was heard" from "what the musician kept".
+    arrangementEvents,
+    removedEvents: corrected.removedEvents,
+    originalNoteCount: arrangementEvents.length,
     notation,
+    transcriptionEvidence: {
+      noteCount: arrangementEvents.length,
+      pitchSource: analysis.pitchSource,
+      events: arrangementEvents.map((event) => ({
+        correctionKey: event.correctionKey,
+        midi: event.midi,
+        startBeat: event.startBeat,
+        durBeats: event.durBeats,
+        hand: event.hand ?? null,
+        role: event.role ?? null,
+      })),
+    },
     uncertainRegions,
     transcriptionAgreement: agreement,
     durationSeconds: imported.durationSeconds,

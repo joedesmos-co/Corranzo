@@ -91,9 +91,13 @@ function bassMidi(spectrum, fftSize, sampleRate, { minHz = 40, maxHz = 250 } = {
  * `corroborateNotes` (default OFF) drops a short transcribed note that no
  * spectral-flux detector heard attack. It is OFF by default because it was
  * MEASURED to delete real notes on real recordings: the flux detector misses
- * a soft pick, and the gate then drops a genuine note. Measured on the
- * GuitarSet takes the arrangement's event F1 is 0.692 with the gate off and
- * 0.667 with it on; on the mic-real clips 0.535 vs 0.519. Switch it on with
+ * a soft pick, and the gate then drops a genuine note. Measured on the five
+ * GuitarSet performances (solo piano, Intermediate, against the JAMS note
+ * truth) the arrangement's event F1 is 0.692 with the gate off and 0.656
+ * with it on, the melody-anchor recall 0.624 -> 0.722 and the bass-anchor
+ * recall 0.735 -> 0.847; the invented-note rate rises 0.109 -> 0.128 and the
+ * note density 3.91 -> 4.71 notes/s. On the solo-guitar arrangement path the
+ * gate makes no measurable difference (0.672 either way). Switch it on with
  * `corroborateNotes: true` to reproduce the older behaviour.
  */
 export async function analyzeMusic(samples, sampleRate, { views = null, predictNotes = null, onProgress = null, tempoOverride = null, isCancelled = null, corroborateNotes = false } = {}) {

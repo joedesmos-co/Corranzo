@@ -2,18 +2,22 @@
  * A9 — useAudioArrangement hook. Browser stages injected at call time:
  * decode via Web Audio, prediction via lazily-loaded Basic Pitch (fallback: null → spectral).
  */
-import { useCallback, useRef, useState } from 'react'
-import { buildArrangementMusicXml } from './arrangementMusicXml.js'
-import {
-  addRemoval,
-  clearRemovals,
-  parseNoteCorrections,
-  serializeNoteCorrections,
-  undoRemoval,
-} from './noteCorrections.js'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { runAudioArrangementPipeline } from './audioArrangementPipeline.js'
-import { PART_INSTRUMENTS, DIFFICULTIES } from './arrangementModel.js'
+import { buildArrangementMusicXml } from './arrangementMusicXml.js'
+import { PART_INSTRUMENTS, DIFFICULTIES, measureComplexity } from './arrangementModel.js'
+import {
+  addRemoval,
+  applyNoteCorrections,
+  clearRemovals,
+  parseNoteCorrections,
+  resolveCorrections,
+  serializeNoteCorrections,
+  undoLastRemoval,
+  undoRemoval,
+} from './noteCorrections.js'
+import { loadNoteCorrections, saveNoteCorrections } from './noteCorrectionStorage.js'
 import { getAudioFingerprint, loadTempoCorrection, saveTempoCorrection } from './tempoCorrectionStorage.js'
 
 export const AUDIO_ARRANGEMENT_SOURCE = 'audio-arrangement'
@@ -168,12 +172,18 @@ export function useAudioArrangement({ onReady = null } = {}) {
       const effectiveTempoOverride = tempoOverride != null
         ? tempoOverride
         : rememberedRef.current
+      const fingerprint = fingerprintRef.current ?? getAudioFingerprint(file)
+      fingerprintRef.current = fingerprint
+      // Per-note edits belong to this recording + arrangement. They survive a
+      // reload and a score regeneration; a different target/difficulty/excerpt
+      // starts from the machine's notes instead of inheriting a foreign edit.
+      const savedCorrections = loadNoteCorrections(fingerprint, { targetPart, difficulty, excerpt })
       if (cancelledRef.current) return null
       setPhase('analyzing')
       const outcome = await runAudioArrangementPipeline(
         file,
         arrayBuffer,
-        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt, tempoOverride: effectiveTempoOverride },
+        { targetPart, difficulty, title: file?.name?.replace(/\.[^.]+$/, '') ?? 'Audio Arrangement', excerpt, tempoOverride: effectiveTempoOverride, corrections: savedCorrections },
         {
           decodeAudioDataImpl: cachedDecode ? (async () => cachedDecode) : decodeWithWebAudio,
           predictNotes: predictWithBasicPitch,
@@ -220,8 +230,10 @@ export function useAudioArrangement({ onReady = null } = {}) {
   // and a note that is not in the correction list is never touched.
   const rebuildWithCorrections = useCallback((previous, corrections) => {
     if (!previous?.ok || !previous.arrangementEvents || !previous.notation) return previous
-    const removed = new Set(corrections.removed)
-    const kept = previous.arrangementEvents.filter((event) => !removed.has(event.correctionKey))
+    const timeOf = (event) => Number(event?.startBeat ?? 0)
+    const corrected = applyNoteCorrections(previous.arrangementEvents, corrections, { timeOf })
+    const resolution = resolveCorrections(previous.arrangementEvents, corrections, { timeOf })
+    const kept = corrected.events
     const musicXml = buildArrangementMusicXml({
       events: kept,
       targetPart: previous.model.targetPart,
@@ -234,9 +246,13 @@ export function useAudioArrangement({ onReady = null } = {}) {
       ...previous,
       musicXml,
       corrections: serializeNoteCorrections(corrections),
-      correctionsApplied: corrections.removed.length,
+      correctionsApplied: corrected.removedCount,
+      correctionsStale: resolution.stale.length,
+      staleCorrectionKeys: resolution.stale,
+      removedEvents: corrected.removedEvents,
       model: {
         ...previous.model,
+        complexity: measureComplexity(kept.map((event) => ({ ...event, startSeconds: event.startBeat }))),
         parts: [{ ...previous.model.parts[0], events: kept }],
       },
     }
@@ -245,21 +261,40 @@ export function useAudioArrangement({ onReady = null } = {}) {
   const removeNote = useCallback((correctionKey) => {
     setResult((previous) => {
       if (!previous?.ok || !correctionKey) return previous
-      return rebuildWithCorrections(previous, addRemoval(parseNoteCorrections(previous.corrections), correctionKey))
+      return rebuildWithCorrections(
+        previous,
+        addRemoval(parseNoteCorrections(previous.corrections), correctionKey),
+      )
     })
   }, [rebuildWithCorrections])
 
   const undoNoteRemoval = useCallback((correctionKey) => {
     setResult((previous) => {
       if (!previous?.ok || !correctionKey) return previous
-      return rebuildWithCorrections(previous, undoRemoval(parseNoteCorrections(previous.corrections), correctionKey))
+      return rebuildWithCorrections(
+        previous,
+        undoRemoval(parseNoteCorrections(previous.corrections), correctionKey),
+      )
+    })
+  }, [rebuildWithCorrections])
+
+  const undoLastNoteRemoval = useCallback(() => {
+    setResult((previous) => {
+      if (!previous?.ok) return previous
+      return rebuildWithCorrections(
+        previous,
+        undoLastRemoval(parseNoteCorrections(previous.corrections)),
+      )
     })
   }, [rebuildWithCorrections])
 
   const clearNoteCorrections = useCallback(() => {
     setResult((previous) => {
       if (!previous?.ok) return previous
-      return rebuildWithCorrections(previous, clearRemovals(parseNoteCorrections(previous.corrections)))
+      return rebuildWithCorrections(
+        previous,
+        clearRemovals(parseNoteCorrections(previous.corrections)),
+      )
     })
   }, [rebuildWithCorrections])
 
@@ -276,6 +311,14 @@ export function useAudioArrangement({ onReady = null } = {}) {
       excerpt: result.excerpt ?? null,
       uncertainRegions: result.uncertainRegions ?? [],
       transcriptionAgreement: result.transcriptionAgreement ?? null,
+      // Persist the edit record WITH the score metadata, separate from the
+      // transcription evidence: the bytes are corrected, while the record
+      // still says which notes the musician removed and how many were heard.
+      corrections: result.corrections ?? null,
+      correctionsApplied: result.correctionsApplied ?? 0,
+      correctionsStale: result.correctionsStale ?? 0,
+      originalNoteCount: result.originalNoteCount ?? result.arrangementEvents?.length ?? null,
+      removedNoteCount: result.removedEvents?.length ?? 0,
     }
     onReady?.(payload)
     return payload
@@ -303,6 +346,30 @@ export function useAudioArrangement({ onReady = null } = {}) {
     return arrange(file, options)
   }, [arrange])
 
+  // Persist the edit record beside the recording + arrangement identity. This
+  // runs for every successful review result, so Remove, Undo, Clear and a
+  // tempo rebuild all leave storage in agreement with the score on screen.
+  useEffect(() => {
+    if (!result?.ok || !result?.notation) return
+    const fingerprint = fingerprintRef.current
+    if (!fingerprint) return
+    const options = lastOptionsRef.current?.options
+    const settings = options ?? {
+      targetPart: result.model.targetPart,
+      difficulty: result.model.difficulty,
+      excerpt: null,
+    }
+    saveNoteCorrections(
+      fingerprint,
+      {
+        targetPart: settings.targetPart ?? result.model.targetPart,
+        difficulty: settings.difficulty ?? result.model.difficulty,
+        excerpt: settings.excerpt ?? null,
+      },
+      result.corrections,
+    )
+  }, [result])
+
   return {
     phase,
     progress,
@@ -317,6 +384,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
     openInPractice,
     removeNote,
     undoNoteRemoval,
+    undoLastNoteRemoval,
     clearNoteCorrections,
     reset: () => {
       cancelledRef.current = true

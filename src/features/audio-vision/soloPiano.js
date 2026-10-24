@@ -21,7 +21,17 @@ function clampPiano(midi) {
  * Arrange quantized transcription events + chords + melody into two-hand piano events.
  * Each event: { midi, startBeat, durBeats, hand: 'RH'|'LH', role, kept }
  */
-export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficulty, beatsPerMeasure = 4, melodyContour = null, beat0 = 0, beatPeriod = 0.5 }) {
+export function arrangeSoloPiano({
+  quantizedNotes,
+  chords,
+  melodyByBeat,
+  difficulty,
+  beatsPerMeasure = 4,
+  melodyContour = null,
+  beat0 = 0,
+  beatPeriod = 0.5,
+}) {
+
   const params = paramsForDifficulty(difficulty)
   const maxSpan = params.maxHandSpanSemitones
   // Group by onset beat.
@@ -117,23 +127,31 @@ export function arrangeSoloPiano({ quantizedNotes, chords, melodyByBeat, difficu
   return { events: finalEvents, warnings, textureSummary: summarizeTextures(finalEvents) }
 }
 
-function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPeriod = 0.5 } = {}) {
+// Exported for unit tests: resolving chord windows by time (not by measure
+// index) is the behaviour this function is responsible for.
+export function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPeriod = 0.5 } = {}) {
   if (!chords?.length) return null
-  // Chords are emitted PER BEAT (one per beat window), so indexing by measure
-  // read the wrong chord for most onsets. Resolve by time instead.
+  // Chord windows are emitted PER BEAT, so resolving by measure index read the
+  // wrong chord for most onsets. Map the beat to its time and resolve by time,
+  // falling back to the nearest window when the onset sits in a gap.
   const seconds = beat0 + onsetBeat * beatPeriod
-  let byTime = chords.find((c) => c.startSeconds <= seconds + 1e-9 && c.endSeconds > seconds + 1e-9)
-  if (!byTime) {
-    let bestDist = Infinity
-    for (const c of chords) {
-      const dist = seconds < c.startSeconds ? c.startSeconds - seconds : seconds - c.endSeconds
-      if (dist < bestDist) {
-        bestDist = dist
-        byTime = c
+  let resolved = chords.find((chord) => (
+    chord.startSeconds <= seconds + 1e-9 && chord.endSeconds > seconds + 1e-9
+  ))
+  if (!resolved) {
+    let bestDistance = Infinity
+    for (const chord of chords) {
+      const distance = seconds < chord.startSeconds
+        ? chord.startSeconds - seconds
+        : seconds - chord.endSeconds
+      if (distance < bestDistance) {
+        bestDistance = distance
+        resolved = chord
       }
     }
   }
-  const byMeasure = byTime
+  const byMeasure = resolved
+
   if (!byMeasure) return null
   const intervalsByQuality = {
     major: [0, 4, 7],
@@ -148,6 +166,7 @@ function chordAt(chords, onsetBeat, beatsPerMeasure, { beat0 = 0, beatPeriod = 0
   // evidence); the template is only a fallback when nothing was heard.
   const heard = Array.isArray(byMeasure.heardPcs) && byMeasure.heardPcs.length ? byMeasure.heardPcs : null
   const intervals = intervalsByQuality[byMeasure.quality] ?? [0, 4, 7]
+
   const tones = heard ?? intervals.map((iv) => (byMeasure.root + iv) % 12)
   return { ...byMeasure, tones, voicingSource: heard ? 'heard' : 'template' }
 }
