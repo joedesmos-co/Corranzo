@@ -165,7 +165,8 @@ def main():
             if i + 1 < len(cols):
                 gaps.append(cols[i + 1]['cx'] - c['cx'])
             if source == 'raster-fallback':
-                side = max(3.0, min(9.0, 0.45 * min(gaps))) if gaps else 9.0
+                lim = min(gaps + [float(s['staff']['gap'])])
+                side = max(3.0, min(16.0, 0.45 * lim))
             else:
                 side = max(3.0, min(16.0, 0.45 * min(gaps))) if gaps else 16.0
             ev = pt._column_evidence(c, ink, bm, rhy, 1.6 * gap, side,

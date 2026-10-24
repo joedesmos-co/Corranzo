@@ -1061,3 +1061,62 @@ voice_ownership is single-voice / unresolved-multi-voice / unknown.
 
 NOT CLAIMED: rhythm slashes, multi-voice pairing, rests (detected but
 not emitted), ties, half/whole raster heads (filled heads only).
+
+### R27 — Full scanned-PDF transcription, reference-verified
+TARGET: the scan had 32/32 rhythm (R26) but 0 fret events. R27 adds
+raster TAB digit recognition and combines it with the raster notation
+rhythm path, producing a COMPLETE transcription of a scanned PDF.
+
+RASTER TAB DIGITS (font-independent pipeline, font-dependent templates):
+  1. Pages with no text layer are re-rendered at 300dpi (OCR needs
+     resolution; the text fast path is untouched).
+  2. Digits are strongly dark ink; a threshold at 0.62 x Otsu isolates
+     them from grey staff lines. A long horizontal opening removes the
+     black 1px line core; components are filtered with limits RELATIVE
+     TO THE STAFF GAP.
+  3. Templates 0-9 are rendered at runtime from the best available
+     font: Arial/Helvetica/Liberation first, bundled OFL Arimo as the
+     fallback (tools/guitar-vision/fonts/Arimo.ttf + OFL). No
+     proprietary font file is redistributed.
+  4. Components on the same string line within 0.55 gap are one
+     multi-digit fret (10/12/14/...). String = nearest line; measures
+     from raster barlines (double opening bars merged).
+  5. The system-opening TAB clef (T/A/B) is excluded from measure 1.
+  6. A damaged 3 can read as 2; the lower-right bowl (a 3 has right-side
+     ink low in the glyph, a 2 does not) disambiguates 2 vs 3 only when
+     their template scores are within 0.15. It fired exactly once on
+     this scan and was correct.
+
+SCALED PROBES: at 300dpi stems are 2-3px and noteheads lost to a 3x3
+erosion, so the morphology kernel and the stem/flag windows scale with
+the staff gap. Flag strips start beyond the measured stem width and
+ignore ink exactly at the stem tip (annotations/brackets there are not
+flags). This kept the 150dpi SMuFL flag result at 40/40 while removing
+all false flags at 300dpi.
+
+REFERENCE-SCORED RESULT — guitar-paired-scan (no text layer, no SMuFL):
+  string+fret   116/116  P 1.00 R 1.00 F1 1.00
+  onsets         32/32   P 1.00 R 1.00 F1 1.00
+  durations      32/32   P 1.00 R 1.00 F1 1.00
+  complete events 32/32  P 1.00 R 1.00 F1 1.00
+  measures        8/8 exact; every measure sums to 4.0 quarters
+  rests 0/0, ties 0/0
+  MusicXML: all 116 notes <type>quarter</type>, 4 notes carry
+  "duration unverified" footnotes (29-31/32 onsets have stem evidence).
+
+TEXT FAST PATH PRESERVED: 180/180 string+fret; complete events 32/32,
+0/32 (sparse abstains), 32/32; measures 8/8, 0/8, 8/8. 384 tests green.
+
+TAB-ONLY SLASHES (Priority 1) — NOT IMPLEMENTED, blocker stated:
+  canon-in-d (739 events), save-me-bts (290), gravity-falls (99) have
+  no notation staff at all; their rhythm is drawn as beamed rhythm
+  slashes above the TAB. Raster TAB frets could recover their strings/
+  frets, and the text path already does for canon, but the slash groups
+  are not parsed, so rhythm remains abstained. Implementing slash
+  grouping (beam count + stroke count per measure) is the remaining
+  capability for these layouts.
+
+PORTABILITY: digit templates prefer Arial/Helvetica (macOS); with the
+bundled Arimo fallback the same scan scores 82/116, because the scan's
+glyphs are Arial-metric. The architecture is font-agnostic; accuracy
+depends on the available font matching the document's engraving font.

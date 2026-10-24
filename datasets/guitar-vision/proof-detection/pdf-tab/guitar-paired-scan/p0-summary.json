@@ -1,36 +1,97 @@
 {
  "pdf": "benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf",
  "page": 0,
- "dpi": 150,
+ "dpi": 300,
  "text_items": 0,
+ "tab_source": "raster",
+ "raster": {
+  "tab_source": "raster",
+  "digit_font": "Arial.ttf",
+  "digit_threshold": 100,
+  "notation_threshold": 129,
+  "raster_events": 116,
+  "raster_staves": 2
+ },
  "staff_bands": 25,
- "tab_staves": [],
- "barlines_per_staff": {},
- "events": 0,
- "events_by_measure": {},
- "rhythm_recovered": false,
- "rhythm_blockers": [
-  "no PDF text layer (scanned/image PDF); raster TAB digit recognition required"
+ "tab_staves": [
+  {
+   "top": 997.0,
+   "bot": 1162.0,
+   "gap": 33.0,
+   "lines": 6
+  },
+  {
+   "top": 2184.75,
+   "bot": 2350.0,
+   "gap": 33.05,
+   "lines": 6
+  }
  ],
- "playable": false,
+ "barlines_per_staff": {
+  "0": [
+   285,
+   795,
+   1303,
+   1811,
+   2319
+  ],
+  "1": [
+   292,
+   802,
+   1311,
+   1819,
+   2327
+  ]
+ },
+ "events": 116,
+ "events_by_measure": {
+  "1": 10,
+  "2": 13,
+  "3": 16,
+  "4": 19,
+  "5": 10,
+  "6": 13,
+  "7": 16,
+  "8": 19
+ },
+ "rhythm_recovered": true,
+ "rhythm_blockers": [],
+ "playable": true,
  "rhythm_stats": {
   "time_signature": "4/4",
   "time_signature_source": "default",
   "measure_quarters": 4.0,
-  "noteheads": 0,
-  "notehead_source": "none",
+  "noteheads": 114,
+  "notehead_source": "raster",
   "rests_detected": 0,
-  "onsets": 0,
-  "onsets_with_notation": 0,
-  "onsets_confident": 0,
-  "measures_complete": 0,
-  "measures_total": 0,
-  "staff_pairing": [],
-  "staffs_exact_pairing": 0,
-  "voice_ownership": "unknown",
+  "onsets": 32,
+  "onsets_with_notation": 32,
+  "onsets_confident": 31,
+  "measures_complete": 8,
+  "measures_total": 8,
+  "staff_pairing": [
+   {
+    "staff": 0,
+    "onsets": 16,
+    "columns": 16,
+    "exact": true,
+    "delta": 0,
+    "reason": "exact"
+   },
+   {
+    "staff": 1,
+    "onsets": 16,
+    "columns": 16,
+    "exact": true,
+    "delta": 0,
+    "reason": "exact"
+   }
+  ],
+  "staffs_exact_pairing": 2,
+  "voice_ownership": "single-voice",
   "flags_detected": 0,
   "rests_emitted": 0,
   "ties_detected": 0
  },
- "rhythm_note": "rhythm not fully recovered from notation; unmeasured durations are explicit placeholders, not recognised timing"
+ "rhythm_note": "durations derived from SMuFL notehead glyphs + raster stems/beams and validated against the time signature"
 }

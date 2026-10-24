@@ -636,11 +636,43 @@ def _stem_probe(ink, beam_mask, box, rhy, min_run=None, side_tol=None,
     # engraving lets the flag touch the next stem, so use near-tip ink.
     tip = best['tip']
     up = best.get('up', True)
+    gap_est = (float(min_run) / 1.6) if min_run else 17.0
+    fw = max(12, int(round(0.40 * gap_est)))
+    fh = max(12, int(round(0.30 * gap_est)))
+    # Measure the stem's own thickness on a clean section NEAR THE
+    # NOTEHEAD end (a flag attaches at the tip, so sampling there would
+    # measure the flag). At 150dpi the stem is 1px and the old +2px start
+    # worked; at 300dpi it is 2-3px and +2px reads the stem as a flag.
+    run_len = max(int(best['run']), 1)
+    base = (max(best['span']) - max(2, run_len // 5)) if up \
+        else (min(best['span']) + max(2, run_len // 5))
+    # Several nearby rows: a staff line crossing one sample would measure
+    # the page-wide line instead of the stem. The stem is the narrowest
+    # non-zero horizontal run among the samples.
+    widths = []
+    for dy in (-6, -3, 0, 3, 6):
+        py = base + dy
+        if not (0 <= py < ink.shape[0]):
+            continue
+        w = 1
+        if up:
+            while xx + w < ink.shape[1] and ink[py, xx + w]:
+                w += 1
+        else:
+            while xx - w >= 0 and ink[py, xx - w]:
+                w += 1
+        if ink[py, xx]:
+            widths.append(w)
+    wstem = min(widths) if widths else 1
+    wstem = min(wstem, max(2, int(0.20 * gap_est)))
+    fx0 = xx + wstem + 1
+    fx1 = fx0 + fw
     if up:
-        fy0, fy1 = tip - 2, tip + 10
+        # A real flag hangs BELOW an up-stem's tip. Ink exactly at the
+        # tip row is usually an annotation/bracket crossing the stem.
+        fy0, fy1 = tip + 2, tip + 2 + fh
     else:
-        fy0, fy1 = tip - 10, tip + 2
-    fx0, fx1 = xx + 2, xx + 14
+        fy0, fy1 = tip - 2 - fh, tip - 2
     fy0 = max(fy0, 0); fy1 = min(fy1, ink.shape[0])
     fx1 = min(fx1, ink.shape[1])
     near = ink[fy0:fy1, fx0:fx1].copy() if fx1 > fx0 else np.zeros((0, 0), bool)
@@ -709,7 +741,23 @@ def _duration_from_evidence(col, ev, confident_enabled=True):
 
 
 def band_clusters(bands, min_lines=4):
-    """Consecutive bands with near-equal spacing -> staff candidates."""
+    """Consecutive bands with near-equal spacing -> staff candidates.
+
+    Bands closer than 0.4 of the typical line gap are the same physical
+    line (thick or broken strokes produce two runs); they are merged
+    first, otherwise a single spurious band hides a real staff line.
+    """
+    if len(bands) >= 3:
+        gaps = [b - a for a, b in zip(bands, bands[1:]) if b - a > 3]
+        med = float(np.median(gaps)) if gaps else 0.0
+        if med > 0:
+            merged = [bands[0]]
+            for b in bands[1:]:
+                if b - merged[-1] < 0.4 * med:
+                    merged[-1] = (merged[-1] + b) / 2.0
+                else:
+                    merged.append(b)
+            bands = merged
     out = []
     n = len(bands)
     i = 0
@@ -778,7 +826,11 @@ def raster_noteheads(ink, y0, y1, gap, min_area_frac=0.10, staff_hint=None):
     sub = ink[y0:y1]
     if sub.size == 0:
         return []
-    er = ndi.binary_erosion(sub, structure=np.ones((3, 3), bool))
+    # Stroke widths scale with the staff: a 3x3 erosion removes 1px
+    # stems at 150dpi but leaves 2-3px stems at 300dpi, which then merge
+    # noteheads with stems. Scale the kernel with the staff gap.
+    k = max(3, int(round(gap / 17.0)) * 2 + 1)
+    er = ndi.binary_erosion(sub, structure=np.ones((k, k), bool))
     lab, n = ndi.label(er)
     objs = ndi.find_objects(lab)
     w_lo, w_hi = 0.35 * gap, 1.45 * gap
@@ -852,6 +904,206 @@ def raster_noteheads(ink, y0, y1, gap, min_area_frac=0.10, staff_hint=None):
     return out
 
 
+# ------------------------------------------------------- raster TAB digits
+_FONT_CANDIDATES = [
+    # System fonts first: Arial/Helvetica are the common TAB engraving
+    # fonts and give the best template match where installed. Nothing is
+    # redistributed here; the OFL Arimo fallback ships with the repo.
+    '/System/Library/Fonts/Supplemental/Arial.ttf',
+    '/System/Library/Fonts/Helvetica.ttc',
+    '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+    '/usr/share/fonts/truetype/arimo/Arimo-Regular.ttf',
+    str(Path(__file__).resolve().parent / 'fonts' / 'Arimo.ttf'),
+]
+
+
+def _norm_digit(mask, W=24, H=32):
+    import cv2
+    return cv2.resize((mask.astype(np.uint8) * 255), (W, H),
+                      interpolation=cv2.INTER_AREA) > 110
+
+
+_DIGIT_TEMPLATES = None
+
+
+def digit_templates():
+    """Binary templates for 0-9 from the best available font."""
+    global _DIGIT_TEMPLATES
+    if _DIGIT_TEMPLATES is not None:
+        return _DIGIT_TEMPLATES
+    from PIL import ImageFont, ImageDraw
+    out = {}
+    used = None
+    for fp in _FONT_CANDIDATES:
+        if not Path(fp).exists():
+            continue
+        try:
+            tmpl = {}
+            for size in (40, 44, 48, 52, 56):
+                font = ImageFont.truetype(fp, size)
+                for d in '0123456789':
+                    img = Image.new('L', (120, 120), 0)
+                    ImageDraw.Draw(img).text((10, 10), d, fill=255, font=font)
+                    a = np.asarray(img)
+                    ys, xs = np.nonzero(a > 40)
+                    if len(ys) == 0:
+                        continue
+                    m = (a[ys.min():ys.max() + 1, xs.min():xs.max() + 1] > 110)
+                    tmpl.setdefault(d, []).append(_norm_digit(m).astype(np.uint8))
+            if len(tmpl) == 10:
+                out = tmpl
+                used = Path(fp).name
+                break
+        except Exception:
+            continue
+    _DIGIT_TEMPLATES = {'templates': out, 'font': used}
+    return _DIGIT_TEMPLATES
+
+
+def classify_digit(mask, templates):
+    q = _norm_digit(mask)
+    scores = []
+    for d, ts in templates.items():
+        s = max(float((q & t).sum()) / max(float((q | t).sum()), 1) for t in ts)
+        scores.append((s, d))
+    scores.sort(reverse=True)
+    if len(scores) > 1 and {scores[0][1], scores[1][1]} == {'2', '3'} \
+            and scores[0][0] - scores[1][0] < 0.15:
+        # A damaged 3 can lose its upper-left bowl and read as 2. The
+        # lower-right bowl is the discriminator: a 3 keeps right-side
+        # ink low in the glyph, a 2 does not.
+        lr = float(q[16:32, 15:24].mean())
+        ll = float(q[16:32, 0:9].mean())
+        if lr >= 0.40 and ll <= 0.36:
+            return '3', scores[0][0]
+    return scores[0][1], scores[0][0]
+
+
+def raster_tab_events(u8):
+    """Fret digits and strings from the rendered page (no text layer).
+
+    Tuned for the clean-scan case: strongly dark pixels isolate digits
+    from grey staff lines; a long horizontal opening removes the line
+    core; components are filtered and measured RELATIVE TO THE STAFF
+    GAP. Multi-digit frets are grouped on the same string line. A
+    system-opening TAB clef is excluded from the first measure.
+    """
+    import cv2
+    otsu = otsu_threshold(u8)
+    thr = max(45, min(120, int(round(0.62 * otsu))))
+    ink = (u8 <= thr).astype(np.uint8)
+    bands = line_bands(u8, thr=otsu)
+    groups = band_clusters(bands, min_lines=5)
+    if len(groups) < 2:
+        return [], [], {}, {'reason': 'no multi-line staff groups'}
+    gap_med = float(np.median([g['gap'] for g in groups]))
+    hk = cv2.getStructuringElement(cv2.MORPH_RECT, (max(30, int(2.5 * gap_med)), 1))
+    lines = cv2.morphologyEx(ink, cv2.MORPH_OPEN, hk)
+    close_h = max(3, int(0.15 * gap_med))
+    clean = cv2.morphologyEx(ink - lines, cv2.MORPH_CLOSE,
+                             cv2.getStructuringElement(cv2.MORPH_RECT, (1, close_h)))
+    n, lab, stats, cent = cv2.connectedComponentsWithStats(clean, 8)
+
+    def comps_in(g, top, bot, gap):
+        out = []
+        for i in range(1, n):
+            x, y, w, h, a = stats[i]
+            cx, cy = cent[i]
+            string = int(round((cy - top) / gap)) + 1
+            if not (top - 0.6 * gap <= cy <= bot + 0.6 * gap and 1 <= string <= 6):
+                continue
+            if not (0.30 * gap <= h <= 0.85 * gap and 0.10 * gap <= w <= 0.65 * gap):
+                continue
+            if not (15 <= a <= 600 and 0.25 <= w / max(h, 1) <= 1.5):
+                continue
+            out.append({'i': i, 'x': x, 'y': y, 'w': w, 'h': h,
+                        'cx': cx, 'cy': cy, 'string': string})
+        return out
+
+    # TAB staves are the groups with digit-like component support.
+    candidates = []
+    for g in groups:
+        cs = comps_in(g, g['top'], g['bot'], g['gap'])
+        if len(cs) >= 6:
+            candidates.append((len(cs), g, cs))
+    if not candidates:
+        return [], [], {}, {'reason': 'no digit support on any staff'}
+    candidates.sort(key=lambda c: -c[0])
+    staves = []
+    for cnt, g, cs in candidates:
+        if not any(abs(g['top'] - s['top']) < 2 * g['gap'] for s in staves):
+            staves.append(g)
+    staves.sort(key=lambda g: g['top'])
+
+    tpl = digit_templates()
+    if not tpl['templates']:
+        return [], [], {}, {'reason': 'no digit template font available'}
+
+    events = []
+    for si, g in enumerate(staves):
+        top, bot, gap = g['top'], g['bot'], g['gap']
+        comps = []
+        for c in comps_in(g, top, bot, gap):
+            d, s = classify_digit(lab[c['y']:c['y'] + c['h'],
+                                       c['x']:c['x'] + c['w']] == c['i'],
+                                  tpl['templates'])
+            c['d'] = d
+            c['score'] = s
+            comps.append(c)
+        comps.sort(key=lambda c: (c['string'], c['x']))
+        groups_c = []
+        for c in comps:
+            if groups_c and groups_c[-1][0]['string'] == c['string'] and \
+                    c['x'] - (groups_c[-1][-1]['x'] + groups_c[-1][-1]['w']) < 0.55 * gap:
+                groups_c[-1].append(c)
+            else:
+                groups_c.append([c])
+        for grp in groups_c:
+            grp.sort(key=lambda c: c['x'])
+            fret_s = ''.join(c['d'] for c in grp)
+            if not fret_s.isdigit():
+                continue
+            fret = int(fret_s)
+            if not (0 <= fret <= 24):
+                continue
+            events.append({'staff': si, 'string': grp[0]['string'],
+                           'fret': fret,
+                           'x': float(np.mean([c['cx'] for c in grp])),
+                           'y': float(np.mean([c['cy'] for c in grp])),
+                           'digits': [c['d'] for c in grp],
+                           'digit_score': min(c['score'] for c in grp)})
+
+    barlines = {}
+    for si, g in enumerate(staves):
+        raw = staff_barlines(u8, g)
+        merged = []
+        for b in raw:
+            if not merged or b - merged[-1] > max(15, 0.75 * g['gap']):
+                merged.append(b)
+        barlines[si] = merged
+    per = [max(1, len(barlines[i]) - 1) for i in range(len(staves))]
+    off, acc = [], 0
+    for p in per:
+        off.append(acc)
+        acc += p
+    for e in events:
+        e['measure'] = off[e['staff']] + max(
+            1, int(__import__('bisect').bisect_left(barlines[e['staff']], e['x'])))
+    # The system-opening TAB clef (letters T/A/B) sits in the first
+    # measure; its fragments can look like digits. Real first onsets
+    # begin after the clef.
+    events = [e for e in events
+              if not (e['measure'] == off[e['staff']] + 1 and
+                      e['x'] < barlines[e['staff']][0] + 2.5 * staves[e['staff']]['gap'])]
+    events.sort(key=lambda e: (e['staff'], e['measure'], e['x'], e['string']))
+    stats_out = {'tab_source': 'raster', 'digit_font': tpl['font'],
+                 'digit_threshold': thr,
+                 'notation_threshold': max(128, min(200, int(0.8 * otsu))),
+                 'raster_events': len(events),
+                 'raster_staves': len(staves)}
+    return staves, barlines, events, stats_out
+
+
 def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
                   default_time=(4, 4), bands=None):
     """Attach onset durations derived from actual notation evidence.
@@ -916,10 +1168,12 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
             if i + 1 < len(cols):
                 gaps.append(cols[i + 1]['cx'] - c['cx'])
             if notehead_source == 'raster':
-                # Raster boxes ARE the ink, so the stem is within a few
-                # pixels of the head edge. A wide search would let a
-                # chord borrow the neighbouring voice's stem.
-                c['side_tol'] = max(3.0, min(9.0, 0.45 * min(gaps))) if gaps else 9.0
+                # Raster boxes are eroded cores, so the stem sits a few
+                # pixels outside them. Bound the search by BOTH the staff
+                # scale and the distance to the next onset, so a chord
+                # cannot borrow a neighbour's stem.
+                lim = min(gaps + [float(staves[si]['gap'])])
+                c['side_tol'] = max(3.0, min(16.0, 0.45 * lim))
             else:
                 c['side_tol'] = (max(3.0, min(float(rhy.STEM_SIDE_TOL), 0.45 * min(gaps)))
                                  if gaps else float(rhy.STEM_SIDE_TOL))
@@ -1171,13 +1425,36 @@ def main():
     if 'error' in ex:
         print('extract failed:', ex['error'])
         return 2
+    # Scanned/image PDFs have no text layer. Digit OCR needs resolution,
+    # so re-render such pages at 300dpi (the vector path is untouched).
+    if not ex['items'] and args.dpi < 300:
+        ex = extract(args.pdf, png, 300, args.page)
+        if 'error' in ex:
+            print('extract failed:', ex['error'])
+            return 2
+        args.dpi = 300
     u8 = np.asarray(Image.open(png).convert('L')).astype(np.uint8)
-    staves, thr_used = find_staves(u8)
-    bands = line_bands(u8, thr=thr_used)
-    digits = dominant_digit_group(digit_shape_items(ex['items']))
-    staves = filter_staves_by_digits(staves, digits)
-    barlines = {i: staff_barlines(u8, s) for i, s in enumerate(staves)}
-    events = assign_events(ex['items'], staves, barlines, u8.shape[1], u8.shape[0])
+    tab_source = 'text-layer'
+    raster_info = {}
+    if not ex['items']:
+        # No text at all: raster TAB digits + raster notation rhythm.
+        staves, barlines, events, raster_info = raster_tab_events(u8)
+        tab_source = 'raster'
+        # Digits need a strict dark threshold; notation heads/stems are
+        # anti-aliased and need the page's ink threshold.
+        thr_used = int(raster_info.get('notation_threshold', 128))
+        bands = line_bands(u8, thr=otsu_threshold(u8))
+        if not staves:
+            # keep the honest abstention path (no events)
+            events = []
+            barlines = {}
+    else:
+        staves, thr_used = find_staves(u8)
+        bands = line_bands(u8, thr=thr_used)
+        digits = dominant_digit_group(digit_shape_items(ex['items']))
+        staves = filter_staves_by_digits(staves, digits)
+        barlines = {i: staff_barlines(u8, s) for i, s in enumerate(staves)}
+        events = assign_events(ex['items'], staves, barlines, u8.shape[1], u8.shape[0])
     # RHYTHM: notation-side evidence (SMuFL glyphs + raster stems/beams)
     ts, ts_source = time_signature(ex['items'])
     rhythm_stats = {'noteheads': 0, 'rests_detected': 0, 'onsets': 0,
@@ -1228,6 +1505,8 @@ def main():
     summary = {
         'pdf': args.pdf, 'page': args.page, 'dpi': args.dpi,
         'text_items': len(ex['items']),
+        'tab_source': tab_source,
+        'raster': raster_info,
         'staff_bands': len(bands),
         'tab_staves': staves,
         'barlines_per_staff': {str(k): v for k, v in barlines.items()},
