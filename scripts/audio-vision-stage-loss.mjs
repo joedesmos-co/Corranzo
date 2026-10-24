@@ -374,7 +374,10 @@ for (const entry of entries) {
   }
 
   const views = await buildAnalysisViews(mono, 22050)
-  const corroborate = process.env.AV_CORROBORATE !== '0'
+  // Match the shipped pipeline: the onset-corroboration gate is OFF by
+  // default (it deleted real notes on real recordings); AV_CORROBORATE=1
+  // reproduces the older behaviour for the ablation.
+  const corroborate = process.env.AV_CORROBORATE === '1'
   const analysis = await analyzeMusic(mono, 22050, {
     views,
     corroborateNotes: corroborate,
