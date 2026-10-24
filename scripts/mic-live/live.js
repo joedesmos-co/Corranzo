@@ -118,8 +118,22 @@ root.render(createElement(App))
 
 window.__liveApi = {
   async inject({ samples, sampleRate, expectedMidis, checkpointId, instrumentId = 'piano', loop = true, channels = 1, roomTone = true }) {
+    // Build the checkpoint the way the app does: chords carry a rolling
+    // window (900 ms, the piano/guitar chord default). Without it the V3
+    // expectation resolves windowMs=1 and every fresh attack resets chord
+    // accumulation, so chords can never complete in the harness.
+    const isChord = expectedMidis.length > 1
     window.__liveInject = {
-      checkpoint: { id: checkpointId, expectedMidis, kind: 'note', mode: 'note' },
+      checkpoint: {
+        id: checkpointId,
+        expectedMidis,
+        expectedMidi: expectedMidis[0],
+        isChord,
+        kind: isChord ? 'chord' : 'note',
+        mode: 'note',
+        rollingWindowMs: isChord ? 900 : undefined,
+        notes: expectedMidis.map((midi, index) => ({ id: `n${index}`, midi })),
+      },
       instrumentId,
     }
     const AudioCtx = window.AudioContext || window.webkitAudioContext

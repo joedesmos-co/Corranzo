@@ -44,6 +44,16 @@ function arg(name, fallback = null) {
 }
 
 const CLIP_SET = arg('clips', 'legacy')
+// Fast regression mode: true completions only (skip the wrong-expectation
+// sweep). The full matrix is the default.
+const TRUE_ONLY = arg('true-only', '0') === '1'
+const FALSE_ONLY = arg('false-only', '0') === '1'
+// Optional scenario-name filter (substring), e.g. octave-up for a fast
+// focused regression of the odd-partial rule.
+const SCENARIO_FILTERS = (arg('scenario', null) ?? '')
+  .split(',')
+  .map((entry) => entry.trim())
+  .filter(Boolean)
 const JSON_OUT = arg('json', null)
 
 // ---- clip collection (same corpora and expectations as the A/B) ----------
@@ -66,6 +76,15 @@ const SPECS = {
     endMs: clip.endMs,
     onsetMs: Math.max(0, (clip.expectedOnsetMs ?? 120) - (clip.startMs ?? 0)),
   }),
+  'mic-real': (clip) => ({
+    file: join(ROOT, 'benchmarks/mic-real', clip.audio.file),
+    instrument: clip.instrument,
+    expected: clip.truth?.anchorTones ?? [],
+    truth: (clip.truth?.notes ?? []).map((note) => note.midi),
+    startMs: null,
+    endMs: null,
+    onsetMs: Math.round((clip.truth?.anchorOnset ?? 0.5) * 1000),
+  }),
   'mic-composites': (clip) => ({
     file: join(ROOT, 'benchmarks/mic-composites', clip.audio.file),
     instrument: clip.instrument,
@@ -82,9 +101,17 @@ function collectClips() {
     ? ['mic-accuracy', 'mic-polyphony', 'mic-composites']
     : CLIP_SET.split(',')
   const out = []
+  const split = arg('split', null)
   for (const name of wanted) {
     const manifest = JSON.parse(readFileSync(join(ROOT, 'benchmarks', name, 'manifest.json'), 'utf8'))
+    const excluded = new Set((manifest.excluded ?? []).map((entry) => entry.id))
     for (const clip of manifest.clips ?? []) {
+      if (excluded.has(clip.id)) {
+        continue
+      }
+      if (name === 'mic-real' && split && clip.split !== split) {
+        continue
+      }
       if (!clip.file && !clip.audio?.file) {
         continue // synthetic/silence entries have no recording
       }
@@ -197,8 +224,13 @@ let trueCompletes = 0
 const latencies = []
 
 for (const clip of clips) {
-  const trueResult = await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, clip.expected)
-  const scenarios = wrongExpectations(clip.expected, clip.truth)
+  const trueResult = FALSE_ONLY
+    ? { advanced: false, wrong: 0, latencyMs: null, mode: null }
+    : await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, clip.expected)
+  const allScenarios = TRUE_ONLY ? [] : wrongExpectations(clip.expected, clip.truth)
+  const scenarios = SCENARIO_FILTERS.length
+    ? allScenarios.filter((scenario) => SCENARIO_FILTERS.some((filter) => scenario.name.includes(filter)))
+    : allScenarios
   const fps = []
   for (const scenario of scenarios) {
     const result = await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, scenario.expected)
@@ -207,7 +239,7 @@ for (const clip of clips) {
       fps.push(scenario.name)
     }
   }
-  if (trueResult.advanced) {
+  if (!FALSE_ONLY && trueResult.advanced) {
     trueCompletes += 1
     if (trueResult.latencyMs != null) {
       latencies.push(trueResult.latencyMs)

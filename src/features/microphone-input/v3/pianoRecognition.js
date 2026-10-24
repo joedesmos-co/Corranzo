@@ -1,3 +1,4 @@
+import { dominantDisagreement, octaveGhostFromHalfPartial } from './octaveGhostEvidence.js'
 import {
   ATTACK_PHASE,
   RECOGNITION_OUTCOME,
@@ -24,6 +25,12 @@ export const PIANO_RECOGNITION_DEFAULTS = Object.freeze({
    * 0.57-0.91). See unexpectedMidis.
    */
   octaveGhostMinExpectedConfidence: 0.5,
+  /**
+   * Odd-partial octave-ghost threshold (see octaveGhostEvidence.js):
+   * the played note's 3rd partial at 1.5x the expected fundamental.
+   * Measured on real guitar: ghosts 0.13-0.22, true notes 0.02-0.08.
+   */
+  octaveGhostHalfPartialRatio: 0.1,
 })
 
 function finite(value, fallback = null) {
@@ -155,22 +162,13 @@ function unexpectedMidis(frame, expected, options) {
   // expected note's confidence high, so only the low-confidence case is
   // rejected. Chords (expected.length !== 1) are untouched: their
   // completion is owned by the chord/V3 path and main's fixes.
-  if (dominant != null && expected.length === 1) {
-    const expectedMidi = expected[0]
-    const cents = centsToNearestPitchClass(dominant, expected)
-    const octaveApart = Math.abs(Math.round(dominant) - expectedMidi) >= 12
-    const materiallyDifferent = octaveApart || cents > options.octaveSafeWrongToneCents
-    const expectedNote = (frame?.v2Notes ?? []).find((note) => note.midi === expectedMidi)
-    const expectedConfidence = Number.isFinite(expectedNote?.confidence)
-      ? expectedNote.confidence
-      : null
-    if (
-      materiallyDifferent &&
-      expectedConfidence != null &&
-      expectedConfidence < options.octaveGhostMinExpectedConfidence
-    ) {
-      unexpected.push(Math.round(dominant))
-    }
+  const disagreement = dominantDisagreement(frame, expected, options)
+  if (disagreement != null) {
+    unexpected.push(disagreement)
+  }
+  const octaveGhost = octaveGhostFromHalfPartial(frame, expected, options)
+  if (octaveGhost != null) {
+    unexpected.push(octaveGhost)
   }
   return uniqueMidis(unexpected)
 }

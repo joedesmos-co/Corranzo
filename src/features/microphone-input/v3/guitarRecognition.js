@@ -1,3 +1,4 @@
+import { dominantDisagreement, octaveGhostFromHalfPartial } from './octaveGhostEvidence.js'
 import {
   ATTACK_PHASE,
   RECOGNITION_OUTCOME,
@@ -16,6 +17,10 @@ export const GUITAR_RECOGNITION_DEFAULTS = Object.freeze({
   rollingWindowMs: 900,
   octaveSafeWrongToneCents: 65,
   dominantWrongToneMinClarity: 0.5,
+  /** Odd-partial octave-ghost guard (see octaveGhostEvidence.js). */
+  octaveGhostHalfPartialRatio: 0.1,
+  /** Low-confidence dominant-disagreement guard (see octaveGhostEvidence.js). */
+  octaveGhostMinExpectedConfidence: 0.5,
 })
 
 function finite(value, fallback = null) {
@@ -154,6 +159,14 @@ function unexpectedMidisFromFrame(frame, expected, options) {
     centsToNearestPitchClass(dominant, expected) > options.octaveSafeWrongToneCents
   ) {
     unexpected.push(Math.round(dominant))
+  }
+  const disagreement = dominantDisagreement(frame, expected, options)
+  if (disagreement != null) {
+    unexpected.push(disagreement)
+  }
+  const octaveGhost = octaveGhostFromHalfPartial(frame, expected, options)
+  if (octaveGhost != null) {
+    unexpected.push(octaveGhost)
   }
   return uniqueMidis(unexpected)
 }

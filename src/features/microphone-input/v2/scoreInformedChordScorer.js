@@ -312,6 +312,14 @@ export function scoreExpectedNote(samples, sampleRate, midi, options = {}) {
     midi >= (options.highOctaveGuardMinMidi ?? SCORE_INFORMED_DEFAULTS.highOctaveGuardMinMidi)
       ? goertzelMagnitude(samples, sampleRate, f0 / 2)
       : 0
+  // Odd-partial probe (octave-ghost evidence): 1.5 x f0 is the THIRD
+  // partial of the note one octave below and is NOT a partial of this
+  // note (integer multiples only). A played octave below therefore lights
+  // this band; a genuinely struck note leaves it empty. Measured on real
+  // acoustic guitar: ghost 0.13-0.22, true notes 0.02-0.08.
+  const halfUpperEnergy = f0 * 1.5 < sampleRate / 2
+    ? goertzelMagnitude(samples, sampleRate, f0 * 1.5)
+    : 0
 
   return {
     midi,
@@ -327,6 +335,8 @@ export function scoreExpectedNote(samples, sampleRate, midi, options = {}) {
     evenUpperEnergy,
     oddEvenRatio,
     lowerOctaveFundamentalEnergy,
+    halfPartialEnergy: halfUpperEnergy,
+    halfPartialRatio: halfUpperEnergy / (fundamentalEnergy + 1e-8),
     isBass,
     bassBoosted: isBass,
   }
