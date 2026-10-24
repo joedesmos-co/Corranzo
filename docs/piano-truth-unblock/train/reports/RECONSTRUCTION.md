@@ -2054,3 +2054,45 @@ not.
 
   No accuracy improvement implemented this session; the decisive comparison
   is the deliverable. Sealed TEST untouched; not merged.
+
+
+## Production-viable OMR rescue: oemer evaluation + unfamiliar-font benchmark
+
+  SSL fix (without disabling verification): oemer's weight download used
+  urllib without a CA bundle; setting SSL_CERT_FILE to certifi's
+  cacert.pem resolved it. Also patched oemer/bbox.py find_lines to accept
+  both (N,1,4) and (N,4) HoughLinesP outputs (OpenCV 4.14 returns the
+  latter; prior crash was an IndexError, not a security bypass).
+
+  Same five DEV pages, same matcher (architecture_compare.json):
+    auto_e2e   complete TP 311/902 (.345)
+    homr       complete TP 636/902 (.705)
+    oemer      complete TP  54/213 (.254) on the one page it completed
+               (homr on that page: 62/213 = .291; auto: 22/213 = .103)
+  oemer runtime: ~6-7+ min/page on this Mac (CoreML falls back to CPU,
+  ~3.3 GB RSS, heavy swap). It crashed on 4/5 attempted pages/fixtures
+  (bbox/find_lines and centers indexing). Not production-viable as-is.
+
+  Unfamiliar clean CC0 fixtures (benchmarks/omr-fixtures, 5 piano PDFs +
+  MusicXML references; rendered at 200 dpi, no reference passed to engine):
+    homr complete TP 135/535 (.252), pitch .253, duration .417, rests .333.
+    Per fixture: beginner 0/32 (!), rhythm-tuplets .016, grand-voices .193,
+    articulation .227, dense .367.
+    oemer: crashed/timeout on the beginner fixture; no fixture outputs.
+  This is the key generalization finding: homr's .705 on Verovio renders
+  does NOT transfer to an unfamiliar benchmark font (.252, beginner 0%).
+  A readable image can still transcribe wrongly; the input-quality gate
+  detects unreadable input, not readable-but-wrong output.
+
+  Licensing:
+    oemer 0.1.8 software MIT; weights shipped via the MIT repo's GitHub
+      release (confirm weight license in legal review).
+    homr 0.7.0 AGPL-3.0; TrOMR weights license unconfirmed -> research only.
+
+  Integration recommendation: do not integrate any engine yet. oemer is
+  legally usable but too slow/fragile and only ~25% complete on one page;
+  homr is stronger but AGPL and fails the unfamiliar-font benchmark.
+  Next step: run oemer on a Linux/GPU worker with the bbox fixes, and/or
+  evaluate a licensed TrOMR/SMT-style model on the CC0 fixtures.
+
+  Input-quality gate preserved; no merge/deploy. Sealed TEST untouched.

@@ -78,6 +78,44 @@
      "precision": 1.0,
      "recall": 1.0
     }
+   },
+   "oemer": {
+    "notes_complete": {
+     "truth": 213,
+     "pred": 210,
+     "tp": 54,
+     "fp": 156,
+     "fn": 159,
+     "precision": 0.2571,
+     "recall": 0.2535
+    },
+    "notes_pitch": {
+     "truth": 38,
+     "pred": 34,
+     "tp": 13,
+     "fp": 21,
+     "fn": 25,
+     "precision": 0.3824,
+     "recall": 0.3421
+    },
+    "notes_dur": {
+     "truth": 7,
+     "pred": 6,
+     "tp": 6,
+     "fp": 0,
+     "fn": 1,
+     "precision": 1.0,
+     "recall": 0.8571
+    },
+    "rests": {
+     "truth": 9,
+     "pred": 6,
+     "tp": 4,
+     "fp": 2,
+     "fn": 5,
+     "precision": 0.6667,
+     "recall": 0.4444
+    }
    }
   },
   "QmPyTcVQiwzxPNv3PaWZWLGwc4U9TMjTZBdFc6EpcQ2UwW": {
@@ -476,6 +514,44 @@
     "pred": 27,
     "precision": 1.0,
     "recall": 1.0
+   }
+  },
+  "oemer": {
+   "notes_complete": {
+    "tp": 54,
+    "fp": 156,
+    "fn": 159,
+    "truth": 213,
+    "pred": 210,
+    "precision": 0.2571,
+    "recall": 0.2535
+   },
+   "notes_pitch": {
+    "tp": 13,
+    "fp": 21,
+    "fn": 25,
+    "truth": 38,
+    "pred": 34,
+    "precision": 0.3824,
+    "recall": 0.3421
+   },
+   "notes_dur": {
+    "tp": 6,
+    "fp": 0,
+    "fn": 1,
+    "truth": 7,
+    "pred": 6,
+    "precision": 1.0,
+    "recall": 0.8571
+   },
+   "rests": {
+    "tp": 4,
+    "fp": 2,
+    "fn": 5,
+    "truth": 9,
+    "pred": 6,
+    "precision": 0.6667,
+    "recall": 0.4444
    }
   }
  }

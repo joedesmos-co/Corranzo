@@ -146,7 +146,11 @@ def main():
         res[sid] = row
     (TRAIN / "reports" / "architecture_compare.json").write_text(
         json.dumps(res, indent=1))
-    # aggregate
+    # aggregate over every engine that appears (n may differ; report counts)
+    names = set()
+    for row in res.values():
+        names.update(k for k in row if isinstance(row[k], dict)
+                     and "notes_complete" in row[k])
     def agg(name):
         keys = ("notes_complete", "notes_pitch", "notes_dur", "rests")
         a = {k: Counter() for k in keys}
@@ -165,7 +169,7 @@ def main():
                 "recall": round(a[k]["tp"] / max(1, a[k]["truth"]), 4)}
         return out
     summary = {"per_score": res,
-               "aggregate": {n: agg(n) for n in ("auto_e2e", "homr")}}
+               "aggregate": {n: agg(n) for n in sorted(names)}}
     (TRAIN / "reports" / "architecture_compare.json").write_text(
         json.dumps(summary, indent=1))
     print(json.dumps(summary["aggregate"], indent=1))

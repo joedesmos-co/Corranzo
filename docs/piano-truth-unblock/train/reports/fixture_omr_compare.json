@@ -1,0 +1,222 @@
+{
+ "piano-rhythm-tuplets-vector": {
+  "truth_notes": 63,
+  "pred_notes": 24,
+  "complete": {
+   "truth": 63,
+   "pred": 24,
+   "tp": 1,
+   "fp": 23,
+   "fn": 62,
+   "precision": 0.0417,
+   "recall": 0.0159
+  },
+  "pitch": {
+   "truth": 16,
+   "pred": 5,
+   "tp": 2,
+   "fp": 3,
+   "fn": 14,
+   "precision": 0.4,
+   "recall": 0.125
+  },
+  "duration": {
+   "truth": 12,
+   "pred": 3,
+   "tp": 2,
+   "fp": 1,
+   "fn": 10,
+   "precision": 0.6667,
+   "recall": 0.1667
+  },
+  "rests": {
+   "truth": 5,
+   "pred": 2,
+   "tp": 1,
+   "fp": 1,
+   "fn": 4,
+   "precision": 0.5,
+   "recall": 0.2
+  },
+  "measure_validity": {
+   "measures": 7,
+   "bad": 0
+  }
+ },
+ "piano-grand-voices-vector": {
+  "truth_notes": 88,
+  "pred_notes": 120,
+  "complete": {
+   "truth": 88,
+   "pred": 120,
+   "tp": 17,
+   "fp": 103,
+   "fn": 71,
+   "precision": 0.1417,
+   "recall": 0.1932
+  },
+  "pitch": {
+   "truth": 88,
+   "pred": 120,
+   "tp": 38,
+   "fp": 82,
+   "fn": 50,
+   "precision": 0.3167,
+   "recall": 0.4318
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 1,
+   "tp": 1,
+   "fp": 0,
+   "fn": 2,
+   "precision": 1.0,
+   "recall": 0.3333
+  },
+  "rests": {
+   "truth": 0,
+   "pred": 2,
+   "tp": 0,
+   "fp": 2,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 11,
+   "bad": 1
+  }
+ },
+ "piano-articulation-scan": {
+  "truth_notes": 88,
+  "pred_notes": 106,
+  "complete": {
+   "truth": 88,
+   "pred": 106,
+   "tp": 20,
+   "fp": 86,
+   "fn": 68,
+   "precision": 0.1887,
+   "recall": 0.2273
+  },
+  "pitch": {
+   "truth": 88,
+   "pred": 32,
+   "tp": 25,
+   "fp": 7,
+   "fn": 63,
+   "precision": 0.7812,
+   "recall": 0.2841
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 5,
+   "tp": 2,
+   "fp": 3,
+   "fn": 1,
+   "precision": 0.4,
+   "recall": 0.6667
+  },
+  "rests": {
+   "truth": 0,
+   "pred": 4,
+   "tp": 0,
+   "fp": 4,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 13,
+   "bad": 3
+  }
+ },
+ "piano-dense-advanced-vector": {
+  "truth_notes": 264,
+  "pred_notes": 172,
+  "complete": {
+   "truth": 264,
+   "pred": 172,
+   "tp": 97,
+   "fp": 75,
+   "fn": 167,
+   "precision": 0.564,
+   "recall": 0.3674
+  },
+  "pitch": {
+   "truth": 263,
+   "pred": 77,
+   "tp": 53,
+   "fp": 24,
+   "fn": 210,
+   "precision": 0.6883,
+   "recall": 0.2015
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 7,
+   "tp": 3,
+   "fp": 4,
+   "fn": 0,
+   "precision": 0.4286,
+   "recall": 1.0
+  },
+  "rests": {
+   "truth": 0,
+   "pred": 1,
+   "tp": 0,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 13,
+   "bad": 6
+  }
+ },
+ "piano-beginner-single-vector": {
+  "truth_notes": 32,
+  "pred_notes": 35,
+  "complete": {
+   "truth": 32,
+   "pred": 35,
+   "tp": 0,
+   "fp": 35,
+   "fn": 32,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "pitch": {
+   "truth": 11,
+   "pred": 5,
+   "tp": 0,
+   "fp": 5,
+   "fn": 11,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 4,
+   "tp": 2,
+   "fp": 2,
+   "fn": 1,
+   "precision": 0.5,
+   "recall": 0.6667
+  },
+  "rests": {
+   "truth": 1,
+   "pred": 1,
+   "tp": 1,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "measure_validity": {
+   "measures": 13,
+   "bad": 0
+  }
+ }
+}
