@@ -70,6 +70,9 @@ function frame(midis, extra = {}) {
       confidence: extra.confidences?.[index] ?? 0.65,
       ratio: extra.ratios?.[index] ?? 2.2,
       harmonicSupport: 1.4,
+      // Clean by default so existing cases are unaffected; the octave-ghost
+      // tests set a strong half-partial (the lower octave's 3rd partial).
+      halfPartialRatio: extra.halfPartialRatios?.[index] ?? 0.05,
     })),
   }
 }
@@ -86,6 +89,22 @@ function evaluateOnce(target, heard, extra = {}) {
 }
 
 describe('Mic V3 Guitar recognition', () => {
+  it('rejects an octave expectation lit only by the played string\u2019s 3rd partial', () => {
+    const target = expectation([67])
+    const result = evaluateOnce(target, [67], {
+      frame: { midiFloat: 55.2, clarity: 0.6, confidences: [0.6], halfPartialRatios: [0.18] },
+    })
+    expect(result.decision.advance).toBe(false)
+  })
+
+  it('still accepts a real upper octave whose half-partial band is clean', () => {
+    const target = expectation([67])
+    const result = evaluateOnce(target, [67], {
+      frame: { midiFloat: 55.2, clarity: 0.6, confidences: [0.6], halfPartialRatios: [0.03] },
+    })
+    expect(result.decision.advance).toBe(true)
+  })
+
   it('requires both tones of a double-stop', () => {
     const target = expectation([45, 57])
     const one = evaluateOnce(target, [45])
