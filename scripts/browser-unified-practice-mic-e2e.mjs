@@ -469,10 +469,13 @@ async function main() {
         await page.screenshot({ path: join(outDir, 'mic-waiting.png') })
         const entry = await scoreState(page)
         const entryCurrent = currentBox(entry)
-        if (entryCurrent && /middle C|Play C4/i.test(entryCurrent.label ?? '')) {
-          pass('mic run waits on middle C', entryCurrent.label)
+        // The current UI renders the box label as text and puts "Play C4" in
+        // the your-turn panel; older builds exposed the label as aria-label.
+        const waitingLabel = entryCurrent?.label ?? entry.yourTurnText ?? ''
+        if (entryCurrent && /middle C|Play C4|\bC4\b/i.test(waitingLabel)) {
+          pass('mic run waits on middle C', waitingLabel.slice(0, 80))
         } else {
-          fail('mic run waits on middle C', entryCurrent?.label ?? entry.yourTurnText)
+          fail('mic run waits on middle C', waitingLabel.slice(0, 120))
         }
         const advanced = await waitForCondition(page, 'c4-advance', async () => {
           const state = await scoreState(page)

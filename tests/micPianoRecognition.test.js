@@ -88,7 +88,7 @@ describe('Mic V3 Piano recognition', () => {
   // played note satisfies an octave expectation, but the engine's own
   // confidence for such a ghost is low (0.28-0.46) while a genuinely
   // struck note reads 0.57-0.91.
-  it('rejects an octave expectation satisfied only by the played note\u2019s harmonic', () => {
+  it('rejects an octave expectation satisfied only by the played note’s harmonic', () => {
     const target = expectation([72])
     const result = evaluateOnce(target, [72], {
       frame: { midiFloat: 60.2, clarity: 0.35, confidences: [0.35], ratios: [1.6] },
