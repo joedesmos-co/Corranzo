@@ -1174,3 +1174,41 @@ CAVEATS: the font benchmark is synthetic (same score, varied typeface);
 it measures classifier robustness, not a new real publisher. Arial-metric
 system fonts still give the best same-font result; the bundled OFL Arimo
 remains a fallback. Rest/ties emission is unchanged.
+
+### R29 — Browser-compatible JS pipeline; no Python at runtime
+The research pipeline is now ported for the browser in
+tools/guitar-vision/browser/guitar-vision.mjs. It uses pdfjs-dist for
+text and raster, implements TAB geometry, string/fret assignment,
+SMuFL rhythm, measure validation and MusicXML, and runs unchanged in
+Node (validation) and Chromium (demo).
+
+REFERENCE RESULTS (JS implementation, not the Python pipeline):
+  paired-chords  116/116 string+fret, 32/32 complete timed, 8/8 measures
+  techniques      32/32 string+fret, 32/32 complete timed, 8/8 measures
+  sparse          32/32 string+fret, 0/32 timed (honest abstention)
+  total          180/180 string+fret, 64/64 complete timed
+  Node runtime   22-88 ms per page
+  Browser        204 ms (paired fixture, headless Chromium + OSMD)
+
+BROWSER EVIDENCE: upload -> recognition -> MusicXML -> OSMD engraving in
+headless Chromium; screenshot /tmp/proof/browser-evidence.png. The
+engraved TAB matches the fixture frets (0/3/5/12/7/10/2/0 ...).
+
+RHYTHM SCOPE: the JS port does not yet include the Python stem/beam/flag
+evidence. Filled noteheads are read as quarters and validated against
+the time signature; every such duration is footnoted "unverified" and
+the score metadata states the method. With no notation noteheads the
+duration is null (no <type>), so sparse abstains rather than inventing
+quarters. This limitation is why the 32/32 timed results should be read
+as quarter-only fixtures, not general rhythm capability.
+
+RUNTIME ASSETS: pdfjs-dist 5.4.296 Apache-2.0; OSMD 2.2.0 BSD-3-Clause
+(demo only); @napi-rs/canvas MIT (Node only); Playwright Apache-2.0
+(test only). No neural weights. The Python raster path uses ordinary
+glyph templates from fonts (Arimo OFL fallback); the browser text path
+uses no templates. Provenance: tools/guitar-vision/browser/ASSETS.md.
+
+NOT PORTED: image-only scans (Python research remains 116/116 on its
+reference), beam/flag verification, TAB-only rhythm slashes, rest/tie
+emission, multi-voice matching. These are reported as unsupported rather
+than approximated.

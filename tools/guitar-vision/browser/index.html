@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corranzo Guitar Vision — browser prototype</title>
+<style>
+  body { font: 15px/1.45 -apple-system, system-ui, sans-serif; margin: 24px; color: #1c1c1c; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .muted { color: #666; margin-bottom: 16px; }
+  #status { background: #f5f5f5; padding: 10px; border-radius: 6px; white-space: pre-wrap; font-size: 12px; }
+  #score { margin-top: 18px; border-top: 1px solid #ddd; padding-top: 12px; min-height: 120px; }
+  button { padding: 6px 14px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<h1>Corranzo Guitar Vision</h1>
+<div class="muted">PDF → TAB → timed MusicXML, entirely in the browser (PDF.js + this repo's JS pipeline). No Python, no server recognition.</div>
+<input id="pdf" type="file" accept="application/pdf">
+<button id="run">Transcribe</button>
+<a id="dl" download="transcription.musicxml" style="display:none;margin-left:12px">Download MusicXML</a>
+<pre id="status">Choose a digital guitar TAB PDF.</pre>
+<div id="score"></div>
+<script type="module" src="./demo.mjs"></script>
+</body>
+</html>
