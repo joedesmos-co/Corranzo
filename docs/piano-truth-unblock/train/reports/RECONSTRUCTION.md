@@ -2192,3 +2192,44 @@ not.
   glyph/reference mismatch; no key/time inference; accidental glyphs are not
   yet applied. Image/scans remain a separate, weaker path.
   No merge/deploy; sealed TEST untouched.
+
+
+## PDF.js-only vector OMR + full-score fidelity (this session)
+
+  Implemented scripts/pdfjs_vector_omr.mjs: PDF.js getOperatorList (staff
+  lines, barlines lw>=0.95, stems lw<0.95, diagonal beam segments, filled
+  dots) + getTextContent (SMuFL glyphs), page-point coordinates with a
+  top-left origin. No PyMuPDF in the production path.
+  Rhythm rules: SMuFL noteheads E0A2/E0A3/E0A4; beam levels 0/1/2/3 ->
+  quarter/8th/16th/32nd; dots; SMuFL rests E4E3..E4E8; tuplet "3" marks
+  above the staff -> 3:2; time signature digits E080..E089; chord clusters
+  by notehead centre; grand staves paired into systems by vertical
+  proximity; measures from width-filtered barlines.
+  MusicXML emits notes/rests, clefs, <time> when decoded, tuplet
+  time-modification; no <key> (unresolved, never silently C major).
+
+  PDF.js vs Python research extractor parity (all four PDFs):
+    beginner 32/32 events, rhythm 63/63, grand 88/88, dense 226/226;
+    python_only 0, pdfjs_only 0. Notehead x parity on beginner: max dx 0.00.
+
+  Complete-event scores vs reference MusicXML (reports/pdfjs_vector_complete.json):
+    beginner-single   complete 32/32 (1.000), pitch 11/11, dur 3/3,
+                      rests 0/1, measures 8 (0 bad)
+    rhythm-tuplets    complete 54/63 (0.857, up from 48/63), pitch 16/16
+                      (0.842 precision), dur 11/12 (0.917), rests 3/5,
+                      measures 8 (0 bad); 12 tuplet notes decoded
+    grand-voices      complete 76/88 (0.864), pitch 76/88, dur 3/3,
+                      measures 8 (0 bad; was 16 with per-staff measures)
+    dense-advanced    complete 159/264 (0.602), pitch 0.601, measures 8
+                      (13 voice-sum defects)
+    aggregate         complete 321/447 (0.718, up from 315/447 = 0.705)
+  Accepted: PDF.js-only path preserves the verified results, adds tuplet
+  decoding (+6 complete events) and fixes grand-staff measure ownership
+  (16 -> 8 measures, 0 bad), with no event regression.
+
+  Outputs: data/vector_out_pdfjs/*.musicxml (valid score-partwise).
+  Remaining: key signatures/accidentals have no evidence in the C-major
+  fixtures and remain unresolved; dense-layout voices/measures; rest glyph
+  vs reference mismatch on beginner; tuplet detection depends on visible
+  "3" text; image/scan path unchanged and separate.
+  No merge/deploy; sealed TEST untouched.
