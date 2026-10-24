@@ -2096,3 +2096,51 @@ not.
   evaluate a licensed TrOMR/SMT-style model on the CC0 fixtures.
 
   Input-quality gate preserved; no merge/deploy. Sealed TEST untouched.
+
+
+## Sustainable hybrid OMR architecture (this session)
+
+  Hybrid routing: digital PDFs with embedded notation-font glyphs take the
+  vector path; image-only PDFs/scans/screenshots take the image path.
+  Working vector prototype: scripts/pdf_vector_omr.py (PyMuPDF, research
+  only). It extracts staff lines/barlines/stems from PDF drawings, classifies
+  noteheads/rests/clefs by staff-relative bbox geometry, associates noteheads
+  to stems, and maps to written pitch. Output schema:
+  {schema:"corranzo-notation-ir/1", notes:[{midi,x,y,staff,measure,clef,
+  confidence}], rests:[...], route:"vector"|"image"}.
+
+  Digital-PDF pitch accuracy on the vendored CC0 fixtures (truth MusicXML,
+  never passed to extraction):
+    beginner-single-vector     32/32  pitch recall 1.000 (33 detected)
+    rhythm-tuplets-vector      63/63  pitch recall 1.000 (66 detected)
+    grand-voices-vector        76/88  pitch recall 0.864 (88 detected)
+    dense-advanced-vector     159/264 pitch recall 0.602 (226 detected)
+    articulation-scan           0/88  route=image (no vector glyphs; correct
+                                      fallback to the image path)
+  Durations/beams/tuplets are NOT yet decoded by the vector prototype; only
+  notehead/pitch/clef/route are claimed.
+
+  Image/scan path (unchanged evidence): homr 70.5% complete on 5 Verovio DEV
+  pages but 25.2% on the CC0 fixtures (beginner 0%); oemer MIT 25.4% on one
+  page, ~6-7 min/page and crash-prone locally. No image engine is
+  production-ready.
+
+  Licensing:
+    Vector prototype imports PyMuPDF (AGPL-3.0) -> research evaluation only.
+    Production digital-PDF route must use the existing browser PDF.js
+    pipeline (Apache-2.0) or a permissive PDF parser (pdfminer.six/pypdf).
+    oemer MIT; homr AGPL; Audiveris AGPL.
+
+  Shared representation + validation: the prototype emits the common IR
+  above with confidence and route. Full measure validation remains the
+  existing MusicXML validator; vector durations are the next component.
+
+  Resource: vector extraction is seconds/PDF, <100 MB RSS; image OMR is the
+  expensive path (oemer ~3.3 GB RSS, minutes/page). Disk is at 2.6 GiB free,
+  below the 5 GiB safety floor; no large downloads/training.
+
+  Decision: continue the hybrid vector-first architecture. It is the only
+  path with measured high pitch accuracy on digital PDFs and a legally
+  usable production story (PDF.js). Next: decode stems/beams/flags/dots in
+  the vector path and add the shared validator before MusicXML.
+  No merge/deploy; sealed TEST untouched.

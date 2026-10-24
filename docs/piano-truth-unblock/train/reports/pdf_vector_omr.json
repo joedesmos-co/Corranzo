@@ -1,0 +1,52 @@
+{
+ "piano-articulation-scan": {
+  "truth_notes": 88,
+  "detected": 0,
+  "pitch_tp": 0,
+  "pitch_recall": 0.0,
+  "count_ratio": 0.0,
+  "rests_detected": null,
+  "staves": null,
+  "route": null
+ },
+ "piano-beginner-single-vector": {
+  "truth_notes": 32,
+  "detected": 33,
+  "pitch_tp": 32,
+  "pitch_recall": 1.0,
+  "count_ratio": 1.031,
+  "rests_detected": 4,
+  "staves": 2,
+  "route": "vector"
+ },
+ "piano-dense-advanced-vector": {
+  "truth_notes": 264,
+  "detected": 226,
+  "pitch_tp": 159,
+  "pitch_recall": 0.6023,
+  "count_ratio": 0.856,
+  "rests_detected": 42,
+  "staves": 4,
+  "route": "vector"
+ },
+ "piano-grand-voices-vector": {
+  "truth_notes": 88,
+  "detected": 88,
+  "pitch_tp": 76,
+  "pitch_recall": 0.8636,
+  "count_ratio": 1.0,
+  "rests_detected": 4,
+  "staves": 4,
+  "route": "vector"
+ },
+ "piano-rhythm-tuplets-vector": {
+  "truth_notes": 63,
+  "detected": 66,
+  "pitch_tp": 63,
+  "pitch_recall": 1.0,
+  "count_ratio": 1.048,
+  "rests_detected": 6,
+  "staves": 2,
+  "route": "vector"
+ }
+}
