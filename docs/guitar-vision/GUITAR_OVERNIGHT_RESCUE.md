@@ -963,3 +963,38 @@ REMAINING / NOT CLAIMED:
   - dotted values: gated by measure validation, not exercised by any
     reference fixture (all quarter).
   - multi-voice real scores: refused by the pairing gate.
+
+### R25 — Eighth-note (flag) recovery verified; stem attribution hardened
+R24's fixtures are quarter-only, so beams/flags were unverified. Two
+stem-attribution bugs also surfaced when the classifier was applied to
+denser notation, and both are fixed:
+
+1. STEM SIDE CONVENTION. The detector searched up and down at both
+   notehead edges. On tight eighth-note chords this lets a chord borrow
+   the neighbour's stem (measured: a left-edge up-run 3.8px away), and
+   with it the neighbour's flag evidence. Engraving convention is
+   right-edge = up-stem, left-edge = down-stem; enforcing that removes
+   the borrow.
+2. SPACING-BOUNDED SEARCH. The +/-16px stem window exceeded half the
+   spacing between eighth-note chords (~17px). The window is now
+   min(16px, 0.45 x nearest column gap), so a stem can only belong to
+   its own onset.
+3. FLAGS. A flag is ink immediately beside the stem tip (10x12px strip,
+   staff-line rows removed). Whole-component tests failed because tight
+   engraving lets a flag touch the next stem; the near-tip strip is
+   robust to that. Beams and flags are mutually exclusive on one note;
+   if both appear the duration uses the subdivision but is marked
+   unconfident (beam_flag_conflict).
+
+NEW REFERENCE EVALUATION (independent, notation-only fixture with real
+eighths; tool: proof-notation-duration-score.py):
+  guitar-standard-chords-vector: 40 onsets, 40 correct, accuracy 1.00
+    confusion: eighth->eighth 16, quarter->quarter 24
+    ambiguous 0, beam_flag_conflicts 0, confident 40/40
+  guitar-paired-chords-vector  : 32/32 quarter, accuracy 1.00
+  guitar-techniques-paired     : 32/32 quarter, accuracy 1.00
+  TOTAL duration classification: 104/104 onsets across 3 references.
+
+The three TAB reference fixtures are unchanged by these fixes:
+  SF 116/116, 32/32, 32/32 (180/180); complete events 32/32, 0/32
+  (sparse abstains), 32/32; measures valid 8/8, 0/8, 8/8.

@@ -579,7 +579,8 @@ def tab_onsets(events, digit_width):
     return onsets
 
 
-def _stem_probe(ink, beam_mask, box, rhy, min_run=None):
+def _stem_probe(ink, beam_mask, box, rhy, min_run=None, side_tol=None,
+                staff_rows=None, flag_min_ink=5):
     """Stem evidence using a SINGLE-PIXEL column.
 
     anchored_stem() requires 25% ink in a 5px window, which assumes a
@@ -592,25 +593,29 @@ def _stem_probe(ink, beam_mask, box, rhy, min_run=None):
     x0, y0, x1, y1 = [int(round(v)) for v in box]
     if min_run is None:
         min_run = rhy.MIN_STEM_RUN
-    tol = rhy.STEM_SIDE_TOL
+    tol = rhy.STEM_SIDE_TOL if side_tol is None else int(round(side_tol))
     best = None
-    for edge in (x1, x0):
+    # Engraving convention: a stem on the RIGHT edge points up, a stem on
+    # the LEFT edge points down. Searching both directions on both edges
+    # lets a dense chord borrow the neighbouring note's stem (measured:
+    # a left-edge up-run 3px away on eighth-note chords), which then
+    # carries the neighbour's flag/beam evidence.
+    for edge, upward in ((x1, True), (x0, False)):
         for xx in range(max(edge - tol, 0), min(edge + tol + 1, ink.shape[1])):
             col = ink[:, xx]
-            up = rhy._bridged_run(col, y0, -1)
-            down = rhy._bridged_run(col, y1, 1)
-            if up >= down:
-                run, tip = up, y0 - up
-                span = (y0 - up, y0)
+            if upward:
+                run = rhy._bridged_run(col, y0, -1)
+                tip, span = y0 - run, (y0 - run, y0)
             else:
-                run, tip = down, y1 + down
-                span = (y1, y1 + down)
+                run = rhy._bridged_run(col, y1, 1)
+                tip, span = y1 + run, (y1, y1 + run)
             if best is None or run > best['run']:
-                best = {'run': run, 'x': xx, 'tip': tip, 'span': span}
+                best = {'run': run, 'x': xx, 'tip': tip, 'span': span,
+                        'up': upward}
     if best is None:
-        return {'stem': False, 'run': 0, 'beams': 0, 'dots': 0}
+        return {'stem': False, 'run': 0, 'beams': 0, 'flags': 0, 'dots': 0}
     if best['run'] < min_run:
-        return {'stem': False, 'run': best['run'], 'beams': 0, 'dots': 0}
+        return {'stem': False, 'run': best['run'], 'beams': 0, 'flags': 0, 'dots': 0}
     y_lo = max(min(best['span']) - 4, 0)
     y_hi = min(max(best['span']) + 4, ink.shape[0] - 1)
     xx = best['x']
@@ -621,11 +626,33 @@ def _stem_probe(ink, beam_mask, box, rhy, min_run=None):
         if r - prev > 3:
             groups += 1
         prev = r
+    # Flags: a flag is ink immediately beside the stem tip (right side for
+    # both stem directions in SMuFL). A quarter note has an empty strip
+    # there; reading the whole nearby component fails because a tight
+    # engraving lets the flag touch the next stem, so use near-tip ink.
+    tip = best['tip']
+    up = best.get('up', True)
+    if up:
+        fy0, fy1 = tip - 2, tip + 10
+    else:
+        fy0, fy1 = tip - 10, tip + 2
+    fx0, fx1 = xx + 2, xx + 14
+    fy0 = max(fy0, 0); fy1 = min(fy1, ink.shape[0])
+    fx1 = min(fx1, ink.shape[1])
+    near = ink[fy0:fy1, fx0:fx1].copy() if fx1 > fx0 else np.zeros((0, 0), bool)
+    if staff_rows is not None and near.size:
+        for yy in range(fy0, fy1):
+            if staff_rows[yy]:
+                near[yy - fy0, :] = False
+    flags = 1 if int(near.sum()) >= flag_min_ink else 0
     return {'stem': True, 'run': int(best['run']), 'beams': int(groups),
-            'dots': 0, 'x': xx, 'span': best['span']}
+            'flags': flags, 'flag_ink': int(near.sum()),
+            'dots': 0, 'x': xx, 'span': best['span'],
+            'tip': tip, 'up': up}
 
 
-def _column_evidence(col, ink, beam_mask, rhy, min_run=None):
+def _column_evidence(col, ink, beam_mask, rhy, min_run=None, side_tol=None,
+                     staff_rows=None, flag_min_ink=5):
     """Strongest stem/beam evidence among the chord's noteheads.
 
     A chord shares one stem, but chord tones displaced to avoid a
@@ -634,10 +661,12 @@ def _column_evidence(col, ink, beam_mask, rhy, min_run=None):
     """
     best = None
     for m in col['members']:
-        ev = _stem_probe(ink, beam_mask, m['box'], rhy, min_run)
+        ev = _stem_probe(ink, beam_mask, m['box'], rhy, min_run, side_tol,
+                         staff_rows, flag_min_ink)
         if best is None or ev['run'] > best['run']:
             best = ev
-    return {'beams': best['beams'], 'dots': 0, 'stem': best['stem'],
+    return {'beams': best['beams'], 'flags': best.get('flags', 0),
+            'dots': 0, 'stem': best['stem'],
             'stem_run': best['run'], 'stem_box': best.get('x')}
 
 
@@ -646,18 +675,24 @@ def _duration_from_evidence(col, ev, confident_enabled=True):
     ambiguous = len(bases) > 1
     base = bases[0]
     beams = ev['beams']
+    flags = ev.get('flags', 0)
     dots = ev['dots']
     if base >= 4.0:            # whole: hollow head, no stem required
         dur, conf = 4.0, True
     elif base >= 2.0:          # half: hollow head is itself evidence
         dur, conf = 2.0, True
     else:
-        dur = 1.0 / (2 ** min(beams, 3))
-        conf = ev['stem']
+        # Beams and flags are mutually exclusive on one note. If both are
+        # seen, one is spurious: use the stronger (either yields the same
+        # subdivision count) but refuse to call the duration confident.
+        contradiction = beams > 0 and flags > 0
+        steps = min(max(beams, flags), 3)
+        dur = 1.0 / (2 ** steps)
+        conf = ev['stem'] and not contradiction
     return {'duration': dur, 'duration_plain': dur,
-            'beams': beams, 'dots': dots, 'stem': ev['stem'],
+            'beams': beams, 'flags': flags, 'dots': dots, 'stem': ev['stem'],
             'confident': bool(conf) and not ambiguous,
-            'ambiguous': ambiguous}
+            'ambiguous': ambiguous, 'beam_flag_conflict': beams > 0 and flags > 0}
 
 
 def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
@@ -678,6 +713,7 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
     noteheads = notation_noteheads(items)
     rests = notation_rests(items)
 
+    staff_rows = ink.sum(axis=1) > 0.35 * ink.shape[1]
     widths = [it['bbox'][2] - it['bbox'][0] for it in items
               if (it.get('text') or '').strip().isdigit()]
     digit_width = float(np.median(widths)) if widths else 10.0
@@ -698,6 +734,18 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
         # staff spaces. The absolute MIN_STEM_RUN is tuned for a 2px
         # stroke at one DPI and rejects genuine 1px stems on crisp pages.
         min_run = 1.6 * float(staves[si]['gap'])
+        flag_min_ink = max(4, int(round(0.3 * float(staves[si]['gap']))))
+        # Bound the stem search by the column spacing. Dense eighth-note
+        # chords sit ~17px apart; an unbounded +/-16px probe lets a chord
+        # borrow its neighbour's stem (and flag/beam evidence).
+        for i, c in enumerate(cols):
+            gaps = []
+            if i:
+                gaps.append(c['cx'] - cols[i - 1]['cx'])
+            if i + 1 < len(cols):
+                gaps.append(cols[i + 1]['cx'] - c['cx'])
+            c['side_tol'] = (max(3.0, min(float(rhy.STEM_SIDE_TOL), 0.45 * min(gaps)))
+                             if gaps else float(rhy.STEM_SIDE_TOL))
         # Pair onsets to columns. Equal counts is the common, exact case:
         # both are left-to-right sequences of the same musical events.
         pair = {}
@@ -728,7 +776,8 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
                     'ambiguous': False,
                 }
                 continue
-            ev = _column_evidence(col, ink, beam_mask, rhy, min_run)
+            ev = _column_evidence(col, ink, beam_mask, rhy, min_run,
+                                  col.get('side_tol'), staff_rows, flag_min_ink)
             r = _duration_from_evidence(col, ev)
             if not exact:
                 # A greedy pairing across unequal counts is a guess about
@@ -802,6 +851,8 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
         'measures_total': len(measure_report),
         'staff_pairing': staff_pairing,
         'staffs_exact_pairing': sum(1 for p in staff_pairing if p['exact']),
+        'flags_detected': sum(1 for o in onsets
+                              if (raw[(o['staff'], o['measure'], round(o['x'], 2))].get('flags') or 0)),
         'rests_emitted': 0,
         'ties_detected': 0,
         '_onsets': onsets,
@@ -947,6 +998,7 @@ def main():
                     'time_signature_source': ts_source,
                     'measure_quarters': ts[0] * 4.0 / ts[1],
                     'measures_complete': 0, 'measures_total': 0,
+                    'flags_detected': 0,
                     'rests_emitted': 0, 'ties_detected': 0}
     try:
         _rhy = _load_mod('proof_rhythm_graph', 'proof-rhythm-graph.py')
