@@ -2233,3 +2233,56 @@ not.
   vs reference mismatch on beginner; tuplet detection depends on visible
   "3" text; image/scan path unchanged and separate.
   No merge/deploy; sealed TEST untouched.
+
+
+## Production-runtime PDF.js 5.4 + browser evidence (this session)
+
+  Stage 1 compatibility fix: pdfjs-dist 5.4.296 changed constructPath from
+  [kindArray, coordsArray] to [paintOp (20=stroke/22=fill/23=eoFill),
+  [pathData object], minMax] with normalized ops 0=moveTo,1=lineTo,2=curveTo.
+  scripts/pdfjs_vector_core.mjs decodes both 4.x and 5.4 formats; the Node
+  wrapper and browser harness share the core. Verified 5.4.296:
+    beginner 32 notes / 1 rest, 4/4, key 0, 8 measures
+    rhythm 63 notes, 54/63 complete (tuplets preserved)
+    grand 88 notes, 76/88 complete, 8 shared grand-staff measures
+    dense 226 notes, 159/264 complete
+  Results are identical to the 4.10.38 baseline (321/447 complete), so the
+  runtime upgrade does not regress any fixture.
+
+  Browser evidence: browser/pdfjs_harness.html + pdfjs_harness.mjs run the
+  same core with the browser build (pdfjs-dist/build/pdf.mjs, version
+  5.4.296) under Chromium via Playwright; result
+  reports/pdfjs54_browser.json: 32 notes, 1 rest, 2 systems, 4/4, vector
+  route, valid MusicXML. Worker: build/pdf.worker.mjs.
+
+  Stage 2 completeness:
+    - time signatures decoded from SMuFL time digits (E080..E089) -> 4/4.
+    - key signatures detected from SMuFL accidental sequences (E260/E262)
+      between clef and notes; no glyphs -> key 0 with provenance
+      "no-key-glyph" (C major inferred from absence, credited in MusicXML).
+    - accidentals detected near noteheads (E260/E261/E262) and applied to
+      pitch; not exercised by the C-major fixtures.
+    - tuplets: visible "3" marks above the staff -> 3:2 time-modification
+      (12 notes on the rhythm fixture, +6 complete events).
+    - rests SMuFL E4E3..E4E8; ties, articulations, dynamics remain
+      unsupported and are listed in credits (no fabrication).
+    - grand-staff staves paired into systems; shared measure numbering.
+    - MusicXML emits <key>, <time>, clefs, tuplets, chords, rests with
+      <backup> between staves; no unresolved values are invented.
+
+  Stage 3 input interface: scripts/omr_input.py classifies PDF vs image,
+  routes PDFs to the PDF.js extractor, and assesses raster quality
+  independently (resolution, Laplacian blur, contrast, staff rows).
+  Clean image -> readable but recognition_confidence null with an explicit
+  limitation; low-res 300x388 -> unreadable, no transcription. Quality and
+  recognition confidence are separate fields.
+
+  Stage 4 unfamiliar documents: vector extractor returns route=image for
+  beethoven-symphony-7-mutopia, Ao no Sumika, and demo-minuet-in-g (no
+  SMuFL vector glyphs / raster PDFs). The image path remains the weak,
+  separate fallback; no vector accuracy is claimed for them.
+
+  Remaining blockers: image/scanned OMR; ties/articulations/dynamics;
+  dense-layout measure/voice timing; rest glyph/reference mismatch;
+  accidentals/key logic implemented but not exercised by the C-major corpus.
+  No merge/deploy; sealed TEST untouched.

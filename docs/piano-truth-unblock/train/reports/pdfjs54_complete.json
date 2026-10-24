@@ -1,0 +1,194 @@
+{
+ "piano-beginner-single-vector": {
+  "complete": {
+   "truth": 32,
+   "pred": 32,
+   "tp": 32,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "pitch": {
+   "truth": 11,
+   "pred": 11,
+   "tp": 11,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 3,
+   "tp": 3,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "rests": {
+   "truth": 1,
+   "pred": 1,
+   "tp": 0,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 8,
+   "bad": 0
+  },
+  "pdfjs_version": "5.4.296",
+  "meter": {
+   "beats": 4,
+   "unit": 4
+  },
+  "key": 0
+ },
+ "piano-rhythm-tuplets-vector": {
+  "complete": {
+   "truth": 63,
+   "pred": 63,
+   "tp": 54,
+   "fp": 9,
+   "fn": 9,
+   "precision": 0.8571,
+   "recall": 0.8571
+  },
+  "pitch": {
+   "truth": 16,
+   "pred": 19,
+   "tp": 16,
+   "fp": 3,
+   "fn": 0,
+   "precision": 0.8421,
+   "recall": 1.0
+  },
+  "duration": {
+   "truth": 12,
+   "pred": 13,
+   "tp": 11,
+   "fp": 2,
+   "fn": 1,
+   "precision": 0.8462,
+   "recall": 0.9167
+  },
+  "rests": {
+   "truth": 5,
+   "pred": 5,
+   "tp": 3,
+   "fp": 2,
+   "fn": 2,
+   "precision": 0.6,
+   "recall": 0.6
+  },
+  "measure_validity": {
+   "measures": 8,
+   "bad": 0
+  },
+  "pdfjs_version": "5.4.296",
+  "meter": {
+   "beats": 4,
+   "unit": 4
+  },
+  "key": 0
+ },
+ "piano-grand-voices-vector": {
+  "complete": {
+   "truth": 88,
+   "pred": 88,
+   "tp": 76,
+   "fp": 12,
+   "fn": 12,
+   "precision": 0.8636,
+   "recall": 0.8636
+  },
+  "pitch": {
+   "truth": 88,
+   "pred": 88,
+   "tp": 76,
+   "fp": 12,
+   "fn": 12,
+   "precision": 0.8636,
+   "recall": 0.8636
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 3,
+   "tp": 3,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0
+  },
+  "rests": {
+   "truth": 0,
+   "pred": 0,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 8,
+   "bad": 0
+  },
+  "pdfjs_version": "5.4.296",
+  "meter": {
+   "beats": 4,
+   "unit": 4
+  },
+  "key": 0
+ },
+ "piano-dense-advanced-vector": {
+  "complete": {
+   "truth": 264,
+   "pred": 226,
+   "tp": 159,
+   "fp": 67,
+   "fn": 105,
+   "precision": 0.7035,
+   "recall": 0.6023
+  },
+  "pitch": {
+   "truth": 263,
+   "pred": 225,
+   "tp": 158,
+   "fp": 67,
+   "fn": 105,
+   "precision": 0.7022,
+   "recall": 0.6008
+  },
+  "duration": {
+   "truth": 3,
+   "pred": 5,
+   "tp": 2,
+   "fp": 3,
+   "fn": 1,
+   "precision": 0.4,
+   "recall": 0.6667
+  },
+  "rests": {
+   "truth": 0,
+   "pred": 0,
+   "tp": 0,
+   "fp": 0,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  "measure_validity": {
+   "measures": 8,
+   "bad": 13
+  },
+  "pdfjs_version": "5.4.296",
+  "meter": {
+   "beats": 4,
+   "unit": 4
+  },
+  "key": 0
+ }
+}
