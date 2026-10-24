@@ -49,7 +49,10 @@ const CLIP_SET = arg('clips', 'legacy')
 const TRUE_ONLY = arg('true-only', '0') === '1'
 // Optional scenario-name filter (substring), e.g. octave-up for a fast
 // focused regression of the odd-partial rule.
-const SCENARIO_FILTER = arg('scenario', null)
+const SCENARIO_FILTERS = (arg('scenario', null) ?? '')
+  .split(',')
+  .map((entry) => entry.trim())
+  .filter(Boolean)
 const JSON_OUT = arg('json', null)
 
 // ---- clip collection (same corpora and expectations as the A/B) ----------
@@ -222,8 +225,8 @@ const latencies = []
 for (const clip of clips) {
   const trueResult = await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, clip.expected)
   const allScenarios = TRUE_ONLY ? [] : wrongExpectations(clip.expected, clip.truth)
-  const scenarios = SCENARIO_FILTER
-    ? allScenarios.filter((scenario) => scenario.name.includes(SCENARIO_FILTER))
+  const scenarios = SCENARIO_FILTERS.length
+    ? allScenarios.filter((scenario) => SCENARIO_FILTERS.some((filter) => scenario.name.includes(filter)))
     : allScenarios
   const fps = []
   for (const scenario of scenarios) {

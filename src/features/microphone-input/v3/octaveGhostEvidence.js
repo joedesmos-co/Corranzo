@@ -44,9 +44,6 @@ export function octaveGhostFromHalfPartial(frame, expectedMidis = [], options = 
   const threshold = Number.isFinite(options.octaveGhostHalfPartialRatio)
     ? options.octaveGhostHalfPartialRatio
     : 0.1
-  const weakConfidence = Number.isFinite(options.octaveGhostMinExpectedConfidence)
-    ? options.octaveGhostMinExpectedConfidence
-    : 0.5
   const dominant = dominantPitch(frame)
   const roundedDominant = dominant == null ? null : Math.round(dominant)
   const blindHeard = new Set([
@@ -79,15 +76,12 @@ export function octaveGhostFromHalfPartial(frame, expectedMidis = [], options = 
     // another chord member (e.g. E4 over a B4 fifth).
     const lowerIsDominant = roundedDominant === lower
     const lowerHeard = blindHeard.has(lower)
-    // Weak-confidence evidence applies to SINGLE-note expectations only:
-    // chord tones legitimately share energy (measured 0.42-0.52 in a real
-    // triad), and a fifth above a chord tone lights its 1.5f band (C4's
-    // 1.5f IS G4), so confidence must not veto inside a chord. For a
-    // chord, the lower octave must actually be the dominant/blind-heard.
-    const ghostLevelConfidence = expectedMidis.length === 1 && Number.isFinite(note?.confidence)
-      ? note.confidence < weakConfidence
-      : false
-    if (lowerIsDominant || lowerHeard || ghostLevelConfidence) {
+    // Physical precondition: the lower octave must actually be the
+    // sounding note (the frame's dominant pitch) or be independently heard.
+    // Confidence is NOT used: real low piano/electric notes measure 0.28-0.48
+    // with a lit 1.5f band (measured on piano-schubert-single and
+    // electric-gtechs-low), and vetoing them was a false rejection.
+    if (lowerIsDominant || lowerHeard) {
       return lower
     }
   }
