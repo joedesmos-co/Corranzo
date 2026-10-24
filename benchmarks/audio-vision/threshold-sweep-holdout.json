@@ -1,0 +1,523 @@
+{
+  "generatedAt": "2026-10-24T17:26:43.403Z",
+  "rows": [
+    {
+      "id": "holdout-bn1-comp",
+      "density": "dense",
+      "referenceNotes": 105,
+      "variants": {
+        "0.5/0.3/5": {
+          "modelNotes": 180,
+          "notes": 115,
+          "eventF1": 0.709,
+          "pitchPrecision": 0.678,
+          "pitchRecall": 0.743,
+          "missed": 27,
+          "falsePositives": 37,
+          "melodyRecall": 0.838,
+          "bassRecall": 0.838,
+          "invented": 0.087,
+          "density": 5.15
+        },
+        "0.8/0.5/3": {
+          "modelNotes": 103,
+          "notes": 85,
+          "eventF1": 0.758,
+          "pitchPrecision": 0.847,
+          "pitchRecall": 0.686,
+          "missed": 33,
+          "falsePositives": 13,
+          "melodyRecall": 0.721,
+          "bassRecall": 0.853,
+          "invented": 0.035,
+          "density": 3.81
+        },
+        "0.8/0.4/3": {
+          "modelNotes": 120,
+          "notes": 91,
+          "eventF1": 0.684,
+          "pitchPrecision": 0.736,
+          "pitchRecall": 0.638,
+          "missed": 38,
+          "falsePositives": 24,
+          "melodyRecall": 0.721,
+          "bassRecall": 0.794,
+          "invented": 0.066,
+          "density": 4.08
+        },
+        "0.65/0.5/5": {
+          "modelNotes": 115,
+          "notes": 92,
+          "eventF1": 0.792,
+          "pitchPrecision": 0.848,
+          "pitchRecall": 0.743,
+          "missed": 27,
+          "falsePositives": 14,
+          "melodyRecall": 0.809,
+          "bassRecall": 0.853,
+          "invented": 0.022,
+          "density": 4.12
+        },
+        "0.65/0.5/3": {
+          "modelNotes": 119,
+          "notes": 93,
+          "eventF1": 0.778,
+          "pitchPrecision": 0.828,
+          "pitchRecall": 0.733,
+          "missed": 28,
+          "falsePositives": 16,
+          "melodyRecall": 0.779,
+          "bassRecall": 0.853,
+          "invented": 0.032,
+          "density": 4.17
+        }
+      }
+    },
+    {
+      "id": "holdout-bn2-comp",
+      "density": "dense",
+      "referenceNotes": 260,
+      "variants": {
+        "0.5/0.3/5": {
+          "modelNotes": 292,
+          "notes": 168,
+          "eventF1": 0.542,
+          "pitchPrecision": 0.69,
+          "pitchRecall": 0.446,
+          "missed": 144,
+          "falsePositives": 52,
+          "melodyRecall": 0.568,
+          "bassRecall": 0.75,
+          "invented": 0.143,
+          "density": 7.26
+        },
+        "0.8/0.5/3": {
+          "modelNotes": 166,
+          "notes": 115,
+          "eventF1": 0.507,
+          "pitchPrecision": 0.826,
+          "pitchRecall": 0.365,
+          "missed": 165,
+          "falsePositives": 20,
+          "melodyRecall": 0.523,
+          "bassRecall": 0.693,
+          "invented": 0.087,
+          "density": 4.97
+        },
+        "0.8/0.4/3": {
+          "modelNotes": 200,
+          "notes": 134,
+          "eventF1": 0.497,
+          "pitchPrecision": 0.731,
+          "pitchRecall": 0.377,
+          "missed": 162,
+          "falsePositives": 36,
+          "melodyRecall": 0.534,
+          "bassRecall": 0.716,
+          "invented": 0.112,
+          "density": 5.79
+        },
+        "0.65/0.5/5": {
+          "modelNotes": 185,
+          "notes": 127,
+          "eventF1": 0.553,
+          "pitchPrecision": 0.843,
+          "pitchRecall": 0.412,
+          "missed": 153,
+          "falsePositives": 20,
+          "melodyRecall": 0.455,
+          "bassRecall": 0.75,
+          "invented": 0.087,
+          "density": 5.49
+        },
+        "0.65/0.5/3": {
+          "modelNotes": 197,
+          "notes": 134,
+          "eventF1": 0.558,
+          "pitchPrecision": 0.821,
+          "pitchRecall": 0.423,
+          "missed": 150,
+          "falsePositives": 24,
+          "melodyRecall": 0.523,
+          "bassRecall": 0.75,
+          "invented": 0.09,
+          "density": 5.79
+        }
+      }
+    },
+    {
+      "id": "holdout-funk1-comp",
+      "density": "dense",
+      "referenceNotes": 232,
+      "variants": {
+        "0.5/0.3/5": {
+          "modelNotes": 300,
+          "notes": 213,
+          "eventF1": 0.701,
+          "pitchPrecision": 0.732,
+          "pitchRecall": 0.672,
+          "missed": 76,
+          "falsePositives": 57,
+          "melodyRecall": 0.781,
+          "bassRecall": 0.854,
+          "invented": 0.146,
+          "density": 8.43
+        },
+        "0.8/0.5/3": {
+          "modelNotes": 179,
+          "notes": 155,
+          "eventF1": 0.78,
+          "pitchPrecision": 0.974,
+          "pitchRecall": 0.651,
+          "missed": 81,
+          "falsePositives": 4,
+          "melodyRecall": 0.76,
+          "bassRecall": 0.844,
+          "invented": 0.013,
+          "density": 6.14
+        },
+        "0.8/0.4/3": {
+          "modelNotes": 207,
+          "notes": 170,
+          "eventF1": 0.746,
+          "pitchPrecision": 0.882,
+          "pitchRecall": 0.647,
+          "missed": 82,
+          "falsePositives": 20,
+          "melodyRecall": 0.76,
+          "bassRecall": 0.844,
+          "invented": 0.065,
+          "density": 6.73
+        },
+        "0.65/0.5/5": {
+          "modelNotes": 176,
+          "notes": 153,
+          "eventF1": 0.764,
+          "pitchPrecision": 0.961,
+          "pitchRecall": 0.634,
+          "missed": 85,
+          "falsePositives": 6,
+          "melodyRecall": 0.729,
+          "bassRecall": 0.823,
+          "invented": 0.02,
+          "density": 6.06
+        },
+        "0.65/0.5/3": {
+          "modelNotes": 191,
+          "notes": 162,
+          "eventF1": 0.787,
+          "pitchPrecision": 0.957,
+          "pitchRecall": 0.668,
+          "missed": 77,
+          "falsePositives": 7,
+          "melodyRecall": 0.76,
+          "bassRecall": 0.854,
+          "invented": 0.019,
+          "density": 6.41
+        }
+      }
+    },
+    {
+      "id": "holdout-bn1-solo",
+      "density": "sparse",
+      "referenceNotes": 61,
+      "variants": {
+        "0.5/0.3/5": {
+          "modelNotes": 77,
+          "notes": 69,
+          "eventF1": 0.923,
+          "pitchPrecision": 0.87,
+          "pitchRecall": 0.984,
+          "missed": 1,
+          "falsePositives": 9,
+          "melodyRecall": 0.983,
+          "bassRecall": 1,
+          "invented": 0.072,
+          "density": 3.09
+        },
+        "0.8/0.5/3": {
+          "modelNotes": 61,
+          "notes": 61,
+          "eventF1": 0.967,
+          "pitchPrecision": 0.967,
+          "pitchRecall": 0.967,
+          "missed": 2,
+          "falsePositives": 2,
+          "melodyRecall": 0.983,
+          "bassRecall": 0.983,
+          "invented": 0.033,
+          "density": 2.73
+        },
+        "0.8/0.4/3": {
+          "modelNotes": 66,
+          "notes": 64,
+          "eventF1": 0.96,
+          "pitchPrecision": 0.938,
+          "pitchRecall": 0.984,
+          "missed": 1,
+          "falsePositives": 4,
+          "melodyRecall": 0.983,
+          "bassRecall": 1,
+          "invented": 0.031,
+          "density": 2.87
+        },
+        "0.65/0.5/5": {
+          "modelNotes": 59,
+          "notes": 59,
+          "eventF1": 0.967,
+          "pitchPrecision": 0.983,
+          "pitchRecall": 0.951,
+          "missed": 3,
+          "falsePositives": 1,
+          "melodyRecall": 0.966,
+          "bassRecall": 0.966,
+          "invented": 0.017,
+          "density": 2.64
+        },
+        "0.65/0.5/3": {
+          "modelNotes": 61,
+          "notes": 61,
+          "eventF1": 0.967,
+          "pitchPrecision": 0.967,
+          "pitchRecall": 0.967,
+          "missed": 2,
+          "falsePositives": 2,
+          "melodyRecall": 0.983,
+          "bassRecall": 0.983,
+          "invented": 0.033,
+          "density": 2.73
+        }
+      }
+    },
+    {
+      "id": "holdout-bn2-solo",
+      "density": "sparse",
+      "referenceNotes": 115,
+      "variants": {
+        "0.5/0.3/5": {
+          "modelNotes": 137,
+          "notes": 128,
+          "eventF1": 0.881,
+          "pitchPrecision": 0.836,
+          "pitchRecall": 0.93,
+          "missed": 8,
+          "falsePositives": 21,
+          "melodyRecall": 0.946,
+          "bassRecall": 0.946,
+          "invented": 0.063,
+          "density": 5.53
+        },
+        "0.8/0.5/3": {
+          "modelNotes": 108,
+          "notes": 107,
+          "eventF1": 0.946,
+          "pitchPrecision": 0.981,
+          "pitchRecall": 0.913,
+          "missed": 10,
+          "falsePositives": 2,
+          "melodyRecall": 0.955,
+          "bassRecall": 0.955,
+          "invented": 0.009,
+          "density": 4.63
+        },
+        "0.8/0.4/3": {
+          "modelNotes": 111,
+          "notes": 110,
+          "eventF1": 0.942,
+          "pitchPrecision": 0.964,
+          "pitchRecall": 0.922,
+          "missed": 9,
+          "falsePositives": 4,
+          "melodyRecall": 0.964,
+          "bassRecall": 0.964,
+          "invented": 0.018,
+          "density": 4.76
+        },
+        "0.65/0.5/5": {
+          "modelNotes": 113,
+          "notes": 113,
+          "eventF1": 0.947,
+          "pitchPrecision": 0.956,
+          "pitchRecall": 0.939,
+          "missed": 7,
+          "falsePositives": 5,
+          "melodyRecall": 0.964,
+          "bassRecall": 0.964,
+          "invented": 0.018,
+          "density": 4.89
+        },
+        "0.65/0.5/3": {
+          "modelNotes": 114,
+          "notes": 113,
+          "eventF1": 0.947,
+          "pitchPrecision": 0.956,
+          "pitchRecall": 0.939,
+          "missed": 7,
+          "falsePositives": 5,
+          "melodyRecall": 0.964,
+          "bassRecall": 0.964,
+          "invented": 0.018,
+          "density": 4.89
+        }
+      }
+    }
+  ],
+  "summary": {
+    "dense": {
+      "0.5/0.3/5": {
+        "eventF1": 0.651,
+        "pitchPrecision": 0.7,
+        "pitchRecall": 0.62,
+        "notes": 165.333,
+        "modelNotes": 257.333,
+        "melodyRecall": 0.729,
+        "bassRecall": 0.814,
+        "invented": 0.125
+      },
+      "0.8/0.5/3": {
+        "eventF1": 0.682,
+        "pitchPrecision": 0.882,
+        "pitchRecall": 0.567,
+        "notes": 118.333,
+        "modelNotes": 149.333,
+        "melodyRecall": 0.668,
+        "bassRecall": 0.797,
+        "invented": 0.045
+      },
+      "0.8/0.4/3": {
+        "eventF1": 0.642,
+        "pitchPrecision": 0.783,
+        "pitchRecall": 0.554,
+        "notes": 131.667,
+        "modelNotes": 175.667,
+        "melodyRecall": 0.672,
+        "bassRecall": 0.785,
+        "invented": 0.081
+      },
+      "0.65/0.5/5": {
+        "eventF1": 0.703,
+        "pitchPrecision": 0.884,
+        "pitchRecall": 0.596,
+        "notes": 124,
+        "modelNotes": 158.667,
+        "melodyRecall": 0.664,
+        "bassRecall": 0.809,
+        "invented": 0.043
+      },
+      "0.65/0.5/3": {
+        "eventF1": 0.708,
+        "pitchPrecision": 0.869,
+        "pitchRecall": 0.608,
+        "notes": 129.667,
+        "modelNotes": 169,
+        "melodyRecall": 0.687,
+        "bassRecall": 0.819,
+        "invented": 0.047
+      }
+    },
+    "sparse": {
+      "0.5/0.3/5": {
+        "eventF1": 0.902,
+        "pitchPrecision": 0.853,
+        "pitchRecall": 0.957,
+        "notes": 98.5,
+        "modelNotes": 107,
+        "melodyRecall": 0.964,
+        "bassRecall": 0.973,
+        "invented": 0.068
+      },
+      "0.8/0.5/3": {
+        "eventF1": 0.956,
+        "pitchPrecision": 0.974,
+        "pitchRecall": 0.94,
+        "notes": 84,
+        "modelNotes": 84.5,
+        "melodyRecall": 0.969,
+        "bassRecall": 0.969,
+        "invented": 0.021
+      },
+      "0.8/0.4/3": {
+        "eventF1": 0.951,
+        "pitchPrecision": 0.951,
+        "pitchRecall": 0.953,
+        "notes": 87,
+        "modelNotes": 88.5,
+        "melodyRecall": 0.974,
+        "bassRecall": 0.982,
+        "invented": 0.025
+      },
+      "0.65/0.5/5": {
+        "eventF1": 0.957,
+        "pitchPrecision": 0.97,
+        "pitchRecall": 0.945,
+        "notes": 86,
+        "modelNotes": 86,
+        "melodyRecall": 0.965,
+        "bassRecall": 0.965,
+        "invented": 0.018
+      },
+      "0.65/0.5/3": {
+        "eventF1": 0.957,
+        "pitchPrecision": 0.962,
+        "pitchRecall": 0.953,
+        "notes": 87,
+        "modelNotes": 87.5,
+        "melodyRecall": 0.974,
+        "bassRecall": 0.974,
+        "invented": 0.026
+      }
+    },
+    "all": {
+      "0.5/0.3/5": {
+        "eventF1": 0.751,
+        "pitchPrecision": 0.761,
+        "pitchRecall": 0.755,
+        "notes": 138.6,
+        "modelNotes": 197.2,
+        "melodyRecall": 0.823,
+        "bassRecall": 0.878,
+        "invented": 0.102
+      },
+      "0.8/0.5/3": {
+        "eventF1": 0.792,
+        "pitchPrecision": 0.919,
+        "pitchRecall": 0.716,
+        "notes": 104.6,
+        "modelNotes": 123.4,
+        "melodyRecall": 0.788,
+        "bassRecall": 0.866,
+        "invented": 0.035
+      },
+      "0.8/0.4/3": {
+        "eventF1": 0.766,
+        "pitchPrecision": 0.85,
+        "pitchRecall": 0.714,
+        "notes": 113.8,
+        "modelNotes": 140.8,
+        "melodyRecall": 0.792,
+        "bassRecall": 0.864,
+        "invented": 0.058
+      },
+      "0.65/0.5/5": {
+        "eventF1": 0.805,
+        "pitchPrecision": 0.918,
+        "pitchRecall": 0.736,
+        "notes": 108.8,
+        "modelNotes": 129.6,
+        "melodyRecall": 0.785,
+        "bassRecall": 0.871,
+        "invented": 0.033
+      },
+      "0.65/0.5/3": {
+        "eventF1": 0.807,
+        "pitchPrecision": 0.906,
+        "pitchRecall": 0.746,
+        "notes": 112.6,
+        "modelNotes": 136.4,
+        "melodyRecall": 0.802,
+        "bassRecall": 0.881,
+        "invented": 0.038
+      }
+    }
+  }
+}

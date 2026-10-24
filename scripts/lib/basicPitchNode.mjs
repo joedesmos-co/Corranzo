@@ -69,7 +69,16 @@ export async function loadBasicPitchNode({ modelDir, onLog = null } = {}) {
  * Run real inference on mono 22050 Hz samples.
  * Returns [{ midi, startSeconds, endSeconds, amplitude }] + stats.
  */
-export async function predictBasicPitchNode(samples22050, { modelDir, onProgress = null } = {}) {
+export async function predictBasicPitchNode(samples22050, {
+  modelDir,
+  onProgress = null,
+  // Keep in step with audioVisionPitchWorker.js NOTE_EXTRACTION: these are the
+  // measured-on-GuitarSet settings, so a Node measurement describes the same
+  // pipeline the browser runs.
+  onsetThreshold = 0.65,
+  frameThreshold = 0.5,
+  minNoteFrames = 3,
+} = {}) {
   const { tf, bp, model } = await loadBasicPitchNode({ modelDir })
   const started = Date.now()
   const frames = []
@@ -83,7 +92,7 @@ export async function predictBasicPitchNode(samples22050, { modelDir, onProgress
   }, (p) => {
     try { onProgress?.(p) } catch { /* noop */ }
   })
-  const notes = bp.noteFramesToTime(bp.outputToNotesPoly(frames, onsets, 0.5, 0.3, 5))
+  const notes = bp.noteFramesToTime(bp.outputToNotesPoly(frames, onsets, onsetThreshold, frameThreshold, minNoteFrames))
   const ms = Date.now() - started
   // Release per-run tensors; the shared graph stays loaded.
   try {
