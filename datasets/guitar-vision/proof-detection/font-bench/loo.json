@@ -1,0 +1,175 @@
+{
+ "generator": "tools/guitar-vision/proof-font-bench.py",
+ "reference": "benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.musicxml",
+ "method": "Same score and layout; digit font varies; generated image-only PDFs. arial_only = single Arial template set (previous behaviour). loo = all available fonts except the test font (leave-one-font-out).",
+ "results": {
+  "real-scan": {
+   "all": {
+    "sf": 116,
+    "n": 116,
+    "complete": 32,
+    "valid": 8
+   }
+  },
+  "arial": {
+   "arial_only": {
+    "sf": 109,
+    "n": 116,
+    "complete": 27,
+    "valid": 8
+   },
+   "all_fonts": {
+    "sf": 110,
+    "n": 116,
+    "complete": 27,
+    "valid": 8
+   },
+   "loo": {
+    "sf": 110,
+    "n": 116,
+    "complete": 27,
+    "valid": 8
+   }
+  },
+  "times": {
+   "arial_only": {
+    "sf": 57,
+    "n": 116,
+    "complete": 5,
+    "valid": 4
+   },
+   "all_fonts": {
+    "sf": 78,
+    "n": 116,
+    "complete": 10,
+    "valid": 4
+   },
+   "loo": {
+    "sf": 78,
+    "n": 116,
+    "complete": 10,
+    "valid": 4
+   }
+  },
+  "courier": {
+   "arial_only": {
+    "sf": 15,
+    "n": 116,
+    "complete": 0,
+    "valid": 0
+   },
+   "all_fonts": {
+    "sf": 37,
+    "n": 116,
+    "complete": 0,
+    "valid": 0
+   },
+   "loo": {
+    "sf": 36,
+    "n": 116,
+    "complete": 0,
+    "valid": 0
+   }
+  },
+  "georgia": {
+   "arial_only": {
+    "sf": 63,
+    "n": 116,
+    "complete": 4,
+    "valid": 4
+   },
+   "all_fonts": {
+    "sf": 99,
+    "n": 116,
+    "complete": 13,
+    "valid": 4
+   },
+   "loo": {
+    "sf": 99,
+    "n": 116,
+    "complete": 13,
+    "valid": 4
+   }
+  },
+  "verdana": {
+   "arial_only": {
+    "sf": 78,
+    "n": 116,
+    "complete": 15,
+    "valid": 7
+   },
+   "all_fonts": {
+    "sf": 116,
+    "n": 116,
+    "complete": 30,
+    "valid": 7
+   },
+   "loo": {
+    "sf": 116,
+    "n": 116,
+    "complete": 30,
+    "valid": 7
+   }
+  },
+  "dejavu-sans": {
+   "arial_only": {
+    "sf": 72,
+    "n": 116,
+    "complete": 9,
+    "valid": 4
+   },
+   "all_fonts": {
+    "sf": 106,
+    "n": 116,
+    "complete": 19,
+    "valid": 5
+   },
+   "loo": {
+    "sf": 106,
+    "n": 116,
+    "complete": 19,
+    "valid": 5
+   }
+  },
+  "dejavu-serif": {
+   "arial_only": {
+    "sf": 72,
+    "n": 116,
+    "complete": 10,
+    "valid": 5
+   },
+   "all_fonts": {
+    "sf": 106,
+    "n": 116,
+    "complete": 25,
+    "valid": 6
+   },
+   "loo": {
+    "sf": 106,
+    "n": 116,
+    "complete": 25,
+    "valid": 6
+   }
+  },
+  "stix": {
+   "arial_only": {
+    "sf": 55,
+    "n": 116,
+    "complete": 5,
+    "valid": 4
+   },
+   "all_fonts": {
+    "sf": 86,
+    "n": 116,
+    "complete": 11,
+    "valid": 5
+   },
+   "loo": {
+    "sf": 86,
+    "n": 116,
+    "complete": 11,
+    "valid": 5
+   }
+  }
+ }
+}

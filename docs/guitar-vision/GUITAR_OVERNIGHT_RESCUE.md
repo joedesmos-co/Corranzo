@@ -1120,3 +1120,57 @@ PORTABILITY: digit templates prefer Arial/Helvetica (macOS); with the
 bundled Arimo fallback the same scan scores 82/116, because the scan's
 glyphs are Arial-metric. The architecture is font-agnostic; accuracy
 depends on the available font matching the document's engraving font.
+
+### R28 — Cross-font scanned TAB: multi-font templates, held-out benchmark
+PROBLEM: the scanned result (116/116) used one Arial-family scan. The
+Arimo-only fallback scored 82/116, so font independence was unproven.
+
+BENCHMARK (tools/guitar-vision/proof-font-bench.py):
+  Same score/layout as guitar-paired-scan, rendered as image-only PDFs
+  with 8 digit fonts: Arial, Times New Roman, Courier New, Georgia,
+  Verdana, DejaVu Sans, DejaVu Serif, STIXGeneral. The reference
+  MusicXML is the unchanged independent truth; only the typeface varies.
+  Pages include a 5-line notation staff and a 6-line TAB staff, blur,
+  rotation and JPEG compression (scan-like).
+
+CLASSIFIER CHANGE: digit templates are no longer "first available font".
+The raster path builds templates from every available face (sans, serif,
+monospace, bold) and classifies against the union. `GV_DIGIT_FONTS`
+overrides the list for leave-one-font-out evaluation.
+
+LEAVE-ONE-FONT-OUT STRING/FRET (test font excluded from templates):
+  font            Arial-only   multi-font LOO
+  Arial             109/116        110/116
+  Times New Roman    57/116         78/116
+  Courier New        15/116         36/116
+  Georgia            63/116         99/116
+  Verdana            78/116        116/116
+  DejaVu Sans        72/116        106/116
+  DejaVu Serif       72/116        106/116
+  STIXGeneral        55/116         86/116
+  mean               65.1           92.1  (+27.0)
+
+COMPLETE TIMED EVENTS also improve on held-out fonts, e.g. Verdana
+15 -> 30/32, Georgia 4 -> 13/32, DejaVu Serif 10 -> 25/32. Serif/mono
+complete-event coverage is still limited by digit segmentation and
+measure grouping, not only classification.
+
+REAL SCAN PRESERVED with the multi-font default:
+  116/116 string+fret, 32/32 onsets, 32/32 durations,
+  32/32 complete events, 8/8 measures.
+
+DIGITAL FAST PATH PRESERVED: 180/180 string+fret; 64/64 complete events;
+measures 8/8, 0/8, 8/8. 384 tests green.
+
+RHYTHM SLASHES (TAB-only layouts): investigated on canon-in-d. Vertical
+stroke rows above the TAB are detectable, but the same band contains
+fret digits, chord symbols and technique marks; naive stroke grouping
+produced 9-33 groups per system with unstable sizes. There is no
+independent reference for these pages, so durations are NOT claimed and
+the parser is not wired in. This remains the blocker for TAB-only
+commercial layouts.
+
+CAVEATS: the font benchmark is synthetic (same score, varied typeface);
+it measures classifier robustness, not a new real publisher. Arial-metric
+system fonts still give the best same-font result; the bundled OFL Arimo
+remains a fallback. Rest/ties emission is unchanged.

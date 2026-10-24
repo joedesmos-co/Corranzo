@@ -906,15 +906,38 @@ def raster_noteheads(ink, y0, y1, gap, min_area_frac=0.10, staff_hint=None):
 
 # ------------------------------------------------------- raster TAB digits
 _FONT_CANDIDATES = [
-    # System fonts first: Arial/Helvetica are the common TAB engraving
-    # fonts and give the best template match where installed. Nothing is
-    # redistributed here; the OFL Arimo fallback ships with the repo.
+    # Sans (TAB engraving is usually sans), serif and monospace faces are
+    # all useful: the classifier is template-based, so a wider range of
+    # glyph shapes generalises better to an unseen publisher font. System
+    # fonts are used at runtime only; the OFL Arimo fallback ships here.
     '/System/Library/Fonts/Supplemental/Arial.ttf',
     '/System/Library/Fonts/Helvetica.ttc',
+    '/System/Library/Fonts/Supplemental/Verdana.ttf',
+    '/System/Library/Fonts/Supplemental/Georgia.ttf',
+    '/System/Library/Fonts/Supplemental/Times New Roman.ttf',
+    '/System/Library/Fonts/Supplemental/Courier New.ttf',
     '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+    '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf',
     '/usr/share/fonts/truetype/arimo/Arimo-Regular.ttf',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans-Bold.ttf',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSansMono.ttf',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSerif.ttf',
+    '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/matplotlib/mpl-data/fonts/ttf/STIXGeneral.ttf',
     str(Path(__file__).resolve().parent / 'fonts' / 'Arimo.ttf'),
 ]
+
+
+def template_font_paths():
+    """Fonts used to build digit templates.
+
+    GV_DIGIT_FONTS (path-separated) overrides the list; the benchmark uses
+    it for leave-one-font-out evaluation. Default: every available face.
+    """
+    env = os.environ.get('GV_DIGIT_FONTS')
+    if env:
+        return [p for p in env.split(os.pathsep) if p and Path(p).exists()]
+    return [p for p in _FONT_CANDIDATES if Path(p).exists()]
 
 
 def _norm_digit(mask, W=24, H=32):
@@ -933,12 +956,10 @@ def digit_templates():
         return _DIGIT_TEMPLATES
     from PIL import ImageFont, ImageDraw
     out = {}
-    used = None
-    for fp in _FONT_CANDIDATES:
-        if not Path(fp).exists():
-            continue
+    used = []
+    for fp in template_font_paths():
         try:
-            tmpl = {}
+            font = ImageFont.truetype(fp, 48)
             for size in (40, 44, 48, 52, 56):
                 font = ImageFont.truetype(fp, size)
                 for d in '0123456789':
@@ -949,14 +970,12 @@ def digit_templates():
                     if len(ys) == 0:
                         continue
                     m = (a[ys.min():ys.max() + 1, xs.min():xs.max() + 1] > 110)
-                    tmpl.setdefault(d, []).append(_norm_digit(m).astype(np.uint8))
-            if len(tmpl) == 10:
-                out = tmpl
-                used = Path(fp).name
-                break
+                    out.setdefault(d, []).append(_norm_digit(m).astype(np.uint8))
+            used.append(Path(fp).name)
         except Exception:
             continue
-    _DIGIT_TEMPLATES = {'templates': out, 'font': used}
+    _DIGIT_TEMPLATES = {'templates': out, 'font': '+'.join(used),
+                        'fonts': used}
     return _DIGIT_TEMPLATES
 
 
@@ -1040,6 +1059,7 @@ def raster_tab_events(u8):
         return [], [], {}, {'reason': 'no digit template font available'}
 
     events = []
+    all_digit_widths = []
     for si, g in enumerate(staves):
         top, bot, gap = g['top'], g['bot'], g['gap']
         comps = []
@@ -1051,6 +1071,7 @@ def raster_tab_events(u8):
             c['score'] = s
             comps.append(c)
         comps.sort(key=lambda c: (c['string'], c['x']))
+        all_digit_widths.extend(c['w'] for c in comps)
         groups_c = []
         for c in comps:
             if groups_c and groups_c[-1][0]['string'] == c['string'] and \
@@ -1099,13 +1120,14 @@ def raster_tab_events(u8):
     stats_out = {'tab_source': 'raster', 'digit_font': tpl['font'],
                  'digit_threshold': thr,
                  'notation_threshold': max(128, min(200, int(0.8 * otsu))),
+                 'digit_width': float(np.median(all_digit_widths)) if all_digit_widths else None,
                  'raster_events': len(events),
                  'raster_staves': len(staves)}
     return staves, barlines, events, stats_out
 
 
 def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
-                  default_time=(4, 4), bands=None):
+                  default_time=(4, 4), bands=None, digit_width=None):
     """Attach onset durations derived from actual notation evidence.
 
     Evidence chain: SMuFL notehead glyph (written value) -> raster stem
@@ -1139,7 +1161,10 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
     staff_rows = ink.sum(axis=1) > 0.35 * ink.shape[1]
     widths = [it['bbox'][2] - it['bbox'][0] for it in items
               if (it.get('text') or '').strip().isdigit()]
-    digit_width = float(np.median(widths)) if widths else 10.0
+    if widths:
+        digit_width = float(np.median(widths))
+    elif not digit_width:
+        digit_width = 10.0
 
     note_by_staff = assign_notation_to_staves(noteheads, staves)
     rest_by_staff = assign_notation_to_staves(rests, staves)
@@ -1473,7 +1498,8 @@ def main():
         _ink = u8 <= thr_used
         _, _bmask = _rhy.detect_stems_beams(u8)
         events, rhythm_stats = attach_rhythm(
-            events, ex['items'], staves, _ink, _bmask, _rhy, bands=bands)
+            events, ex['items'], staves, _ink, _bmask, _rhy, bands=bands,
+            digit_width=raster_info.get('digit_width'))
         rhythm_stats.pop('_onsets', None)
         rhythm_stats.pop('_rests', None)
         rhythm_stats.pop('_measure_report', None)
