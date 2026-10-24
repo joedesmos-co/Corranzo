@@ -17,6 +17,8 @@
 // modules in order, so this runs before TF.js is evaluated.
 import './audioVisionWorkerEnv.js'
 import { BasicPitch, noteFramesToTime, outputToNotesPoly } from '@spotify/basic-pitch'
+
+import { NOTE_EXTRACTION } from './noteExtraction.js'
 import * as tf from '@tensorflow/tfjs'
 
 let modelPromise = null
@@ -89,7 +91,13 @@ self.onmessage = async (event) => {
         post({ jobId, progress: fraction })
       },
     )
-    const notes = noteFramesToTime(outputToNotesPoly(frames, onsets, 0.5, 0.3, 5)).map((note) => ({
+    const notes = noteFramesToTime(outputToNotesPoly(
+      frames,
+      onsets,
+      NOTE_EXTRACTION.onsetThreshold,
+      NOTE_EXTRACTION.frameThreshold,
+      NOTE_EXTRACTION.minNoteFrames,
+    )).map((note) => ({
       midi: Math.round(note.pitchMidi),
       startOffsetSeconds: note.startTimeSeconds,
       endOffsetSeconds: note.startTimeSeconds + note.durationSeconds,
