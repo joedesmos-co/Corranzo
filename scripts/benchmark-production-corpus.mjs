@@ -47,6 +47,7 @@ const CLIP_SET = arg('clips', 'legacy')
 // Fast regression mode: true completions only (skip the wrong-expectation
 // sweep). The full matrix is the default.
 const TRUE_ONLY = arg('true-only', '0') === '1'
+const FALSE_ONLY = arg('false-only', '0') === '1'
 // Optional scenario-name filter (substring), e.g. octave-up for a fast
 // focused regression of the odd-partial rule.
 const SCENARIO_FILTERS = (arg('scenario', null) ?? '')
@@ -223,7 +224,9 @@ let trueCompletes = 0
 const latencies = []
 
 for (const clip of clips) {
-  const trueResult = await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, clip.expected)
+  const trueResult = FALSE_ONLY
+    ? { advanced: false, wrong: 0, latencyMs: null, mode: null }
+    : await runScenario(`${baseUrl}/scripts/mic-live/live.html`, clip, clip.expected)
   const allScenarios = TRUE_ONLY ? [] : wrongExpectations(clip.expected, clip.truth)
   const scenarios = SCENARIO_FILTERS.length
     ? allScenarios.filter((scenario) => SCENARIO_FILTERS.some((filter) => scenario.name.includes(filter)))
@@ -236,7 +239,7 @@ for (const clip of clips) {
       fps.push(scenario.name)
     }
   }
-  if (trueResult.advanced) {
+  if (!FALSE_ONLY && trueResult.advanced) {
     trueCompletes += 1
     if (trueResult.latencyMs != null) {
       latencies.push(trueResult.latencyMs)

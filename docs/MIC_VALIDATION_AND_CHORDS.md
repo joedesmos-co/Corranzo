@@ -130,3 +130,51 @@ recognisers, so a future backend can supply the same evidence.
 
 Not merged, not deployed. Physical acceptance is required and is specified
 in `docs/MIC_PHYSICAL_ACCEPTANCE.md`.
+
+---
+
+## Independent reproduction on current production (2026-10-24)
+
+The A/B above was reproduced from current `main` (`a58b60e069`) with the
+branch’s corrected checkpoint harness on the same 46 non-excluded mic-real
+clips and the same 52 wrong-expectation scenarios.
+
+| metric | production | candidate |
+|---|---:|---:|
+| legitimate completions | **40 / 46** | **40 / 46** |
+| false completions | **22 / 52** | **7 / 52** |
+| false reduction | — | **−68 %** |
+| onset→advance p50 | 50–62 ms | 62 ms |
+
+The legitimate set is at parity. The two movements between the sets were:
+
+* `piano-mozart2-triad`: production did not complete; candidate did.
+* `acoustic-rock-single`: production completed only at ~21.7 s (near the
+  harness timeout); candidate did not. A focused run shows the candidate’s
+  frames are rejected as `non-musical-input`, not by the new octave guard.
+  This is a borderline detection/timing flake, not a guard false rejection.
+
+Focused false-rejection checks:
+
+* `piano-schubert-single` (C3, confidence 0.28–0.33 in earlier research):
+  candidate advances, `matched [48]`, `wrong 0`.
+* `acoustic-rock-single`: candidate does not advance, but the rejections are
+  `non-musical-input` (dominant moved to another melody note), not the
+  odd-partial/dominant guard.
+
+Remaining false awards in the 52-scenario matrix are mostly semitone
+neighbours and chord “same-count” substitutions; the guitar octave-ghost
+family is gone. The six-string open-Em strum still does not complete (the low
+E fundamental never clears the detector ratio), on both revisions.
+
+Focused 23-scenario matrix (current main, integrated):
+
+| metric | production | integrated |
+|---|---:|---:|
+| legitimate completions | 6 / 7 | **6 / 7** |
+| false completions | 4–6 / 16 | **1 / 16** |
+
+The one false award left is the guitar open-strum vs octave-transposed chord
+(chords are deliberately untouched by this guard). Wrong-note reports are
+higher while a wrong octave is held (the guard re-fires per frame); this is
+feedback noise, not a false acceptance, and is recorded as a UX limitation.
