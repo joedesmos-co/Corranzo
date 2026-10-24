@@ -2144,3 +2144,51 @@ not.
   usable production story (PDF.js). Next: decode stems/beams/flags/dots in
   the vector path and add the shared validator before MusicXML.
   No merge/deploy; sealed TEST untouched.
+
+
+## Complete vector music recognition (this session)
+
+  pdf_vector_omr.py now derives rhythm from structural PDF evidence:
+    - SMuFL noteheads 0xE0A2 whole, 0xE0A3 half, 0xE0A4 black;
+    - black heads: beam level count 0/1/2/3 -> quarter/8th/16th/32nd;
+    - augmentation dots from 3x3 filled circles (x1.5);
+    - rests from SMuFL 0xE4E3..0xE4E7 with duration; unknown glyphs are
+      emitted as unresolved, never fabricated;
+    - chords grouped by x coincidence; one-to-one stem clusters; measures
+      from width-filtered barlines (stems have width 0.8, barlines 1.0/1.8).
+  MusicXML serializer emits notes/rests, clefs, credits, no <key>/<time>
+  (unresolved; never silently C major / 4/4). Unresolved rests are omitted
+  and listed, not replaced by quarter rests.
+
+  Complete-event scores vs reference MusicXML (multiset midi+duration+dots,
+  reports/vector_omr_complete.json):
+    beginner-single-vector   complete 32/32 (1.000), pitch 11/11, dur 3/3,
+                             rests 0/1, measures 8 (0 bad)
+    rhythm-tuplets-vector    complete 48/63 (0.762), pitch 13/16 (0.813),
+                             dur 7/12 (0.583), rests 3/5, measures 8 (0 bad)
+    grand-voices-vector      complete 76/88 (0.864), pitch 76/88, dur 3/3,
+                             measures 16 (0 bad; measure count inflated by
+                             treating grand-staff staves as separate systems)
+    dense-advanced-vector    complete 159/264 (0.602), pitch 0.601,
+                             dur 2/3, measures 16 (13 bad)
+    articulation-scan        route=image (no vector glyphs) - not scored
+    aggregate 4 vector PDFs  complete 315/447 (0.705), pitch 258/378 (0.683),
+                             duration 15/21 (0.714), rests 3/6 (0.500)
+  Beginner is the first independently reference-scored, rhythm-bearing
+  MusicXML transcription: data/vector_out/piano-beginner-single-vector.musicxml
+  (32 notes, 8 valid measures, 0 bad measures; the one rest is drawn as an
+  8th-rest glyph while the reference says quarter - documented mismatch).
+
+  PDF.js port: scripts/pdfjs_vector_probe.mjs extracts all 32 noteheads from
+  the same PDF with the same SMuFL codepoints; x coordinates match the
+  PyMuPDF research extractor exactly (max dx 0.00, mean 0.00). The
+  production path (PDF.js, Apache-2.0) already has vector object/staff
+  extraction; the port only needs the same duration rules (beam segments,
+  dots, SMuFL rests) applied to its operator-list paths. PyMuPDF remains
+  research-only (AGPL-3.0); no AGPL dependency is integrated.
+
+  Remaining limitations: grand-staff measure pairing; dense-layout barlines/
+  voices; tuplet time-modification (rhythm fixture 16th overcount); rest
+  glyph/reference mismatch; no key/time inference; accidental glyphs are not
+  yet applied. Image/scans remain a separate, weaker path.
+  No merge/deploy; sealed TEST untouched.

@@ -1,0 +1,38 @@
+{
+ "complete": {
+  "tp": 315,
+  "fp": 94,
+  "fn": 132,
+  "truth": 447,
+  "pred": 409,
+  "precision": 0.7702,
+  "recall": 0.7047
+ },
+ "pitch": {
+  "tp": 258,
+  "fp": 79,
+  "fn": 120,
+  "truth": 378,
+  "pred": 337,
+  "precision": 0.7656,
+  "recall": 0.6825
+ },
+ "duration": {
+  "tp": 15,
+  "fp": 4,
+  "fn": 6,
+  "truth": 21,
+  "pred": 19,
+  "precision": 0.7895,
+  "recall": 0.7143
+ },
+ "rests": {
+  "tp": 3,
+  "fp": 3,
+  "fn": 3,
+  "truth": 6,
+  "pred": 6,
+  "precision": 0.5,
+  "recall": 0.5
+ }
+}
