@@ -111,12 +111,16 @@
   "22": 12
  },
  "rhythm_recovered": false,
+ "rhythm_blockers": [
+  "no notation noteheads above the TAB (TAB-only layout; rhythm-slash recognition not implemented)"
+ ],
  "playable": false,
  "rhythm_stats": {
   "time_signature": "4/4",
   "time_signature_source": "smufl-glyphs",
   "measure_quarters": 4.0,
   "noteheads": 0,
+  "notehead_source": "none",
   "rests_detected": 1,
   "onsets": 197,
   "onsets_with_notation": 0,
@@ -128,34 +132,45 @@
     "staff": 0,
     "onsets": 40,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -40,
+    "reason": "missing-notation-events"
    },
    {
     "staff": 1,
     "onsets": 40,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -40,
+    "reason": "missing-notation-events"
    },
    {
     "staff": 2,
     "onsets": 50,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -50,
+    "reason": "missing-notation-events"
    },
    {
     "staff": 3,
     "onsets": 42,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -42,
+    "reason": "missing-notation-events"
    },
    {
     "staff": 4,
     "onsets": 25,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -25,
+    "reason": "missing-notation-events"
    }
   ],
   "staffs_exact_pairing": 0,
+  "voice_ownership": "unknown",
   "flags_detected": 0,
   "rests_emitted": 0,
   "ties_detected": 0

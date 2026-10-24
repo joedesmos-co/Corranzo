@@ -998,3 +998,66 @@ eighths; tool: proof-notation-duration-score.py):
 The three TAB reference fixtures are unchanged by these fixes:
   SF 116/116, 32/32, 32/32 (180/180); complete events 32/32, 0/32
   (sparse abstains), 32/32; measures valid 8/8, 0/8, 8/8.
+
+### R26 — Font-independent raster notation; reference-scored on a scan
+MOTIVATION: SMuFL noteheads are a text-layer luxury. Real PDFs either
+rasterise notation as paths/bitmaps or contain no notation staff at all.
+R26 adds a raster path that runs when the SMuFL path finds no noteheads.
+
+RASTER NOTEHEAD RECOGNITION (font independent, no fixture constants):
+  1. 3x3 erosion removes staff lines and stems (1-3px strokes) while
+     filled noteheads survive as solid cores.
+  2. Size filters are RELATIVE TO THE STAFF GAP (width 0.35-1.45 gap,
+     height 0.30-1.30 gap, area 0.10-3.0 gap^2, aspect 0.9-2.4,
+     fill >= 0.45), so DPI does not matter.
+  3. Two chord tones a second apart can TOUCH. Oversized blobs are split
+     at the valley of their row profile; the scan's two missed heads
+     were exactly this case (17x16 blobs, valley value 2 vs peaks 10-11).
+  4. The search region is the notation staff group immediately above
+     each TAB staff, clamped so it never enters the TAB digits. Low
+     ledger notes keep a staff_hint so they are not reassigned to the
+     TAB staff below.
+  5. Stem search is bounded by column spacing and, for raster heads, to
+     9px (their boxes are the ink). Staff lines are rejected inside the
+     flag strip by dropping near-full rows - scanned lines are often too
+     broken for a page-wide row mask.
+
+REFERENCE-SCORED RESULT ON A NON-SMuFL PDF (real scan, no text layer):
+  guitar-paired-scan:
+    noteheads 116/116 (32 columns; per-measure chord sizes match exactly)
+    onsets 32/32, durations 32/32, accuracy 1.00
+    measures 8/8 valid, meter INFERRED as 4/4 (not read from the ref)
+    source: raster-fallback
+  This is the first reference-scored rhythm result from a PDF with no
+  musical text glyphs at all.
+
+DURATION-CHANNEL TOTAL across four independent references:
+  paired-chords 32/32, techniques 32/32, standard 40/40 (16 eighths),
+  scan 32/32  ->  136/136 onsets, 0 ambiguous, 0 beam/flag conflicts.
+
+SMuFL FAST PATH PRESERVED (all three TAB fixtures unchanged):
+  SF 116/116, 32/32, 32/32 (180/180)
+  complete events 32/32, 0/32 (sparse abstains), 32/32
+  measures valid 8/8, 0/8, 8/8
+
+REAL-WORLD PDF TAXONOMY (no independent reference; structural only):
+  canon-in-d (739 events, 22 measures): TAB-only. No notation staff;
+    rhythm is drawn as beamed rhythm slashes above the TAB. The raster
+    notehead path correctly finds 0 notation heads. BLOCKER: rhythm-slash
+    recognition (not implemented). No rhythm claimed.
+  save-me-bts (290 events), gravity-falls (99 events): same TAB-only
+    layout with rhythm slashes. Same blocker.
+  home-undertale (139 events, 159 SMuFL heads): single-note melody
+    columns 27-31 vs TAB chord onsets 24-28 per system -> genuine
+    multi-voice. Exact-pairing gate refuses every system
+    (voice_ownership=unresolved-multi-voice). No durations claimed.
+  guitar-paired-scan: no text layer -> 0 TAB events; notation rhythm is
+    scored separately (above). BLOCKER for complete events: raster TAB
+    digit recognition (frozen detector unchanged).
+  guitar-standard-chords: no TAB -> 0 events, correctly refuses.
+
+NEW REPORTING: rhythm_blockers states the precise cause per file;
+voice_ownership is single-voice / unresolved-multi-voice / unknown.
+
+NOT CLAIMED: rhythm slashes, multi-voice pairing, rests (detected but
+not emitted), ties, half/whole raster heads (filled heads only).

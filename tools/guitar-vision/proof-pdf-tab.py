@@ -512,6 +512,10 @@ def assign_notation_to_staves(glyphs, staves):
     """
     per = {}
     for g in glyphs:
+        hint = g.get('staff_hint')
+        if hint is not None and 0 <= hint < len(staves):
+            per.setdefault(hint, []).append(g)
+            continue
         best, best_key = None, None
         for si, st in enumerate(staves):
             d = _dist_to_span(g['cy'], st['top'], st['bot'])
@@ -644,6 +648,15 @@ def _stem_probe(ink, beam_mask, box, rhy, min_run=None, side_tol=None,
         for yy in range(fy0, fy1):
             if staff_rows[yy]:
                 near[yy - fy0, :] = False
+    if near.size:
+        # A staff line crosses the whole strip (nearly every column), while
+        # a flag is a sparse diagonal stroke. Scanned staff lines are often
+        # too broken for a page-wide row mask, so reject near-full rows
+        # locally instead of relying on global line detection.
+        width = near.shape[1]
+        rowsum = near.sum(axis=1)
+        keep = (rowsum > 0) & (rowsum < max(2, int(0.8 * width)))
+        near = near[keep, :]
     flags = 1 if int(near.sum()) >= flag_min_ink else 0
     return {'stem': True, 'run': int(best['run']), 'beams': int(groups),
             'flags': flags, 'flag_ink': int(near.sum()),
@@ -695,8 +708,152 @@ def _duration_from_evidence(col, ev, confident_enabled=True):
             'ambiguous': ambiguous, 'beam_flag_conflict': beams > 0 and flags > 0}
 
 
+def band_clusters(bands, min_lines=4):
+    """Consecutive bands with near-equal spacing -> staff candidates."""
+    out = []
+    n = len(bands)
+    i = 0
+    while i < n:
+        best = None
+        for k in range(min_lines, 8):
+            if i + k > n:
+                break
+            m = bands[i:i + k]
+            gaps = [b - a for a, b in zip(m, m[1:])]
+            mg = sum(gaps) / len(gaps)
+            if not (5 <= mg <= 60):
+                continue
+            cv = (sum((g - mg) ** 2 for g in gaps) / len(gaps)) ** 0.5 / mg
+            if cv <= 0.18:
+                best = {'top': float(m[0]), 'bot': float(m[-1]),
+                        'gap': float(mg), 'lines': k}
+        if best:
+            out.append(best)
+            i += best['lines']
+        else:
+            i += 1
+    return out
+
+
+def notation_regions(bands, staves):
+    """Vertical region of the notation staff above each TAB staff.
+
+    A notation system is engraved immediately above its TAB staff. The
+    region is the tallest evenly-spaced line group between the previous
+    TAB staff and this one, padded for ledger lines and flags. TAB-only
+    scores (no line group there) get no region, so no rhythm is guessed.
+    """
+    order = sorted(range(len(staves)), key=lambda i: staves[i]['top'])
+    regions = {}
+    prev_bot = -1.0
+    for si in order:
+        st = staves[si]
+        above = [b for b in bands if prev_bot + 3 < b < st['top'] - 3]
+        groups = band_clusters(above, min_lines=4)
+        groups = [g for g in groups if g['bot'] < st['top'] - 3]
+        if groups:
+            g = max(groups, key=lambda g: (g['lines'], -abs(st['top'] - g['bot'])))
+            pad = g['gap']
+            # Generous above (ledger notes) and below (low chord tones),
+            # but never into the TAB staff where fret digits live.
+            regions[si] = (max(g['top'] - 4.0 * pad, prev_bot + pad),
+                           min(g['bot'] + 8.0 * pad, st['top'] - 1.5 * pad))
+        prev_bot = st['bot']
+    return regions
+
+
+def raster_noteheads(ink, y0, y1, gap, min_area_frac=0.10, staff_hint=None):
+    """Font-independent filled-notehead detection from the rendered page.
+
+    Staff lines and stems are 1-3px strokes and vanish under a 3x3
+    erosion, while filled noteheads survive as solid cores. Two chord
+    tones a second apart can touch: an oversized blob is split at the
+    valley of its row profile, which separates the two heads without
+    relying on font metrics. All size limits are relative to the staff
+    gap, so the same code works at other DPIs.
+    """
+    from scipy import ndimage as ndi
+    y0 = max(int(y0), 0)
+    y1 = min(int(y1), ink.shape[0])
+    sub = ink[y0:y1]
+    if sub.size == 0:
+        return []
+    er = ndi.binary_erosion(sub, structure=np.ones((3, 3), bool))
+    lab, n = ndi.label(er)
+    objs = ndi.find_objects(lab)
+    w_lo, w_hi = 0.35 * gap, 1.45 * gap
+    h_lo, h_hi = 0.30 * gap, 1.30 * gap
+    a_lo, a_hi = min_area_frac * gap * gap, 3.0 * gap * gap
+    raw = []
+    for i, sl in enumerate(objs, 1):
+        if sl is None:
+            continue
+        ys, xs = sl
+        h = ys.stop - ys.start
+        w = xs.stop - xs.start
+        area = int((lab[sl] == i).sum())
+        if not (w_lo <= w <= w_hi and h_lo <= h <= h_hi and a_lo <= area <= a_hi):
+            continue
+        if not (0.9 <= w / max(h, 1) <= 2.4):
+            continue
+        if area / max(w * h, 1) < 0.45:
+            continue
+        raw.append({'i': i, 'x0': xs.start, 'y0': ys.start,
+                    'w': w, 'h': h, 'a': area})
+    if not raw:
+        return []
+    med_h = float(np.median([b['h'] for b in raw]))
+    med_a = float(np.median([b['a'] for b in raw]))
+    out = []
+    for b in raw:
+        if b['h'] >= 1.35 * med_h and b['a'] >= 1.5 * med_a:
+            sub_b = (lab[b['y0']:b['y0'] + b['h'],
+                         b['x0']:b['x0'] + b['w']] == b['i'])
+            prof = sub_b.sum(axis=1)
+            mx = int(prof.max()) if prof.size else 0
+            cuts = []
+            for k in range(1, len(prof) - 1):
+                if (prof[k] <= 0.45 * mx and prof[k] <= prof[k - 1]
+                        and prof[k] <= prof[k + 1]):
+                    if cuts and k - cuts[-1] <= 2:
+                        continue
+                    cuts.append(k)
+            segs, prev = [], 0
+            for c in cuts:
+                if prof[prev:c].sum() >= 0.35 * mx and prof[c:].sum() >= 0.35 * mx:
+                    segs.append((prev, c))
+                    prev = c
+            segs.append((prev, len(prof)))
+            for (r0, r1) in segs:
+                part = sub_b[r0:r1, :]
+                if part.sum() < 0.45 * med_a:
+                    continue
+                ys2, xs2 = np.nonzero(part)
+                bx0 = b['x0'] + int(xs2.min())
+                bx1 = b['x0'] + int(xs2.max()) + 1
+                by0 = y0 + b['y0'] + r0 + int(ys2.min())
+                by1 = y0 + b['y0'] + r0 + int(ys2.max()) + 1
+                out.append({'kind': 'quarter', 'base': 1.0,
+                            'box': [float(bx0), float(by0), float(bx1), float(by1)],
+                            'cx': (bx0 + bx1) / 2.0, 'cy': (by0 + by1) / 2.0,
+                            'w': float(bx1 - bx0), 'h': float(by1 - by0),
+                            'split': True, 'staff_hint': staff_hint})
+        else:
+            bx0 = b['x0']
+            by0 = y0 + b['y0']
+            bx1 = b['x0'] + b['w']
+            by1 = y0 + b['y0'] + b['h']
+            out.append({'kind': 'quarter', 'base': 1.0,
+                        'box': [float(bx0), float(by0), float(bx1), float(by1)],
+                        'cx': (bx0 + bx1) / 2.0, 'cy': (by0 + by1) / 2.0,
+                        'w': float(b['w']), 'h': float(b['h']),
+                        'split': False, 'staff_hint': staff_hint})
+    out.sort(key=lambda q: (q['cy'], q['cx']))
+    return out
+
+
 def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
-                  default_time=(4, 4)):
+                  default_time=(4, 4), bands=None):
     """Attach onset durations derived from actual notation evidence.
 
     Evidence chain: SMuFL notehead glyph (written value) -> raster stem
@@ -711,6 +868,20 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
     ts, ts_source = time_signature(items, default_time)
     beats = ts[0] * 4.0 / ts[1]
     noteheads = notation_noteheads(items)
+    notehead_source = 'smufl-glyphs' if noteheads else 'none'
+    if not noteheads and bands is not None:
+        # Raster fallback: recognise filled noteheads from the rendered
+        # page. This is the path for PDFs whose notation is drawn as
+        # vector paths or a bitmap instead of SMuFL text.
+        regions = notation_regions(bands, staves)
+        for si, st in enumerate(staves):
+            reg = regions.get(si)
+            if reg is None:
+                continue
+            noteheads.extend(raster_noteheads(ink, reg[0], reg[1],
+                                              st['gap'], staff_hint=si))
+        if noteheads:
+            notehead_source = 'raster'
     rests = notation_rests(items)
 
     staff_rows = ink.sum(axis=1) > 0.35 * ink.shape[1]
@@ -744,8 +915,14 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
                 gaps.append(c['cx'] - cols[i - 1]['cx'])
             if i + 1 < len(cols):
                 gaps.append(cols[i + 1]['cx'] - c['cx'])
-            c['side_tol'] = (max(3.0, min(float(rhy.STEM_SIDE_TOL), 0.45 * min(gaps)))
-                             if gaps else float(rhy.STEM_SIDE_TOL))
+            if notehead_source == 'raster':
+                # Raster boxes ARE the ink, so the stem is within a few
+                # pixels of the head edge. A wide search would let a
+                # chord borrow the neighbouring voice's stem.
+                c['side_tol'] = max(3.0, min(9.0, 0.45 * min(gaps))) if gaps else 9.0
+            else:
+                c['side_tol'] = (max(3.0, min(float(rhy.STEM_SIDE_TOL), 0.45 * min(gaps)))
+                                 if gaps else float(rhy.STEM_SIDE_TOL))
         # Pair onsets to columns. Equal counts is the common, exact case:
         # both are left-to-right sequences of the same musical events.
         pair = {}
@@ -788,8 +965,14 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
             else:
                 r['pairing'] = 'exact'
             raw[(o['staff'], o['measure'], round(o['x'], 2))] = r
-        staff_pairing.append({'staff': si, 'onsets': len(os_),
-                              'columns': len(cols), 'exact': exact})
+        staff_pairing.append({
+            'staff': si, 'onsets': len(os_), 'columns': len(cols),
+            'exact': exact, 'delta': len(cols) - len(os_),
+            'reason': ('exact' if exact else
+                       ('extra-notation-events (multi-voice or second staff)'
+                        if len(cols) > len(os_) else
+                        'missing-notation-events')),
+        })
         # keep the pairing for the event objects
         for o in os_:
             o['column'] = pair.get(id(o))
@@ -843,6 +1026,7 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
         'time_signature_source': ts_source,
         'measure_quarters': beats,
         'noteheads': len(noteheads),
+        'notehead_source': notehead_source,
         'rests_detected': len(rests),
         'onsets': len(onsets),
         'onsets_with_notation': matched,
@@ -851,6 +1035,10 @@ def attach_rhythm(events, items, staves, ink, beam_mask, rhy,
         'measures_total': len(measure_report),
         'staff_pairing': staff_pairing,
         'staffs_exact_pairing': sum(1 for p in staff_pairing if p['exact']),
+        'voice_ownership': ('single-voice' if staff_pairing and
+                            all(p['exact'] for p in staff_pairing)
+                            else ('unknown' if notehead_source == 'none'
+                                  else 'unresolved-multi-voice')),
         'flags_detected': sum(1 for o in onsets
                               if (raw[(o['staff'], o['measure'], round(o['x'], 2))].get('flags') or 0)),
         'rests_emitted': 0,
@@ -1008,7 +1196,7 @@ def main():
         _ink = u8 <= thr_used
         _, _bmask = _rhy.detect_stems_beams(u8)
         events, rhythm_stats = attach_rhythm(
-            events, ex['items'], staves, _ink, _bmask, _rhy)
+            events, ex['items'], staves, _ink, _bmask, _rhy, bands=bands)
         rhythm_stats.pop('_onsets', None)
         rhythm_stats.pop('_rests', None)
         rhythm_stats.pop('_measure_report', None)
@@ -1016,8 +1204,27 @@ def main():
         rhythm_stats['error'] = f'{type(_e).__name__}: {_e}'
     recovered = (rhythm_stats.get('onsets', 0) > 0 and
                  rhythm_stats.get('onsets_with_notation') == rhythm_stats.get('onsets') and
+                 rhythm_stats.get('staffs_exact_pairing') == len(rhythm_stats.get('staff_pairing', [])) and
                  rhythm_stats.get('measures_total', 0) > 0 and
                  rhythm_stats.get('measures_complete') == rhythm_stats.get('measures_total'))
+    blockers = []
+    if not staves:
+        if len(ex['items']) == 0:
+            blockers.append('no PDF text layer (scanned/image PDF); '
+                            'raster TAB digit recognition required')
+        else:
+            blockers.append('no six-line TAB staff with digit support')
+    elif rhythm_stats.get('notehead_source') in (None, 'none'):
+        blockers.append('no notation noteheads above the TAB (TAB-only '
+                        'layout; rhythm-slash recognition not implemented)')
+    elif rhythm_stats.get('staffs_exact_pairing') != len(rhythm_stats.get('staff_pairing', [])):
+        blockers.append('notation/TAB onset counts differ per system '
+                        '(multi-voice or partial notation)')
+    elif rhythm_stats.get('onsets_with_notation') != rhythm_stats.get('onsets'):
+        blockers.append('TAB onsets without a notation counterpart')
+    elif rhythm_stats.get('measures_total', 0) and \
+            rhythm_stats.get('measures_complete') != rhythm_stats.get('measures_total'):
+        blockers.append('measure duration validation failed')
     summary = {
         'pdf': args.pdf, 'page': args.page, 'dpi': args.dpi,
         'text_items': len(ex['items']),
@@ -1028,6 +1235,7 @@ def main():
         'events_by_measure': {str(m): sum(1 for e in events if e['measure'] == m)
                               for m in sorted({e['measure'] for e in events})},
         'rhythm_recovered': bool(recovered),
+        'rhythm_blockers': blockers,
         'playable': bool(recovered),
         'rhythm_stats': rhythm_stats,
         'rhythm_note': ('durations derived from SMuFL notehead glyphs + '

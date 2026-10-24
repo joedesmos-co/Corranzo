@@ -9,12 +9,16 @@
  "events": 0,
  "events_by_measure": {},
  "rhythm_recovered": false,
+ "rhythm_blockers": [
+  "no six-line TAB staff with digit support"
+ ],
  "playable": false,
  "rhythm_stats": {
   "time_signature": "4/4",
   "time_signature_source": "smufl-glyphs",
   "measure_quarters": 4.0,
   "noteheads": 115,
+  "notehead_source": "smufl-glyphs",
   "rests_detected": 0,
   "onsets": 0,
   "onsets_with_notation": 0,
@@ -23,6 +27,7 @@
   "measures_total": 0,
   "staff_pairing": [],
   "staffs_exact_pairing": 0,
+  "voice_ownership": "unresolved-multi-voice",
   "flags_detected": 0,
   "rests_emitted": 0,
   "ties_detected": 0

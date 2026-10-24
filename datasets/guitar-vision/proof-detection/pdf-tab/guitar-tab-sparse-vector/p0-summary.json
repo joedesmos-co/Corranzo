@@ -50,12 +50,16 @@
   "8": 4
  },
  "rhythm_recovered": false,
+ "rhythm_blockers": [
+  "no notation noteheads above the TAB (TAB-only layout; rhythm-slash recognition not implemented)"
+ ],
  "playable": false,
  "rhythm_stats": {
   "time_signature": "4/4",
   "time_signature_source": "smufl-glyphs",
   "measure_quarters": 4.0,
   "noteheads": 0,
+  "notehead_source": "none",
   "rests_detected": 0,
   "onsets": 32,
   "onsets_with_notation": 0,
@@ -67,16 +71,21 @@
     "staff": 0,
     "onsets": 16,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -16,
+    "reason": "missing-notation-events"
    },
    {
     "staff": 1,
     "onsets": 16,
     "columns": 0,
-    "exact": false
+    "exact": false,
+    "delta": -16,
+    "reason": "missing-notation-events"
    }
   ],
   "staffs_exact_pairing": 0,
+  "voice_ownership": "unknown",
   "flags_detected": 0,
   "rests_emitted": 0,
   "ties_detected": 0

@@ -50,12 +50,14 @@
   "8": 19
  },
  "rhythm_recovered": true,
+ "rhythm_blockers": [],
  "playable": true,
  "rhythm_stats": {
   "time_signature": "4/4",
   "time_signature_source": "smufl-glyphs",
   "measure_quarters": 4.0,
   "noteheads": 116,
+  "notehead_source": "smufl-glyphs",
   "rests_detected": 0,
   "onsets": 32,
   "onsets_with_notation": 32,
@@ -67,16 +69,21 @@
     "staff": 0,
     "onsets": 16,
     "columns": 16,
-    "exact": true
+    "exact": true,
+    "delta": 0,
+    "reason": "exact"
    },
    {
     "staff": 1,
     "onsets": 16,
     "columns": 16,
-    "exact": true
+    "exact": true,
+    "delta": 0,
+    "reason": "exact"
    }
   ],
   "staffs_exact_pairing": 2,
+  "voice_ownership": "single-voice",
   "flags_detected": 0,
   "rests_emitted": 0,
   "ties_detected": 0
