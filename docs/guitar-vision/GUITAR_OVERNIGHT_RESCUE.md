@@ -863,3 +863,29 @@ an explicit default duration and the summary records
 Remaining blockers: canon-in-d style PDFs (stock-photo header, segmented
 staff lines, chord symbols) defeat contiguous-run line detection; raster
 fallback still has the native-font detector gap.
+
+### R23 — Segmented/grey staff lines fixed; canon-in-D now transcribes
+ROOT CAUSE: canon-in-d renders its staff lines in mid-grey (pixel
+128-160), so the fixed `<128` ink threshold erased every staff line
+(1 band detected, 0 staves, 0 events). Verified: at threshold 160 the
+TAB staff resolves to exactly 6 rows (319/334/348/363/377/392).
+
+FIX (principled, no fixture constants): strict threshold first, Otsu
+fallback only when strict finds no TAB staff. Crisp vector PDFs keep
+their 2-3px line centres (raising the threshold thickens strokes and
+shifts string alignment); grey/lightly-stroked PDFs get Otsu.
+
+RESULTS:
+  canon-in-d (real user PDF, no GT): 49 staff bands, 5 TAB staves
+    (y 319/500/863/1224/1586, gap 14.6), 739 events across 22 measures.
+    String spread 1-6 = 128/200/148/106/82/75; frets 0/3/1/2/5 dominant
+    - consistent with Canon in D (D-A-Bm-F#m-G) harmony.
+  Three reference fixtures PRESERVED exactly:
+    paired-chords 116/116 P1.00 R1.00 F1 1.00 8/8 measures
+    tab-sparse     32/32  P1.00 R1.00 F1 1.00 8/8 measures
+    techniques     32/32  P1.00 R1.00 F1 1.00 8/8 measures
+
+RHYTHM: still not recovered. The PDF text layer carries fret digits
+only; durations must come from the notation staff (noteheads/stems/
+beams) which is a separate detector. Output marks rhythm_recovered=false.
+No rhythm is invented.

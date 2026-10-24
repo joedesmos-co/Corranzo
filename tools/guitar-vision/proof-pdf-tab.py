@@ -25,6 +25,86 @@ EXTRACT = Path('/tmp/proof/pdfjs-extract.cjs')
 TUNING = [64, 59, 55, 50, 45, 40]
 
 
+def binarize(u8):
+    """Ink mask with an ADAPTIVE threshold.
+
+    Vector PDFs render staff lines in full black, but rasterised or
+    lightly-stroked PDFs render them in mid-grey (measured 128-160 on a
+    real score), so a fixed <128 threshold erases the entire staff.
+    Otsu's method finds the ink/paper split from the page's own
+    histogram; the result is clamped to a sane range and only used when
+    it separates the page (otherwise falls back to 128).
+    """
+    hist, _ = np.histogram(u8, bins=256, range=(0, 256))
+    total = u8.size
+    if total == 0:
+        return u8 < 128
+    sum_all = float(np.dot(np.arange(256), hist))
+    w_b = 0.0
+    sum_b = 0.0
+    best_thr, best_var = 128, -1.0
+    for t in range(256):
+        w_b += float(hist[t])
+        if w_b == 0:
+            continue
+        w_f = total - w_b
+        if w_f == 0:
+            break
+        sum_b += t * float(hist[t])
+        m_b = sum_b / w_b
+        m_f = (sum_all - sum_b) / w_f
+        var = w_b * w_f * (m_b - m_f) ** 2
+        if var > best_var:
+            best_var, best_thr = var, t
+    # Otsu on a mostly-white page returns ~0; clamp to a useful ink range
+    if best_thr < 80:
+        best_thr = 128
+    return u8 <= best_thr
+
+
+def otsu_threshold(u8):
+    """Threshold only (no full mask) so callers can pick a fallback."""
+    hist, _ = np.histogram(u8, bins=256, range=(0, 256))
+    total = u8.size
+    if total == 0:
+        return 128
+    sum_all = float(np.dot(np.arange(256), hist))
+    w_b = 0.0
+    sum_b = 0.0
+    best_thr, best_var = 128, -1.0
+    for t in range(256):
+        w_b += float(hist[t])
+        if w_b == 0:
+            continue
+        w_f = total - w_b
+        if w_f == 0:
+            break
+        sum_b += t * float(hist[t])
+        m_b = sum_b / w_b
+        m_f = (sum_all - sum_b) / w_f
+        var = w_b * w_f * (m_b - m_f) ** 2
+        if var > best_var:
+            best_var, best_thr = var, t
+    return 128 if best_thr < 80 else best_thr
+
+
+def find_staves(u8):
+    """Staves with a STRICT threshold first, Otsu only as a fallback.
+
+    Crisp vector PDFs have true-black strokes; raising the threshold
+    thickens those strokes by 2-3px, which shifts line centres and breaks
+    string alignment. Lightly-stroked/grey PDFs have no ink at 128 at all
+    and need Otsu. So: strict first, fall back only when strict finds no
+    TAB staff.
+    """
+    for thr in (128, otsu_threshold(u8)):
+        bands = line_bands(u8, thr=thr)
+        staves = tab_staves(bands)
+        if staves:
+            return staves, thr
+    return [], 128
+
+
 # ---------------------------------------------------------------- extract
 def extract(pdf, png, dpi=150, page=0):
     """pdfjs-dist text items + page raster. Returns dict or None."""
@@ -46,9 +126,9 @@ def extract(pdf, png, dpi=150, page=0):
 
 
 # --------------------------------------------------------------- geometry
-def line_bands(u8, minrun_frac=0.06):
+def line_bands(u8, minrun_frac=0.06, thr=128):
     """Horizontal line bands by contiguous run, width-relative threshold."""
-    ink = u8 < 128
+    ink = u8 <= thr
     h, w = ink.shape
     minrun = max(int(w * minrun_frac), 40)
     runs = np.zeros(h, dtype=np.int32)
@@ -173,7 +253,7 @@ def filter_staves_by_digits(staves, digits, min_support=3):
 
 def staff_barlines(u8, staff):
     """Vertical ink columns spanning the staff's full inter-line height."""
-    ink = u8 < 128
+    ink = binarize(u8)
     top = int(round(staff['top']))
     bot = int(round(staff['bot']))
     span = bot - top + 1
@@ -324,8 +404,8 @@ def main():
         print('extract failed:', ex['error'])
         return 2
     u8 = np.asarray(Image.open(png).convert('L')).astype(np.uint8)
-    bands = line_bands(u8)
-    staves = tab_staves(bands)
+    staves, thr_used = find_staves(u8)
+    bands = line_bands(u8, thr=thr_used)
     digits = dominant_digit_group(digit_shape_items(ex['items']))
     staves = filter_staves_by_digits(staves, digits)
     barlines = {i: staff_barlines(u8, s) for i, s in enumerate(staves)}
