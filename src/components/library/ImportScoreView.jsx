@@ -132,8 +132,14 @@ export default function ImportScoreView({
               ? ` Covers ${Math.floor(arrangementMeta.excerpt.startSeconds / 60)}:${String(Math.floor(arrangementMeta.excerpt.startSeconds % 60)).padStart(2, '0')}–${Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) / 60)}:${String(Math.floor((arrangementMeta.excerpt.startSeconds + arrangementMeta.excerpt.durationSeconds) % 60)).padStart(2, '0')} of the recording.`
               : ''}
             Page-follow visuals need a PDF — timing, playback and practice modes work from the notation.
-            {arrangementMeta.removedNoteCount > 0
-              ? ` ${arrangementMeta.removedNoteCount} note${arrangementMeta.removedNoteCount === 1 ? '' : 's'} removed by you.`
+            {(arrangementMeta.removedNoteCount + (arrangementMeta.removedAddedNoteCount ?? 0)) > 0
+              ? ` ${arrangementMeta.removedNoteCount + (arrangementMeta.removedAddedNoteCount ?? 0)} note${(arrangementMeta.removedNoteCount + (arrangementMeta.removedAddedNoteCount ?? 0)) === 1 ? '' : 's'} removed by you.`
+              : ''}
+            {arrangementMeta.correctionsEdited > 0
+              ? ` ${arrangementMeta.correctionsEdited} note${arrangementMeta.correctionsEdited === 1 ? '' : 's'} edited.`
+              : ''}
+            {arrangementMeta.correctionsAdded > 0
+              ? ` ${arrangementMeta.correctionsAdded} missing note${arrangementMeta.correctionsAdded === 1 ? '' : 's'} added.`
               : ''}
             {arrangementMeta.correctionsStale > 0
               ? ` ${arrangementMeta.correctionsStale} saved correction${arrangementMeta.correctionsStale === 1 ? '' : 's'} no longer matched and ${arrangementMeta.correctionsStale === 1 ? 'was' : 'were'} ignored.`
