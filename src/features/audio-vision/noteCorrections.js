@@ -109,11 +109,125 @@ export function annotateNoteKeys(events, { timeOf } = {}) {
   )
 }
 
+const MAX_PITCH_DELTA = 24
+const MAX_TIME_DELTA_BEATS = 16
+
+function finiteOrNull(value) {
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
+}
+
+function sanitizeEdit(edit) {
+  if (!edit || typeof edit !== 'object') return null
+  const clean = {}
+  const pitchDelta = finiteOrNull(edit.pitchDelta)
+  if (pitchDelta != null) {
+    const bounded = Math.max(-MAX_PITCH_DELTA, Math.min(MAX_PITCH_DELTA, Math.round(pitchDelta)))
+    if (bounded !== 0) clean.pitchDelta = bounded
+  }
+  const onsetDeltaBeats = finiteOrNull(edit.onsetDeltaBeats)
+  if (onsetDeltaBeats != null) {
+    const bounded = Math.max(-MAX_TIME_DELTA_BEATS, Math.min(MAX_TIME_DELTA_BEATS, onsetDeltaBeats))
+    if (bounded !== 0) clean.onsetDeltaBeats = Math.round(bounded * 1000) / 1000
+  }
+  const durationDeltaBeats = finiteOrNull(edit.durationDeltaBeats)
+  if (durationDeltaBeats != null) {
+    const bounded = Math.max(-MAX_TIME_DELTA_BEATS, Math.min(MAX_TIME_DELTA_BEATS, durationDeltaBeats))
+    if (bounded !== 0) clean.durationDeltaBeats = Math.round(bounded * 1000) / 1000
+  }
+  return Object.keys(clean).length ? clean : null
+}
+
+function sanitizeAdded(list) {
+  if (!Array.isArray(list)) return []
+  const seen = new Set()
+  const out = []
+  for (const entry of list) {
+    const midi = finiteOrNull(entry?.midi)
+    const startBeat = finiteOrNull(entry?.startBeat)
+    const durBeats = finiteOrNull(entry?.durBeats)
+    if (midi == null || startBeat == null || durBeats == null) continue
+    const id = typeof entry?.id === 'string' && entry.id.length ? entry.id : `user-${out.length + 1}`
+    if (seen.has(id)) continue
+    seen.add(id)
+    out.push({
+      id,
+      midi: Math.max(21, Math.min(108, Math.round(midi))),
+      startBeat: Math.max(0, startBeat),
+      durBeats: Math.max(0.05, durBeats),
+      hand: entry?.hand === 'LH' ? 'LH' : 'RH',
+      role: typeof entry?.role === 'string' ? entry.role : 'user',
+    })
+  }
+  return out
+}
+
 export function createNoteCorrections(initial = null) {
   const removed = Array.isArray(initial?.removed)
     ? initial.removed.filter((key) => typeof key === 'string' && key.length > 0)
     : []
-  return { version: 2, removed: [...new Set(removed)] }
+  // Version 3 adds per-note edits (pitch/onset/duration deltas) and
+  // musician-added notes. A version 1 or 2 record loads as removals only.
+  const notes = {}
+  if (initial?.notes && typeof initial.notes === 'object') {
+    for (const [key, edit] of Object.entries(initial.notes)) {
+      if (typeof key !== 'string' || !key.length) continue
+      const clean = sanitizeEdit(edit)
+      if (clean) notes[key] = clean
+    }
+  }
+  return {
+    version: 3,
+    removed: [...new Set(removed)],
+    notes,
+    added: sanitizeAdded(initial?.added),
+  }
+}
+
+/** Set (or clear) one note's edits. Returns a NEW corrections object. */
+export function setNoteEdit(corrections, key, edit) {
+  const next = createNoteCorrections(corrections)
+  if (!key) return next
+  const clean = sanitizeEdit({ ...(next.notes[key] ?? {}), ...(edit ?? {}) })
+  if (clean) next.notes[key] = clean
+  else delete next.notes[key]
+  return next
+}
+
+/** The edits recorded for one note (empty object when none). */
+export function noteEdit(corrections, key) {
+  return { ...(corrections?.notes?.[key] ?? {}) }
+}
+
+/** Add a musician-created note. Returns a NEW corrections object. */
+export function addUserNote(corrections, note) {
+  const next = createNoteCorrections(corrections)
+  const id = `user-${Date.now().toString(36)}-${next.added.length + 1}`
+  const [clean] = sanitizeAdded([{ ...note, id: note?.id ?? id }])
+  if (clean) next.added.push(clean)
+  return next
+}
+
+export function removeUserNote(corrections, id) {
+  const next = createNoteCorrections(corrections)
+  next.added = next.added.filter((note) => note.id !== id)
+  return next
+}
+
+/** Undo the most recent edit of any kind (removals last-in-first-out). */
+export function undoLastEdit(corrections) {
+  const next = createNoteCorrections(corrections)
+  const addedKeys = Object.keys(next.notes)
+  if (addedKeys.length) {
+    delete next.notes[addedKeys[addedKeys.length - 1]]
+    return next
+  }
+  if (next.added.length) {
+    next.added.pop()
+    return next
+  }
+  next.removed.pop()
+  return next
 }
 
 export function hasRemoval(corrections, key) {
@@ -158,11 +272,13 @@ export function clearRemovals(corrections) {
 export function applyNoteCorrections(events, corrections, { timeOf } = {}) {
   const annotated = annotateNoteKeys(events, { timeOf })
   const removed = new Set(corrections?.removed ?? [])
-  if (!removed.size) {
-    return { events: annotated, removedEvents: [], removedCount: 0 }
-  }
-  const kept = []
+  const edits = corrections?.notes ?? {}
+  const addedNotes = corrections?.added ?? []
+  const addedIdsRemoved = new Set(addedNotes.filter((n) => removed.has(`user:${n.id}`)).map((n) => n.id))
+
+  // 1. removals (they win over every other edit)
   const removedEvents = []
+  let kept = []
   for (const event of annotated) {
     if (event.correctionKey && removed.has(event.correctionKey)) {
       removedEvents.push(event)
@@ -170,7 +286,61 @@ export function applyNoteCorrections(events, corrections, { timeOf } = {}) {
     }
     kept.push(event)
   }
-  return { events: kept, removedEvents, removedCount: removedEvents.length }
+
+  // 2. pitch, 3. onset, 4. duration - only on notes that survived, and only
+  //    the fields the musician actually changed.
+  let editedCount = 0
+  kept = kept.map((event) => {
+    const edit = event.correctionKey ? edits[event.correctionKey] : null
+    if (!edit) return event
+    const next = { ...event }
+    if (edit.pitchDelta) next.midi = Math.max(21, Math.min(108, Math.round(event.midi) + edit.pitchDelta))
+    if (edit.onsetDeltaBeats) {
+      const startBeat = (event.startBeat ?? 0) + edit.onsetDeltaBeats
+      next.startBeat = Math.max(0, Math.round(startBeat * 1000) / 1000)
+    }
+    if (edit.durationDeltaBeats) {
+      next.durBeats = Math.max(0.05, Math.round(((event.durBeats ?? 0.25) + edit.durationDeltaBeats) * 1000) / 1000)
+    }
+    editedCount += 1
+    return next
+  })
+
+  // 5. added notes. A note the musician adds is never allowed to duplicate an
+  //    existing (pitch, onset) - that would create two identical practice
+  //    targets and an invalid-looking chord - it is skipped and reported.
+  const skippedAdditions = []
+  const added = []
+  for (const note of addedNotes) {
+    if (addedIdsRemoved.has(note.id)) continue
+    const duplicate = kept.some((event) =>
+      Math.round(event.midi) === note.midi && Math.abs((event.startBeat ?? 0) - note.startBeat) <= 0.01)
+    if (duplicate) { skippedAdditions.push(note.id); continue }
+    added.push({
+      midi: note.midi,
+      startBeat: note.startBeat,
+      durBeats: note.durBeats,
+      hand: note.hand,
+      role: note.role,
+      provenance: 'user',
+      correctionKey: `user:${note.id}`,
+      isUserAdded: true,
+    })
+  }
+  // The surviving events keep their incoming order (the arranger emits them
+  // deterministically, and the score writer groups by measure itself); added
+  // notes are appended in time order. Reordering here would change unrelated
+  // notation, which the correction layer must never do.
+  added.sort((a, b) => (a.startBeat ?? 0) - (b.startBeat ?? 0) || a.midi - b.midi)
+  const finalEvents = [...kept, ...added]
+  return {
+    events: finalEvents,
+    removedEvents,
+    removedCount: removedEvents.length,
+    editedCount,
+    addedCount: added.length,
+    skippedAdditions,
+  }
 }
 
 /** Which corrections still match something in this transcription (no drift). */
@@ -186,7 +356,8 @@ export function resolveCorrections(events, corrections, { timeOf } = {}) {
 
 /** Persistence: a plain JSON object, versioned, safe to store with a take. */
 export function serializeNoteCorrections(corrections) {
-  return { version: 2, removed: [...new Set(corrections?.removed ?? [])] }
+  const clean = createNoteCorrections(corrections)
+  return { version: 3, removed: clean.removed, notes: clean.notes, added: clean.added }
 }
 
 /**
@@ -198,6 +369,7 @@ export function serializeNoteCorrections(corrections) {
  */
 export function parseNoteCorrections(raw) {
   if (!raw || typeof raw !== 'object') return createNoteCorrections()
-  if (raw.version !== 1 && raw.version !== 2) return createNoteCorrections()
-  return createNoteCorrections({ removed: raw.removed })
+  if (raw.version !== 1 && raw.version !== 2 && raw.version !== 3) return createNoteCorrections()
+  // v1/v2 records carry removals only; v3 adds note edits and added notes.
+  return createNoteCorrections({ removed: raw.removed, notes: raw.notes, added: raw.added })
 }
