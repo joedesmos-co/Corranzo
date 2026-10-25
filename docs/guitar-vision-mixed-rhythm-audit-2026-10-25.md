@@ -2,9 +2,9 @@
 
 **Reviewed:** `48a5790f7e` (mixed-rhythm fixture + blocker) and the later
 `6683d65e3b` text-run splitting fix on `codex/guitar-vision`.
-**Decision: not integrated.** The text-run split fixes notehead extraction, but
-the mixed fixture still has no evidence-based duration or valid measure. The
-current experimental practice gate stays closed.
+**Decision: the timing candidate is not integrated. The isolated text-run split
+was integrated as extraction-only experimental work; practice stays closed.**
+The mixed fixture still has no evidence-based duration or valid measure.
 
 ## Reproduction on the pinned mixed fixture
 
@@ -78,3 +78,37 @@ timing evaluation. It does not.
 Current main remains at the verified paired/chords evidence:
 116/116 string+fret, 32/32 confident onsets, 8/8 measures, but all guitar vector
 practice remains disabled.
+
+
+## Round-4 integration: extraction-only split accepted
+
+The isolated `notationNoteheads` change from `6683d65e3b` was ported without any
+stem/beam changes from the newer research branch. It was paired with a strict
+unknown-rhythm guard:
+
+- `attachRhythm` keeps `duration = null` when the notehead/stem/beam/flag
+  evidence is not confident.
+- After measure validation, every event in an incomplete measure has its
+  duration set back to `null` and `confident=false`.
+- `rhythm_recovered` now additionally requires
+  `onsets_confident === onsets`.
+
+Independent result on `guitar-mixed-rhythm-vector`:
+
+- 60/60 string/fret events;
+- **21/21 noteheads** (was 18/21);
+- 21 onsets, **0/21 confident**;
+- 4/4 measures declared, **0/4 valid**;
+- every event duration is **null** (no fabricated quarter);
+- MusicXML contains the explicit `duration not recovered` footnote and no
+  `<type>quarter</type>`;
+- `rhythm_recovered=false`, assessment `pitchOnly=true`, `practiceReady=false`.
+
+Actual browser PDF.js extraction (Chromium, source module) reproduced the same
+21 noteheads, null durations, 0/4 measures and placeholder XML. The product
+browser flow (Chromium and WebKit) passes 27/27 and the mixed fixture falls back
+without experimental practice metadata.
+
+The paired/chords and techniques fixtures remain unchanged: 116/116 and 32/32
+events, 32/32 confident onsets, 8/8 measures. Sparse remains pitch-only with
+null timing. The new fixture and tests are committed with the extraction change.

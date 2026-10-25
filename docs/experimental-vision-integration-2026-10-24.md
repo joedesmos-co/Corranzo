@@ -277,3 +277,29 @@ unified mic practice **23 passed, 0 failed, 1 skipped**.
 `2007f8939497160e25544dca0fa103f33846c541e527a256ef7f483a8445a70e`.
 Not deployed. If deployed, rollback target is
 `94122c75-aaff-46fd-b24e-fad7908bb9b6`.
+
+## 8. Round 4 — Guitar text runs integrated; Piano safety repair rejected
+
+**Live at round-4 start:** Worker
+`0ccc559c-10d5-43df-92db-42a5715790cb`, bundle `index-ks2_w5OX.js`
+(SHA-256 matches the round-3 local build). The round-3 Audio Vision v3 editor
+is live; the older round-2 bundle is no longer production.
+
+**Integrated:** `d31a569572` — isolated Guitar `notationNoteheads` text-run
+splitting from `6683d65e3b`, plus strict unknown-rhythm protection. Mixed fixture
+goes 18→21 noteheads and 60/60 string/fret, but everything remains
+`duration:null`, 0 confident onsets, 0/4 valid measures, `rhythm_recovered`
+false and practice disabled. Paired/techniques remain 116/116 and 32/32 with
+8/8 measures; sparse abstains. No stem/beam changes from newer research were
+imported. See `docs/guitar-vision-mixed-rhythm-audit-2026-10-25.md`.
+
+**Not integrated:** Piano `723b47847c`. The arithmetic rest promotion is now
+correctly denied, but our own controls still find practice-enabled false
+acceptance for equal-pitch short slurs, same-staff two-voice sums and decorative
+short curves; path accidentals remain unverified. See
+`docs/piano-vector-safety-repair-audit-2026-10-25.md`.
+
+**Round-4 local bundle:** `dist/assets/index-DJy6qAU3.js`, SHA-256
+`79808654cb4a4ba3a46eb9f19de9a4a957b51cf46d53722c7a7e9166eb0bcf06`.
+Not deployed. Rollback target if deployed:
+`0ccc559c-10d5-43df-92db-42a5715790cb`.
