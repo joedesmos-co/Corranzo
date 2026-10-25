@@ -233,13 +233,50 @@ export function assignEvents(items, staves, barlines) {
 
 // ----------------------------------------------------------------- rhythm
 export function notationNoteheads(items) {
+  // A PDF text run may contain several SMuFL glyphs plus spaces. PDF.js
+  // exposes the run width but not per-character advances. Derive the notehead
+  // advance from standalone runs, then solve the space advance from the run
+  // width; positions are cumulative. This is font/page derived, not a fixed
+  // offset. Runs with no standalone notehead become equal-advance estimates
+  // and remain marked as split evidence.
+  const single = []
+  for (const it of items) {
+    const txt = it.text || ''
+    if (txt.length === 1 && SMUFL_NOTEHEADS[txt]) single.push(it.bbox[2] - it.bbox[0])
+  }
+  single.sort((a, b) => a - b)
+  const advNote = single.length ? single[single.length >> 1] : 0
   const out = []
   for (const it of items) {
-    const ch = (it.text || '').trim()[0]
-    if (!ch || !SMUFL_NOTEHEADS[ch]) continue
-    const [base, kind] = [SMUFL_NOTEHEADS[ch][1], SMUFL_NOTEHEADS[ch][0]]
+    const txt = it.text || ''
+    if (!txt) continue
+    const chars = [...txt]
+    if (!chars.some(ch => SMUFL_NOTEHEADS[ch])) continue
     const [x0, y0, x1, y1] = it.bbox
-    out.push({ kind, base, box: [x0, y0, x1, y1], cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, w: x1 - x0, h: y1 - y0 })
+    const width = x1 - x0
+    const nH = chars.filter(ch => SMUFL_NOTEHEADS[ch]).length
+    const nS = chars.filter(ch => ch === ' ').length
+    let advSpace = 0
+    let noteAdv = advNote
+    if (chars.length === 1) {
+      noteAdv = width || advNote
+    } else if (nS > 0 && noteAdv > 0) {
+      advSpace = (width - nH * noteAdv) / nS
+      if (!(advSpace >= 0) || advSpace > noteAdv * 2) advSpace = 0
+    } else {
+      noteAdv = width / Math.max(chars.length, 1)
+    }
+    let cursor = x0
+    for (const ch of chars) {
+      const adv = ch === ' ' ? (advSpace || noteAdv) : noteAdv
+      if (SMUFL_NOTEHEADS[ch]) {
+        const [kind, base] = SMUFL_NOTEHEADS[ch]
+        out.push({ kind, base, box: [cursor, y0, cursor + adv, y1],
+          cx: cursor + adv / 2, cy: (y0 + y1) / 2, w: adv, h: y1 - y0,
+          split: chars.length > 1, sourceIndex: out.length })
+      }
+      cursor += adv
+    }
   }
   out.sort((a, b) => a.cx - b.cx)
   return out
@@ -479,7 +516,11 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
         const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [s.gap]))))
         const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap)
         const d = durationFromEvidence(c, ev)
-        dur = d.duration; beams = d.beams; flags = d.flags
+        // A notehead plus absent/ambiguous stem/beam evidence is not a
+        // written duration. Keep the value explicitly unknown instead of
+        // promoting a placeholder quarter because more noteheads were found.
+        dur = d.confident ? d.duration : null
+        beams = d.beams; flags = d.flags
         stem = d.stem; conf = d.confident
       }
       raw.set(`${si}|${o.measure}|${o.x.toFixed(2)}`, { duration: dur, beams, flags, stem, confident: conf })
@@ -499,7 +540,16 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
     const total = keys.reduce((a, k) => a + raw.get(k).duration, 0)
     const complete = Math.abs(total - beats) <= 0.02
     if (complete) valid++
-    if (!complete) for (const k of keys) raw.get(k).confident = false
+    if (!complete) {
+      // A duration that cannot fill its measure is not trustworthy timing.
+      // Keep it explicitly unknown so neither MusicXML nor a consumer can
+      // mistake a placeholder quarter for evidence.
+      for (const k of keys) {
+        const row = raw.get(k)
+        row.duration = null
+        row.confident = false
+      }
+    }
     report[m] = { onsets: os_.length, quarters: +total.toFixed(3), expected: beats, complete }
   }
   const confident = onsets.filter(o => raw.get(`${o.staff}|${o.measure}|${o.x.toFixed(2)}`).confident).length
@@ -653,6 +703,7 @@ export async function recognizePdf(data, { dpi = 150, pageNo = 1, createCanvas, 
   const rhythm = attachRhythm(events, page.items, staves, page.gray, page.width, page.height, beamMask)
   const [ts] = timeSignature(page.items)
   const recovered = rhythm.stats.onsets > 0 &&
+    rhythm.stats.onsets_confident === rhythm.stats.onsets &&
     rhythm.stats.staff_pairing.every(p => p.exact) &&
     rhythm.stats.measures_total > 0 &&
     rhythm.stats.measures_complete === rhythm.stats.measures_total
