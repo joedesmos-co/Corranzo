@@ -252,7 +252,7 @@ export function timeSignature(items) {
     if (!ch) continue
     const cp = ch.codePointAt(0)
     if (cp >= 0xE080 && cp <= 0xE089) {
-      const [x0, y0, x1, y1] = it.bbox
+      const [x0, y0, , y1] = it.bbox
       glyphs.push({ digit: cp - 0xE080, x0, cy: (y0 + y1) / 2, h: y1 - y0 })
     }
   }
@@ -292,17 +292,6 @@ export function noteheadColumns(noteheads) {
   return cols
 }
 
-function bridgedRun(gray, width, height, x, start, step) {
-  // Count ink rows while bridging small gaps (anti-aliasing / staff
-  // crossings), mirroring the raster research probe.
-  let ink = 0, gap = 0, y = start
-  while (y >= 0 && y < height) {
-    if (gray[y * width + x] <= 200) { ink++; gap = 0 }
-    else { gap++; if (gap > 6) break }
-    y += step
-  }
-  return ink
-}
 export function detectBeams(gray, width, height, thr = 128) {
   // Beam mask: pixels belonging to horizontal ink runs >= 60px, then
   // components with 3..25px thickness. Mirrors the verified Python
