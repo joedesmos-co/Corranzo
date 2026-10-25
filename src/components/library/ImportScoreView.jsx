@@ -62,8 +62,15 @@ export default function ImportScoreView({
   const emptyNotation = sourceReady && mapReady && !timing.isLoading && !timing.error && !timing.timingMap?.notes?.length
   const showOmrPanel = shouldShowLibraryOmrPanel({ hasPdf, musicXmlSource, pdfIdentity })
   const qualityWarning = musicXmlSource?.omrMeta?.quality?.acceptance === 'warning'
-  const waitAvailable = musicXmlSource?.source !== 'omr' || musicXmlSource?.omrMeta?.sourceVisualMap?.anchorCount > 0
-  const selectedMode = mode === PRACTICE_MODE.WAIT_FOR_YOU && !waitAvailable ? PRACTICE_MODE.PREVIEW : mode
+  const experimentalVision = musicXmlSource?.omrMeta?.experimentalVision ?? null
+  const experimentalPracticeBlocked = experimentalVision?.practiceReady === false
+  const playAlongAvailable = !experimentalPracticeBlocked
+  const waitAvailable = !experimentalPracticeBlocked && (musicXmlSource?.source !== 'omr' || musicXmlSource?.omrMeta?.sourceVisualMap?.anchorCount > 0)
+  const selectedMode = experimentalPracticeBlocked
+    ? PRACTICE_MODE.PREVIEW
+    : mode === PRACTICE_MODE.WAIT_FOR_YOU && !waitAvailable
+      ? PRACTICE_MODE.PREVIEW
+      : mode
   const autoOmrRequestForCurrentPdf = autoOmrRequest?.instrumentId === instrumentId && autoOmrRequest?.pdfFileName === fileName ? autoOmrRequest : null
   const pickerProps = { onFileSelect, onMusicXmlSelect, onMidiSelect, onClassifiedUpload, disabled: uploadsDisabled }
   function openScore() {
@@ -75,7 +82,10 @@ export default function ImportScoreView({
     const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End']
     if (!keys.includes(event.key)) return
     event.preventDefault()
-    const modes = Object.values(PRACTICE_MODE).filter(value => value !== PRACTICE_MODE.WAIT_FOR_YOU || waitAvailable)
+    const modes = Object.values(PRACTICE_MODE).filter(value =>
+      (value !== PRACTICE_MODE.WAIT_FOR_YOU || waitAvailable) &&
+      (value !== PRACTICE_MODE.PLAY_ALONG || playAlongAvailable),
+    )
     const offset = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1
     const next = event.key === 'Home' ? modes[0] : event.key === 'End' ? modes.at(-1) : modes[(modes.indexOf(selectedMode) + offset + modes.length) % modes.length]
     setMode(next)
@@ -134,6 +144,18 @@ export default function ImportScoreView({
             {arrangementMeta.partial ? ' Some passages were uncertain; listen through before you practice.' : ''}
           </p>
         </div>}
+        {experimentalVision && <div className="score-import-message" role="note">
+          <h2>Experimental recognition draft</h2>
+          <p>
+            {experimentalVision.engine === 'piano-vector' ? 'Piano vector' : 'Guitar TAB'} recognition is experimental.
+            {experimentalPracticeBlocked
+              ? ' Practice modes are disabled because timing or voice evidence is incomplete; this score is preview-only.'
+              : ' Inspect the notes and rhythm carefully before practicing.'}
+            {Array.isArray(experimentalVision.warnings) && experimentalVision.warnings.length > 0
+              ? ` ${experimentalVision.warnings.join(' ')}`
+              : ''}
+          </p>
+        </div>}
         {!hasPdf && <div className="score-import-empty"><p className="cz-edition-label">A little care goes a long way</p><h2>A clear page.<br />A better start.</h2><p>Include the whole page, keep notes sharp, and avoid glare or shadows. For photos, keep the camera square to the music.</p><p>Your score is prepared in this browser.</p></div>}
         {hasPdf && showOmrPanel && <PdfOmrPlaybackPanel
           key={`omr-panel-${fileName ?? 'score'}-${pdfFileUrl ?? 'no-url'}`}
@@ -152,7 +174,7 @@ export default function ImportScoreView({
           {showIntroduction && <p className="score-import-intro">Three ways to use your score. You can switch at any time.</p>}
           <div className="score-import-modes" role="radiogroup" aria-label="Starting mode" onKeyDown={modeKeys}>
             {Object.values(PRACTICE_MODE).map(value => <button key={value} data-mode={value} role="radio" aria-checked={selectedMode === value} tabIndex={selectedMode === value ? 0 : -1}
-              disabled={value === PRACTICE_MODE.WAIT_FOR_YOU && !waitAvailable} onClick={() => setMode(value)}>
+              disabled={(value === PRACTICE_MODE.WAIT_FOR_YOU && !waitAvailable) || (value === PRACTICE_MODE.PLAY_ALONG && !playAlongAvailable)} onClick={() => setMode(value)}>
               <span className="score-import-mode-dot" aria-hidden="true" /><span><strong>{PRACTICE_MODE_LABELS[value]}</strong><span>{IMPORT_MODE_HELP[value]}</span></span>
             </button>)}
           </div>

@@ -1060,6 +1060,7 @@ export default function App() {
     sourcePracticeSessionEpoch = null,
     sourceOmrRunId = null,
     sourceScoreId = null,
+    experimentalVision = null,
   }) => {
     const callbackToken = {
       callbackPdfIdentity: sourcePdfIdentity,
@@ -1336,6 +1337,9 @@ export default function App() {
     const omrWarnings = [...new Set((warnings ?? []).filter(Boolean))].slice(0, 8)
     if (omrWarnings.length) {
       omrMeta.warnings = omrWarnings
+    }
+    if (experimentalVision && typeof experimentalVision === 'object') {
+      omrMeta.experimentalVision = experimentalVision
     }
     const normalizedMeasureGrid = normalizeOmrMeasureGridMetadata(measureGrid)
     if (normalizedMeasureGrid) {

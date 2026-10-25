@@ -115,3 +115,33 @@ piano and guitar; the V3 decision logic and V2 fallback are untouched; no UI,
 cursor or score-following changes. The physical acceptance checklist is
 preserved at `docs/MIC_PHYSICAL_ACCEPTANCE.md` (no hardware was available;
 every number here is injected-stream). Not merged, not deployed.
+
+---
+
+## Independent reproduction on current production (2026-10-24)
+
+Reproduced from current `main` (`ca85b1468f`) with the same harness, real
+Chromium production hook and identical clips/scenarios. Production already
+contains the October 24 odd-partial octave guard.
+
+| matrix | production | candidate |
+|---|---:|---:|
+| legitimate completions (46 clips) | **40 / 46** | **39 / 46** |
+| onset→advance p50 | 50 ms | 63 ms |
+| octave+neighbour false scenarios (8 clips, 21 scenarios) | **12 / 21** | **1 / 21** |
+| remaining false | — | `acoustic-fresh-ss-single:neighbor-1-of-56` |
+
+The only true-completion difference is `acoustic-rock-single`: production
+advanced at ~21.7 s (near the harness timeout), candidate did not. That clip is
+already an inconsistent/borderline detector case; the candidate's other 39
+legitimate completions, including quiet electric, repeats, chords and octave
+composites, are at parity.
+
+The remaining false award is the documented case: expectation 55 while 56 is
+played; the expected long-window ratio is above the floor, so a safe veto would
+require rejecting true notes elsewhere.
+
+Independent cost measurement of `measureResolutionRatios` in Node on an 8192-
+sample window: **1.09 ms/call** over 1,000 calls (well below a 16.7 ms frame
+budget; the research browser measurement was 0.21 ms incremental). It runs only
+for single-note expectations.
