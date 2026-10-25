@@ -31,6 +31,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const pianoPdf = join(ROOT, 'benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf')
 const guitarPdf = join(ROOT, 'benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf')
 const scannedGuitarPdf = join(ROOT, 'benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf')
+const mixedGuitarPdf = join(ROOT, 'benchmarks/omr-fixtures/guitar-mixed-rhythm-vector/guitar-mixed-rhythm-vector.pdf')
 const realPianoPdf = join(ROOT, 'public/fixtures/demo-minuet-in-g.pdf')
 
 await mkdir(OUT, { recursive: true })
@@ -230,6 +231,17 @@ try {
   if (!fallbackMeta) pass('scanned guitar: honest standard fallback, no experimental metadata')
   else fail('scanned guitar: honest standard fallback', JSON.stringify(fallbackMeta))
   await shot('scanned-fallback')
+
+  // ------------------------------------- uncertain guitar mixed rhythm
+  await openImport({ mode: 'guitar-vector', instrument: 'guitar' })
+  await upload(mixedGuitarPdf, 'mixed guitar rhythm')
+  await waitReady('mixed guitar rhythm', { expectExperimental: false })
+  const mixedSaved = await readSaved()
+  if (!(mixedSaved?.meta?.omrMeta?.experimentalVision)) {
+    pass('mixed guitar rhythm: unknown timing stays experimental-disabled')
+  } else {
+    fail('mixed guitar rhythm: unknown timing stays experimental-disabled', JSON.stringify(mixedSaved?.meta?.omrMeta?.experimentalVision))
+  }
 
   // ------------------------------------------------ unsupported piano PDF
   await openImport({ mode: 'piano-vector', instrument: 'piano' })

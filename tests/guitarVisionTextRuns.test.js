@@ -46,6 +46,17 @@ describe('guitar notation notehead text runs', () => {
     expect(heads[0].box).toEqual([200, 40, 210, 60])
   })
 
+  it('keeps every glyph in a mixed-width run and marks it split', () => {
+    const heads = notationNoteheads([
+      item('\ue0a2\ue0a4', [0, 0, 30, 10]),
+      item('\ue0a4', [100, 0, 110, 10]),
+    ])
+    expect(heads).toHaveLength(3)
+    expect(heads[0]).toMatchObject({ kind: 'half', base: 2, split: true })
+    expect(heads[1]).toMatchObject({ kind: 'quarter', base: 1, split: true })
+    expect(heads[2]).toMatchObject({ kind: 'quarter', base: 1, split: false })
+  })
+
   it('keeps adjacent chord runs separate', () => {
     const heads = notationNoteheads([
       item('\ue0a4', [10, 10, 20, 20]),
