@@ -342,11 +342,21 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
           Math.abs(a.cy - hd.cy) <= 0.6 * gap)
         if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
-        if (hd.acc == null) {
-          const pa = accPaths.find((a) => a.x <= hd.x && a.x >= hd.x - 2.5 * gap &&
-            Math.abs(a.y - hd.cy) <= 0.8 * gap)
-          if (pa) hd.acc = pa.code
+      }
+      // Path-drawn accidentals are assigned exclusively: each candidate path
+      // belongs to the nearest unassigned notehead to its right. A single
+      // accidental can never modify two unrelated notes.
+      for (const pa of accPaths) {
+        if (pa.used) continue
+        let best = null
+        for (const hd of heads) {
+          if (hd.acc != null) continue
+          if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
+          if (Math.abs(pa.y - hd.cy) > 0.8 * gap) continue
+          const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
+          if (!best || d < best.d) best = { d, hd }
         }
+        if (best) { best.hd.acc = pa.code; pa.used = true }
       }
       const clusters = []
       for (const hd of heads) {
@@ -360,7 +370,15 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         let best = null
         for (const st of stems) {
           if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
-          const d = Math.abs(st.x - c.cx)
+          // Stem ownership by notehead edge: up-stems attach at the right
+          // edge (~1.25 gaps), down-stems at the left edge (~0.25 gap).
+          // Fall back to the cluster centre for chords/dense layouts where
+          // the edge estimate is unreliable.
+          const head = c.items[0]
+          const up = st.y0 < head.cy
+          const expected = up ? head.x + 1.25 * gap : head.x - 0.25 * gap
+          let d = Math.abs(st.x - expected)
+          if (d > 0.9 * gap) d = Math.abs(st.x - c.cx)
           if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x }
         }
         for (const hd of c.items) {
@@ -425,14 +443,23 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         }
       }
     }
-    // tuplet marks: a '3' above the staff marks the chord at that x as 3:2
-    const marks = textMarks.filter((t) => t.s === '3' && t.y < g0[0] - 1.0 * gap)
-    for (const n of notes) {
-      if (n.measure < base || n.measure >= base + count) continue
-      if (marks.some((t) => Math.abs(t.x - (n.cx || n.x)) <= 0.4 * gap)) {
-        n.tuplet = [3, 2]
-        n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
+    // tuplet marks: a '3' above THIS system marks the nearest chord cluster
+    // as 3:2. Markers from other systems are excluded by the y band; all
+    // chord members at the chosen x receive the tuplet.
+    const marks = textMarks.filter((t) => t.s === '3' &&
+      t.y < g0[0] - 0.5 * gap && t.y > g0[0] - 8.0 * gap)
+    const sysNotes = notes.filter((n) => n.measure >= base && n.measure < base + count)
+    // Assign each note to its NEAREST tuplet marker (within 2.2 gaps). This
+    // groups a triplet run without one marker stealing a neighbouring note.
+    for (const n of sysNotes) {
+      let best = null
+      for (const t of marks) {
+        const d = Math.abs(t.x - n.x)
+        if (!best || d < best.d) best = { d, t }
       }
+      if (!best || best.d > 2.2 * gap) continue
+      n.tuplet = [3, 2]
+      n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
     }
     sys.beats = beats; sys.unit = unit
   }

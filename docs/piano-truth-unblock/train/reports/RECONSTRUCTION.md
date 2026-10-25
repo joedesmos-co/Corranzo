@@ -2469,3 +2469,60 @@ not.
   itself. Tests: piano_safety_controls.test.mjs,
   piano_curve_classification.test.mjs, piano_vector_practice_gate.test.mjs.
   No merge/deploy; sealed TEST untouched.
+
+
+## Trustworthy symbol ownership and structural accuracy (this session)
+
+  PHASE 1 — non-identifiable rests: the beginner's 0xE4E6 glyph is visually
+  the same wedge as the rhythm eighth-context rest; the pixels do not encode
+  quarter vs eighth. We stopped tuning shape classifiers. The draft keeps
+  the inferred quarter rest with provenance measure-fill /
+  ambiguous-glyph-shape, and practice stays disabled. The exact unresolved
+  symbol (measure 7, 0xE4E6) is recorded for future human correction.
+
+  PHASE 2 — accidental ownership: path-drawn accidentals are now assigned
+  EXCLUSIVELY to the nearest unassigned notehead to their right (edge-aware
+  stem ownership first, cluster-centre fallback for chords). Unknown
+  accidental-sized filled paths block practice (unresolved-accidentals).
+  Grand 88/88; dense 185 -> 195/264 (exclusive assignment recovered 10 more).
+
+  PHASE 3 — curves: endpoint geometry + pitch equality + forward measure +
+  long/high ambiguity guard; same-pitch curves that are too long/high are
+  ambiguous, not ties. MusicXML <tie>/<tied>/<slur>. Grand A4 tie m3->m4 and
+  F4->G4 slur serialized; curve precision on fixtures 2/2, 0 false ties.
+  Negative controls cover tie, repeated notes, different-pitch slur,
+  equal-pitch slur-as-tie, ambiguous long curve, chord partial tie, cross-
+  measure tie, multi-voice.
+
+  PHASE 4 — rhythm: tuplets now assigned to the nearest marker per note
+  (2.2-gap window) and filtered by system y; stem ownership uses the
+  notehead edge (1.25 gaps right / 0.25 left) with cluster fallback. Rhythm
+  improved 44 -> 62/63 notes (98.4%), 4/5 rests, one remaining invalid
+  measure (the dotted-eighth F has no drawn flag/beam in the PDF and the
+  final quarter rest is glyph-ambiguous; no rests/durations were invented).
+
+  PHASE 5 — dense: 195/264 exact (73.9%), 4 invalid measures, unresolved
+  noteheads remain; no artificial fixes.
+
+  PHASE 6 — Ao no Sumika: pages 1/3/4 extract 33/60/24 notes, page 2
+  incomplete; gate refuses; no reference accuracy claim. Demo-minuet and
+  Brahms remain image fallback.
+
+  PHASE 7 — safety: gate unchanged in strictness. 14 safety controls,
+  7 curve controls and the practice-gate regression all pass. Beginner is
+  reference-correct but practice-blocked; grand is the only safe score.
+
+  Strict before -> after (notes/rests):
+    beginner 32/32, 1/1      -> 32/32, 1/1 (practice BLOCKED)
+    rhythm   44/63, 5/5      -> 62/63, 4/5 (blocked: rest + measure)
+    grand    88/88, 0/0      -> 88/88, 0/0 (practice READY)
+    dense    185/264, 0/0    -> 195/264, 0/0 (blocked)
+    total    349/447 (P .853/R .781) -> 377/447 (P .922/R .843)
+  Practice-ready safe scores: 1 (grand). Correct-on-reference and
+  safe-to-practice remain separate metrics.
+
+  Browser pdfjs 5.4.296: beginner practiceReady false (rest inferred/
+  ambiguous); grand practiceReady true. Reports: symbol_ownership.json,
+  browser_practice_gate.json, safety_correction.json,
+  piano_vector_core_general.patch (465 lines), minrest patch (107 lines).
+  No merge/deploy; sealed TEST untouched.
