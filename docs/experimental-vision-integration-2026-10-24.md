@@ -149,3 +149,23 @@ persists through save/reload because the metadata is stored with the score.
 | **total** | **21 / 21** | **21 / 21** |
 
 No application console or page errors. The same 21/21 flows also pass against the built `dist` bundle in Chromium and WebKit.
+
+## 6. Deployment
+
+| item | value |
+|---|---|
+| source commits | `ab4d94cf53` (vision), `5d5ae10c36` (mic) |
+| bundle | `dist/assets/index-B2-EFkfL.js` |
+| bundle SHA-256 | `66db0b80a3b6aae39d10bbe0170b40aade98360d39761d4477baf7a8c38f9c2a` |
+| Worker version | `46ba60fa-fabc-44bc-b93b-31ccde4e234f` |
+| deployment id | `fb92d768-1d65-423d-8248-4f8859608054` |
+| live bundle | `index-B2-EFkfL.js`, SHA-256 matches local |
+| live routes | `/`, `/privacy`, `/terms`, `/contact` → 200 |
+| rollback target | `f7c9b7f8-59f8-4c3c-980f-51e8dd7710f4` |
+
+The experimental recognition paths are off by default on the live site. The
+mic semitone evidence is active by default and has no UI change.
+
+Live acceptance: the same 21/21 experimental-vision flow passed against
+`https://corranzo.com/` in Chromium on the deployed bundle (local and live
+SHA-256 match).
