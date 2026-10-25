@@ -1,0 +1,232 @@
+{
+ "generatedAt": "2026-10-25T15:23:49.347Z",
+ "split": "FRESH: compositions Rock1/SS1/Funk2 (never used in any prior evaluation), players 02 and 05, both variants",
+ "variants": {
+  "original (production weights)": {
+   "microF1": 0.772,
+   "precision": 0.807,
+   "recall": 0.739,
+   "denseF1": 0.726,
+   "sparseF1": 0.892,
+   "registerRecall": {
+    "bass": 0.597,
+    "mid": 0.758,
+    "high": 0.845
+   },
+   "missed": 642,
+   "falsePositives": 436,
+   "octaveErrors": 117,
+   "takes": [
+    {
+     "base": "02_Funk2-108-Eb_comp",
+     "f1": 0.647,
+     "precision": 0.848,
+     "recall": 0.523
+    },
+    {
+     "base": "02_Funk2-108-Eb_solo",
+     "f1": 0.85,
+     "precision": 0.833,
+     "recall": 0.867
+    },
+    {
+     "base": "02_Funk2-119-G_comp",
+     "f1": 0.718,
+     "precision": 0.824,
+     "recall": 0.636
+    },
+    {
+     "base": "02_Funk2-119-G_solo",
+     "f1": 0.902,
+     "precision": 0.878,
+     "recall": 0.927
+    },
+    {
+     "base": "02_Rock1-130-A_comp",
+     "f1": 0.642,
+     "precision": 0.786,
+     "recall": 0.543
+    },
+    {
+     "base": "02_Rock1-130-A_solo",
+     "f1": 0.881,
+     "precision": 0.808,
+     "recall": 0.969
+    },
+    {
+     "base": "02_SS1-100-C#_comp",
+     "f1": 0.631,
+     "precision": 0.694,
+     "recall": 0.578
+    },
+    {
+     "base": "02_SS1-100-C#_solo",
+     "f1": 0.911,
+     "precision": 0.875,
+     "recall": 0.949
+    },
+    {
+     "base": "05_Funk2-108-Eb_comp",
+     "f1": 0.779,
+     "precision": 0.829,
+     "recall": 0.735
+    },
+    {
+     "base": "05_Funk2-108-Eb_solo",
+     "f1": 0.924,
+     "precision": 0.859,
+     "recall": 1
+    },
+    {
+     "base": "05_Funk2-119-G_comp",
+     "f1": 0.875,
+     "precision": 0.883,
+     "recall": 0.868
+    },
+    {
+     "base": "05_Funk2-119-G_solo",
+     "f1": 0.928,
+     "precision": 0.882,
+     "recall": 0.98
+    },
+    {
+     "base": "05_Rock1-130-A_comp",
+     "f1": 0.826,
+     "precision": 0.928,
+     "recall": 0.744
+    },
+    {
+     "base": "05_Rock1-130-A_solo",
+     "f1": 0.902,
+     "precision": 0.822,
+     "recall": 1
+    },
+    {
+     "base": "05_SS1-100-C#_comp",
+     "f1": 0.69,
+     "precision": 0.542,
+     "recall": 0.951
+    },
+    {
+     "base": "05_SS1-100-C#_solo",
+     "f1": 0.836,
+     "precision": 0.757,
+     "recall": 0.933
+    }
+   ]
+  },
+  "heads-only fine-tune": {
+   "microF1": 0.705,
+   "precision": 0.901,
+   "recall": 0.579,
+   "denseF1": 0.616,
+   "sparseF1": 0.918,
+   "registerRecall": {
+    "bass": 0.325,
+    "mid": 0.618,
+    "high": 0.639
+   },
+   "missed": 1036,
+   "falsePositives": 156,
+   "octaveErrors": 38,
+   "takes": [
+    {
+     "base": "02_Funk2-108-Eb_comp",
+     "f1": 0.53,
+     "precision": 0.906,
+     "recall": 0.375
+    },
+    {
+     "base": "02_Funk2-108-Eb_solo",
+     "f1": 0.874,
+     "precision": 0.941,
+     "recall": 0.816
+    },
+    {
+     "base": "02_Funk2-119-G_comp",
+     "f1": 0.559,
+     "precision": 0.838,
+     "recall": 0.419
+    },
+    {
+     "base": "02_Funk2-119-G_solo",
+     "f1": 0.91,
+     "precision": 0.941,
+     "recall": 0.881
+    },
+    {
+     "base": "02_Rock1-130-A_comp",
+     "f1": 0.502,
+     "precision": 0.843,
+     "recall": 0.357
+    },
+    {
+     "base": "02_Rock1-130-A_solo",
+     "f1": 0.875,
+     "precision": 0.889,
+     "recall": 0.862
+    },
+    {
+     "base": "02_SS1-100-C#_comp",
+     "f1": 0.575,
+     "precision": 0.852,
+     "recall": 0.434
+    },
+    {
+     "base": "02_SS1-100-C#_solo",
+     "f1": 0.957,
+     "precision": 0.982,
+     "recall": 0.932
+    },
+    {
+     "base": "05_Funk2-108-Eb_comp",
+     "f1": 0.678,
+     "precision": 0.872,
+     "recall": 0.555
+    },
+    {
+     "base": "05_Funk2-108-Eb_solo",
+     "f1": 0.951,
+     "precision": 0.951,
+     "recall": 0.951
+    },
+    {
+     "base": "05_Funk2-119-G_comp",
+     "f1": 0.797,
+     "precision": 0.94,
+     "recall": 0.692
+    },
+    {
+     "base": "05_Funk2-119-G_solo",
+     "f1": 0.937,
+     "precision": 0.978,
+     "recall": 0.899
+    },
+    {
+     "base": "05_Rock1-130-A_comp",
+     "f1": 0.541,
+     "precision": 0.991,
+     "recall": 0.372
+    },
+    {
+     "base": "05_Rock1-130-A_solo",
+     "f1": 0.96,
+     "precision": 0.923,
+     "recall": 1
+    },
+    {
+     "base": "05_SS1-100-C#_comp",
+     "f1": 0.857,
+     "precision": 0.787,
+     "recall": 0.941
+    },
+    {
+     "base": "05_SS1-100-C#_solo",
+     "f1": 0.9,
+     "precision": 0.9,
+     "recall": 0.9
+    }
+   ]
+  }
+ }
+}
