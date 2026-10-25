@@ -1,0 +1,355 @@
+{
+ "generatedAt": "2026-10-25T13:42:01.344Z",
+ "split": "GuitarSet 05_* (untouched final test, 10 takes)",
+ "extractor": "production (outputToNotesPoly frame 0.5, min 3)",
+ "variants": {
+  "prod 0.65/0.5": {
+   "microF1": 0.879,
+   "microPrecision": 0.83,
+   "microRecall": 0.934,
+   "denseF1": 0.881,
+   "sparseF1": 0.874,
+   "missed": 70,
+   "falsePositives": 204,
+   "octaveErrors": 23,
+   "registerRecall": {
+    "bass": 0.966,
+    "mid": 0.931,
+    "high": 1
+   },
+   "takes": [
+    {
+     "base": "05_BN1-129-Eb_comp",
+     "density": "dense",
+     "f1": 0.859,
+     "precision": 0.773,
+     "recall": 0.966
+    },
+    {
+     "base": "05_BN1-147-Gb_comp",
+     "density": "dense",
+     "f1": 0.829,
+     "precision": 0.763,
+     "recall": 0.906
+    },
+    {
+     "base": "05_BN2-131-B_comp",
+     "density": "dense",
+     "f1": 0.906,
+     "precision": 0.902,
+     "recall": 0.911
+    },
+    {
+     "base": "05_BN2-166-Ab_comp",
+     "density": "dense",
+     "f1": 0.868,
+     "precision": 0.863,
+     "recall": 0.873
+    },
+    {
+     "base": "05_BN3-119-G_comp",
+     "density": "dense",
+     "f1": 0.915,
+     "precision": 0.878,
+     "recall": 0.956
+    },
+    {
+     "base": "05_BN1-129-Eb_solo",
+     "density": "sparse",
+     "f1": 0.889,
+     "precision": 0.8,
+     "recall": 1
+    },
+    {
+     "base": "05_BN1-147-Gb_solo",
+     "density": "sparse",
+     "f1": 0.806,
+     "precision": 0.714,
+     "recall": 0.926
+    },
+    {
+     "base": "05_BN2-131-B_solo",
+     "density": "sparse",
+     "f1": 0.857,
+     "precision": 0.75,
+     "recall": 1
+    },
+    {
+     "base": "05_BN2-166-Ab_solo",
+     "density": "sparse",
+     "f1": 0.928,
+     "precision": 0.901,
+     "recall": 0.955
+    },
+    {
+     "base": "05_BN3-119-G_solo",
+     "density": "sparse",
+     "f1": 0.861,
+     "precision": 0.787,
+     "recall": 0.952
+    }
+   ]
+  },
+  "ft 0.65/0.5": {
+   "microF1": 0.841,
+   "microPrecision": 0.836,
+   "microRecall": 0.846,
+   "denseF1": 0.83,
+   "sparseF1": 0.872,
+   "missed": 164,
+   "falsePositives": 177,
+   "octaveErrors": 35,
+   "registerRecall": {
+    "bass": 0.898,
+    "mid": 0.84,
+    "high": 1
+   },
+   "takes": [
+    {
+     "base": "05_BN1-129-Eb_comp",
+     "density": "dense",
+     "f1": 0.828,
+     "precision": 0.812,
+     "recall": 0.845
+    },
+    {
+     "base": "05_BN1-147-Gb_comp",
+     "density": "dense",
+     "f1": 0.804,
+     "precision": 0.796,
+     "recall": 0.813
+    },
+    {
+     "base": "05_BN2-131-B_comp",
+     "density": "dense",
+     "f1": 0.848,
+     "precision": 0.886,
+     "recall": 0.812
+    },
+    {
+     "base": "05_BN2-166-Ab_comp",
+     "density": "dense",
+     "f1": 0.804,
+     "precision": 0.828,
+     "recall": 0.78
+    },
+    {
+     "base": "05_BN3-119-G_comp",
+     "density": "dense",
+     "f1": 0.852,
+     "precision": 0.839,
+     "recall": 0.867
+    },
+    {
+     "base": "05_BN1-129-Eb_solo",
+     "density": "sparse",
+     "f1": 0.935,
+     "precision": 0.896,
+     "recall": 0.977
+    },
+    {
+     "base": "05_BN1-147-Gb_solo",
+     "density": "sparse",
+     "f1": 0.772,
+     "precision": 0.733,
+     "recall": 0.815
+    },
+    {
+     "base": "05_BN2-131-B_solo",
+     "density": "sparse",
+     "f1": 0.844,
+     "precision": 0.765,
+     "recall": 0.942
+    },
+    {
+     "base": "05_BN2-166-Ab_solo",
+     "density": "sparse",
+     "f1": 0.901,
+     "precision": 0.922,
+     "recall": 0.881
+    },
+    {
+     "base": "05_BN3-119-G_solo",
+     "density": "sparse",
+     "f1": 0.877,
+     "precision": 0.838,
+     "recall": 0.919
+    }
+   ]
+  },
+  "ft 0.5/0.5": {
+   "microF1": 0.843,
+   "microPrecision": 0.804,
+   "microRecall": 0.887,
+   "denseF1": 0.83,
+   "sparseF1": 0.881,
+   "missed": 121,
+   "falsePositives": 231,
+   "octaveErrors": 40,
+   "registerRecall": {
+    "bass": 0.966,
+    "mid": 0.878,
+    "high": 1
+   },
+   "takes": [
+    {
+     "base": "05_BN1-129-Eb_comp",
+     "density": "dense",
+     "f1": 0.818,
+     "precision": 0.776,
+     "recall": 0.865
+    },
+    {
+     "base": "05_BN1-147-Gb_comp",
+     "density": "dense",
+     "f1": 0.813,
+     "precision": 0.752,
+     "recall": 0.885
+    },
+    {
+     "base": "05_BN2-131-B_comp",
+     "density": "dense",
+     "f1": 0.845,
+     "precision": 0.816,
+     "recall": 0.876
+    },
+    {
+     "base": "05_BN2-166-Ab_comp",
+     "density": "dense",
+     "f1": 0.807,
+     "precision": 0.783,
+     "recall": 0.832
+    },
+    {
+     "base": "05_BN3-119-G_comp",
+     "density": "dense",
+     "f1": 0.856,
+     "precision": 0.821,
+     "recall": 0.894
+    },
+    {
+     "base": "05_BN1-129-Eb_solo",
+     "density": "sparse",
+     "f1": 0.925,
+     "precision": 0.878,
+     "recall": 0.977
+    },
+    {
+     "base": "05_BN1-147-Gb_solo",
+     "density": "sparse",
+     "f1": 0.759,
+     "precision": 0.71,
+     "recall": 0.815
+    },
+    {
+     "base": "05_BN2-131-B_solo",
+     "density": "sparse",
+     "f1": 0.865,
+     "precision": 0.779,
+     "recall": 0.971
+    },
+    {
+     "base": "05_BN2-166-Ab_solo",
+     "density": "sparse",
+     "f1": 0.917,
+     "precision": 0.924,
+     "recall": 0.91
+    },
+    {
+     "base": "05_BN3-119-G_solo",
+     "density": "sparse",
+     "f1": 0.887,
+     "precision": 0.831,
+     "recall": 0.952
+    }
+   ]
+  },
+  "prod 0.5/0.5": {
+   "microF1": 0.828,
+   "microPrecision": 0.742,
+   "microRecall": 0.937,
+   "denseF1": 0.827,
+   "sparseF1": 0.833,
+   "missed": 67,
+   "falsePositives": 348,
+   "octaveErrors": 25,
+   "registerRecall": {
+    "bass": 0.966,
+    "mid": 0.934,
+    "high": 1
+   },
+   "takes": [
+    {
+     "base": "05_BN1-129-Eb_comp",
+     "density": "dense",
+     "f1": 0.819,
+     "precision": 0.711,
+     "recall": 0.966
+    },
+    {
+     "base": "05_BN1-147-Gb_comp",
+     "density": "dense",
+     "f1": 0.753,
+     "precision": 0.644,
+     "recall": 0.906
+    },
+    {
+     "base": "05_BN2-131-B_comp",
+     "density": "dense",
+     "f1": 0.84,
+     "precision": 0.772,
+     "recall": 0.921
+    },
+    {
+     "base": "05_BN2-166-Ab_comp",
+     "density": "dense",
+     "f1": 0.817,
+     "precision": 0.764,
+     "recall": 0.879
+    },
+    {
+     "base": "05_BN3-119-G_comp",
+     "density": "dense",
+     "f1": 0.871,
+     "precision": 0.8,
+     "recall": 0.956
+    },
+    {
+     "base": "05_BN1-129-Eb_solo",
+     "density": "sparse",
+     "f1": 0.846,
+     "precision": 0.733,
+     "recall": 1
+    },
+    {
+     "base": "05_BN1-147-Gb_solo",
+     "density": "sparse",
+     "f1": 0.781,
+     "precision": 0.676,
+     "recall": 0.926
+    },
+    {
+     "base": "05_BN2-131-B_solo",
+     "density": "sparse",
+     "f1": 0.802,
+     "precision": 0.67,
+     "recall": 1
+    },
+    {
+     "base": "05_BN2-166-Ab_solo",
+     "density": "sparse",
+     "f1": 0.901,
+     "precision": 0.853,
+     "recall": 0.955
+    },
+    {
+     "base": "05_BN3-119-G_solo",
+     "density": "sparse",
+     "f1": 0.814,
+     "precision": 0.711,
+     "recall": 0.952
+    }
+   ]
+  }
+ }
+}

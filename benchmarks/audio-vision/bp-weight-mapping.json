@@ -1,0 +1,251 @@
+[
+ {
+  "checkpointLayer": 0,
+  "kerasLayer": "batch_normalization",
+  "kind": "bn",
+  "tensors": [
+   {
+    "name": "layer_with_weights-0/gamma",
+    "shape": [
+     1
+    ],
+    "sha1": "3d34f27a5729"
+   },
+   {
+    "name": "layer_with_weights-0/beta",
+    "shape": [
+     1
+    ],
+    "sha1": "dc6ad1f1b99b"
+   },
+   {
+    "name": "layer_with_weights-0/moving_mean",
+    "shape": [
+     1
+    ],
+    "sha1": "813b11ab1929"
+   },
+   {
+    "name": "layer_with_weights-0/moving_variance",
+    "shape": [
+     1
+    ],
+    "sha1": "5d3850310980"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 1,
+  "kerasLayer": "conv2d",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-1/kernel",
+    "shape": [
+     3,
+     39,
+     8,
+     8
+    ],
+    "sha1": "a03a0b09dabb"
+   },
+   {
+    "name": "layer_with_weights-1/bias",
+    "shape": [
+     8
+    ],
+    "sha1": "1bb3c3b6c8e0"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 2,
+  "kerasLayer": "batch_normalization_1",
+  "kind": "bn",
+  "tensors": [
+   {
+    "name": "layer_with_weights-2/gamma",
+    "shape": [
+     8
+    ],
+    "sha1": "38a9758e64ea"
+   },
+   {
+    "name": "layer_with_weights-2/beta",
+    "shape": [
+     8
+    ],
+    "sha1": "ba9476e9d0d3"
+   },
+   {
+    "name": "layer_with_weights-2/moving_mean",
+    "shape": [
+     8
+    ],
+    "sha1": "a5cb71d9c847"
+   },
+   {
+    "name": "layer_with_weights-2/moving_variance",
+    "shape": [
+     8
+    ],
+    "sha1": "816991e9cc9b"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 3,
+  "kerasLayer": "contours-reduced",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-3/kernel",
+    "shape": [
+     5,
+     5,
+     8,
+     1
+    ],
+    "sha1": "daa55611bb8a"
+   },
+   {
+    "name": "layer_with_weights-3/bias",
+    "shape": [
+     1
+    ],
+    "sha1": "150ea743014e"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 4,
+  "kerasLayer": "conv2d_1",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-4/kernel",
+    "shape": [
+     7,
+     7,
+     1,
+     32
+    ],
+    "sha1": "6a93af106fc2"
+   },
+   {
+    "name": "layer_with_weights-4/bias",
+    "shape": [
+     32
+    ],
+    "sha1": "56b127a76abe"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 5,
+  "kerasLayer": "conv2d_3",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-5/kernel",
+    "shape": [
+     5,
+     5,
+     8,
+     32
+    ],
+    "sha1": "a1246c364953"
+   },
+   {
+    "name": "layer_with_weights-5/bias",
+    "shape": [
+     32
+    ],
+    "sha1": "824da4fcaf51"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 6,
+  "kerasLayer": "batch_normalization_2",
+  "kind": "bn",
+  "tensors": [
+   {
+    "name": "layer_with_weights-6/gamma",
+    "shape": [
+     32
+    ],
+    "sha1": "8dff51fe4fbe"
+   },
+   {
+    "name": "layer_with_weights-6/beta",
+    "shape": [
+     32
+    ],
+    "sha1": "6613f9faf2ff"
+   },
+   {
+    "name": "layer_with_weights-6/moving_mean",
+    "shape": [
+     32
+    ],
+    "sha1": "c975ca02ca27"
+   },
+   {
+    "name": "layer_with_weights-6/moving_variance",
+    "shape": [
+     32
+    ],
+    "sha1": "3d763953b194"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 7,
+  "kerasLayer": "conv2d_2",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-7/kernel",
+    "shape": [
+     7,
+     3,
+     32,
+     1
+    ],
+    "sha1": "6bad4ef0c6c8"
+   },
+   {
+    "name": "layer_with_weights-7/bias",
+    "shape": [
+     1
+    ],
+    "sha1": "8a66536cbd15"
+   }
+  ]
+ },
+ {
+  "checkpointLayer": 8,
+  "kerasLayer": "conv2d_4",
+  "kind": "conv",
+  "tensors": [
+   {
+    "name": "layer_with_weights-8/kernel",
+    "shape": [
+     3,
+     3,
+     33,
+     1
+    ],
+    "sha1": "233cafa5f2f0"
+   },
+   {
+    "name": "layer_with_weights-8/bias",
+    "shape": [
+     1
+    ],
+    "sha1": "0099b206bf86"
+   }
+  ]
+ }
+]
