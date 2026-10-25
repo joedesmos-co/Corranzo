@@ -188,3 +188,20 @@ competing with tab underlines. Pill boxes stay on the dark desk. */
   100% { transform: translateX(360%); }
 }
 .audio-vision-progress-pct { font-weight: 400; opacity: 0.7; }
+
+/* Audio Vision note review — edit, add and undo without leaving the score. */
+.audio-vision-note-list { max-height: 260px; overflow-y: auto; padding-left: 0; list-style: none; margin: 8px 0; }
+.audio-vision-note-list-tall { max-height: 380px; }
+.audio-vision-note-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; }
+.audio-vision-note-actions { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.audio-vision-note-editor { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 10px; margin: 2px 0 8px; border-left: 2px solid var(--cz-sheet-line); background: var(--cz-sheet-raised); }
+.audio-vision-note-editor-label { font-size: 11px; font-weight: 600; opacity: .7; text-transform: uppercase; letter-spacing: .04em; }
+.audio-vision-note-add { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--cz-sheet-line); }
+.audio-vision-note-add label { display: flex; flex-direction: column; gap: 2px; font-size: 11px; opacity: .8; }
+.audio-vision-note-add input { font: inherit; padding: 3px 5px; border: 1px solid var(--cz-ink); border-radius: 2px; background: var(--cz-sheet); color: var(--cz-ink); }
+.audio-vision-note-removed { margin: 8px 0; }
+@media (max-width: 640px) {
+  .audio-vision-note-row { align-items: start; flex-direction: column; }
+  .audio-vision-note-editor { align-items: start; }
+  .audio-vision-note-add { align-items: start; }
+}
