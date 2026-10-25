@@ -9,7 +9,7 @@ import ScoreFeedbackChips from './ScoreFeedbackChips.jsx'
 
 function ToolButton({ tool, onTool, id, icon, label, children }) { return <button className="workspace-tool-button" data-tour-id={id === 'input' ? 'practice-input-source' : id === 'settings' ? 'practice-advanced' : undefined} aria-label={label} title={label} aria-expanded={tool === id} aria-haspopup="dialog" onClick={() => onTool(id)}><Icon name={icon} size={20} /><span>{children || label}</span></button> }
 
-export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled, engraved = false }) {
+export default function WorkspaceTransport({ session: s, scoreFollow, onTool, tool, waitDisabled, playAlongDisabled = false, engraved = false }) {
   const tick = usePracticeTick()
   const cursorState = useScoreFollowCursorOptional()
   const p = s.playback
@@ -21,11 +21,18 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
   const checkpoint = s.waitForYou.enrichedCheckpoint ?? s.waitForYou.currentCheckpoint
   const targetNotes = getExpectedMidis(checkpoint).map(midiToNoteLabel).join(' · ')
   const label = checkpoint?.displayLabel || s.waitForYou.guidance?.targetLabel || checkpoint?.noteLabel || getExpectedMidis(checkpoint).map(midiToNoteLabel).join(' · ') || 'Highlighted notes'
-  function chooseMode(mode) { s.setPracticeMode(mode) }
+  function chooseMode(mode) {
+    if (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled) return
+    if (mode === PRACTICE_MODE.PLAY_ALONG && playAlongDisabled) return
+    s.setPracticeMode(mode)
+  }
   function modeKeys(e) {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return
     e.preventDefault()
-    const modes = Object.values(PRACTICE_MODE).filter(m => !(m === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled))
+    const modes = Object.values(PRACTICE_MODE).filter(m =>
+      !(m === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled) &&
+      !(m === PRACTICE_MODE.PLAY_ALONG && playAlongDisabled),
+    )
     const index = modes.indexOf(s.practiceMode)
     const next = e.key === 'Home' ? 0 : e.key === 'End' ? modes.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + modes.length) % modes.length
     chooseMode(modes[next])
@@ -34,7 +41,7 @@ export default function WorkspaceTransport({ session: s, scoreFollow, onTool, to
   return <footer className="workspace-dock" data-loop-active={Boolean(s.loop.enabled && loop?.isValid)} aria-label="Score transport">
     <div className="workspace-mode-row">
       <div className="workspace-modes" data-tour-id="practice-mode" role="radiogroup" aria-label="Practice mode" onKeyDown={modeKeys}>
-        {Object.values(PRACTICE_MODE).map((mode, i) => <button key={mode} data-mode={mode} role="radio" aria-checked={s.practiceMode === mode} tabIndex={s.practiceMode === mode ? 0 : -1} disabled={s.timingDisabled || (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled)} title={mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled ? 'Score following must be ready before this mode is available.' : `${PRACTICE_MODE_LABELS[mode]} (${i + 1})`} onClick={() => chooseMode(mode)}>{PRACTICE_MODE_LABELS[mode]}</button>)}
+        {Object.values(PRACTICE_MODE).map((mode, i) => <button key={mode} data-mode={mode} role="radio" aria-checked={s.practiceMode === mode} tabIndex={s.practiceMode === mode ? 0 : -1} disabled={s.timingDisabled || (mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled) || (mode === PRACTICE_MODE.PLAY_ALONG && playAlongDisabled)} title={mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled ? 'Score following must be ready before this mode is available.' : mode === PRACTICE_MODE.PLAY_ALONG && playAlongDisabled ? 'Practice modes are disabled for this experimental draft.' : `${PRACTICE_MODE_LABELS[mode]} (${i + 1})`} onClick={() => chooseMode(mode)}>{PRACTICE_MODE_LABELS[mode]}</button>)}
       </div>
       <div className={`workspace-status workspace-status--${status.kind}`} data-tour-id="score-cursor" role="status" title={status.detail}><span className="workspace-status-dot" />{status.label}</div>
       {s.practiceMode !== PRACTICE_MODE.PREVIEW && <ToolButton tool={tool} onTool={onTool} id="input" icon={s.wfyInputSource === 'microphone' && s.wfyInputSourceReady ? 'mic' : 'keyboard'} label="Practice input">{s.wfyInputSourceReady && s.wfyInputSource !== 'manual' ? (s.wfyInputSource === 'microphone' ? 'Microphone' : 'MIDI keyboard') : 'Connect instrument'}</ToolButton>}

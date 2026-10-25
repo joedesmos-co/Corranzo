@@ -60,7 +60,9 @@ export default function PracticeView({
   // page. They now use the SAME workspace as a PDF score: the score surface is
   // the engraved MusicXML instead of a PDF page, and everything else - modes,
   // transport, tools, the red cursor - is the one Practice Engine.
-  const isEngravedNotation = isPdflessNotationSource(musicXmlSource)
+  const experimentalVision = musicXmlSource?.omrMeta?.experimentalVision ?? null
+  const isExperimentalEngraved = Boolean(experimentalVision)
+  const isEngravedNotation = isPdflessNotationSource(musicXmlSource) || isExperimentalEngraved
   const hasPracticeSurface = Boolean(pdfFile) || isEngravedNotation
   // The score title: the title the engraver prints wins (what the musician
   // sees on the page), then the file name.
@@ -96,7 +98,9 @@ export default function PracticeView({
     toolOriginRef.current = document.activeElement
     setTool(value => value === next ? null : next)
   }, [])
-  const waitDisabled = Boolean(scoreFollow.experimentalOmrPlayback && !scoreFollow.canFollow && !(session.sourceVisualMap?.anchorCount > 0))
+  const experimentalPracticeBlocked = experimentalVision?.practiceReady === false
+  const playAlongDisabled = experimentalPracticeBlocked
+  const waitDisabled = experimentalPracticeBlocked || Boolean(scoreFollow.experimentalOmrPlayback && !scoreFollow.canFollow && !(session.sourceVisualMap?.anchorCount > 0))
   useEffect(() => {
     if (!focus) return undefined
     const previousOverflow = document.body.style.overflow
@@ -203,7 +207,7 @@ export default function PracticeView({
     onPrevMeasure: () => sessionRef.current.measure.goToPreviousMeasure(),
     onNextMeasure: () => sessionRef.current.measure.goToNextMeasure(),
     onToggleFullscreen: toggleFocus,
-    onModeChange: mode => { if (!sessionRef.current.timingDisabled && !(mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled)) sessionRef.current.setPracticeMode(mode) },
+    onModeChange: mode => { if (mode === PRACTICE_MODE.PREVIEW || (!sessionRef.current.timingDisabled && !(mode === PRACTICE_MODE.WAIT_FOR_YOU && waitDisabled) && !(mode === PRACTICE_MODE.PLAY_ALONG && playAlongDisabled))) sessionRef.current.setPracticeMode(mode) },
     onAdjustTempo: delta => { const p = sessionRef.current.playback; p.setPlaybackRate(Math.max(.25, Math.min(1.5, Math.round((p.playbackRate + delta) * 100) / 100))) },
     onLoop: () => openTool('loop'),
     onWaitForYouContinue: () => sessionRef.current.waitForYou.markCorrectAndContinue(),
@@ -257,7 +261,7 @@ export default function PracticeView({
                     onDismiss={onDismissOmrQualityWarning}
                     onReportProblem={() => openReportDialog({ defaultCategory: null })}
                   />
-                  {pdfFile ? (
+                  {pdfFile && !isExperimentalEngraved ? (
                     <PdfViewer
                       variant="practice"
                       file={pdfFile}
@@ -286,7 +290,7 @@ export default function PracticeView({
               )}
             </div>
             <div className="workspace-dock-wrap" inert={tool ? true : undefined}>
-              <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} engraved={isEngravedNotation} />
+              <WorkspaceTransport session={session} scoreFollow={scoreFollow} onTool={openTool} tool={tool} waitDisabled={waitDisabled} playAlongDisabled={playAlongDisabled} engraved={isEngravedNotation} />
             </div>
             {tool && <WorkspaceTools tool={tool} onClose={closeTool} returnFocusTo={toolOriginRef} session={session} scoreFollow={scoreFollow} fileName={fileName} pageNumber={pageNumber} practiceStats={practiceStats} pieceId={practicePiece?.id} engraved={isEngravedNotation} onReport={() => { closeTool(); openReportDialog() }} />}
             <RecognitionProblemReportDialog

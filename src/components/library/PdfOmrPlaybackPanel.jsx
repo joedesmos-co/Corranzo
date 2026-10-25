@@ -3,6 +3,8 @@ import { describePreparation, describePreparationFailure } from '../../features/
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { runPdfOmrClient, cancelActiveOmrWorker } from '../../features/omr/runPdfOmrClient.js'
 import { useInstrument } from '../../context/instrumentContext.js'
+import { experimentalVisionLabel, getExperimentalVisionMode } from '../../features/vision/experimentalVisionFlag.js'
+import { runExperimentalVisionRecognition } from '../../features/vision/vectorVisionClient.js'
 import { describePdfSourceType, isPdfBufferAttached } from '../../features/omr/omrPdfSource.js'
 import { beginOmrUiBlock, endOmrUiBlock, releaseOmrUiLocks } from '../../features/omr/omrUiGuard.js'
 import { OMR_STATUS, yieldToBrowser } from '../../features/omr/omrConstants.js'
@@ -65,6 +67,8 @@ export default function PdfOmrPlaybackPanel({
   onAutoStartConsumed = null,
 }) {
   const { instrumentId } = useInstrument()
+  const experimentalMode = getExperimentalVisionMode()
+  const experimentalLabel = experimentalVisionLabel(experimentalMode)
   const [status, setStatus] = useState(OMR_STATUS.IDLE)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState(null)
@@ -222,36 +226,71 @@ export default function PdfOmrPlaybackPanel({
     try {
       omrTrace('ui:handleGenerate:runPdfOmrClient:start', null, runId)
       const developerOptions = resolveOmrV3DeveloperPipelineOptions(getOmrDiagnosticFlags())
-      const result = await runScorePreparation(() => runPdfOmrClient(pdfSource, {
-        title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
-        pdfFileUrl,
-        instrumentId,
-        scoreId: runScoreId,
-        generation: runPracticeSessionEpoch,
-        pdfHash:
-          typeof window !== 'undefined'
-            ? window.__SCOREFLOW_ACTIVE_SCORE__?.pdfHash ?? null
-            : null,
-        omrV3Compare: developerOptions.omrV3Compare,
-        omrV3Shadow: developerOptions.omrV3Shadow,
-        onStatus: (nextStatus) => {
-          if (activeRunRef.current !== runId || controller.signal.aborted) {
-            return
-          }
-          omrTrace('ui:onStatus', { nextStatus }, runId)
-          setStatus(nextStatus)
-        },
-        onProgress: (progress) => {
-          if (activeRunRef.current !== runId || controller.signal.aborted) {
-            return
-          }
-          setProgressLabel(progress.label ?? '')
-          setProgress(progress)
-        },
-        signal: controller.signal,
-        useWorker: true,
-        traceRunId: runId,
-      }), controller.signal)
+      let result = null
+      let experimentalFailure = null
+      if (experimentalMode) {
+        try {
+          setProgressLabel(`${experimentalLabel}…`)
+          const experimental = await runExperimentalVisionRecognition({
+            pdfSource,
+            pdfFileUrl,
+            instrumentId,
+            title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'Experimental vision',
+            signal: controller.signal,
+            traceRunId: runId,
+            onProgress: (progress) => {
+              if (activeRunRef.current !== runId || controller.signal.aborted) return
+              setProgressLabel(progress.label ?? '')
+              setProgress({ label: progress.label ?? '', fraction: 0 })
+            },
+          })
+          if (experimental.ok) result = experimental.result
+          else experimentalFailure = experimental.message
+        } catch (error) {
+          if (error?.name === 'AbortError') throw error
+          experimentalFailure = error?.message ?? String(error)
+        }
+        if (experimentalFailure) {
+          omrTrace('ui:experimental-vision-fallback', { message: experimentalFailure }, runId)
+          onFeedbackRef.current?.({
+            type: 'info',
+            message: `Experimental recognition could not read this PDF (${experimentalFailure}). Using standard preparation.`,
+            source: 'preparation',
+          })
+        }
+      }
+      if (!result) {
+        result = await runScorePreparation(() => runPdfOmrClient(pdfSource, {
+          title: pdfFileName?.replace(/\.[^.]+$/, '') ?? 'PDF score',
+          pdfFileUrl,
+          instrumentId,
+          scoreId: runScoreId,
+          generation: runPracticeSessionEpoch,
+          pdfHash:
+            typeof window !== 'undefined'
+              ? window.__SCOREFLOW_ACTIVE_SCORE__?.pdfHash ?? null
+              : null,
+          omrV3Compare: developerOptions.omrV3Compare,
+          omrV3Shadow: developerOptions.omrV3Shadow,
+          onStatus: (nextStatus) => {
+            if (activeRunRef.current !== runId || controller.signal.aborted) {
+              return
+            }
+            omrTrace('ui:onStatus', { nextStatus }, runId)
+            setStatus(nextStatus)
+          },
+          onProgress: (progress) => {
+            if (activeRunRef.current !== runId || controller.signal.aborted) {
+              return
+            }
+            setProgressLabel(progress.label ?? '')
+            setProgress(progress)
+          },
+          signal: controller.signal,
+          useWorker: true,
+          traceRunId: runId,
+        }), controller.signal)
+      }
 
       noteOmrWorkerSettled({
         runId,
@@ -339,6 +378,7 @@ export default function PdfOmrPlaybackPanel({
         sourcePracticeSessionEpoch: runPracticeSessionEpoch,
         sourceOmrRunId: runId,
         sourceScoreId: registered.scoreId ?? runScoreId,
+        experimentalVision: result.experimentalVision ?? null,
       })
 
       // Stale / discarded results must not mutate panel UI (FAILED would block
@@ -481,7 +521,7 @@ export default function PdfOmrPlaybackPanel({
         completed: completedRunRef.current,
       }, runId)
     }
-  }, [pdfSource, pdfFileUrl, pdfFileName, pdfIdentity, practiceSessionEpoch, instrumentId, isGenerating, disabled])
+  }, [pdfSource, pdfFileUrl, pdfFileName, pdfIdentity, practiceSessionEpoch, instrumentId, isGenerating, disabled, experimentalMode, experimentalLabel])
 
   // Keep the latest start helpers in refs so this effect can stay Strict Mode
   // safe without re-arming whenever callback identities churn.
@@ -591,6 +631,7 @@ export default function PdfOmrPlaybackPanel({
   const presentation = describePreparation(status, progress)
   return (
     <section className="library-omr-panel score-import-processing" aria-label="Preparing score" data-busy={showPreparing} data-state={status}>
+      {experimentalLabel && <p className="score-import-caption" role="note"><strong>{experimentalLabel} is active.</strong> This is an opt-in draft: practice modes stay disabled unless timing and voice evidence are complete. Clear the experimental vision flag to use standard preparation.</p>}
       <p className="cz-edition-label">{showRetry ? 'Let’s try a different approach' : 'From page to playback'}</p>
       <div role={showRetry ? 'alert' : 'status'} aria-live="polite" aria-atomic="true">
         <h2>{showRetry ? failureCopy?.title ?? 'We couldn’t prepare playback' : showPreparing ? presentation.title : status === OMR_STATUS.READY ? 'Checking your score' : cancelled ? 'Preparation paused' : 'Ready to prepare'}</h2>
