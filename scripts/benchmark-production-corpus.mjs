@@ -48,6 +48,7 @@ const CLIP_SET = arg('clips', 'legacy')
 // sweep). The full matrix is the default.
 const TRUE_ONLY = arg('true-only', '0') === '1'
 const FALSE_ONLY = arg('false-only', '0') === '1'
+const CLIP_FILTER = (arg('clip', null) ?? '').split(',').map((v) => v.trim()).filter(Boolean)
 // Optional scenario-name filter (substring), e.g. octave-up for a fast
 // focused regression of the odd-partial rule.
 const SCENARIO_FILTERS = (arg('scenario', null) ?? '')
@@ -106,6 +107,9 @@ function collectClips() {
     const manifest = JSON.parse(readFileSync(join(ROOT, 'benchmarks', name, 'manifest.json'), 'utf8'))
     const excluded = new Set((manifest.excluded ?? []).map((entry) => entry.id))
     for (const clip of manifest.clips ?? []) {
+      if (CLIP_FILTER.length && !CLIP_FILTER.some((filter) => clip.id.includes(filter))) {
+        continue
+      }
       if (excluded.has(clip.id)) {
         continue
       }
@@ -260,12 +264,16 @@ const summary = {
   falseCompletes,
   scenarios: scenarioCount,
   latency: latencies.length
-    ? {
-      n: latencies.length,
-      min: Math.min(...latencies),
-      p50: [...latencies].sort((a, b) => a - b)[Math.floor(latencies.length * 0.5)],
-      max: Math.max(...latencies),
-    }
+    ? (() => {
+      const sorted = [...latencies].sort((a, b) => a - b)
+      return {
+        n: sorted.length,
+        min: sorted[0],
+        p50: sorted[Math.floor(sorted.length * 0.5)],
+        p95: sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * 0.95))],
+        max: sorted[sorted.length - 1],
+      }
+    })()
     : null,
 }
 console.log('\n=== PRODUCTION (current main: V3 + V2) ===')
