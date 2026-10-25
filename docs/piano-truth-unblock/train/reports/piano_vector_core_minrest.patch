@@ -1,0 +1,86 @@
+--- a/src/features/vision/pianoVectorCore.js
++++ b/src/features/vision/pianoVectorCore.js
+@@ -360,7 +360,7 @@
+ 
+   const keyVals = notes.map((n) => n.key_fifths)
+   const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
+-  return { page: pageNo, size: [W, H], staves: staves.length,
++  const ir = { page: pageNo, size: [W, H], staves: staves.length,
+     clefs, notes, rests, unresolved, key,
+     curveCount: curvePaths,
+     unresolvedNotes: unresolved.length,
+@@ -374,6 +374,8 @@
+       'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
+       'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
+       'Articulations/dynamics are not yet transcribed.'] }
++  reconcileMeasureRests(ir)
++  return ir
+ }
+ 
+ function beamLevels(stemX, beams, g, gap) {
+@@ -444,6 +446,65 @@
+ }
+ 
+ 
++
++const REST_UPGRADE = {
++  eighth: ['quarter', 'half', 'whole'],
++  quarter: ['half', 'whole'],
++  half: ['whole'],
++  '16th': ['eighth', 'quarter', 'half', 'whole'],
++  '32nd': ['16th', 'eighth', 'quarter', 'half', 'whole'],
++}
++
++/**
++ * Measure-fill reconciliation for a single ambiguous rest.
++ *
++ * Some notation fonts reuse a rest glyph for a different written value. When
++ * a measure has exactly one known rest, otherwise known notes, and is short
++ * of the decoded meter, the smallest longer rest value that fills the measure
++ * exactly is accepted (provenance: measure-fill). Multiple candidates or an
++ * already-overfull measure are left untouched. No filename/measure special
++ * cases and no reference MusicXML are used.
++ */
++function reconcileMeasureRests(ir) {
++  if (!ir?.meter || !ir?.notes?.length) return
++  const beats = (ir.meter.beats * 4) / ir.meter.unit
++  if (!(beats > 0)) return
++  const sums = new Map()
++  const restsByKey = new Map()
++  for (const n of ir.notes) {
++    if (n.chord_root === false) continue
++    const key = `${n.measure}:${n.staff}`
++    sums.set(key, (sums.get(key) ?? 0) + Number(n.dur_q ?? 0))
++  }
++  for (const r of ir.rests) {
++    if (!r.type || !r.dur_q) continue
++    const key = `${r.measure}:${r.staff}`
++    sums.set(key, (sums.get(key) ?? 0) + Number(r.dur_q ?? 0))
++    if (!restsByKey.has(key)) restsByKey.set(key, [])
++    restsByKey.get(key).push(r)
++  }
++  let fixed = 0
++  for (const [key, rests] of restsByKey) {
++    if (rests.length !== 1) continue
++    const rest = rests[0]
++    const total = sums.get(key) ?? 0
++    if (!(total < beats - 0.02)) continue
++    const candidates = REST_UPGRADE[rest.type] ?? []
++    const matches = candidates.filter((type) =>
++      Math.abs(total - Number(rest.dur_q) + TYPE_Q[type] - beats) <= 0.02)
++    if (matches.length !== 1) continue
++    rest.type = matches[0]
++    rest.dur_q = String(TYPE_Q[matches[0]])
++    rest.provenance = 'measure-fill'
++    rest.confidence = 0.7
++    fixed += 1
++  }
++  ir.restReconciled = fixed
++  if (fixed > 0) {
++    ir.credits.push(`${fixed} rest duration(s) reconciled to the decoded meter (measure-fill).`)
++  }
++}
++
+ /** Recognize one page of a vector piano PDF. No reference metadata is read. */
+ export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
+   if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')

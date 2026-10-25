@@ -2286,3 +2286,62 @@ not.
   dense-layout measure/voice timing; rest glyph/reference mismatch;
   accidentals/key logic implemented but not exercised by the C-major corpus.
   No merge/deploy; sealed TEST untouched.
+
+
+## Musical correctness & practice readiness (this session)
+
+  Starting research commit e738cd8ffb. Production source 5d5ae10c36, main
+  e413f5b865; src/features/vision/pianoVectorCore.js is the deployed core.
+  Reproduced the production baseline with pdfjs-dist 5.4.296 and the
+  production core: strict exact MIDI+measure+duration notes 306/447
+  (the audit's matcher reports 305/447; one-event matcher difference), rests
+  3/6, and ZERO practice-ready scores. Beginner blocked only by
+  measure-duration-invalid on measure 6 (0-based).
+
+  Root cause of the beginner rest defect: the fixture's notation font maps
+  SMuFL 0xE4E6 (canonically an eighth rest) to a drawn quarter rest. The rest
+  is placed in the correct measure, but its glyph-derived duration is 0.5
+  instead of 1.0, leaving measure 7 at 3.5/4.0. The gate correctly blocked
+  the score rather than accepting invalid timing.
+
+  Fix (general, no filename/measure/reference special cases): measure-fill
+  reconciliation. When a measure has exactly one known rest, otherwise known
+  notes, is short of the decoded meter, and exactly one longer rest value
+  fills the measure, accept it with provenance "measure-fill" and confidence
+  0.7. Multiple candidates or overfull measures are untouched. The practice
+  gate was NOT relaxed: it still requires meter/key, no unresolved glyphs,
+  no ties/slurs, and valid measure fill.
+
+  Before/after (strict exact matcher, 4 CC0 fixtures):
+    notes 306/447 (P .748/R .685) -> 306/447 (unchanged)
+    rests   3/6   (P .5/R .5)     ->   6/6   (P 1.0/R 1.0)
+    beginner gate: blocked (measure-duration-invalid) -> PRACTICE-READY
+    beginner measures: 7/8 valid -> 8/8 valid
+    rhythm bad measures: 5 -> 3; grand: only ties/slurs; dense: unchanged
+  Beginner MusicXML verified with music21: 8 measures, every measure 4/4,
+  measure 7 = dotted-quarter E, eighth G, quarter rest, quarter A (matches
+  reference exactly); 32/32 notes, 1/1 rest.
+
+  Browser verification (real Corranzo-compatible pathway): the browser build
+  pdfjs-dist 5.4.296 under Chromium/Playwright runs the candidate core on
+  the beginner PDF -> 32 notes, 1 rest, restReconciled 1, gate issues [],
+  practiceReady TRUE, valid MusicXML. reports/practice_readiness.json.
+
+  Generalization (separate, flagged patch): PDF.js 5.4 CTM save/restore and
+  matrix composition, staff-line width independent detection, SMuFL
+  codepoint notehead acceptance, notehead-width clustering, and stem
+  proximity to noteheads. Held-out Ao no Sumika: 0 -> 33 vector notes and
+  key -5 recovered (was route=image); still not practice-ready (time
+  signature unknown, unresolved noteheads, 32 curves). demo-minuet and
+  Brahms have 0 SMuFL glyphs -> image route; no vector claim.
+
+  Integration artifacts:
+    scripts/pianoVectorCore_minrest.mjs + reports/piano_vector_core_minrest.patch
+      (recommended minimal patch: rest reconciliation only, 86-line diff)
+    scripts/pianoVectorCore_candidate.mjs + reports/piano_vector_core_general.patch
+      (general extraction robustness; separate, unvalidated on references)
+    scripts/piano_vector_practice_gate.test.mjs (gate regression)
+    reports/practice_readiness.json, data/vector_out_practice/
+  Next: curve classification (tie vs slur) and tie merging, multi-page
+  vector support, then image-route accuracy. No merge/deploy; sealed TEST
+  untouched.
