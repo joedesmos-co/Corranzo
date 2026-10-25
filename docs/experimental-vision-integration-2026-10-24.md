@@ -237,3 +237,43 @@ authorization was not explicit). The live site remains version
 previous round. The verified round-2 bundle is `index-pcLGJ7oV.js`; it is
 deployment-ready but not live. If deployed, the rollback target is
 `674f3939-e59f-46ec-94b2-d26e6e16ed54`.
+
+## 7. Round 3 — Audio corrections integrated; Piano/Guitar held
+
+**Live at round-3 start:** Worker
+`94122c75-aaff-46fd-b24e-fad7908bb9b6`, bundle `index-pcLGJ7oV.js`. The
+round-2 experimental bundle was deployed after the previous report by another
+authorized deployment; it remains the live baseline.
+
+**Integrated this round:** Audio Vision v3 note corrections, in three reviewable
+commits:
+
+- `f4fb61a2c7` — v3 data model + storage + 34 tests.
+- `c610ac7afd` — pipeline/hook/saved metadata + 12 product-path tests.
+- `870777bb91` — review editor UI + 20/20 real Chromium acceptance.
+
+See `docs/audio-vision-corrections-v3-integration-2026-10-25.md`.
+
+**Not integrated:** Piano `bd143648b0` and Guitar `48a5790f7e` /
+`6683d65e3b`. Both remain experimental and practice-disabled.
+
+- Piano audit: `docs/piano-vector-structural-audit-2026-10-25.md`.
+  Candidate reproduces 349/447, grand 88/88 and dashed rest 6/6, but
+  equal-pitch slurs and cross-staff curves become ties, decorative curves can
+  remain practice-open, and the old rest false-acceptance survives. No
+  production change.
+- Guitar audit: `docs/guitar-vision-mixed-rhythm-audit-2026-10-25.md`.
+  `6683` fixes 18→21 noteheads and 60/60 string/fret, but the mixed page still
+  has 0 confident onsets, all placeholder quarters and 0/4 valid measures.
+  No production change.
+
+**Round-3 regression:** full suite **4002 passed, 19 skipped, 0 failed**;
+PDF-first **4 / 4**; Audio Vision critical **19 / 19**; Audio note editor
+**21 / 21 Chromium** and **21 / 21 WebKit** on the built bundle; experimental
+Vision **24 / 24 Chromium** and **24 / 24 WebKit**; unified WebKit **12 / 12**;
+unified mic practice **23 passed, 0 failed, 1 skipped**.
+
+**Round-3 local bundle:** `dist/assets/index-ks2_w5OX.js`, SHA-256
+`2007f8939497160e25544dca0fa103f33846c541e527a256ef7f483a8445a70e`.
+Not deployed. If deployed, rollback target is
+`94122c75-aaff-46fd-b24e-fad7908bb9b6`.

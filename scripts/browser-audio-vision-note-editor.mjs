@@ -14,7 +14,7 @@ import { rm } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import { chromium } from 'playwright'
+import { chromium, webkit } from 'playwright'
 import { parseMusicXml } from '../src/features/musicxml/parseMusicXml.js'
 import { buildNoteCheckpoints } from '../src/features/practice/waitForYouCheckpoints.js'
 
@@ -184,7 +184,8 @@ const server = await createServer({
   logLevel: 'error',
 })
 await server.listen()
-const browser = await chromium.launchPersistentContext(profileDir, {
+const browserType = process.env.BROWSER === 'webkit' ? webkit : chromium
+const browser = await browserType.launchPersistentContext(profileDir, {
   headless: true,
   viewport: { width: 1440, height: 1000 },
   args: ['--autoplay-policy=no-user-gesture-required'],
@@ -326,6 +327,17 @@ try {
   } else {
     fail('editor: corrected score playback starts', 'no Play button')
   }
+  const engraving = await page.evaluate(() => {
+    const container = document.querySelector('.osmd-score__container[data-osmd-ready="true"]')
+    const svg = container?.querySelector('svg')
+    return {
+      svg: Boolean(svg),
+      staveNotes: svg?.querySelectorAll('g.vf-stavenote').length ?? 0,
+      measures: svg?.querySelectorAll('g.vf-measure').length ?? 0,
+    }
+  })
+  if (engraving.svg && engraving.staveNotes > 0) pass('editor: corrected score is engraved by OSMD', JSON.stringify(engraving))
+  else fail('editor: corrected score is engraved by OSMD', JSON.stringify(engraving))
   await page.screenshot({ path: join(outDir, 'practice-edited.png') }).catch(() => {})
   await page.getByRole('radio', { name: /wait for you/i }).first().click()
   await sleep(1200)
