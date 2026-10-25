@@ -10,8 +10,11 @@
   "key": 0,
   "restReconciled": 1,
   "gate": {
-   "practiceReady": true,
-   "issues": [],
+   "practiceReady": false,
+   "issues": [
+    "rest-duration-inferred",
+    "rest-duration-ambiguous"
+   ],
    "badMeasures": []
   },
   "xmlLength": 7237,

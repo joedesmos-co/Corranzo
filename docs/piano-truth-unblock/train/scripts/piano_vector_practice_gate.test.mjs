@@ -21,7 +21,7 @@ const ROOT = process.env.CORRANZO_ROOT ??
 const FIX = path.join(ROOT, 'benchmarks', 'omr-fixtures')
 
 const CASES = [
-  { name: 'piano-beginner-single-vector', practice: true, validMeasures: true,
+  { name: 'piano-beginner-single-vector', practice: false, validMeasures: true,
     notes: 32, rests: 1, measures: 8, restType: 'quarter' },
   { name: 'piano-rhythm-tuplets-vector', practice: false, validMeasures: false },
   { name: 'piano-grand-voices-vector', practice: true, validMeasures: true,

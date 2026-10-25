@@ -87,6 +87,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
   const beams = []
   const dots = []
   const accPaths = []
+  let unresolvedAccidentals = 0
   const curves = []
   const timeGlyphX = []
   let curvePaths = 0
@@ -186,7 +187,9 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
               }
               if (pops.includes(2)) curves += 1
               const code = curves ? -1 : (slanted > 0 ? 1 : (horizontal > 0 ? 0 : null))
-              if (code != null) {
+              if (code == null) {
+                unresolvedAccidentals += 1
+              } else {
                 accPaths.push({ code, x: (Math.min(...xs) + Math.max(...xs)) / 2,
                   y: H - (Math.min(...ys) + Math.max(...ys)) / 2, w, h })
               }
@@ -456,6 +459,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     curveCount: curvePaths,
     unresolvedNotes: unresolved.length,
     unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
+    unresolvedAccidentals,
     key_source: key === 0 ? 'no-key-glyph' : key == null ? 'unresolved' : 'glyph-sequence',
     systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
     gap: systems[0]?.gap ?? 8,
@@ -616,6 +620,9 @@ export function classifyCurves(ir) {
         0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
       if (!tiePair || d < tiePair.d) tiePair = { d, a, b }
     }
+    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
+      c.kind = 'ambiguous'; ambiguous += 1; continue
+    }
     if (tiePair) {
       c.kind = 'tie'; ties += 1
       tiePair.a.tie_start = true; tiePair.b.tie_end = true
@@ -659,7 +666,7 @@ const REST_UPGRADE = {
  * (provenance: measure-fill). Multiple candidates or an already-overfull
  * measure are left untouched.
  */
-function reconcileMeasureRests(ir) {
+export function reconcileMeasureRests(ir) {
   if (!ir?.meter || !ir?.notes?.length) return
   const beats = (ir.meter.beats * 4) / ir.meter.unit
   if (!(beats > 0)) return
@@ -691,11 +698,15 @@ function reconcileMeasureRests(ir) {
     rest.type = type
     rest.dur_q = String(TYPE_Q[type])
     rest.provenance = 'measure-fill'
-    rest.confidence = 0.7
+    rest.confidence = 0.5
+    rest.visualEvidence = 'ambiguous-glyph-shape'
+    rest.practiceSafe = false
     fixed += 1
   }
   ir.restReconciled = fixed
+  ir.restInferred = fixed
   if (fixed > 0) {
+    ir.credits = ir.credits ?? []
     ir.credits.push(`${fixed} rest duration(s) reconciled to the decoded meter (measure-fill).`)
   }
 }
@@ -727,6 +738,9 @@ export function assessPianoVectorIr(ir) {
   if (ir?.key == null) issues.push('key-signature-unknown')
   if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
   if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
+  if ((ir?.unresolvedAccidentals ?? 0) > 0) issues.push('unresolved-accidentals')
+  if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
+  if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
   if ((ir?.incompletePages ?? 0) > 0) issues.push('incomplete-pages')
   if (ir?.crossPageContinuation === 'unresolved' && (ir?.pageCount ?? 1) > 1) issues.push('cross-page-continuation-unresolved')
   const resolvedCurves = (ir?.tieCount ?? 0) + (ir?.slurCount ?? 0)
@@ -762,6 +776,8 @@ export function assessPianoVectorIr(ir) {
     meter: ir?.meter ?? null,
     curveCount: ir?.curveCount ?? 0,
     tieCount: ir?.tieCount ?? 0,
+    restReconciled: ir?.restReconciled ?? 0,
+    restInferred: ir?.restInferred ?? 0,
     slurCount: ir?.slurCount ?? 0,
     ambiguousCurves: ir?.ambiguousCurves ?? 0,
     unresolvedNotes: ir?.unresolvedNotes ?? 0,
@@ -781,6 +797,9 @@ export function assessPianoVectorIr(ir) {
         case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
+        case 'unresolved-accidentals': return 'A music-sized filled symbol could not be classified as an accidental.'
+        case 'rest-duration-inferred': return 'A rest duration was inferred from measure arithmetic, not visual glyph evidence.'
+        case 'rest-duration-ambiguous': return 'The rest glyph shape does not uniquely identify its written duration.'
         case 'incomplete-pages': return 'One or more pages could not be read; the score is incomplete.'
         case 'cross-page-continuation-unresolved': return 'Cross-page ties/slurs cannot yet be continued safely.'
         default: return issue

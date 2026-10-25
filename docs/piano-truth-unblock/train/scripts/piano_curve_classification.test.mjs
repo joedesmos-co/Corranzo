@@ -17,8 +17,8 @@ function base(notes, curves) {
 }
 
 // 1. same-pitch cross-measure tie
-let ir = base([note(0, 100, 100, 69), note(1, 200, 100, 69)],
-  [{ x0: 100, y0: 100, x1: 200, y1: 100 }])
+let ir = base([note(0, 100, 100, 69), note(1, 160, 100, 69)],
+  [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
 classifyCurves(ir)
 assert.equal(ir.tieCount, 1)
 assert.equal(ir.slurCount, 0)
@@ -50,8 +50,8 @@ assert.equal(assessPianoVectorIr(ir).issues.includes('ties-or-slurs-not-transcri
 // 5. chord partial tie: only the equal-pitch A4 is tied
 ir = base([
   note(0, 100, 100, 69), note(0, 100, 92, 72),
-  note(1, 200, 100, 69), note(1, 200, 84, 76),
-], [{ x0: 100, y0: 100, x1: 200, y1: 100 }])
+  note(1, 160, 100, 69), note(1, 200, 84, 76),
+], [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
 classifyCurves(ir)
 assert.equal(ir.tieCount, 1)
 assert.equal(ir.notes[0].tie_start, true)
@@ -60,15 +60,15 @@ assert.equal(ir.notes[2].tie_end, true)
 assert.equal(ir.notes[3].tie_end, undefined)
 
 // 6. equal pitches connected by a curve are a tie (standard notation)
-ir = base([note(0, 100, 100, 69), note(1, 200, 100, 69)], [{ x0: 100, y0: 100, x1: 200, y1: 100 }])
+ir = base([note(0, 100, 100, 69), note(1, 160, 100, 69)], [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
 classifyCurves(ir)
 assert.equal(ir.tieCount, 1)
 
 // 7. multi-voice: tie goes to the closest equal pitch on the same staff
 ir = base([
   note(0, 100, 100, 69, 0), note(0, 100, 150, 69, 1),
-  note(1, 200, 100, 69, 0), note(1, 200, 150, 69, 1),
-], [{ x0: 100, y0: 100, x1: 200, y1: 100 }])
+  note(1, 160, 100, 69, 0), note(1, 160, 150, 69, 1),
+], [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
 classifyCurves(ir)
 assert.equal(ir.tieCount, 1)
 assert.equal(ir.notes[0].tie_start, true)

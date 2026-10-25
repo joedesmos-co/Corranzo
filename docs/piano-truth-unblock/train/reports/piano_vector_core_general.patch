@@ -1,6 +1,6 @@
 --- a/src/features/vision/pianoVectorCore.js
 +++ b/src/features/vision/pianoVectorCore.js
-@@ -73,16 +73,29 @@
+@@ -73,16 +73,30 @@
    const ops = await page.getOperatorList()
    let lw = 0
    let ctm = [1, 0, 0, 1, 0, 0]
@@ -18,6 +18,7 @@
    const beams = []
    const dots = []
 +  const accPaths = []
++  let unresolvedAccidentals = 0
 +  const curves = []
    const timeGlyphX = []
    let curvePaths = 0
@@ -31,7 +32,7 @@
      if (name === 'setLineWidth') lw = args[0]
      if (name === 'constructPath') {
        const decoded = decodePath(args)
-@@ -95,11 +108,30 @@
+@@ -95,11 +109,30 @@
          // of silently serializing re-attacked notes.
          if (pops.includes(2) && c.length >= 8) {
            const xs = [], ys = []
@@ -66,7 +67,7 @@
          }
          const isLine = pops.length === 2 && pops[0] === 0 && pops[1] === 1
          if (isLine && c.length >= 4) {
-@@ -107,7 +139,7 @@
+@@ -107,7 +140,7 @@
            const [x1, y1] = pt(c[2], c[3])
            const w = Math.abs(x1 - x0)
            const h = Math.abs(y1 - y0)
@@ -75,7 +76,7 @@
              staffLines.push(+(H - y0).toFixed(1))
            } else if (w < 1.5 && h > 0.02 * H) {
              vlines.push({ x: +x0.toFixed(1), y0: +(H - Math.max(y0, y1)).toFixed(1),
-@@ -115,6 +147,50 @@
+@@ -115,6 +148,52 @@
            } else if (w >= 4 && w <= 12 && h >= 3 && h <= 8) {
              beams.push({ x0: +Math.min(x0, x1).toFixed(1), x1: +Math.max(x0, x1).toFixed(1),
                           y: +((H - y0) + (H - y1)) / 2 })
@@ -118,7 +119,9 @@
 +              }
 +              if (pops.includes(2)) curves += 1
 +              const code = curves ? -1 : (slanted > 0 ? 1 : (horizontal > 0 ? 0 : null))
-+              if (code != null) {
++              if (code == null) {
++                unresolvedAccidentals += 1
++              } else {
 +                accPaths.push({ code, x: (Math.min(...xs) + Math.max(...xs)) / 2,
 +                  y: H - (Math.min(...ys) + Math.max(...ys)) / 2, w, h })
 +              }
@@ -126,7 +129,7 @@
            }
          } else if ((paint === 22 || paint === 23 ||
                      (Array.isArray(args[0]) && args[0][0] === 13 && args[0].includes(15))) &&
-@@ -150,7 +226,7 @@
+@@ -150,7 +229,7 @@
      const x = tr[4]
      const y = tr[5] // PDF.js viewport transform already uses top-left
      const h = it.height || 0
@@ -135,7 +138,7 @@
      glyphs.push({ code, x: +x.toFixed(1), y: +y.toFixed(1),
                    cy: +(y - 0.27 * h).toFixed(1), w: +w.toFixed(1), h: +h.toFixed(1) })
      if (TIME_DIGIT[code] != null) timeGlyphX.push({ x: +x.toFixed(1), y: +y.toFixed(1), d: TIME_DIGIT[code] })
-@@ -190,8 +266,11 @@
+@@ -190,8 +269,11 @@
      const g0 = sys.staves[0]
      const gap = sys.gap
      const sh = g0[g0.length - 1] - g0[0]
@@ -148,7 +151,7 @@
        .map((v) => v.x))].sort((a, b) => a - b)
      const bars = []
      for (const b of barsRaw) if (!bars.length || b - bars[bars.length - 1] > gap) bars.push(b)
-@@ -210,9 +289,10 @@
+@@ -210,9 +292,10 @@
  
      for (let sti = 0; sti < sys.staves.length; sti++) {
        const g = sys.staves[sti]
@@ -161,7 +164,7 @@
        const clefGlyphs = glyphs.filter((gl) => gl.h >= 2.0 * gap && gl.w >= 1.3 * gap &&
          g[0] - 4 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 4 * gap &&
          gl.x <= (bars.length ? bars[0] : gl.x) + 3 * gap)
-@@ -244,8 +324,14 @@
+@@ -244,8 +327,14 @@
        }
        const bottom = BOTTOM[clef]
        const bottomIdx = STEP_NAMES.indexOf(bottom[0]) + 7 * bottom[1]
@@ -178,7 +181,7 @@
        const accGlyphs = glyphs.filter((gl) => [0xe260, 0xe261, 0xe262].includes(gl.code) &&
          !keyGlyphs.includes(gl) &&
          g[0] - 2 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 2 * gap)
-@@ -253,6 +339,11 @@
+@@ -253,6 +342,11 @@
          const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
            Math.abs(a.cy - hd.cy) <= 0.6 * gap)
          if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
@@ -190,7 +193,7 @@
        }
        const clusters = []
        for (const hd of heads) {
-@@ -346,7 +437,7 @@
+@@ -346,7 +440,7 @@
    // chords by x coincidence
    const byX = new Map()
    for (const n of notes) {
@@ -199,7 +202,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -360,13 +451,15 @@
+@@ -360,13 +454,16 @@
  
    const keyVals = notes.map((n) => n.key_fifths)
    const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
@@ -209,6 +212,7 @@
      curveCount: curvePaths,
      unresolvedNotes: unresolved.length,
      unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
++    unresolvedAccidentals,
      key_source: key === 0 ? 'no-key-glyph' : key == null ? 'unresolved' : 'glyph-sequence',
      systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
 +    gap: systems[0]?.gap ?? 8,
@@ -216,7 +220,7 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -374,6 +467,9 @@
+@@ -374,6 +471,9 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
@@ -226,10 +230,12 @@
  }
  
  function beamLevels(stemX, beams, g, gap) {
-@@ -391,6 +487,45 @@
+@@ -389,6 +489,45 @@
+   if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
+   for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
    return 0
- }
- 
++}
++
 +
 +/**
 + * Minimum general multi-page extraction: each page is recognized with the
@@ -267,12 +273,10 @@
 +    crossPageContinuation: pageCount > 1 ? 'unresolved' : 'not-applicable',
 +    credits: ['Multi-page extraction preserves page identity and measure order.',
 +      'Cross-page ties/slurs are not yet continued; practice is blocked when pages are incomplete.'] }
-+}
-+
+ }
+ 
  export function toMusicXML(ir, divisions = 480) {
-   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-   const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -433,7 +568,15 @@
+@@ -433,7 +572,15 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -288,7 +292,7 @@
          out.push(`<voice>${st + 1}</voice><staff>${st + 1}</staff></note>`)
        }
      }
-@@ -444,6 +587,119 @@
+@@ -444,6 +591,126 @@
  }
  
  
@@ -320,6 +324,9 @@
 +      const d = Math.abs(a.x - c.x0) + Math.abs(b.x - c.x1) +
 +        0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
 +      if (!tiePair || d < tiePair.d) tiePair = { d, a, b }
++    }
++    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
++      c.kind = 'ambiguous'; ambiguous += 1; continue
 +    }
 +    if (tiePair) {
 +      c.kind = 'tie'; ties += 1
@@ -364,7 +371,7 @@
 + * (provenance: measure-fill). Multiple candidates or an already-overfull
 + * measure are left untouched.
 + */
-+function reconcileMeasureRests(ir) {
++export function reconcileMeasureRests(ir) {
 +  if (!ir?.meter || !ir?.notes?.length) return
 +  const beats = (ir.meter.beats * 4) / ir.meter.unit
 +  if (!(beats > 0)) return
@@ -396,11 +403,15 @@
 +    rest.type = type
 +    rest.dur_q = String(TYPE_Q[type])
 +    rest.provenance = 'measure-fill'
-+    rest.confidence = 0.7
++    rest.confidence = 0.5
++    rest.visualEvidence = 'ambiguous-glyph-shape'
++    rest.practiceSafe = false
 +    fixed += 1
 +  }
 +  ir.restReconciled = fixed
++  ir.restInferred = fixed
 +  if (fixed > 0) {
++    ir.credits = ir.credits ?? []
 +    ir.credits.push(`${fixed} rest duration(s) reconciled to the decoded meter (measure-fill).`)
 +  }
 +}
@@ -408,11 +419,14 @@
  /** Recognize one page of a vector piano PDF. No reference metadata is read. */
  export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
    if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
-@@ -471,7 +727,11 @@
+@@ -471,7 +738,14 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
 -  if (ir?.curveCount > 0) issues.push('ties-or-slurs-not-transcribed')
++  if ((ir?.unresolvedAccidentals ?? 0) > 0) issues.push('unresolved-accidentals')
++  if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
++  if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
 +  if ((ir?.incompletePages ?? 0) > 0) issues.push('incomplete-pages')
 +  if (ir?.crossPageContinuation === 'unresolved' && (ir?.pageCount ?? 1) > 1) issues.push('cross-page-continuation-unresolved')
 +  const resolvedCurves = (ir?.tieCount ?? 0) + (ir?.slurCount ?? 0)
@@ -421,17 +435,19 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -501,6 +761,9 @@
+@@ -501,6 +775,11 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
 +    tieCount: ir?.tieCount ?? 0,
++    restReconciled: ir?.restReconciled ?? 0,
++    restInferred: ir?.restInferred ?? 0,
 +    slurCount: ir?.slurCount ?? 0,
 +    ambiguousCurves: ir?.ambiguousCurves ?? 0,
      unresolvedNotes: ir?.unresolvedNotes ?? 0,
      unresolvedRests: ir?.unresolvedRests ?? 0,
      badMeasures,
-@@ -515,9 +778,11 @@
+@@ -515,9 +794,14 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'
@@ -439,6 +455,9 @@
 +        case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
          case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
          case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
++        case 'unresolved-accidentals': return 'A music-sized filled symbol could not be classified as an accidental.'
++        case 'rest-duration-inferred': return 'A rest duration was inferred from measure arithmetic, not visual glyph evidence.'
++        case 'rest-duration-ambiguous': return 'The rest glyph shape does not uniquely identify its written duration.'
 +        case 'incomplete-pages': return 'One or more pages could not be read; the score is incomplete.'
 +        case 'cross-page-continuation-unresolved': return 'Cross-page ties/slurs cannot yet be continued safely.'
          default: return issue

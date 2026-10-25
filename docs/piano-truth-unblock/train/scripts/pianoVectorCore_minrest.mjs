@@ -496,10 +496,13 @@ function reconcileMeasureRests(ir) {
     rest.type = matches[0]
     rest.dur_q = String(TYPE_Q[matches[0]])
     rest.provenance = 'measure-fill'
-    rest.confidence = 0.7
+    rest.confidence = 0.5
+    rest.visualEvidence = 'ambiguous-glyph-shape'
+    rest.practiceSafe = false
     fixed += 1
   }
   ir.restReconciled = fixed
+  ir.restInferred = fixed
   if (fixed > 0) {
     ir.credits.push(`${fixed} rest duration(s) reconciled to the decoded meter (measure-fill).`)
   }
@@ -532,6 +535,8 @@ export function assessPianoVectorIr(ir) {
   if (ir?.key == null) issues.push('key-signature-unknown')
   if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
   if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
+  if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
+  if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
   if (ir?.curveCount > 0) issues.push('ties-or-slurs-not-transcribed')
 
   const beats = measureBeatCount(ir?.meter)
@@ -576,6 +581,8 @@ export function assessPianoVectorIr(ir) {
         case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
         case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
         case 'unresolved-rests': return 'Some rests could not be resolved.'
+        case 'rest-duration-inferred': return 'A rest duration was inferred from measure arithmetic, not visual glyph evidence.'
+        case 'rest-duration-ambiguous': return 'The rest glyph shape does not uniquely identify its written duration.'
         case 'ties-or-slurs-not-transcribed': return 'Ties/slurs are not transcribed; repeated attacks may be wrong.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'

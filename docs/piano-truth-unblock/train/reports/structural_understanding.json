@@ -77,13 +77,18 @@
  },
  "gate": {
   "piano-beginner-single-vector": {
-   "practiceReady": true,
-   "issues": [],
+   "practiceReady": false,
+   "issues": [
+    "rest-duration-inferred",
+    "rest-duration-ambiguous"
+   ],
    "badMeasures": []
   },
   "piano-rhythm-tuplets-vector": {
    "practiceReady": false,
    "issues": [
+    "rest-duration-inferred",
+    "rest-duration-ambiguous",
     "measure-duration-invalid"
    ],
    "badMeasures": [
@@ -114,7 +119,6 @@
   }
  },
  "practice_ready_scores": [
-  "piano-beginner-single-vector",
   "piano-grand-voices-vector"
  ],
  "held_out": {
@@ -152,8 +156,11 @@
    "key": 0,
    "restReconciled": 1,
    "gate": {
-    "practiceReady": true,
-    "issues": [],
+    "practiceReady": false,
+    "issues": [
+     "rest-duration-inferred",
+     "rest-duration-ambiguous"
+    ],
     "badMeasures": []
    },
    "xmlLength": 7237,
@@ -177,5 +184,6 @@
    "xmlLength": 16319,
    "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
   }
- }
+ },
+ "safety_note": "Beginner is reference-correct (32/32 notes, 1/1 rest, 8/8 measures) but NOT practice-ready: the rest glyph shape is ambiguous and its duration is an arithmetic inference. Grand has no rests and is practice-ready with a verified tie and slur."
 }

@@ -2402,3 +2402,70 @@ not.
   piano_curve_classification.test.mjs. Gate not weakened: ambiguous curves,
   incomplete pages and unresolved cross-page continuation still block.
   No merge/deploy; sealed TEST untouched.
+
+
+## Evidence-grounded practice safety: rest corroboration + negative controls (this session)
+
+  PHASE 1 — the beginner rest is encoded as SMuFL 0xE4E6 (eighth rest) but
+  is visually a quarter rest in this fixture font. High-DPI crops show the
+  SAME small wedge shape for the beginner quarter-context rest and the rhythm
+  eighth-context rest; the glyph does not uniquely identify the written
+  value. Meter completion is therefore only a consistency check, not proof
+  of rest identity. The measure-fill reconciliation is retained as a DRAFT
+  inference with provenance "measure-fill", visualEvidence
+  "ambiguous-glyph-shape", practiceSafe=false, and restInferred count.
+
+  SAFETY CORRECTION — the practice gate now refuses any score with an
+  inferred/ambiguous rest (issues: rest-duration-inferred,
+  rest-duration-ambiguous), any unresolved accidental-shaped path, any
+  ambiguous curve, incomplete page, or unresolved cross-page continuation.
+  The previous "2 practice-ready" claim is corrected: beginner is
+  reference-correct but NOT practice-safe; grand-voices remains
+  practice-ready (no rests; tie+slur verified).
+
+  Strict reference accuracy is unchanged: notes 349/447 (P .853/R .781),
+  rests 6/6 (the beginner rest still matches the reference value, but it is
+  an inference and cannot grant practice). Grand 88/88; dense 185/264.
+
+  PHASE 2 — negative controls (scripts/piano_safety_controls.test.mjs, 14
+  cases, all pass): correct eighth rest + missing half note refused; partial
+  pickup refused; wrong time signature refused; two voices with one short
+  voice refused; missing rest refused; multiple ambiguous rests refused;
+  unresolved accidental refused; tied vs repeated distinguished; ambiguous
+  same-pitch long curve refused; unrelated curve refused; wrong staff
+  ownership refused; partially recognized multi-page refused; actual
+  beginner recognition refused; actual grand recognition accepted.
+
+  PHASE 3 — curve classifier now uses endpoint geometry with x/y proximity,
+  pitch equality, forward measure, and a long/high-curve ambiguity guard
+  (same-pitch curve >2.5 gaps high or >10 gaps span is ambiguous, not a
+  tie). Grand tie A4 m3->m4 and slur F4->G4 are serialized as <tie>/<tied>
+  and <slur>; MusicXML parses with music21. Equal-pitch slurs are treated as
+  ties only when the curve is note-attached and short; otherwise abstain.
+
+  PHASE 4 — path-drawn accidentals: filled 2-rectangle + slanted-line
+  sharp shapes are classified and attached to the nearest notehead
+  (12 grand + 31 dense events recovered). Unknown accidental-sized filled
+  paths increment unresolvedAccidentals and block practice.
+
+  PHASE 5 — multi-page: extractPianoVectorPages preserves page identity,
+  measure offsets, incomplete pages and cross-page flags. Ao no Sumika
+  pages 1/3/4 yield 33/60/24 notes; page 2 is incomplete; the gate refuses
+  (no reference accuracy claim). demo-minuet/Brahms remain image fallback.
+
+  PHASE 6 — rhythm (44/63; 3 invalid measures; 2 inferred rests) and dense
+  (185/264; 4 invalid measures; unresolved noteheads) remain blocked; no
+  artificial rests or stretched notes were added.
+
+  Browser (pdfjs 5.4.296, Chromium): beginner practiceReady FALSE with
+  rest-duration-inferred/ambiguous; grand practiceReady TRUE. Reports:
+  reports/safety_correction.json, reports/browser_practice_gate.json,
+  reports/structural_understanding.json.
+
+  Integration: reports/piano_vector_core_general.patch (465 lines;
+  recommended, includes ties/slurs/accidentals/multi-page and safe rest
+  provenance). reports/piano_vector_core_minrest.patch (107 lines) now also
+  refuses the inferred beginner rest, but grants no practice eligibility by
+  itself. Tests: piano_safety_controls.test.mjs,
+  piano_curve_classification.test.mjs, piano_vector_practice_gate.test.mjs.
+  No merge/deploy; sealed TEST untouched.
