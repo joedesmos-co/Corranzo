@@ -1288,3 +1288,31 @@ NEXT: (a) split merged SMuFL text runs into one notehead per glyph
 (b) then re-test beam levels for sixteenths and the dotted/tie/rest
 extensions. String/fret evidence on the mixed fixture is already exact,
 so the attachment problem is isolated to rhythm-column extraction.
+
+### R32 — PDF.js merged SMuFL runs split; mixed noteheads complete
+DIAGNOSIS: the mixed fixture's sixteenth group is one PDF.js text item
+whose string is `\uE0A4 \uE0A4 \uE0A4 \uE0A4` (glyphs with spaces), width
+119.4px. The extractor read one character per item, losing 3 noteheads.
+Notehead advance was 21.9px; the run width solves the space advance
+(10.6px), so positions are cumulative rather than guessed.
+
+FIX: notationNoteheads iterates every character in a run, derives the
+notehead advance from standalone single-glyph items, solves the space
+advance from the run width, and emits per-glyph boxes with split
+provenance. No fixture constants.
+
+RESULT on guitar-mixed-rhythm-vector:
+  noteheads 18 -> 21/21
+  staff pairing 10/10 + 11/11 exact
+  string/fret 60/60, P/R 1.00
+  complete timed events 2/21; valid measures 0/4 (NOT solved)
+
+REGRESSION CHECK:
+  paired 116/116 SF, 32/32 timed, 8/8; techniques 32/32, 8/8;
+  sparse 32/32, abstains; standard notation 40/40 (16 eighths).
+
+NEXT EXACT BLOCKER: the generated mixed page's stems/beams are not read
+by the probe (all 60 events -> quarter, every measure invalid). The text
+run fix is complete; the remaining work is the fixture's stem/beam
+geometry vs the detector, then sixteenth beam levels. No mixed-rhythm
+timing claim until that passes.

@@ -234,13 +234,49 @@ export function assignEvents(items, staves, barlines) {
 
 // ----------------------------------------------------------------- rhythm
 export function notationNoteheads(items) {
+  // A PDF text run may contain several SMuFL glyphs plus spaces
+  // (e.g. "\uE0A4 \uE0A4 \uE0A4"). PDF.js exposes the run width but not
+  // per-character advances. Derive the notehead advance from standalone
+  // runs, then solve the space advance from the run width; positions are
+  // cumulative. This is font/page derived, not a fixed offset.
+  const single = []
+  for (const it of items) {
+    const txt = it.text || ''
+    if (txt.length === 1 && SMUFL_NOTEHEADS[txt]) single.push(it.bbox[2] - it.bbox[0])
+  }
+  single.sort((a, b) => a - b)
+  const advNote = single.length ? single[single.length >> 1] : 0
   const out = []
   for (const it of items) {
-    const ch = (it.text || '').trim()[0]
-    if (!ch || !SMUFL_NOTEHEADS[ch]) continue
-    const [base, kind] = [SMUFL_NOTEHEADS[ch][1], SMUFL_NOTEHEADS[ch][0]]
+    const txt = it.text || ''
+    if (!txt) continue
+    const chars = [...txt]
+    if (!chars.some(ch => SMUFL_NOTEHEADS[ch])) continue
     const [x0, y0, x1, y1] = it.bbox
-    out.push({ kind, base, box: [x0, y0, x1, y1], cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, w: x1 - x0, h: y1 - y0 })
+    const width = x1 - x0
+    const nH = chars.filter(ch => SMUFL_NOTEHEADS[ch]).length
+    const nS = chars.filter(ch => ch === ' ').length
+    let advSpace = 0
+    let noteAdv = advNote
+    if (chars.length === 1) {
+      noteAdv = width || advNote
+    } else if (nS > 0 && noteAdv > 0) {
+      advSpace = (width - nH * noteAdv) / nS
+      if (!(advSpace >= 0) || advSpace > noteAdv * 2) advSpace = 0
+    } else {
+      noteAdv = width / Math.max(chars.length, 1)
+    }
+    let cursor = x0
+    for (const ch of chars) {
+      const adv = ch === ' ' ? (advSpace || noteAdv) : noteAdv
+      if (SMUFL_NOTEHEADS[ch]) {
+        const [kind, base] = SMUFL_NOTEHEADS[ch]
+        out.push({ kind, base, box: [cursor, y0, cursor + adv, y1],
+          cx: cursor + adv / 2, cy: (y0 + y1) / 2, w: adv, h: y1 - y0,
+          split: chars.length > 1, sourceIndex: out.length })
+      }
+      cursor += adv
+    }
   }
   out.sort((a, b) => a.cx - b.cx)
   return out
