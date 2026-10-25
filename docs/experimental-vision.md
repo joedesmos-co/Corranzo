@@ -34,8 +34,9 @@ localStorage.removeItem('corranzo-experimental-vision-engine-v1')
   fixture metadata or truth files.
 * **Guitar TAB vector** reads the PDF's digital text layer and staff geometry
   with PDF.js only. It recovers string/fret events and measure ownership. Its
-  duration channel is explicitly **unverified** (the beam/flag ownership from
-  the Python research path is not ported).
+  duration channel now uses notehead + stem/beam/flag evidence. Paired/techniques
+  fixtures recover 32/32 onsets and 8/8 measures; ties/rests/dots and independent
+  voices remain unaudited, so practice stays disabled.
 
 ## What is intentionally blocked
 

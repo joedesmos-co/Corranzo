@@ -31,6 +31,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const pianoPdf = join(ROOT, 'benchmarks/omr-fixtures/piano-beginner-single-vector/piano-beginner-single-vector.pdf')
 const guitarPdf = join(ROOT, 'benchmarks/omr-fixtures/guitar-paired-chords-vector/guitar-paired-chords-vector.pdf')
 const scannedGuitarPdf = join(ROOT, 'benchmarks/omr-fixtures/guitar-paired-scan/guitar-paired-scan.pdf')
+const realPianoPdf = join(ROOT, 'public/fixtures/demo-minuet-in-g.pdf')
 
 await mkdir(OUT, { recursive: true })
 const vite = EXTERNAL ? null : await createServer({
@@ -229,6 +230,17 @@ try {
   if (!fallbackMeta) pass('scanned guitar: honest standard fallback, no experimental metadata')
   else fail('scanned guitar: honest standard fallback', JSON.stringify(fallbackMeta))
   await shot('scanned-fallback')
+
+  // ------------------------------------------------ unsupported piano PDF
+  await openImport({ mode: 'piano-vector', instrument: 'piano' })
+  await upload(realPianoPdf, 'real piano PDF')
+  await waitReady('real piano PDF', { expectExperimental: false })
+  const realPianoSaved = await readSaved()
+  if (!(realPianoSaved?.meta?.omrMeta?.experimentalVision)) {
+    pass('real piano PDF: honest standard fallback, no experimental metadata')
+  } else {
+    fail('real piano PDF: honest standard fallback', JSON.stringify(realPianoSaved?.meta?.omrMeta?.experimentalVision))
+  }
 
   // --------------------------------------------------------- flag off default
   await openImport({ mode: null, instrument: 'piano' })

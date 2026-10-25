@@ -14,7 +14,7 @@ import {
   assessPianoVectorIr,
   toMusicXML,
 } from '../src/features/vision/pianoVectorCore.js'
-import { assessGuitarTabRecognition } from '../src/features/vision/guitarTabCore.js'
+import { assessGuitarTabRecognition, durationFromEvidence } from '../src/features/vision/guitarTabCore.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const store = new Map()
@@ -90,11 +90,11 @@ describe('piano vector core', () => {
 })
 
 describe('guitar TAB assessment', () => {
-  it('never promotes placeholder quarters to a practice score', () => {
+  it('never promotes an evidence-recovered but unaudited score to practice', () => {
     const assessment = assessGuitarTabRecognition({
       events: new Array(116).fill({}),
       summary: {
-        text_items: 100, events: 116,
+        text_items: 100, events: 116, rhythm_recovered: true,
         rhythm: {
           rhythm_recovered: true, time_signature: '4/4',
           measures_complete: 8, measures_total: 8,
@@ -105,8 +105,31 @@ describe('guitar TAB assessment', () => {
     })
     expect(assessment.practiceReady).toBe(false)
     expect(assessment.completeFidelity).toBe(false)
-    expect(assessment.issues).toContain('durations-unverified')
-    expect(assessment.issues).toContain('beam-flag-rhythm-not-ported')
+    expect(assessment.rhythmRecovered).toBe(true)
+    expect(assessment.issues).toContain('ties-rests-voice-audit-required')
+  })
+
+  it('classifies written durations from notehead + stem/beam/flag evidence', () => {
+    const col = (bases) => ({ members: bases.map((base) => ({ base })) })
+    const evidence = (overrides = {}) => ({ beams: 0, flags: 0, stem: true, ...overrides })
+    expect(durationFromEvidence(col([1]), evidence()).duration).toBe(1)
+    expect(durationFromEvidence(col([1]), evidence({ beams: 1 })).duration).toBe(0.5)
+    expect(durationFromEvidence(col([1]), evidence({ beams: 2 })).duration).toBe(0.25)
+    expect(durationFromEvidence(col([1]), evidence({ beams: 3 })).duration).toBe(0.125)
+    expect(durationFromEvidence(col([4]), evidence()).duration).toBe(4)
+    expect(durationFromEvidence(col([2]), evidence()).duration).toBe(2)
+  })
+
+  it('marks conflicting or ambiguous evidence as non-confident', () => {
+    const col = (bases) => ({ members: bases.map((base) => ({ base })) })
+    const conflict = durationFromEvidence(col([1]), { beams: 1, flags: 1, stem: true })
+    expect(conflict.duration).toBe(0.5)
+    expect(conflict.confident).toBe(false)
+    const ambiguous = durationFromEvidence(col([1, 2]), { beams: 0, flags: 0, stem: true })
+    expect(ambiguous.ambiguous).toBe(true)
+    expect(ambiguous.confident).toBe(false)
+    const noStem = durationFromEvidence(col([1]), { beams: 0, flags: 0, stem: false })
+    expect(noStem.confident).toBe(false)
   })
 
   it('marks a pitch-only recognition explicitly', () => {
