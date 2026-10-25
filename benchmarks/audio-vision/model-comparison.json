@@ -1,0 +1,710 @@
+{
+  "generatedAt": "2026-10-25T03:13:12.771Z",
+  "tolerance": 0.12,
+  "recordings": [
+    {
+      "id": "01_BN1-129-Eb_comp",
+      "complementarity": {
+        "bpMissed": 11,
+        "recoveredByCandidate": 3,
+        "candidateFalseNotes": 37,
+        "union": {
+          "precision": 0.647,
+          "recall": 0.924,
+          "eventF1": 0.761
+        }
+      },
+      "instrument": "guitar",
+      "audioSeconds": 22.3,
+      "referenceNotes": 105,
+      "basicPitch": {
+        "notes": 119,
+        "precision": 0.79,
+        "recall": 0.895,
+        "eventF1": 0.839,
+        "matched": 94,
+        "missed": 11,
+        "falsePositives": 25,
+        "onsetMaeMs": 14,
+        "durationMaeMs": 120,
+        "octaveErrors": 10,
+        "inventedRate": 0.05,
+        "melodyRecall": 0.956,
+        "runtimeMs": 14908,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 118,
+        "precision": 0.686,
+        "recall": 0.771,
+        "eventF1": 0.726,
+        "matched": 81,
+        "missed": 24,
+        "falsePositives": 37,
+        "onsetMaeMs": 18,
+        "durationMaeMs": 121,
+        "octaveErrors": 5,
+        "inventedRate": 0.169,
+        "melodyRecall": 0.824,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "01_BN2-166-Ab_comp",
+      "complementarity": {
+        "bpMissed": 89,
+        "recoveredByCandidate": 13,
+        "candidateFalseNotes": 89,
+        "union": {
+          "precision": 0.639,
+          "recall": 0.7,
+          "eventF1": 0.668
+        }
+      },
+      "instrument": "guitar",
+      "audioSeconds": 23.1,
+      "referenceNotes": 260,
+      "basicPitch": {
+        "notes": 197,
+        "precision": 0.858,
+        "recall": 0.65,
+        "eventF1": 0.74,
+        "matched": 169,
+        "missed": 91,
+        "falsePositives": 28,
+        "onsetMaeMs": 13,
+        "durationMaeMs": 123,
+        "octaveErrors": 9,
+        "inventedRate": 0.056,
+        "melodyRecall": 0.75,
+        "runtimeMs": 15917,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 204,
+        "precision": 0.564,
+        "recall": 0.442,
+        "eventF1": 0.496,
+        "matched": 115,
+        "missed": 145,
+        "falsePositives": 89,
+        "onsetMaeMs": 19,
+        "durationMaeMs": 123,
+        "octaveErrors": 14,
+        "inventedRate": 0.275,
+        "melodyRecall": 0.523,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "01_Funk1-114-Ab_comp",
+      "complementarity": {
+        "bpMissed": 48,
+        "recoveredByCandidate": 15,
+        "candidateFalseNotes": 79,
+        "union": {
+          "precision": 0.698,
+          "recall": 0.836,
+          "eventF1": 0.761
+        }
+      },
+      "instrument": "guitar",
+      "audioSeconds": 25.3,
+      "referenceNotes": 232,
+      "basicPitch": {
+        "notes": 191,
+        "precision": 0.942,
+        "recall": 0.776,
+        "eventF1": 0.851,
+        "matched": 180,
+        "missed": 52,
+        "falsePositives": 11,
+        "onsetMaeMs": 9,
+        "durationMaeMs": 36,
+        "octaveErrors": 3,
+        "inventedRate": 0.016,
+        "melodyRecall": 0.802,
+        "runtimeMs": 16874,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 218,
+        "precision": 0.638,
+        "recall": 0.599,
+        "eventF1": 0.618,
+        "matched": 139,
+        "missed": 93,
+        "falsePositives": 79,
+        "onsetMaeMs": 17,
+        "durationMaeMs": 60,
+        "octaveErrors": 20,
+        "inventedRate": 0.234,
+        "melodyRecall": 0.51,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "01_BN1-129-Eb_solo",
+      "complementarity": {
+        "bpMissed": 2,
+        "recoveredByCandidate": 2,
+        "candidateFalseNotes": 24,
+        "union": {
+          "precision": 0.709,
+          "recall": 1,
+          "eventF1": 0.83
+        }
+      },
+      "instrument": "guitar",
+      "audioSeconds": 22.3,
+      "referenceNotes": 61,
+      "basicPitch": {
+        "notes": 61,
+        "precision": 0.967,
+        "recall": 0.967,
+        "eventF1": 0.967,
+        "matched": 59,
+        "missed": 2,
+        "falsePositives": 2,
+        "onsetMaeMs": 16,
+        "durationMaeMs": 49,
+        "octaveErrors": 0,
+        "inventedRate": 0.033,
+        "melodyRecall": 0.983,
+        "runtimeMs": 14731,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 79,
+        "precision": 0.696,
+        "recall": 0.902,
+        "eventF1": 0.786,
+        "matched": 55,
+        "missed": 6,
+        "falsePositives": 24,
+        "onsetMaeMs": 20,
+        "durationMaeMs": 52,
+        "octaveErrors": 1,
+        "inventedRate": 0.266,
+        "melodyRecall": 0.932,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "01_BN2-166-Ab_solo",
+      "complementarity": {
+        "bpMissed": 7,
+        "recoveredByCandidate": 2,
+        "candidateFalseNotes": 18,
+        "union": {
+          "precision": 0.815,
+          "recall": 0.957,
+          "eventF1": 0.88
+        }
+      },
+      "instrument": "guitar",
+      "audioSeconds": 23.1,
+      "referenceNotes": 115,
+      "basicPitch": {
+        "notes": 114,
+        "precision": 0.947,
+        "recall": 0.939,
+        "eventF1": 0.943,
+        "matched": 108,
+        "missed": 7,
+        "falsePositives": 6,
+        "onsetMaeMs": 9,
+        "durationMaeMs": 37,
+        "octaveErrors": 0,
+        "inventedRate": 0.018,
+        "melodyRecall": 0.964,
+        "runtimeMs": 15830,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 125,
+        "precision": 0.84,
+        "recall": 0.913,
+        "eventF1": 0.875,
+        "matched": 105,
+        "missed": 10,
+        "falsePositives": 20,
+        "onsetMaeMs": 17,
+        "durationMaeMs": 59,
+        "octaveErrors": 1,
+        "inventedRate": 0.096,
+        "melodyRecall": 0.955,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-mozart-dyad",
+      "complementarity": {
+        "bpMissed": 5,
+        "recoveredByCandidate": 4,
+        "candidateFalseNotes": 6,
+        "union": {
+          "precision": 0.409,
+          "recall": 0.75,
+          "eventF1": 0.529
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 12,
+      "basicPitch": {
+        "notes": 19,
+        "precision": 0.368,
+        "recall": 0.583,
+        "eventF1": 0.452,
+        "matched": 7,
+        "missed": 5,
+        "falsePositives": 12,
+        "onsetMaeMs": 85,
+        "durationMaeMs": 272,
+        "octaveErrors": 1,
+        "inventedRate": 0.421,
+        "melodyRecall": 1,
+        "runtimeMs": 2132,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 14,
+        "precision": 0.571,
+        "recall": 0.667,
+        "eventF1": 0.615,
+        "matched": 8,
+        "missed": 4,
+        "falsePositives": 6,
+        "onsetMaeMs": 106,
+        "durationMaeMs": 408,
+        "octaveErrors": 0,
+        "inventedRate": 0.357,
+        "melodyRecall": 0.75,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "complementarity": {
+        "bpMissed": 15,
+        "recoveredByCandidate": 0,
+        "candidateFalseNotes": 19,
+        "union": {
+          "precision": 0.12,
+          "recall": 0.167,
+          "eventF1": 0.14
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 18,
+      "basicPitch": {
+        "notes": 19,
+        "precision": 0.158,
+        "recall": 0.167,
+        "eventF1": 0.162,
+        "matched": 3,
+        "missed": 15,
+        "falsePositives": 16,
+        "onsetMaeMs": 22,
+        "durationMaeMs": 358,
+        "octaveErrors": 4,
+        "inventedRate": 0.526,
+        "melodyRecall": 0.111,
+        "runtimeMs": 2135,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 23,
+        "precision": 0.13,
+        "recall": 0.167,
+        "eventF1": 0.146,
+        "matched": 3,
+        "missed": 15,
+        "falsePositives": 20,
+        "onsetMaeMs": 52,
+        "durationMaeMs": 177,
+        "octaveErrors": 3,
+        "inventedRate": 0.565,
+        "melodyRecall": 0.111,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "complementarity": {
+        "bpMissed": 19,
+        "recoveredByCandidate": 1,
+        "candidateFalseNotes": 14,
+        "union": {
+          "precision": 0.259,
+          "recall": 0.28,
+          "eventF1": 0.269
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 25,
+      "basicPitch": {
+        "notes": 26,
+        "precision": 0.231,
+        "recall": 0.24,
+        "eventF1": 0.235,
+        "matched": 6,
+        "missed": 19,
+        "falsePositives": 20,
+        "onsetMaeMs": 57,
+        "durationMaeMs": 242,
+        "octaveErrors": 4,
+        "inventedRate": 0.385,
+        "melodyRecall": 0.5,
+        "runtimeMs": 2188,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 20,
+        "precision": 0.3,
+        "recall": 0.24,
+        "eventF1": 0.267,
+        "matched": 6,
+        "missed": 19,
+        "falsePositives": 14,
+        "onsetMaeMs": 42,
+        "durationMaeMs": 309,
+        "octaveErrors": 2,
+        "inventedRate": 0.25,
+        "melodyRecall": 0.5,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "complementarity": {
+        "bpMissed": 17,
+        "recoveredByCandidate": 0,
+        "candidateFalseNotes": 13,
+        "union": {
+          "precision": 0.227,
+          "recall": 0.217,
+          "eventF1": 0.222
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 23,
+      "basicPitch": {
+        "notes": 20,
+        "precision": 0.25,
+        "recall": 0.217,
+        "eventF1": 0.233,
+        "matched": 5,
+        "missed": 18,
+        "falsePositives": 15,
+        "onsetMaeMs": 27,
+        "durationMaeMs": 276,
+        "octaveErrors": 4,
+        "inventedRate": 0.25,
+        "melodyRecall": 0.333,
+        "runtimeMs": 2125,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 17,
+        "precision": 0.235,
+        "recall": 0.174,
+        "eventF1": 0.2,
+        "matched": 4,
+        "missed": 19,
+        "falsePositives": 13,
+        "onsetMaeMs": 31,
+        "durationMaeMs": 479,
+        "octaveErrors": 2,
+        "inventedRate": 0.294,
+        "melodyRecall": 0.167,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "complementarity": {
+        "bpMissed": 9,
+        "recoveredByCandidate": 0,
+        "candidateFalseNotes": 11,
+        "union": {
+          "precision": 0.167,
+          "recall": 0.25,
+          "eventF1": 0.2
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 12,
+      "basicPitch": {
+        "notes": 18,
+        "precision": 0.167,
+        "recall": 0.25,
+        "eventF1": 0.2,
+        "matched": 3,
+        "missed": 9,
+        "falsePositives": 15,
+        "onsetMaeMs": 75,
+        "durationMaeMs": 178,
+        "octaveErrors": 1,
+        "inventedRate": 0.667,
+        "melodyRecall": 0.2,
+        "runtimeMs": 2127,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 14,
+        "precision": 0.214,
+        "recall": 0.25,
+        "eventF1": 0.231,
+        "matched": 3,
+        "missed": 9,
+        "falsePositives": 11,
+        "onsetMaeMs": 69,
+        "durationMaeMs": 256,
+        "octaveErrors": 1,
+        "inventedRate": 0.714,
+        "melodyRecall": 0.2,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "complementarity": {
+        "bpMissed": 1,
+        "recoveredByCandidate": 1,
+        "candidateFalseNotes": 8,
+        "union": {
+          "precision": 0.667,
+          "recall": 1,
+          "eventF1": 0.8
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 18,
+      "basicPitch": {
+        "notes": 25,
+        "precision": 0.68,
+        "recall": 0.944,
+        "eventF1": 0.791,
+        "matched": 17,
+        "missed": 1,
+        "falsePositives": 8,
+        "onsetMaeMs": 6,
+        "durationMaeMs": 241,
+        "octaveErrors": 0,
+        "inventedRate": 0.32,
+        "melodyRecall": 1,
+        "runtimeMs": 2155,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 22,
+        "precision": 0.636,
+        "recall": 0.778,
+        "eventF1": 0.7,
+        "matched": 14,
+        "missed": 4,
+        "falsePositives": 8,
+        "onsetMaeMs": 8,
+        "durationMaeMs": 309,
+        "octaveErrors": 0,
+        "inventedRate": 0.364,
+        "melodyRecall": 0.75,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "complementarity": {
+        "bpMissed": 0,
+        "recoveredByCandidate": 0,
+        "candidateFalseNotes": 4,
+        "union": {
+          "precision": 0.63,
+          "recall": 1,
+          "eventF1": 0.773
+        }
+      },
+      "instrument": "piano",
+      "audioSeconds": 3,
+      "referenceNotes": 17,
+      "basicPitch": {
+        "notes": 26,
+        "precision": 0.654,
+        "recall": 1,
+        "eventF1": 0.791,
+        "matched": 17,
+        "missed": 0,
+        "falsePositives": 9,
+        "onsetMaeMs": 54,
+        "durationMaeMs": 199,
+        "octaveErrors": 0,
+        "inventedRate": 0.346,
+        "melodyRecall": 1,
+        "runtimeMs": 2117,
+        "modelBytes": 916929
+      },
+      "hft": {
+        "notes": 21,
+        "precision": 0.81,
+        "recall": 1,
+        "eventF1": 0.895,
+        "matched": 17,
+        "missed": 0,
+        "falsePositives": 4,
+        "onsetMaeMs": 49,
+        "durationMaeMs": 194,
+        "octaveErrors": 0,
+        "inventedRate": 0.19,
+        "melodyRecall": 1,
+        "runtimeMs": null,
+        "modelBytes": 22136000
+      }
+    }
+  ],
+  "pool": {
+    "all": {
+      "basicPitch": {
+        "recordings": 12,
+        "referenceNotes": 898,
+        "predicted": 835,
+        "matched": 668,
+        "microPrecision": 0.8,
+        "microRecall": 0.744,
+        "microF1": 0.771,
+        "missed": 230,
+        "falsePositives": 167,
+        "octaveErrors": 36,
+        "onsetMaeMs": 32.25,
+        "durationMaeMs": 177.583,
+        "inventedRate": 0.257,
+        "melodyRecall": 0.717,
+        "runtimeMsTotal": 93239
+      },
+      "hft": {
+        "recordings": 12,
+        "referenceNotes": 898,
+        "predicted": 875,
+        "matched": 550,
+        "microPrecision": 0.629,
+        "microRecall": 0.612,
+        "microF1": 0.62,
+        "missed": 348,
+        "falsePositives": 325,
+        "octaveErrors": 49,
+        "onsetMaeMs": 37.333,
+        "durationMaeMs": 212.25,
+        "inventedRate": 0.314,
+        "melodyRecall": 0.602,
+        "runtimeMsTotal": 0
+      },
+      "complementarity": {
+        "recordings": 12,
+        "bpMissed": 223,
+        "recoveredByCandidate": 41,
+        "candidateFalseNotes": 322
+      }
+    },
+    "guitar": {
+      "basicPitch": {
+        "recordings": 5,
+        "referenceNotes": 773,
+        "predicted": 682,
+        "matched": 610,
+        "microPrecision": 0.894,
+        "microRecall": 0.789,
+        "microF1": 0.838,
+        "missed": 163,
+        "falsePositives": 72,
+        "octaveErrors": 22,
+        "onsetMaeMs": 12.2,
+        "durationMaeMs": 73,
+        "inventedRate": 0.035,
+        "melodyRecall": 0.891,
+        "runtimeMsTotal": 78260
+      },
+      "hft": {
+        "recordings": 5,
+        "referenceNotes": 773,
+        "predicted": 744,
+        "matched": 495,
+        "microPrecision": 0.665,
+        "microRecall": 0.64,
+        "microF1": 0.653,
+        "missed": 278,
+        "falsePositives": 249,
+        "octaveErrors": 41,
+        "onsetMaeMs": 18.2,
+        "durationMaeMs": 83,
+        "inventedRate": 0.208,
+        "melodyRecall": 0.749,
+        "runtimeMsTotal": 0
+      },
+      "complementarity": {
+        "recordings": 5,
+        "bpMissed": 157,
+        "recoveredByCandidate": 35,
+        "candidateFalseNotes": 247
+      }
+    },
+    "piano": {
+      "basicPitch": {
+        "recordings": 7,
+        "referenceNotes": 125,
+        "predicted": 153,
+        "matched": 58,
+        "microPrecision": 0.379,
+        "microRecall": 0.464,
+        "microF1": 0.417,
+        "missed": 67,
+        "falsePositives": 95,
+        "octaveErrors": 14,
+        "onsetMaeMs": 46.571,
+        "durationMaeMs": 252.286,
+        "inventedRate": 0.416,
+        "melodyRecall": 0.592,
+        "runtimeMsTotal": 14979
+      },
+      "hft": {
+        "recordings": 7,
+        "referenceNotes": 125,
+        "predicted": 131,
+        "matched": 55,
+        "microPrecision": 0.42,
+        "microRecall": 0.44,
+        "microF1": 0.43,
+        "missed": 70,
+        "falsePositives": 76,
+        "octaveErrors": 8,
+        "onsetMaeMs": 51,
+        "durationMaeMs": 304.571,
+        "inventedRate": 0.391,
+        "melodyRecall": 0.497,
+        "runtimeMsTotal": 0
+      },
+      "complementarity": {
+        "recordings": 7,
+        "bpMissed": 66,
+        "recoveredByCandidate": 6,
+        "candidateFalseNotes": 75
+      }
+    }
+  }
+}

@@ -139,12 +139,17 @@ async function analyseRecording({ id, instrument, density, samples, truth }) {
       }))
   const baseNotes = extract(BASE)
   const lowNotes = extract(LOW)
-  const peak = (matrix, frame, midi, radius = 2) => {
+  const peak = (matrix, frame, midi, radius = 2, pitchRadius = 0) => {
     let best = 0
     for (let d = -radius; d <= radius; d += 1) {
       const row = matrix[Math.max(0, Math.min(matrix.length - 1, frame + d))]
-      const value = row?.[midi - MIDI_MIN] ?? 0
-      if (Number.isFinite(value)) best = Math.max(best, value)
+      if (!row) continue
+      for (let p = -pitchRadius; p <= pitchRadius; p += 1) {
+        const bin = midi - MIDI_MIN + p
+        if (bin < 0 || bin >= row.length) continue
+        const value = row[bin] ?? 0
+        if (Number.isFinite(value)) best = Math.max(best, value)
+      }
     }
     return best
   }
@@ -171,6 +176,10 @@ async function analyseRecording({ id, instrument, density, samples, truth }) {
     denseChord: 0,
     recoverableSafe: 0,
     recoverableRisky: 0,
+    inferenceWeakWide: 0,
+    inferenceWeakAnyPitch: 0,
+    alignmentOnly: 0,
+    pitchNeighbourOnly: 0,
   }
   const examples = []
   for (const truthNote of truth) {
@@ -179,9 +188,19 @@ async function analyseRecording({ id, instrument, density, samples, truth }) {
     const frame = Math.round(truthNote.onset * FPS)
     const p = peak(frames, frame, truthNote.midi)
     const o = peak(onsets, frame, truthNote.midi)
+    // Sensitivity: the same question over a wider time window (±70 ms) and a
+    // pitch neighbourhood (±2 semitones). If a note is invisible only under
+    // the narrow reading, the bottleneck is alignment/segmentation, not the
+    // model; if it stays invisible under the wide reading, it is inference.
+    const pWide = peak(frames, frame, truthNote.midi, 6)
+    const pAnyPitch = peak(frames, frame, truthNote.midi, 6, 2)
     const sibling = isSiblingOfWritten(truthNote)
     if (sibling) categories.harmonicSibling += 1
     if (p < 0.3) categories.inferenceWeak += 1
+    if (pWide < 0.3) categories.inferenceWeakWide += 1
+    if (pAnyPitch < 0.3) categories.inferenceWeakAnyPitch += 1
+    if (p < 0.3 && pWide >= 0.3) categories.alignmentOnly += 1
+    if (pWide < 0.3 && pAnyPitch >= 0.3) categories.pitchNeighbourOnly += 1
     else if (p < 0.5) categories.extractionBorderline += 1
     else categories.extractionStrong += 1
     const atOnset = truth.filter((t) => Math.abs(t.onset - truthNote.onset) <= 0.05).length
@@ -209,6 +228,8 @@ async function analyseRecording({ id, instrument, density, samples, truth }) {
         midi: truthNote.midi,
         duration: Math.round(duration * 100) / 100,
         p: Math.round(p * 1000) / 1000,
+        pWide: Math.round(pWide * 1000) / 1000,
+        pAnyPitch: Math.round(pAnyPitch * 1000) / 1000,
         onsetP: Math.round(o * 1000) / 1000,
         polyphony: atOnset,
         sibling,
@@ -260,8 +281,8 @@ for (const job of jobs) {
   const row = await analyseRecording({ ...job.meta, samples: job.samples, truth: job.truth })
   report.rows.push(row)
   console.log(`${row.id} (${row.instrument}): ref ${row.referenceNotes}, matched ${row.matchedBase} (low ${row.matchedLow}) ` +
-    `| missed ${row.categories.missed}: inference ${row.categories.inferenceWeak}, borderline ${row.categories.extractionBorderline}, ` +
-    `strong-but-rejected ${row.categories.extractionStrong}, sibling ${row.categories.harmonicSibling} ` +
+    `| missed ${row.categories.missed}: inference ${row.categories.inferenceWeak} (wide ${row.categories.inferenceWeakWide}, any-pitch ${row.categories.inferenceWeakAnyPitch}), ` +
+    `borderline ${row.categories.extractionBorderline}, strong-but-rejected ${row.categories.extractionStrong}, sibling ${row.categories.harmonicSibling} ` +
     `| recoverable safe ${row.categories.recoverableSafe}, risky ${row.categories.recoverableRisky}`)
   if (global.gc) global.gc()
 }
@@ -280,6 +301,10 @@ const pool = (rows) => {
     lowRecall: ref ? Math.round((matchedLow / ref) * 1000) / 1000 : null,
     missed: total('missed'),
     inferenceWeak: total('inferenceWeak'),
+    inferenceWeakWide: total('inferenceWeakWide'),
+    inferenceWeakAnyPitch: total('inferenceWeakAnyPitch'),
+    alignmentOnly: total('alignmentOnly'),
+    pitchNeighbourOnly: total('pitchNeighbourOnly'),
     extractionBorderline: total('extractionBorderline'),
     extractionStrong: total('extractionStrong'),
     harmonicSibling: total('harmonicSibling'),
