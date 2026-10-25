@@ -45,12 +45,15 @@ here is deliberately strict: exact MIDI + measure + written duration.
 | rhythm-tuplets | 63 | 43 | 0.683 | 0.683 | ties/slurs detected but not transcribed; measure invalid |
 | grand-voices | 88 | 76 | 0.864 | 0.864 | ties/slurs not transcribed |
 | dense-advanced | 264 | 154 | 0.681 | 0.583 | unresolved noteheads; measure invalid |
-| **total** | **447** | **305** | — | **0.682** | — |
+| **total** | **447** | **306** | — | **0.685** | — |
 
 The research commit reports 321/447 complete events (71.8%). The difference is
 the matcher: this audit requires exact written duration; the research
 "complete" matcher is more permissive. The lower number is the conservative
-one.
+one. The canonical evaluator is `scripts/vision-piano-reference-eval.mjs`
+(raw MusicXML duration/divisions + dots + 1-based `measure@number`); it reports
+306/447 and 3/6 rests on current main, resolving the earlier 305/447 ad-hoc
+discrepancy.
 
 The beginner fixture's 32 pitches and durations are exact, but its detected
 rest is an eighth instead of the reference quarter, so measure 6 does not fill
@@ -90,10 +93,33 @@ Digital paired fixture, independent reference MusicXML:
 * every note carries `<technical><string>/<fret>`;
 * OSMD engraves 32 TAB notes (six-line staff) and does not use the PDF canvas.
 
-Duration channel: **unverified**. The browser port uses filled-notehead
-quarters constrained by measure fill; beam/flag ownership is not ported. The
-score is therefore pitch/string/fret recognition, not a complete timed score.
-Practice is always disabled for this path.
+Duration channel: **evidence-based for the controlled paired fixture.**
+The browser port now recovers notehead + stem/beam/flag evidence:
+- paired/chords: 32/32 onsets confident, 32/32 quarter durations, 8/8 measures;
+- techniques: 32/32 onsets, 8/8 measures, but the reference tie markup is still
+  unsupported;
+- notation-only mixed fixture: 40/40 onsets, 16 eighth + 24 quarter, exact
+  (this is notation-only, not a TAB event stream);
+- sparse TAB: 32 string/fret events but 0 durations; pitch-only, no invented
+  quarters.
+
+Practice remains disabled for all guitar vector scores because ties, rests,
+dots and independent voices are not audited. The experimental MusicXML is a
+preview/engraving draft, not a fabricated practice target.
+
+### Two-staff duplication audit
+
+For the paired fixture:
+
+* 116 distinct musical events, 32 chord onsets;
+* 232 `<pitch>` and 232 `<technical>` entries because the same event is emitted
+  on staff 1 (standard notation) and staff 2 (TAB) after a `<backup>`;
+* `parseMusicXml` / `buildNoteCheckpoints` yields **32 practice checkpoints**,
+  not 64;
+* playback validation yields **116 playable events** and **8 measures**, not
+  232;
+* OSMD renders 32 TAB notes/chord onsets; no note is duplicated in playback or
+  practice targets.
 
 Real-world digital-TAB PDFs (unfamiliar, text-layer, multi-page) recover:
 
@@ -109,7 +135,8 @@ supported by the browser path and falls back to the standard image OMR path.
 
 ### Blockers to default
 
-* No ported beam/flag rhythm ownership; durations are placeholders.
+* Ties, rests, dots and independent-voice ownership are not audited; practice
+  remains disabled even where onset durations are evidence-based.
 * Rest/ties are not emitted; multi-voice layouts unresolved.
 * Real-world TAB is multi-page; the current experimental client reads one page
   and rejects multi-page PDFs rather than silently truncating.
@@ -117,6 +144,17 @@ supported by the browser path and falls back to the standard image OMR path.
   parity; real-world layouts need independent references.
 * No Python runtime, PyMuPDF or undocumented weights were added; PDF.js is the
   only new runtime path (already Apache-2.0 via `react-pdf`).
+
+## 3b. Piano rest repair — reviewed, rejected for practice promotion
+
+`3db0b7df18` adds a math-only measure-fill rest reconciliation. It makes the
+beginner fixture 1/1 rest and 8/8 measures and would set practice-ready true.
+It is **not integrated** because the same rule promotes legitimate eighth rests
+with an undetected note, pickup/incomplete measures, a wrong decoded meter and
+a short voice on a multi-voice staff. The negative controls and the exact
+promotion table are in `docs/piano-vector-rest-audit-2026-10-24.md`; the
+candidate stays research-only and the production practice gate remains false
+for the beginner fixture.
 
 ## 4. Flag, fallback and practice gate
 
@@ -146,9 +184,9 @@ persists through save/reload because the metadata is stored with the score.
 | Guitar TAB upload -> 232-pitch standard+TAB XML -> engraving -> save/reopen -> gated modes | PASS | PASS |
 | Scanned guitar fallback -> standard path, no experimental metadata | PASS | PASS |
 | Flag off -> standard path, no experimental gate | PASS | PASS |
-| **total** | **21 / 21** | **21 / 21** |
+| **total** | **24 / 24** | **24 / 24** |
 
-No application console or page errors. The same 21/21 flows also pass against the built `dist` bundle in Chromium and WebKit.
+No application console or page errors. The same 24/24 flows also pass against the built `dist` bundle in Chromium and WebKit.
 
 ## 6. Deployment
 
