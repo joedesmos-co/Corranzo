@@ -390,12 +390,19 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     const [x0, y0, x1, y1] = m.box.map(Math.round)
     for (const [edge, up] of [[x1, true], [x0, false]]) {
       for (let x = Math.max(Math.round(edge - sideTol), 0); x <= Math.min(Math.round(edge + sideTol), width - 1); x++) {
-        const start = up ? y0 : y1
-        let run = 0, gap = 0, yy = start
-        while (yy >= 0 && yy < height) {
-          if (gray[yy * width + x] <= 128) { run++; gap = 0 }
-          else { gap++; if (gap > 6) break }
-          yy += up ? -1 : 1
+        // Start at the bbox edge AND the notehead centre: font bboxes
+        // include ascent padding, so a stem attached to the ink can sit
+        // entirely inside the bbox and be missed from the edge alone.
+        const starts = up ? [y0, (y0 + y1) >> 1, y1] : [y1, (y0 + y1) >> 1, y0]
+        let run = 0
+        for (const start of starts) {
+          let gap = 0, yy = start, rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr++; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          if (rr > run) run = rr
         }
         if (run > best.run) {
           best = {

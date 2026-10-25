@@ -23,6 +23,7 @@ DPI = 150.0
 PX = 72.0 / DPI                         # image px -> points
 NOTE = chr(0xE0A4)                      # SMuFL noteheadBlack
 TS4 = chr(0xE084)                       # SMuFL timeSig4
+NOTE_H = chr(0xE0A2)                    # SMuFL noteheadHalf
 TUNING = [64, 59, 55, 50, 45, 40]
 
 # durations in quarters
@@ -108,7 +109,8 @@ def draw(c):
             for i, (px, dur, notes) in enumerate(onsets):
                 c.setFillGray(0.05)
                 c.setFont('CorranzoMusic', 15.0)
-                c.drawCentredString(x(px), y(ntop + 2 * 16.8 + 9), NOTE)
+                glyph = NOTE_H if dur >= 2 else NOTE
+                c.drawCentredString(x(px), y(ntop + 2 * 16.8 + 9), glyph)
                 stem_x = px + 7
                 c.setLineWidth(1.0)
                 c.setStrokeGray(0.05)

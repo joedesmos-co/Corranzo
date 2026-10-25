@@ -1316,3 +1316,31 @@ by the probe (all 60 events -> quarter, every measure invalid). The text
 run fix is complete; the remaining work is the fixture's stem/beam
 geometry vs the detector, then sixteenth beam levels. No mixed-rhythm
 timing claim until that passes.
+
+### R33 — Stem ownership fixed; mixed rhythm 15/21 complete, 3/4 valid
+ROOT CAUSE of stem:false: font bboxes include ascent padding, so a stem
+attached to the ink can lie entirely inside the bbox. Searching only
+from the bbox edge found no run. The probe now tests the bbox edge AND
+the notehead centre (both directions) and keeps the longest run.
+
+FIXTURE ARTWORK BUG (not detector tuning): half notes were drawn with the
+filled quarter glyph, so two measures could never validate. The generator
+now uses SMuFL noteheadHalf (U+E0A2) for halves.
+
+MIXED FIXTURE (guitar-mixed-rhythm-vector), browser JS:
+  noteheads 21/21, onsets 21, string/fret 60/60, pairing exact
+  confident onsets 0 -> 15/21
+  valid measures 0 -> 3/4
+  complete timed events 2 -> 15/21 (F1 0.714)
+  onsets 17/21, durations 15/21
+  durations: 25 quarter, 20 eighth, 9 half, 6 sixteenth
+
+REMAINING BLOCKER: the four-sixteenth group in measure 3 yields only 6
+sixteenth events; two lack double-beam evidence, so measure 3 sums
+short. Next: inspect the beam-mask components for that group (merged
+beam levels or missing second beam) and the stem run for the inner
+notes. No quarter placeholders are used; unsupported durations remain
+null or invalid-measure flagged.
+
+REGRESSIONS: digital fixtures re-run after the probe change (see final
+report); no production files changed.
