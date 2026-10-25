@@ -7,10 +7,11 @@
  "rhythm_recovered": true,
  "playable": true,
  "onsets": 32,
+ "onsets_confident": 32,
  "measures_complete": 8,
  "measures_total": 8,
- "runtime_ms": 204,
+ "runtime_ms": 219,
  "engraved": true,
- "xml_bytes": 34962,
- "note": "Durations are measure-validated quarters; beam/flag verification is not ported and each note carries an unverified footnote."
+ "xml_bytes": 26591,
+ "note": "Durations recovered from SMuFL noteheads plus stem/beam/flag evidence and measure validation; no placeholder quarters."
 }

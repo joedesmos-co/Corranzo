@@ -1212,3 +1212,54 @@ NOT PORTED: image-only scans (Python research remains 116/116 on its
 reference), beam/flag verification, TAB-only rhythm slashes, rest/tie
 emission, multi-voice matching. These are reported as unsupported rather
 than approximated.
+
+### R30 — Real browser-side rhythm recovered; engraving count audit
+ROOT CAUSE of the browser placeholder quarters: the JS stem probe computed
+a fractional side tolerance; the pixel loop then indexed arrays with
+fractional x, producing `undefined` -> every stem read as absent. The
+earlier simplified beam/flag probe was also unreliable, so the port fell
+back to measure-validated quarters.
+
+FIX:
+- Integer stem-search bounds; bridged 1px run, right=up / left=down.
+- Beam mask: horizontal ink runs >=60px, components 3..25px thick
+  (mirrors the verified Python 5x60 opening).
+- Flags: strip beyond the measured stem width, rows beyond the tip,
+  reject near-full rows; ink threshold 128 (not 200).
+- Durations: notehead glyph + beams/flags; measure validation; no
+  notation counterpart -> null duration (sparse still abstains).
+
+REFERENCE-VERIFIED BROWSER RHYTHM:
+  guitar-standard-chords-vector (mixed values, notation only):
+    40/40 onsets, 16 eighth + 24 quarter, all confident (exact).
+  paired-chords: 116/116 SF, 32/32 onsets, 32/32 durations,
+    32/32 complete timed, 8/8 measures.
+  techniques: 32/32 SF, 32/32 complete timed, 8/8 measures.
+  sparse: 32/32 SF, 0/32 timed (no notation -> no <type>).
+  TOTAL: 180/180 SF, 64/64 complete timed.
+  Browser (headless Chromium): 32/32 confident onsets, 8/8 measures,
+  219 ms including PDF render + OSMD engraving; XML 26,591 bytes.
+
+ENGRAVING COUNT AUDIT (232 / 232 / 32):
+  main's emitGuitarMeasure writes each event on staff 1 (notation) and
+  then staff 2 (TAB) after a <backup>, both with <technical>.
+  232 pitches = 116 events x 2 staff representations.
+  232 technical entries = 2 x 116.
+  32 = chord onsets on the TAB staff (OSMD collapses chord members).
+  No note is lost or attached to a wrong string; the pitch/technical
+  counts double because of the two-staff representation. Distinct
+  musical events remain 116 (32 onsets).
+
+UNFAMILIAR DIGITAL PDFs (JS, page 1 only, no reference):
+  canon-in-d 739 events / 197 onsets; save-me 290/284; gravity 99/99;
+  home-undertale 139/129. Rhythm abstains (TAB-only slashes or
+  multi-voice), matching the Python classification. No accuracy claim.
+
+MULTI-PAGE: the browser path still processes page 1 only. Page order,
+staff identity and tuning across pages are NOT yet handled; these
+unfamiliar results are single-page.
+
+PRACTICE: the experimental flag remains off. The paired/techniques
+fixtures now have verified rhythm, but production eligibility must be
+driven by the integration assessment; the research `playable` flag is
+not a production gate.

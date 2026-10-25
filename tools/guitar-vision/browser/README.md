@@ -29,14 +29,17 @@ MusicXML, and inspect the OSMD engraving.
 | **total** | **180/180** | **64/64** | — |
 
 Browser run (headless Chromium, paired fixture): 116 events, 2 TAB
-staves, 32 onsets, 8/8 measures, **204 ms** including PDF rendering and
-OSMD engraving; XML 34,962 bytes.
+staves, 32/32 confident onsets, 8/8 measures, **219 ms** including PDF
+rendering and OSMD engraving; XML 26,591 bytes.
 
 ## Honesty / limits
 
-- Rhythms are filled-notehead quarters constrained by measure validation.
-  Beam/flag verification is not ported; every such duration carries an
-  "unverified" footnote and the score metadata names the method.
+- Rhythm is recovered from SMuFL noteheads plus stem, beam and flag
+  evidence, validated per measure. On the notation-only mixed-value
+  reference (`guitar-standard-chords-vector`) this classifies 40/40
+  onsets exactly (16 eighths, 24 quarters). The three TAB fixtures are
+  quarter-only, so 64/64 timed events there is not evidence of general
+  tuplet/dotted/voice coverage.
 - If no notation noteheads exist (sparse fixture), durations are genuinely
   unknown: no `<type>`, footnote, `rhythm_recovered=false`.
 - Scanned/image-only PDFs are not ported to the browser (the Python

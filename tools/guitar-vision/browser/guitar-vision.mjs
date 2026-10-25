@@ -304,47 +304,139 @@ function bridgedRun(gray, width, height, x, start, step) {
   }
   return ink
 }
-function runUp(gray, width, height, x, y0) { return bridgedRun(gray, width, height, x, y0, -1) }
-function runDown(gray, width, height, x, y1) { return bridgedRun(gray, width, height, x, y1, 1) }
+export function detectBeams(gray, width, height, thr = 128) {
+  // Beam mask: pixels belonging to horizontal ink runs >= 60px, then
+  // components with 3..25px thickness. Mirrors the verified Python
+  // (5x60 opening + height filter); staff lines are 1-2px and die.
+  const run = new Uint8Array(width * height)
+  for (let y = 0; y < height; y++) {
+    let x = 0
+    const off = y * width
+    while (x < width) {
+      if (gray[off + x] <= thr) {
+        let e = x
+        while (e < width && gray[off + e] <= thr) e++
+        if (e - x >= 60) for (let k = x; k < e; k++) run[off + k] = 1
+        x = e
+      } else x++
+    }
+  }
+  const seen = new Uint8Array(width * height)
+  const mask = new Uint8Array(width * height)
+  const stack = []
+  for (let i = 0; i < run.length; i++) {
+    if (!run[i] || seen[i]) continue
+    stack.length = 0; stack.push(i); seen[i] = 1
+    const pix = []
+    let minY = height, maxY = 0
+    while (stack.length) {
+      const j = stack.pop(); pix.push(j)
+      const y = (j / width) | 0, x = j % width
+      if (y < minY) minY = y
+      if (y > maxY) maxY = y
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy
+        if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue
+        const k = ny * width + nx
+        if (run[k] && !seen[k]) { seen[k] = 1; stack.push(k) }
+      }
+    }
+    const h = maxY - minY + 1
+    if (pix.length >= 60 && h >= 3 && h <= 25) for (const j of pix) mask[j] = 1
+  }
+  return mask
+}
 
-function columnEvidence(col, gray, width, height, minRun, sideTol) {
-  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true }
+export function columnEvidence(col, gray, beamMask, width, height, minRun, sideTol, gapEst) {
+  const ink = y => gray[y * width] <= 128
+  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0] }
   for (const m of col.members) {
     const [x0, y0, x1, y1] = m.box.map(Math.round)
     for (const [edge, up] of [[x1, true], [x0, false]]) {
-      for (let x = Math.max(edge - sideTol, 0); x <= Math.min(edge + sideTol, width - 1); x++) {
-        const run = up ? runUp(gray, width, height, x, y0) : runDown(gray, width, height, x, y1)
-        if (run > best.run) best = { run, stem: run >= minRun, beams: 0, flags: 0, x, tip: up ? y0 - run : y1 + run, up }
+      for (let x = Math.max(Math.round(edge - sideTol), 0); x <= Math.min(Math.round(edge + sideTol), width - 1); x++) {
+        const start = up ? y0 : y1
+        let run = 0, gap = 0, yy = start
+        while (yy >= 0 && yy < height) {
+          if (gray[yy * width + x] <= 128) { run++; gap = 0 }
+          else { gap++; if (gap > 6) break }
+          yy += up ? -1 : 1
+        }
+        if (run > best.run) {
+          best = {
+            run, stem: run >= minRun, beams: 0, flags: 0, x,
+            tip: up ? y0 - run : y1 + run, up,
+            span: up ? [y0 - run, y0] : [y1, y1 + run],
+          }
+        }
       }
     }
   }
   if (!best.stem) return best
-  // beams: horizontal ink groups crossing the stem column near the tip
-  const y0 = Math.max(Math.min(best.tip, best.tip + (best.up ? 0 : 0)) - 4, 0)
-  const y1 = Math.min(Math.max(best.tip, best.tip) + 4, height - 1)
+  // Beams: distinct beam-mask row groups along the full stem column.
   let groups = 0, prev = -99
-  for (let y = y0; y <= y1; y++) {
-    let n = 0
-    for (let x = Math.max(best.x - 6, 0); x <= Math.min(best.x + 6, width - 1); x++) if (gray[y * width + x] <= 200) n++
-    if (n >= 4) { if (y - prev > 3) groups++; prev = y }
+  const yLo = Math.max(Math.min(...best.span) - 4, 0)
+  const yHi = Math.min(Math.max(...best.span) + 4, height - 1)
+  for (let y = yLo; y <= yHi; y++) {
+    let hit = false
+    for (let x = Math.max(best.x - 6, 0); x <= Math.min(best.x + 6, width - 1); x++) {
+      if (beamMask[y * width + x]) { hit = true; break }
+    }
+    if (hit) { if (y - prev > 3) groups++; prev = y }
   }
   best.beams = groups
-  // flags: sparse ink beyond the tip (not a full horizontal line)
-  const fh = 12, fw = 12
-  const fy0 = best.up ? best.tip + 2 : best.tip - 2 - fh
-  const fx0 = best.x + 2
-  let ink = 0
-  for (let y = fy0; y < fy0 + fh; y++) {
+  // Flags: ink beside the stem tip, beyond the measured stem width.
+  // Sample the stem on a clean section near the notehead end; a staff
+  // line crossing one sample would otherwise be measured as the stem.
+  const fw = Math.max(12, Math.round(0.4 * gapEst))
+  const fh = Math.max(12, Math.round(0.3 * gapEst))
+  const runLen = Math.max(best.run, 1)
+  const base = best.up ? Math.max(...best.span) - Math.max(2, runLen / 5 | 0)
+    : Math.min(...best.span) + Math.max(2, runLen / 5 | 0)
+  const widths = []
+  for (const dy of [-6, -3, 0, 3, 6]) {
+    const y = base + dy
     if (y < 0 || y >= height) continue
-    let row = 0
-    for (let x = fx0; x < Math.min(fx0 + fw, width); x++) if (gray[y * width + x] <= 200) row++
-    if (row > 0 && row < 0.8 * fw) ink += row
+    let w = 1
+    if (best.up) { while (best.x + w < width && ink(y * width + best.x + w)) w++ }
+    else { while (best.x - w >= 0 && ink(y * width + best.x - w)) w++ }
+    if (ink(y * width + best.x)) widths.push(w)
   }
-  best.flags = ink >= 5 ? 1 : 0
+  let wstem = widths.length ? Math.min(...widths) : 1
+  wstem = Math.min(wstem, Math.max(2, Math.round(0.2 * gapEst)))
+  const fx0 = best.x + wstem + 1
+  const fx1 = Math.min(fx0 + fw, width)
+  const fy0 = best.up ? best.tip + 2 : best.tip - 2 - fh
+  const fy1 = best.up ? best.tip + 2 + fh : best.tip - 2
+  let inkCount = 0
+  for (let y = Math.max(fy0, 0); y < Math.min(fy1, height); y++) {
+    let row = 0
+    for (let x = fx0; x < fx1; x++) if (gray[y * width + x] <= 128) row++
+    if (row > 0 && row < 0.8 * (fx1 - fx0)) inkCount += row
+  }
+  best.flags = inkCount >= 5 ? 1 : 0
   return best
 }
 
-function attachRhythm(events, items, staves, gray, width, height) {
+export function durationFromEvidence(col, ev) {
+  const bases = [...new Set(col.members.map(m => m.base))].sort((a, b) => b - a)
+  const base = bases[0]
+  const ambiguous = bases.length > 1
+  const beams = ev.beams || 0
+  const flags = ev.flags || 0
+  let dur, conf
+  if (base >= 4) { dur = 4; conf = true }
+  else if (base >= 2) { dur = 2; conf = true }
+  else {
+    const steps = Math.min(Math.max(beams, flags), 3)
+    const conflict = beams > 0 && flags > 0
+    dur = 1 / (2 ** steps)
+    conf = !!ev.stem && !conflict
+  }
+  return { duration: dur, beams, flags, stem: !!ev.stem,
+    confident: conf && !ambiguous, ambiguous, beam_flag_conflict: beams > 0 && flags > 0 }
+}
+
+function attachRhythm(events, items, staves, gray, width, height, beamMask) {
   const [ts, tsSource] = timeSignature(items)
   const beats = ts[0] * 4 / ts[1]
   const noteheads = notationNoteheads(items)
@@ -387,21 +479,20 @@ function attachRhythm(events, items, staves, gray, width, height) {
     for (let i = 0; i < os_.length; i++) {
       const o = os_[i]
       const c = exact ? cols[i] : null
-      // Browser port: a filled SMuFL notehead is a quarter unless beams or
-      // flags prove otherwise. Beam/flag detection is NOT ported yet, so
-      // the written value is constrained only by measure validation and is
-      // flagged unverified in the MusicXML. No notation counterpart means
-      // the duration is genuinely unknown (null), not a default quarter.
+      // Written value from the SMuFL notehead plus stem/beam/flag
+      // evidence, exactly as in the verified research probe. With no
+      // notation counterpart the duration is genuinely unknown (null).
       let dur = null, beams = 0, flags = 0, stem = false, conf = false
       if (c) {
-        dur = 1.0
         const s = staves[si]
         const gaps = []
         if (i) gaps.push(c.cx - cols[i - 1].cx)
         if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
         const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [s.gap]))))
-        const ev = columnEvidence(c, gray, width, height, 1.6 * s.gap, side)
-        stem = ev.stem
+        const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap)
+        const d = durationFromEvidence(c, ev)
+        dur = d.duration; beams = d.beams; flags = d.flags
+        stem = d.stem; conf = d.confident
       }
       raw.set(`${si}|${o.measure}|${o.x.toFixed(2)}`, { duration: dur, beams, flags, stem, confident: conf })
       for (const e of o.events) e.rhythm = raw.get(`${si}|${o.measure}|${o.x.toFixed(2)}`)
@@ -429,7 +520,7 @@ function attachRhythm(events, items, staves, gray, width, height) {
       time_signature: `${ts[0]}/${ts[1]}`, time_signature_source: tsSource,
       noteheads: noteheads.length, notehead_source: source,
       onsets: onsets.length, onsets_confident: confident,
-      duration_source: 'filled-notehead+measure-validation (beam/flag detection not ported)',
+      duration_source: 'smufl-notehead+stem/beam/flag evidence',
       measures_complete: valid, measures_total: byMeasure.size,
       staff_pairing: pairing,
       voice_ownership: pairing.every(p => p.exact) ? 'single-voice' : 'unresolved-multi-voice',
@@ -520,6 +611,39 @@ export function toMusicXML(events, { divisions = 480, timeSig = [4, 4], rhythmSo
   return rows.join('\n')
 }
 
+// ------------------------------------------------------- notation rhythm
+// Standalone rhythm analysis for notation-only pages (no TAB digits).
+// Used to validate beam/flag classification against MusicXML references.
+export async function analyzeNotationRhythm(data, { dpi = 150, pageNo = 1, createCanvas } = {}) {
+  const doc = await loadPdf(data)
+  const page = await extractPage(doc, pageNo, dpi, createCanvas)
+  const beamMask = detectBeams(page.gray, page.width, page.height)
+  let nh = notationNoteheads(page.items)
+  if (!nh.length) return { rows: [], noteheads: 0, systems: 0 }
+  const h = Median(nh.map(n => n.h))
+  nh = [...nh].sort((a, b) => a.cy - b.cy)
+  const systems = [[nh[0]]]
+  for (const n of nh.slice(1)) {
+    if (n.cy - systems[systems.length - 1][systems[systems.length - 1].length - 1].cy > 6 * h) systems.push([n])
+    else systems[systems.length - 1].push(n)
+  }
+  const rows = []
+  systems.forEach((sys, si) => {
+    const cols = noteheadColumns(sys)
+    const gap = h / 2
+    cols.forEach((c, i) => {
+      const gaps = []
+      if (i) gaps.push(c.cx - cols[i - 1].cx)
+      if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
+      const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [gap]))))
+      const ev = columnEvidence(c, page.gray, beamMask, page.width, page.height, 1.6 * gap, side, gap)
+      const d = durationFromEvidence(c, ev)
+      rows.push({ system: si, x: +c.cx.toFixed(1), ...d })
+    })
+  })
+  return { rows, noteheads: nh.length, systems: systems.length }
+}
+
 // ------------------------------------------------------------------- main
 export async function recognizePdf(data, { dpi = 150, pageNo = 1, createCanvas } = {}) {
   const t0 = Date.now()
@@ -537,14 +661,15 @@ export async function recognizePdf(data, { dpi = 150, pageNo = 1, createCanvas }
   const barlines = {}
   for (let i = 0; i < staves.length; i++) barlines[i] = staffBarlines(page.gray, page.width, staves[i], otsuThr)
   const events = assignEvents(page.items, staves, barlines)
-  const rhythm = attachRhythm(events, page.items, staves, page.gray, page.width, page.height)
+  const beamMask = detectBeams(page.gray, page.width, page.height)
+  const rhythm = attachRhythm(events, page.items, staves, page.gray, page.width, page.height, beamMask)
   const [ts] = timeSignature(page.items)
   const recovered = rhythm.stats.onsets > 0 &&
     rhythm.stats.staff_pairing.every(p => p.exact) &&
     rhythm.stats.measures_total > 0 &&
     rhythm.stats.measures_complete === rhythm.stats.measures_total
   const xml = toMusicXML(events, { timeSig: ts,
-    rhythmSource: recovered ? 'smufl-notehead+measure-validation (browser port)' : 'unrecovered-placeholder' })
+    rhythmSource: recovered ? 'smufl-notehead+stem/beam/flag' : 'unrecovered-placeholder' })
   return {
     events, xml, staves, barlines, items: page.items,
     summary: {

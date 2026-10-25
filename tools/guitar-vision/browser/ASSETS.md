@@ -46,6 +46,5 @@ OSMD, and writes a screenshot to `/tmp/proof/browser-evidence.png`.
   remains; 116/116 on its reference scan).
 - TAB-only beamed rhythm slashes: **not supported** (no independent rhythm
   reference established).
-- Beam/flag verification: **not ported**; the browser uses filled-notehead
-  quarters constrained by measure validation, and marks every such note
-  unverified in the MusicXML footnote and score metadata.
+- Beam/flag verification: **ported** and used for durations; the mixed-
+  value notation reference classifies 40/40 onsets (16 eighths).
