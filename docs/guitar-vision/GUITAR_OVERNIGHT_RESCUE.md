@@ -1263,3 +1263,28 @@ PRACTICE: the experimental flag remains off. The paired/techniques
 fixtures now have verified rhythm, but production eligibility must be
 driven by the integration assessment; the research `playable` flag is
 not a production gate.
+
+### R31 — Mixed-rhythm paired TAB benchmark (reference-backed)
+Created tools/guitar-vision/proof-mixed-rhythm-fixture.py and
+benchmarks/omr-fixtures/guitar-mixed-rhythm-vector/ (PDF + MusicXML):
+4/4, 4 measures, chords, quarter/eighth/sixteenth notes, beamed groups,
+SMuFL noteheads/time signature, text TAB digits. Reference and PDF come
+from the same event model.
+
+RESULT (browser JS pipeline, page 1):
+  string/fret 60/60, P 1.00 R 1.00; 4/4 measures exact.
+  rhythm: 21 predicted onsets, 21 reference onsets, but only 7 onset
+  positions match; complete events 1/21; valid measures 0/4.
+
+EXACT BLOCKER: only 18/21 notation noteheads are extracted. The three
+sixteenth-note glyphs in measure 3 are drawn ~33px apart and pdfjs
+merges adjacent identical SMuFL glyphs into one text item; the JS takes
+the first character of each item, losing the rest. With 10/10 columns on
+system 1 but 8/11 on system 2, the exact-pairing gate refuses and the
+measure validation cannot recover timing.
+
+NEXT: (a) split merged SMuFL text runs into one notehead per glyph
+(expose character offsets), or space the fixture's sixteenths further;
+(b) then re-test beam levels for sixteenths and the dotted/tie/rest
+extensions. String/fret evidence on the mixed fixture is already exact,
+so the attachment problem is isolated to rhythm-column extraction.
