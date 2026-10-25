@@ -131,6 +131,57 @@ export function dominantDisagreement(frame, expectedMidis = [], options = {}) {
   return Math.round(dominant)
 }
 
+/**
+ * Semitone-leak refusal using time-frequency RESOLUTION evidence.
+ *
+ * A played note's energy leaks into the semitone above/below in a short
+ * analysis window; a longer window narrows the main lobe. The detection
+ * layer measures the expected pitch and the played (monophonic) pitch in
+ * the same long window (frame.resolutionEvidence); when the played pitch
+ * is a semitone away and either
+ *   - the expected pitch falls below the detection ratio at resolution, or
+ *   - the played pitch is materially stronger (>= factor x),
+ * the expectation is spectral leakage, not a played note.
+ *
+ * True notes are untouched: the evidence exists only when the monophonic
+ * pitch is a semitone from the expectation, and a real note's own ratio
+ * stays high (measured: 3.0-5.8 vs neighbours 1.2-2.4 on real guitar).
+ *
+ * @returns {number|null} the played pitch to report as unexpected
+ */
+export function semitoneLeakFromResolution(frame, expectedMidis = [], options = {}) {
+  if (!Array.isArray(expectedMidis) || expectedMidis.length !== 1) {
+    return null
+  }
+  const evidence = frame?.resolutionEvidence
+  if (!evidence || !Number.isFinite(evidence.expectedRatio)) {
+    return null
+  }
+  if (evidence.expectedMidi !== expectedMidis[0]) {
+    return null
+  }
+  const floor = Number.isFinite(options.resolutionLeakFloor) ? options.resolutionLeakFloor : 1.35
+  const factor = Number.isFinite(options.resolutionLeakFactor) ? options.resolutionLeakFactor : 1.8
+  // The expectation must be UNSUPPORTED at resolution (below the detector
+  // floor) AND a semitone neighbour must be materially stronger. A real
+  // note keeps a high ratio; the played note's leakage does not.
+  if (evidence.expectedRatio >= floor) {
+    return null
+  }
+  const neighbors = Array.isArray(evidence.neighbors) ? evidence.neighbors : []
+  const strongest = neighbors.reduce(
+    (best, entry) => (Number.isFinite(entry.ratio) && entry.ratio > (best?.ratio ?? 0) ? entry : best),
+    null,
+  )
+  if (!strongest || Math.abs(strongest.midi - evidence.expectedMidi) !== 1) {
+    return null
+  }
+  if (strongest.ratio < evidence.expectedRatio * factor) {
+    return null
+  }
+  return strongest.midi
+}
+
 function pitchClassCents(midiFloat, midi) {
   const delta = (((midiFloat - midi) % 12) + 12) % 12
   return Math.min(delta, 12 - delta) * 100

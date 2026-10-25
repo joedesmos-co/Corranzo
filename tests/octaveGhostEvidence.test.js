@@ -3,7 +3,7 @@
  * decision). Pure, no audio APIs.
  */
 import { describe, expect, it } from 'vitest'
-import { octaveGhostFromHalfPartial } from '../src/features/microphone-input/v3/octaveGhostEvidence.js'
+import { octaveGhostFromHalfPartial, semitoneLeakFromResolution } from '../src/features/microphone-input/v3/octaveGhostEvidence.js'
 
 function frame({ dominant, midi = 67, ratio = 0.18, fundamental = 0.03, notes = null }) {
   return {
@@ -13,6 +13,38 @@ function frame({ dominant, midi = 67, ratio = 0.18, fundamental = 0.03, notes = 
     ],
   }
 }
+
+describe('semitoneLeakFromResolution', () => {
+  const frame = (evidence) => ({ resolutionEvidence: evidence })
+  const evidence = (overrides = {}) => ({
+    expectedMidi: 56,
+    expectedRatio: 1.19,
+    neighbors: [
+      { midi: 55, ratio: 3.06 },
+      { midi: 57, ratio: 1.2 },
+    ],
+    ...overrides,
+  })
+
+  it('refuses an unsupported expectation that a semitone neighbour dominates', () => {
+    expect(semitoneLeakFromResolution(frame(evidence()), [56])).toBe(55)
+  })
+
+  it('keeps a real note whose own ratio clears the floor', () => {
+    expect(semitoneLeakFromResolution(frame(evidence({ expectedRatio: 3.06 })), [56])).toBe(null)
+  })
+
+  it('keeps an unsupported expectation when no neighbour is materially stronger', () => {
+    expect(semitoneLeakFromResolution(frame(evidence({ neighbors: [{ midi: 55, ratio: 1.3 }] })), [56])).toBe(null)
+  })
+
+  it('never fires without evidence, without a semitone neighbour, or for chords', () => {
+    expect(semitoneLeakFromResolution({}, [56])).toBe(null)
+    expect(semitoneLeakFromResolution(frame(evidence({ neighbors: [{ midi: 44, ratio: 9 }] })), [56])).toBe(null)
+    expect(semitoneLeakFromResolution(frame(evidence()), [56, 60])).toBe(null)
+    expect(semitoneLeakFromResolution(frame(evidence({ expectedMidi: 55 })), [56])).toBe(null)
+  })
+})
 
 describe('octaveGhostFromHalfPartial', () => {
   it('reports the played pitch when the lower octave\u2019s 3rd partial is strong', () => {

@@ -1,4 +1,4 @@
-import { dominantDisagreement, octaveGhostFromHalfPartial } from './octaveGhostEvidence.js'
+import { dominantDisagreement, octaveGhostFromHalfPartial, semitoneLeakFromResolution } from './octaveGhostEvidence.js'
 import {
   ATTACK_PHASE,
   RECOGNITION_OUTCOME,
@@ -163,6 +163,10 @@ function unexpectedMidisFromFrame(frame, expected, options) {
   const disagreement = dominantDisagreement(frame, expected, options)
   if (disagreement != null) {
     unexpected.push(disagreement)
+  }
+  const semitoneLeak = semitoneLeakFromResolution(frame, expected, options)
+  if (semitoneLeak != null) {
+    unexpected.push(semitoneLeak)
   }
   const octaveGhost = octaveGhostFromHalfPartial(frame, expected, options)
   if (octaveGhost != null) {
