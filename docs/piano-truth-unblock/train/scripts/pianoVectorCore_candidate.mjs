@@ -86,6 +86,8 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
   const vlines = []
   const beams = []
   const dots = []
+  const accPaths = []
+  const curves = []
   const timeGlyphX = []
   let curvePaths = 0
   for (let i = 0; i < ops.fnArray.length; i++) {
@@ -106,11 +108,30 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         // of silently serializing re-attacked notes.
         if (pops.includes(2) && c.length >= 8) {
           const xs = [], ys = []
-          for (let k = 0; k + 1 < c.length; k += 2) {
-            const [px, py] = pt(c[k], c[k + 1]); xs.push(px); ys.push(py)
+          let ci = 0, start = null, last = null
+          for (const op of pops) {
+            if (op === 0) {
+              const p = pt(c[ci], c[ci + 1]); ci += 2
+              if (!start) start = p
+              last = p; xs.push(p[0]); ys.push(p[1])
+            } else if (op === 1) {
+              const p = pt(c[ci], c[ci + 1]); ci += 2
+              last = p; xs.push(p[0]); ys.push(p[1])
+            } else if (op === 2) {
+              for (let k = 0; k < 3; k++) {
+                const p = pt(c[ci], c[ci + 1]); ci += 2
+                last = p; xs.push(p[0]); ys.push(p[1])
+              }
+            }
           }
-          if (Math.max(...xs) - Math.min(...xs) > 6 ||
-              Math.max(...ys) - Math.min(...ys) > 6) curvePaths += 1
+          const w = xs.length ? Math.max(...xs) - Math.min(...xs) : 0
+          const h = ys.length ? Math.max(...ys) - Math.min(...ys) : 0
+          if (start && last && (w > 6 || h > 6)) {
+            curvePaths += 1
+            curves.push({ x0: +(start[0]).toFixed(1), y0: +(H - start[1]).toFixed(1),
+              x1: +(last[0]).toFixed(1), y1: +(H - last[1]).toFixed(1),
+              w: +w.toFixed(1), h: +h.toFixed(1) })
+          }
         }
         const isLine = pops.length === 2 && pops[0] === 0 && pops[1] === 1
         if (isLine && c.length >= 4) {
@@ -126,6 +147,50 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           } else if (w >= 4 && w <= 12 && h >= 3 && h <= 8) {
             beams.push({ x0: +Math.min(x0, x1).toFixed(1), x1: +Math.max(x0, x1).toFixed(1),
                          y: +((H - y0) + (H - y1)) / 2 })
+          }
+        } else if (paint === 22 || paint === 23) {
+          // Path-drawn accidental (outlined font): sharp/natural/flat.
+          const xs = [], ys = []
+          let ci = 0, prev = null
+          const segs = []
+          for (const op of pops) {
+            if (op === 0) { prev = [c[ci], c[ci + 1]]; ci += 2 }
+            else if (op === 1) {
+              const p = [c[ci], c[ci + 1]]; ci += 2
+              if (prev) segs.push([prev, p])
+              prev = p
+            } else if (op === 2) {
+              for (let k = 0; k < 3; k++) {
+                const [px, py] = pt(c[ci], c[ci + 1]); xs.push(px); ys.push(py); ci += 2
+              }
+              prev = [c[ci - 2], c[ci - 1]]
+            }
+          }
+          for (const [a, b] of segs) {
+            const p0 = pt(a[0], a[1]); const p1 = pt(b[0], b[1])
+            xs.push(p0[0], p1[0]); ys.push(p0[1], p1[1])
+          }
+          if (xs.length && ys.length) {
+            const w = Math.max(...xs) - Math.min(...xs)
+            const h = Math.max(...ys) - Math.min(...ys)
+            if (w <= 5 && h <= 5 && pops.includes(2)) {
+              dots.push({ x: +((Math.min(...xs) + Math.max(...xs)) / 2).toFixed(1),
+                          y: +(H - (Math.min(...ys) + Math.max(...ys)) / 2).toFixed(1) })
+            } else if (w >= 5 && w <= 14 && h >= 7 && h <= 18) {
+              let vertical = 0, slanted = 0, horizontal = 0, curves = 0
+              for (const [a, b] of segs) {
+                const dx = Math.abs(b[0] - a[0]), dy = Math.abs(b[1] - a[1])
+                if (dx <= 0.25 * w) vertical += 1
+                else if (dy <= 0.02 * h) horizontal += 1
+                else slanted += 1
+              }
+              if (pops.includes(2)) curves += 1
+              const code = curves ? -1 : (slanted > 0 ? 1 : (horizontal > 0 ? 0 : null))
+              if (code != null) {
+                accPaths.push({ code, x: (Math.min(...xs) + Math.max(...xs)) / 2,
+                  y: H - (Math.min(...ys) + Math.max(...ys)) / 2, w, h })
+              }
+            }
           }
         } else if ((paint === 22 || paint === 23 ||
                     (Array.isArray(args[0]) && args[0][0] === 13 && args[0].includes(15))) &&
@@ -274,6 +339,11 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
           Math.abs(a.cy - hd.cy) <= 0.6 * gap)
         if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
+        if (hd.acc == null) {
+          const pa = accPaths.find((a) => a.x <= hd.x && a.x >= hd.x - 2.5 * gap &&
+            Math.abs(a.y - hd.cy) <= 0.8 * gap)
+          if (pa) hd.acc = pa.code
+        }
       }
       const clusters = []
       for (const hd of heads) {
@@ -388,6 +458,8 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
     key_source: key === 0 ? 'no-key-glyph' : key == null ? 'unresolved' : 'glyph-sequence',
     systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
+    gap: systems[0]?.gap ?? 8,
+    curves: curves,
     meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
     route: notes.length ? 'vector' : 'image',
     schema: 'corranzo-notation-ir/1',
@@ -396,6 +468,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
       'Articulations/dynamics are not yet transcribed.'] }
   reconcileMeasureRests(ir)
+  classifyCurves(ir)
   return ir
 }
 
@@ -412,6 +485,45 @@ function diatonic(midi) {
   if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
   for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
   return 0
+}
+
+
+/**
+ * Minimum general multi-page extraction: each page is recognized with the
+ * same single-page core, events keep their page identity, measures are
+ * offset in reading order, and incomplete pages/cross-page continuations are
+ * explicit. This is not a claim that cross-page ties are solved.
+ */
+export async function extractPianoVectorPages(pdfjsLib, data, { maxPages = 32 } = {}) {
+  const source = data instanceof Uint8Array ? data : new Uint8Array(data)
+  const doc = await pdfjsLib.getDocument({ data: new Uint8Array(source), useSystemFonts: true }).promise
+  const pageCount = Math.min(doc.numPages, maxPages)
+  await doc.destroy()
+  const pages = []
+  const notes = [], rests = [], unresolved = []
+  const clefs = {}
+  let offset = 0
+  for (let p = 1; p <= pageCount; p++) {
+    const ir = await extractFromData(pdfjsLib, new Uint8Array(source), p)
+    const complete = !!ir?.notes?.length
+    pages.push({ page: p, route: ir?.route ?? 'image', notes: ir?.notes?.length ?? 0,
+      rests: ir?.rests?.length ?? 0, meter: ir?.meter ?? null, complete })
+    if (!complete) continue
+    for (const e of [...ir.notes, ...ir.rests]) { e.measure += offset; e.page = p }
+    notes.push(...ir.notes); rests.push(...(ir.rests ?? []))
+    Object.assign(clefs, ir.clefs ?? {})
+    unresolved.push(...(ir.unresolved ?? []))
+    const maxMeasure = Math.max(-1, ...ir.notes.map((n) => n.measure))
+    offset = maxMeasure + 1
+  }
+  const incompletePages = pages.filter((p) => !p.complete).length
+  return { route: notes.length ? 'vector' : 'image', schema: 'corranzo-notation-ir/1',
+    pageCount, pages, multiPage: pageCount > 1, notes, rests, unresolved,
+    meter: pages[0]?.meter ?? null, key: null, systems: [], clefs,
+    incompletePages,
+    crossPageContinuation: pageCount > 1 ? 'unresolved' : 'not-applicable',
+    credits: ['Multi-page extraction preserves page identity and measure order.',
+      'Cross-page ties/slurs are not yet continued; practice is blocked when pages are incomplete.'] }
 }
 
 export function toMusicXML(ir, divisions = 480) {
@@ -456,7 +568,15 @@ export function toMusicXML(ir, divisions = 480) {
         }
         out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
         for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
+        if (e.tie_start) out.push('<tie type="start"/>')
+        if (e.tie_end) out.push('<tie type="stop"/>')
         if (e.tuplet) out.push(`<time-modification><actual-notes>${e.tuplet[0]}</actual-notes><normal-notes>${e.tuplet[1]}</normal-notes></time-modification>`)
+        const nots = []
+        if (e.tie_start) nots.push('<tied type="start"/>')
+        if (e.tie_end) nots.push('<tied type="stop"/>')
+        if (e.slur_start) nots.push('<slur type="start" number="1"/>')
+        if (e.slur_end) nots.push('<slur type="stop" number="1"/>')
+        if (nots.length) out.push(`<notations>${nots.join('')}</notations>`)
         out.push(`<voice>${st + 1}</voice><staff>${st + 1}</staff></note>`)
       }
     }
@@ -467,6 +587,59 @@ export function toMusicXML(ir, divisions = 480) {
 }
 
 
+
+
+/**
+ * Classify curved paths as ties or slurs using endpoint-to-notehead
+ * proximity and pitch continuity. Ties require equal MIDI pitch and a
+ * non-decreasing measure; slurs require two different pitches. Curves whose
+ * endpoints cannot be paired are left ambiguous and keep the practice gate
+ * closed. No curve is merged into a duration without equal-pitch evidence.
+ */
+export function classifyCurves(ir) {
+  const gap = ir.gap || 8
+  const candidates = (x, y) => ir.notes.filter((n) =>
+    Math.abs(n.x - x) <= 2.0 * gap && Math.abs(n.y - y) <= 2.5 * gap)
+  let ties = 0, slurs = 0, ambiguous = 0
+  for (const c of ir.curves ?? []) {
+    const ca = candidates(c.x0, c.y0)
+    const cb = candidates(c.x1, c.y1)
+    if (!ca.length || !cb.length) {
+      c.kind = 'ambiguous'; ambiguous += 1; continue
+    }
+    // Prefer an equal-pitch, forward-measure pair (tie). Otherwise the
+    // closest pair is a slur; unrelated endpoints stay ambiguous.
+    let tiePair = null
+    for (const a of ca) for (const b of cb) {
+      if (a === b || a.midi !== b.midi || a.measure > b.measure) continue
+      const d = Math.abs(a.x - c.x0) + Math.abs(b.x - c.x1) +
+        0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
+      if (!tiePair || d < tiePair.d) tiePair = { d, a, b }
+    }
+    if (tiePair) {
+      c.kind = 'tie'; ties += 1
+      tiePair.a.tie_start = true; tiePair.b.tie_end = true
+      tiePair.a.tie_to = tiePair.b.x; tiePair.b.tie_from = tiePair.a.x
+      continue
+    }
+    let best = null
+    for (const a of ca) for (const b of cb) {
+      if (a === b) continue
+      const d = Math.abs(a.x - c.x0) + Math.abs(b.x - c.x1) +
+        0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
+      if (!best || d < best.d) best = { d, a, b }
+    }
+    if (best) {
+      c.kind = 'slur'; slurs += 1
+      best.a.slur_start = true; best.b.slur_end = true
+    } else {
+      c.kind = 'ambiguous'; ambiguous += 1
+    }
+  }
+  ir.tieCount = ties
+  ir.slurCount = slurs
+  ir.ambiguousCurves = ambiguous
+}
 
 const REST_UPGRADE = {
   eighth: ['quarter', 'half', 'whole'],
@@ -554,7 +727,11 @@ export function assessPianoVectorIr(ir) {
   if (ir?.key == null) issues.push('key-signature-unknown')
   if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
   if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
-  if (ir?.curveCount > 0) issues.push('ties-or-slurs-not-transcribed')
+  if ((ir?.incompletePages ?? 0) > 0) issues.push('incomplete-pages')
+  if (ir?.crossPageContinuation === 'unresolved' && (ir?.pageCount ?? 1) > 1) issues.push('cross-page-continuation-unresolved')
+  const resolvedCurves = (ir?.tieCount ?? 0) + (ir?.slurCount ?? 0)
+  if ((ir?.ambiguousCurves ?? 0) > 0 ||
+      (ir?.curveCount ?? 0) > resolvedCurves) issues.push('ties-or-slurs-not-transcribed')
 
   const beats = measureBeatCount(ir?.meter)
   const badMeasures = []
@@ -584,6 +761,9 @@ export function assessPianoVectorIr(ir) {
     key: ir?.key ?? null,
     meter: ir?.meter ?? null,
     curveCount: ir?.curveCount ?? 0,
+    tieCount: ir?.tieCount ?? 0,
+    slurCount: ir?.slurCount ?? 0,
+    ambiguousCurves: ir?.ambiguousCurves ?? 0,
     unresolvedNotes: ir?.unresolvedNotes ?? 0,
     unresolvedRests: ir?.unresolvedRests ?? 0,
     badMeasures,
@@ -598,9 +778,11 @@ export function assessPianoVectorIr(ir) {
         case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
         case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
         case 'unresolved-rests': return 'Some rests could not be resolved.'
-        case 'ties-or-slurs-not-transcribed': return 'Ties/slurs are not transcribed; repeated attacks may be wrong.'
+        case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
+        case 'incomplete-pages': return 'One or more pages could not be read; the score is incomplete.'
+        case 'cross-page-continuation-unresolved': return 'Cross-page ties/slurs cannot yet be continued safely.'
         default: return issue
       }
     }),

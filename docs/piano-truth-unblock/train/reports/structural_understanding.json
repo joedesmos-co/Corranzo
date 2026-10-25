@@ -1,0 +1,181 @@
+{
+ "per_fixture": {
+  "piano-beginner-single-vector": {
+   "notes_tp": 32,
+   "notes_fp": 0,
+   "notes_fn": 0,
+   "notes_truth": 32,
+   "notes_pred": 32,
+   "notes_precision": 1.0,
+   "notes_recall": 1.0,
+   "rests_tp": 1,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 1,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  },
+  "piano-rhythm-tuplets-vector": {
+   "notes_tp": 44,
+   "notes_fp": 19,
+   "notes_fn": 19,
+   "notes_truth": 63,
+   "notes_pred": 63,
+   "notes_precision": 0.6984,
+   "notes_recall": 0.6984,
+   "rests_tp": 5,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 5,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  },
+  "piano-grand-voices-vector": {
+   "notes_tp": 88,
+   "notes_fp": 0,
+   "notes_fn": 0,
+   "notes_truth": 88,
+   "notes_pred": 88,
+   "notes_precision": 1.0,
+   "notes_recall": 1.0,
+   "rests_tp": 0,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 0,
+   "rests_precision": 0.0,
+   "rests_recall": 0.0
+  },
+  "piano-dense-advanced-vector": {
+   "notes_tp": 185,
+   "notes_fp": 41,
+   "notes_fn": 79,
+   "notes_truth": 264,
+   "notes_pred": 226,
+   "notes_precision": 0.8186,
+   "notes_recall": 0.7008,
+   "rests_tp": 0,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 0,
+   "rests_precision": 0.0,
+   "rests_recall": 0.0
+  }
+ },
+ "total": {
+  "notes_tp": 349,
+  "notes_fp": 60,
+  "notes_fn": 98,
+  "notes_truth": 447,
+  "rests_tp": 6,
+  "rests_fp": 0,
+  "rests_fn": 0,
+  "rests_truth": 6,
+  "notes_precision": 0.8533,
+  "notes_recall": 0.7808,
+  "rests_precision": 1.0,
+  "rests_recall": 1.0
+ },
+ "gate": {
+  "piano-beginner-single-vector": {
+   "practiceReady": true,
+   "issues": [],
+   "badMeasures": []
+  },
+  "piano-rhythm-tuplets-vector": {
+   "practiceReady": false,
+   "issues": [
+    "measure-duration-invalid"
+   ],
+   "badMeasures": [
+    "2:0",
+    "3:0",
+    "6:0"
+   ]
+  },
+  "piano-grand-voices-vector": {
+   "practiceReady": true,
+   "issues": [],
+   "badMeasures": [],
+   "ties": 1,
+   "slurs": 1
+  },
+  "piano-dense-advanced-vector": {
+   "practiceReady": false,
+   "issues": [
+    "unresolved-noteheads",
+    "measure-duration-invalid"
+   ],
+   "badMeasures": [
+    "2:0",
+    "6:0",
+    "7:0",
+    "7:1"
+   ]
+  }
+ },
+ "practice_ready_scores": [
+  "piano-beginner-single-vector",
+  "piano-grand-voices-vector"
+ ],
+ "held_out": {
+  "Ao no Sumika (Piano).pdf": {
+   "pages": 4,
+   "page_notes": [
+    33,
+    0,
+    60,
+    24
+   ],
+   "incompletePages": 1,
+   "total_notes": 117,
+   "practiceReady": false,
+   "reason": "page 2 unreadable, time/key unknown, cross-page continuation unresolved"
+  },
+  "demo-minuet-in-g.pdf": {
+   "smufl_items": 0,
+   "route": "image"
+  },
+  "piano-brahms-lullaby.pdf": {
+   "smufl_items": 0,
+   "route": "image"
+  }
+ },
+ "browser": {
+  "beginner": {
+   "version": "5.4.296",
+   "notes": 32,
+   "rests": 1,
+   "meter": {
+    "beats": 4,
+    "unit": 4
+   },
+   "key": 0,
+   "restReconciled": 1,
+   "gate": {
+    "practiceReady": true,
+    "issues": [],
+    "badMeasures": []
+   },
+   "xmlLength": 7237,
+   "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
+  },
+  "grand": {
+   "version": "5.4.296",
+   "notes": 88,
+   "rests": 0,
+   "meter": {
+    "beats": 4,
+    "unit": 4
+   },
+   "key": 0,
+   "restReconciled": 0,
+   "gate": {
+    "practiceReady": true,
+    "issues": [],
+    "badMeasures": []
+   },
+   "xmlLength": 16319,
+   "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
+  }
+ }
+}

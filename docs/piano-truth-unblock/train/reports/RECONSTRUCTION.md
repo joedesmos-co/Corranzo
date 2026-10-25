@@ -2345,3 +2345,60 @@ not.
   Next: curve classification (tie vs slur) and tie merging, multi-page
   vector support, then image-route accuracy. No merge/deploy; sealed TEST
   untouched.
+
+
+## Structural music understanding: ties, slurs, accidentals, multi-page (this session)
+
+  Phase 1 — curves: grand-voices has one tie (A4 m3->m4) and one slur
+  (F4 m1->G4 m2); Ao has 32 curved paths. Added endpoint extraction and a
+  classifier using x/y endpoint proximity (2.0 x gap, 2.5 y gap) plus
+  pitch continuity: equal MIDI + non-decreasing measure => tie; otherwise
+  the closest pair => slur; no pair => ambiguous (gate stays closed).
+  Negative controls cover tie, repeated notes without a curve, slur,
+  ambiguous, chord partial tie, equal-pitch slur-as-tie, cross-measure tie,
+  and multi-voice choice (scripts/piano_curve_classification.test.mjs).
+
+  Phase 2 — MusicXML: ties serialize as <tie type=start/stop/> plus
+  <tied>; slurs as <slur type=start/stop number=1/>. Tied continuations are
+  not new attacks in playback semantics; no duration is merged without
+  equal-pitch evidence. Beginner/grand MusicXML parse with music21; grand
+  tie start is A4 in measure 3, stop in measure 4.
+
+  Phase 3 — voices: grand truth uses one voice per staff (staff1/voice1 56,
+  staff2/voice2 32); output voice=staff+1 matches. Same-staff polyphony is
+  not solved and remains staff-only.
+
+  Phase 4 — real-world: added path-drawn accidental detection (filled
+  sharp/natural/flat outlines, e.g. 8.8x11.6 two-rectangle+slant shape),
+  which fixed the 12 semitone-low grand events and +31 dense events.
+  Ao no Sumika now extracts pages 1/3/4 (33/60/24 notes) with page 2
+  incomplete; no reference accuracy is claimed. demo-minuet and Brahms
+  remain image fallback (0 SMuFL glyphs).
+
+  Phase 5 — multi-page groundwork: extractPianoVectorPages preserves page
+  identity, staff indices and reading-order measure offsets; incomplete
+  pages and unresolved cross-page continuations are explicit and block the
+  practice gate. This is IR-level merging, not XML concatenation.
+
+  Strict exact MIDI+measure+duration results (before -> after):
+    beginner   32/32 (rest 1/1)          -> 32/32 (rest 1/1), practice TRUE
+    rhythm     44/63 (rest 5/5)          -> 44/63 (rest 5/5), 3 bad measures
+    grand      76/88 (0 bad)             -> 88/88 (0 bad), practice TRUE
+    dense      154/264 (4 bad)           -> 185/264 (4 bad)
+    total      306/447 (P .748/R .685)   -> 349/447 (P .853/R .781)
+    rests      3/6                       -> 6/6
+    practice-ready scores: 1 -> 2 (beginner + grand-voices)
+
+  Browser verification (pdfjs-dist 5.4.296 browser build, Chromium):
+  beginner 32 notes/1 rest/practiceReady true; grand 88 notes/0 rests/
+  practiceReady true with 1 tie + 1 slur serialized. Reports:
+  reports/structural_understanding.json, reports/browser_practice_gate.json,
+  data/vector_out_practice/*.musicxml.
+
+  Integration: reports/piano_vector_core_general.patch (446 lines, includes
+  ties/slurs/accidentals/multi-page; validated on 4 fixtures) and
+  reports/piano_vector_core_minrest.patch (86 lines, beginner-only safety
+  patch). Tests: piano_vector_practice_gate.test.mjs,
+  piano_curve_classification.test.mjs. Gate not weakened: ambiguous curves,
+  incomplete pages and unresolved cross-page continuation still block.
+  No merge/deploy; sealed TEST untouched.

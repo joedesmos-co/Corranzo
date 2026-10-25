@@ -24,7 +24,8 @@ const CASES = [
   { name: 'piano-beginner-single-vector', practice: true, validMeasures: true,
     notes: 32, rests: 1, measures: 8, restType: 'quarter' },
   { name: 'piano-rhythm-tuplets-vector', practice: false, validMeasures: false },
-  { name: 'piano-grand-voices-vector', practice: false, validMeasures: true },
+  { name: 'piano-grand-voices-vector', practice: true, validMeasures: true,
+    notes: 88, rests: 0, measures: 8 },
   { name: 'piano-dense-advanced-vector', practice: false, validMeasures: false },
 ]
 
