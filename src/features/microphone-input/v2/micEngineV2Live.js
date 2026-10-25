@@ -12,6 +12,7 @@ import { MIC_SIGNAL_QUALITY } from '../micSignalQuality.js'
 import { matchesAnyExpected } from '../../practice/midiPitchMatch.js'
 import { aggregateScoreInformedTracks } from './micScoreInformedAggregation.js'
 import {
+  measureResolutionRatios,
   SCORE_INFORMED_DEFAULTS,
   scoreInformedChordWindow,
 } from './scoreInformedChordScorer.js'
@@ -246,6 +247,19 @@ export function processMicEngineV2Tick({
   const primaryMidi = pickPrimaryMidi(v2Notes, detectedMidis) ?? signalFrame.midi
   const dominantPitchMidi = signalFrame.midi
   const dominantPitchMidiFloat = signalFrame.midiFloat
+  // Semitone-resolution evidence (single-note expectations only): when the
+  // monophonic pitch is a semitone from the expectation, measure both in a
+  // long window so the expectation layer can tell a real note from the
+  // played note's spectral leakage. Chords and octave relations are not
+  // touched (the octave guard covers those).
+  let resolutionEvidence = null
+  if (expectedMidis.length === 1) {
+    try {
+      resolutionEvidence = measureResolutionRatios(buffer, sampleRate, Math.round(expectedMidis[0]))
+    } catch {
+      resolutionEvidence = null
+    }
+  }
   const rawGateOpen = Boolean(signalFrame.gateOpen)
   const softGateThreshold = softGateOpenThreshold(signalFrame.noiseFloor, softGateOptions)
   const softGateEvidence = expectedMidis.length > 0 &&
@@ -283,6 +297,7 @@ export function processMicEngineV2Tick({
     clarity: usedV2 && meanConfidence > 0 ? meanConfidence : signalFrame.clarity,
     signalQuality,
     v2DetectedMidis: detectedMidis,
+    resolutionEvidence,
     v2Notes,
     v2MeanConfidence: meanConfidence,
     v2Active: usedV2 && !runtimeState.v2Unavailable,
