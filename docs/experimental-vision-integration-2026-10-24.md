@@ -188,6 +188,26 @@ persists through save/reload because the metadata is stored with the score.
 
 No application console or page errors. The same 24/24 flows also pass against the built `dist` bundle in Chromium and WebKit.
 
+## 5b. Round-2 verification (2026-10-25)
+
+* Full unit suite: **3956 passed, 19 skipped, 0 failed**.
+* PDF-first standard flow: **4 / 4** (PDF workspace, page follow, three modes).
+* Audio Vision critical UX: **19 / 19** (progress, 93 BPM tempo rebuild,
+  restart/reopen, cancellation 35 ms, unsupported/malformed/silence).
+* Unified WebKit: **12 / 12** (Practice Engine, cursor, TAB, engraving).
+* Unified mic practice: **23 passed, 0 failed, 1 skipped**.
+* Experimental Vision flow: **24 / 24 Chromium** and **24 / 24 WebKit** on the
+  dev server and on the built `dist` bundle.
+* Guitar rhythm: 116/116 string+fret+measure; 32/32 confident onsets and 8/8
+  measures on the paired fixture; 40/40 notation-only mixed onsets
+  (16 eighth + 24 quarter); sparse TAB abstains with null durations.
+* Two-staff audit: 116 distinct events, 32 checkpoints, 116 playback events,
+  232 pitches/technicals (2 representations), no duplicated playback targets.
+* Piano rest candidate: reproduced but rejected; canonical strict scorer is
+  **306/447 notes, 3/6 rests** on current main (305 was the earlier ad-hoc
+  evaluator; `measure@number` is 1-based). Negative controls show the
+  measure-fill rule false-promotes four ambiguous cases.
+
 ## 6. Deployment
 
 | item | value |
@@ -207,3 +227,13 @@ mic semitone evidence is active by default and has no UI change.
 Live acceptance: the same 21/21 experimental-vision flow passed against
 `https://corranzo.com/` in Chromium on the deployed bundle (local and live
 SHA-256 match).
+
+
+### Round-2 deployment status
+
+No new live deployment was made in this round (overnight deployment
+authorization was not explicit). The live site remains version
+`674f3939-e59f-46ec-94b2-d26e6e16ed54` / bundle `index-B2-EFkfL.js` from the
+previous round. The verified round-2 bundle is `index-pcLGJ7oV.js`; it is
+deployment-ready but not live. If deployed, the rollback target is
+`674f3939-e59f-46ec-94b2-d26e6e16ed54`.
