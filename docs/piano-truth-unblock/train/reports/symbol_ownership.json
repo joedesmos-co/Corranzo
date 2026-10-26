@@ -160,5 +160,148 @@
    "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
   }
  },
- "notes": "Rhythm improved 44->62/63; dense 185->195/264; beginner reference-correct but practice-blocked on ambiguous rest; grand 88/88 practice-ready."
+ "notes": "Rhythm improved 44->62/63; dense 185->195/264; beginner reference-correct but practice-blocked on ambiguous rest; grand 88/88 practice-ready.",
+ "corrected_corpus": {
+  "per_fixture": {
+   "piano-beginner-single-vector": {
+    "notes_tp": 32,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 32,
+    "notes_pred": 32,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 1,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 1,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-rhythm-tuplets-vector": {
+    "notes_tp": 63,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 63,
+    "notes_pred": 63,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 5,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 5,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-grand-voices-vector": {
+    "notes_tp": 88,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 88,
+    "notes_pred": 88,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   },
+   "piano-dense-advanced-vector": {
+    "notes_tp": 195,
+    "notes_fp": 31,
+    "notes_fn": 69,
+    "notes_truth": 264,
+    "notes_pred": 226,
+    "notes_precision": 0.8628,
+    "notes_recall": 0.7386,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   }
+  },
+  "total": {
+   "notes_tp": 378,
+   "notes_fp": 31,
+   "notes_fn": 69,
+   "notes_truth": 447,
+   "rests_tp": 6,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 6,
+   "notes_precision": 0.9242,
+   "notes_recall": 0.8456,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  }
+ },
+ "practice_ready_scores_corrected": [
+  "piano-beginner-single-vector",
+  "piano-rhythm-tuplets-vector",
+  "piano-grand-voices-vector"
+ ],
+ "generator_defects": [
+  "missing quarter-rest glyph (0xE4E5); quarter rests drawn as 0xE4E6",
+  "dotted-eighth/tuplet flags omitted (duration 9/4)"
+ ],
+ "browser_corrected": {
+  "beginner": {
+   "version": "5.4.296",
+   "notes": 32,
+   "rests": 1,
+   "meter": {
+    "beats": 4,
+    "unit": 4
+   },
+   "key": 0,
+   "restReconciled": 0,
+   "gate": {
+    "practiceReady": true,
+    "issues": [],
+    "badMeasures": []
+   },
+   "xmlLength": 7124,
+   "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
+  },
+  "rhythm": {
+   "version": "5.4.296",
+   "notes": 63,
+   "rests": 5,
+   "meter": {
+    "beats": 4,
+    "unit": 4
+   },
+   "key": 0,
+   "restReconciled": 0,
+   "gate": {
+    "practiceReady": true,
+    "issues": [],
+    "badMeasures": []
+   },
+   "xmlLength": 13170,
+   "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
+  },
+  "grand": {
+   "version": "5.4.296",
+   "notes": 88,
+   "rests": 0,
+   "meter": {
+    "beats": 4,
+    "unit": 4
+   },
+   "key": 0,
+   "restReconciled": 0,
+   "gate": {
+    "practiceReady": true,
+    "issues": [],
+    "badMeasures": []
+   },
+   "xmlLength": 16319,
+   "xmlHead": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<score-partwise version=\"4.0\">\n<miscellaneous><miscellaneous-field name=\"corranzo_notation_ir\">corranzo-notation-ir/1</mi"
+  }
+ }
 }
