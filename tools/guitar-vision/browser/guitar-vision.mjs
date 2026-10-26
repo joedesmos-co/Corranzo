@@ -506,6 +506,64 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     if (row > 0 && row < 0.8 * (fx1 - fx0)) inkCount += row
   }
   best.flags = inkCount >= 5 ? 1 : 0
+  // Dots: small filled circular ink to the right of the notehead.
+  // Conservative: require a compact, roughly circular blob whose centre
+  // sits 0.4-1.2 staff gaps right of the notehead and within 0.3 gap
+  // vertically of the notehead centre. Count at most 2 (double dot).
+  let dots = 0
+  const g = (Number.isFinite(gapEst) && gapEst > 0) ? gapEst : 16.8
+  const noteCx = (col.x0 + col.x1) / 2
+  const noteCy = (col.y0 + col.y1) / 2
+  const rMin = 0.12 * g, rMax = 0.45 * g
+  const dotCandidates = []
+  // scan a region to the right of the notehead
+  const rx0 = Math.round(col.x1 + 0.3 * g)
+  const rx1 = Math.min(width - 1, Math.round(col.x1 + 1.4 * g))
+  const ry0 = Math.max(0, Math.round(noteCy - 0.6 * g))
+  const ry1 = Math.min(height - 1, Math.round(noteCy + 0.6 * g))
+  // find connected components of ink in this region
+  const seen = new Uint8Array(width * height)
+  for (let sy = ry0; sy <= ry1; sy++) for (let sx = rx0; sx <= rx1; sx++) {
+    if (gray[sy * width + sx] > 128 || seen[sy * width + sx]) continue
+    // flood fill
+    const stack = [sy * width + sx]; seen[sy * width + sx] = 1
+    const pix = []
+    let minX = sx, maxX = sx, minY = sy, maxY = sy
+    while (stack.length) {
+      const j = stack.pop(); pix.push(j)
+      const yy = (j / width) | 0, xx = j % width
+      if (xx < minX) minX = xx; if (xx > maxX) maxX = xx
+      if (yy < minY) minY = yy; if (yy > maxY) maxY = yy
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = xx + dx, ny = yy + dy
+        if (nx < rx0 || nx > rx1 || ny < ry0 || ny > ry1) continue
+        const k = ny * width + nx
+        if (gray[k] <= 128 && !seen[k]) { seen[k] = 1; stack.push(k) }
+      }
+    }
+    const w = maxX - minX + 1, hh = maxY - minY + 1
+    const area = pix.length
+    const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2
+    const aspect = w / Math.max(hh, 1)
+    if (w >= rMin && w <= rMax && hh >= rMin && hh <= rMax &&
+        aspect >= 0.7 && aspect <= 1.3 &&
+        area >= 0.5 * Math.PI * (Math.min(w, hh) / 2) ** 2 * 0.6) {
+      // vertical proximity to notehead centre
+      if (Math.abs(cy - noteCy) <= 0.35 * g) {
+        dotCandidates.push({ cx, cy, w, hh, area })
+      }
+    }
+  }
+  // count distinct dots (sorted by x), at most 2
+  dotCandidates.sort((a, b) => a.cx - b.cx)
+  const chosen = []
+  for (const cd of dotCandidates) {
+    if (chosen.length && cd.cx - chosen[chosen.length - 1].cx < 0.25 * g) continue
+    chosen.push(cd)
+    if (chosen.length >= 2) break
+  }
+  dots = chosen.length
+  best.dots = dots
   // clean extra fields
   delete best.score; delete best.beamConn
   return best
@@ -516,6 +574,7 @@ export function durationFromEvidence(col, ev) {
   const ambiguous = bases.length > 1
   const beams = ev.beams || 0
   const flags = ev.flags || 0
+  const dots = ev.dots || 0
   let dur, conf
   if (base >= 4) { dur = 4; conf = true }
   else if (base >= 2) { dur = 2; conf = true }
@@ -525,7 +584,9 @@ export function durationFromEvidence(col, ev) {
     dur = 1 / (2 ** steps)
     conf = !!ev.stem && !conflict
   }
-  return { duration: dur, beams, flags, stem: !!ev.stem,
+  // apply dot multiplier (dotted note = 1.5x)
+  if (dots > 0) dur = dur * (1.5 ** dots)
+  return { duration: dur, beams, flags, dots, stem: !!ev.stem,
     confident: conf && !ambiguous, ambiguous, beam_flag_conflict: beams > 0 && flags > 0 }
 }
 
