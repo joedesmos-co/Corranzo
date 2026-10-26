@@ -506,5 +506,38 @@
    "chrome_pdf": true
   },
   "conclusion": "No independent text-layer SMuFL vector PDF was available locally. Verovio output becomes outlined paths; the vector extractor correctly falls back to image. Independent-engraver accuracy is NOT claimed."
+ },
+ "voice_graph": {
+  "verified_single_voice": "beginner/rhythm/grand (edge stems, 0 conflicts)",
+  "inferred": "dense (8 stem conflicts, 12 fallback stems)",
+  "gate": "voice-ownership-unverified blocks practice"
+ },
+ "key_region": "path accidentals between clef and time signature are assigned to the key, marked used, and never reused inline; text-drawn accidentals are also exclusive",
+ "verovio_image_fallback": {
+  "engraver": "Verovio (MusicXML -> SVG) -> Chromium PDF -> 200 dpi raster",
+  "vector_route": "image (Verovio/Chrome PDF outlines glyphs; 6 text items, 1 SMuFL)",
+  "image_engine": "homr 0.7.0 (AGPL-3.0, research evaluation only)",
+  "strict_complete": {
+   "notes_tp": 32,
+   "notes_pred": 32,
+   "notes_truth": 32,
+   "notes_precision": 1.0,
+   "notes_recall": 1.0,
+   "rests_tp": 1,
+   "rests_truth": 1,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  },
+  "measures": 8,
+  "scope": "single corrected beginner score rendered by a genuinely different engraver; not a broad corpus"
+ },
+ "dense_failure_categories": {
+  "accidental_semitone": 23,
+  "missing_notehead": 24,
+  "duration_wrong": 29,
+  "other_pitch": 8,
+  "extra_notehead": 16,
+  "missing_events": 69,
+  "extra_events": 31
  }
 }

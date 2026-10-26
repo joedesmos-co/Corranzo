@@ -2630,3 +2630,59 @@ not.
   Remaining blockers: dense 195/264 (69 unmatched), key-signature-region
   exclusion, independent text-layer engraver corpus, OSMD/save-reopen,
   multi-page Ao. No merge/deploy; sealed TEST untouched.
+
+
+## Voice graph, curve ownership & cross-engraver reliability (this session)
+
+  PHASE 1-2 — voice graph and verified ownership: assignVoices now records
+  stem ownership per note (edge vs position-fallback), splits upward/downward
+  stems into voices only as INFERRED evidence, and builds a voiceGraph
+  {notes, staves, voices, splits, conflicts, edgeStems, unresolvedStems,
+  verified}. voiceOwnership is "verified" only for a single voice per staff
+  with zero stem conflicts and zero unresolved/fallback stems; all two-voice
+  stem splits are "inferred" and practice-blocked with
+  voice-ownership-unverified. The integration agent's two-incomplete-voices
+  case (2+2 beats, staff total 4) is blocked by voice-duration-invalid; a
+  stem-split two-voice score is blocked even when both voices fill, because
+  stems alone are not proof. Corrected beginner/rhythm/grand: single voice
+  per staff, 32/63/88 edge stems, 0 conflicts -> verified. Dense: 8 conflicts,
+  12 fallback stems -> inferred, blocked.
+
+  PHASE 3 — curves: ties require close notehead attachment (<=1.4 gaps),
+  same staff, consecutive same-staff/voice order, no intervening note, and
+  compact span/height; equal-pitch far/high, intervening-note, cross-staff
+  and unattached decorative curves are AMBIGUOUS, not ties. Short adjacent
+  equal-pitch curves remain ties by notation convention. 11 curve negative
+  controls pass; on the fixture set 2/2 ties and 1/1 slurs correct, 0 false
+  ties, 0 false slurs. Ambiguous curves keep practice closed.
+
+  PHASE 4 — tuplets: one numeral may own at most three chord/note clusters
+  within 3 gaps and a 5-gap span; clusters are exclusive. A single "3" can
+  no longer assign six unrelated notes; a triplet of three two-note chords
+  still owns six noteheads; adjacent markers do not steal notes. Corrected
+  rhythm 63/63, 5/5 rests, 12/12 tuplets, 8/8 measures.
+
+  PHASE 5 — key/accidental regions: path-drawn accidentals between the clef
+  and the time signature are assigned to the key, marked used, and excluded
+  from inline assignment; text-drawn accidentals are also exclusive. No
+  fixture exercises path-key signatures (C major); inline accidentals are
+  unchanged. Dense 195/264 (exclusive assignment recovered 10).
+
+  PHASE 6 — independent engraver: Verovio -> Chrome PDF outlines glyphs
+  (6 text items, 1 SMuFL; vector route=image). The separate image fallback
+  (homr 0.7.0, AGPL research only) on the 200-dpi Verovio beginner raster
+  scores 32/32 notes, 1/1 rest, 8/8 measures (strict). This is a genuine
+  different engraver but a single score; no broad cross-engraver claim.
+
+  PHASE 7 — dense: 195/264, 69 missing / 31 extra. Classified: accidental
+  semitone 23, missing notehead 24, duration wrong 29, other pitch 8, extra
+  notehead 16. Dense remains practice-blocked (unresolved noteheads, 8 stem
+  conflicts, 4 invalid measures).
+
+  Corrected metrics: 378/447 notes (P .924/R .846), rests 6/6; practice-ready
+  verified scores = 3 (beginner, rhythm, grand); dense false. Original
+  beginner/rhythm remain blocked. Browser pdfjs 5.4.296: corrected three
+  all practiceReady true. Reports: symbol_ownership.json,
+  corrected_baseline_vs_candidate.json, verovio_image_fallback.json,
+  independent_engraver_probe.json, browser_practice_gate.json.
+  No merge/deploy; sealed TEST untouched.

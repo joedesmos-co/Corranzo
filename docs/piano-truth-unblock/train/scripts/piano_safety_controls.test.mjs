@@ -26,7 +26,8 @@ const rest = (measure, staff, x, y, type, dur, extra = {}) => ({
 const ir = (notes, rests = [], extra = {}) => ({
   route: 'vector', meter: { beats: 4, unit: 4 }, key: 0, gap: 8,
   notes, rests, unresolved: [], unresolvedNotes: 0, unresolvedRests: 0,
-  curveCount: 0, restInferred: 0, unresolvedAccidentals: 0, credits: [], ...extra,
+  curveCount: 0, restInferred: 0, unresolvedAccidentals: 0, credits: [],
+  voiceOwnership: 'verified', ...extra,
 })
 const blocked = (x, issue) => assert.equal(assessPianoVectorIr(x).issues.includes(issue), true)
 const ready = (x) => assert.equal(assessPianoVectorIr(x).practiceReady, true)
@@ -65,12 +66,14 @@ x = ir([
 ])
 blocked(x, 'voice-duration-invalid')
 assert.equal(assessPianoVectorIr(x).practiceReady, false)
-// Two voices that each fill four beats are legitimate.
+// Two voices that each fill four beats have valid timing, but stem-only
+// ownership is still not verified; the score remains preview-only.
 x = ir([
   ...Array.from({ length: 4 }, (_, i) => note(0, 0, 100 + 50 * i, 100, 60 + i, '1', { voice: '1' })),
   ...Array.from({ length: 4 }, (_, i) => note(0, 0, 100 + 50 * i, 120, 48 + i, '1', { voice: '2' })),
-])
-ready(x)
+], [], { voiceOwnership: 'inferred' })
+blocked(x, 'voice-ownership-unverified')
+assert.equal(assessPianoVectorIr(x).practiceReady, false)
 // Stem-direction voice assignment produces two voices for two up/two down.
 x = ir([
   { ...note(0, 0, 100, 100, 60), stem_x: 110 },
@@ -83,6 +86,7 @@ assert.equal(new Set(x.notes.map((n) => n.voice)).size, 2)
 x.notes[0].voice = '1'; x.notes[1].voice = '1'
 x.notes[2].voice = '2'; x.notes[3].voice = '2'
 blocked(x, 'voice-duration-invalid')
+assert.equal(x.voiceOwnership, 'inferred')
 
 // 4c. one tuplet numeral must not own six unrelated clusters.
 const tupletNotes = [0, 10, 20, 30, 40, 50].map((xx) =>

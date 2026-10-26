@@ -1,0 +1,18 @@
+{
+ "engraver": "Verovio (MusicXML -> SVG) -> Chromium PDF -> 200 dpi raster",
+ "vector_route": "image (Verovio/Chrome PDF outlines glyphs; 6 text items, 1 SMuFL)",
+ "image_engine": "homr 0.7.0 (AGPL-3.0, research evaluation only)",
+ "strict_complete": {
+  "notes_tp": 32,
+  "notes_pred": 32,
+  "notes_truth": 32,
+  "notes_precision": 1.0,
+  "notes_recall": 1.0,
+  "rests_tp": 1,
+  "rests_truth": 1,
+  "rests_precision": 1.0,
+  "rests_recall": 1.0
+ },
+ "measures": 8,
+ "scope": "single corrected beginner score rendered by a genuinely different engraver; not a broad corpus"
+}

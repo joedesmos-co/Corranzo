@@ -327,6 +327,28 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       }
       const bottom = BOTTOM[clef]
       const bottomIdx = STEP_NAMES.indexOf(bottom[0]) + 7 * bottom[1]
+      // Key-signature region: path-drawn accidentals between the clef and
+      // the time signature belong to the key, not to a single notehead.
+      const clefGlyphForKey = clefs.length ? clefs.sort((a, b) => a.x - b.x)[0] : null
+      const timeForStaff = timeGlyphX.filter((t) =>
+        g[0] - 2 * gap <= t.y && t.y <= g[g.length - 1] + 2 * gap &&
+        (!clefGlyphForKey || t.x > clefGlyphForKey.x))
+        .sort((a, b) => a.x - b.x)[0]
+      const keyEnd = timeForStaff ? timeForStaff.x - gap :
+        (clefGlyphForKey ? clefGlyphForKey.x + 5 * gap : 0)
+      if (clefGlyphForKey) {
+        const keyPathGlyphs = accPaths.filter((pa) => !pa.used &&
+          pa.x > clefGlyphForKey.x + clefGlyphForKey.w && pa.x < keyEnd &&
+          g[0] - 2 * gap <= pa.y && pa.y <= g[g.length - 1] + 2 * gap)
+        if (keyPathGlyphs.length) {
+          const sharps = keyPathGlyphs.filter((pa) => pa.code === 1).length
+          const flats = keyPathGlyphs.filter((pa) => pa.code === -1).length
+          if (sharps && !flats && sharps <= 7) { keyFifths = sharps; keySource = 'path-key-sequence' }
+          else if (flats && !sharps && flats <= 7) { keyFifths = -flats; keySource = 'path-key-sequence' }
+          else { keyFifths = null; keySource = 'path-key-ambiguous' }
+          for (const pa of keyPathGlyphs) pa.used = true
+        }
+      }
       const heads = glyphs.filter((gl) => {
         const smuflHead = [0xe0a2, 0xe0a3, 0xe0a4].includes(gl.code)
         const isSmufl = gl.code >= 0xe000 && gl.code <= 0xf8ff
@@ -338,10 +360,18 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const accGlyphs = glyphs.filter((gl) => [0xe260, 0xe261, 0xe262].includes(gl.code) &&
         !keyGlyphs.includes(gl) &&
         g[0] - 2 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 2 * gap)
-      for (const hd of heads) {
-        const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
-          Math.abs(a.cy - hd.cy) <= 0.6 * gap)
-        if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
+      // Text-drawn accidentals are exclusive too: the nearest unassigned
+      // notehead to the right owns each glyph.
+      for (const ag of accGlyphs) {
+        let best = null
+        for (const hd of heads) {
+          if (hd.acc != null) continue
+          if (!(ag.x <= hd.x && hd.x - ag.x <= 2 * gap)) continue
+          if (Math.abs(ag.cy - hd.cy) > 0.6 * gap) continue
+          const d = (hd.x - ag.x) + Math.abs(ag.cy - hd.cy)
+          if (!best || d < best.d) best = { d, hd }
+        }
+        if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
       }
       // Path-drawn accidentals are assigned exclusively: each candidate path
       // belongs to the nearest unassigned notehead to its right. A single
@@ -378,8 +408,9 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           const up = st.y0 < head.cy
           const expected = up ? head.x + 1.25 * gap : head.x - 0.25 * gap
           let d = Math.abs(st.x - expected)
-          if (d > 0.9 * gap) d = Math.abs(st.x - c.cx)
-          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x }
+          let edge = d <= 0.9 * gap
+          if (!edge) d = Math.abs(st.x - c.cx)
+          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
         }
         for (const hd of c.items) {
           if (!best) {
@@ -392,7 +423,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
               const midi = STEP_SEMI[STEP_NAMES[letter]] + 12 * (Math.floor(cidx / 7) + 1) + acc
               notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
                 measure: measureOf(hd.x), clef, kind: 'note', type: 'whole',
-                dots: 0, dur_q: '4', stem_x: null, beam_count: null,
+                dots: 0, dur_q: '4', stem_x: null, stemOwnership: 'stemless', beam_count: null,
                 accidental: acc || 0, key_fifths: keyFifths,
                 confidence: 0.7, provenance: 'pdfjs-vector' })
             } else {
@@ -416,7 +447,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
             measure: measureOf(hd.x), clef, kind: 'note', type: dtype,
             dots: dotsN, dur_q: String(TYPE_Q[dtype] * (dotsN ? 1.5 : 1)),
-            stem_x: best.x, beam_count: bc, accidental: acc || 0,
+            stem_x: best.x, stemOwnership: best.edge ? 'edge' : 'position-fallback', beam_count: bc, accidental: acc || 0,
             key_fifths: keyFifths, confidence: 0.9,
             provenance: 'pdfjs-vector' })
         }
@@ -738,7 +769,7 @@ export function assignVoices(ir) {
     if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
     byStaffMeasure.get(key).push(n)
   }
-  let splits = 0
+  let splits = 0, conflicts = 0, unresolvedStems = 0, edgeStems = 0
   for (const [key, notes] of byStaffMeasure) {
     const staff = notes[0]?.staff ?? 0
     const ups = notes.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
@@ -746,18 +777,47 @@ export function assignVoices(ir) {
     const split = ups.length >= 2 && downs.length >= 2
     if (split) {
       splits += 1
-      for (const n of ups) n.voice = String(staff * 4 + 1)
-      for (const n of downs) n.voice = String(staff * 4 + 2)
-      for (const n of notes) if (!n.voice) n.voice = String(staff * 4 + 1)
+      for (const n of ups) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'stem-direction' }
+      for (const n of downs) { n.voice = String(staff * 4 + 2); n.voiceEvidence = 'stem-direction' }
     } else {
-      for (const n of notes) n.voice = String(staff * 4 + 1)
+      for (const n of notes) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'staff-default' }
+    }
+    for (const n of notes) {
+      if (n.stemOwnership === 'edge') edgeStems += 1
+      if (n.stemOwnership === 'position-fallback') unresolvedStems += 1
+    }
+    // Conflict: a stem claimed by notes in different x clusters.
+    const byStem = new Map()
+    for (const n of notes) {
+      if (n.stem_x == null) continue
+      if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
+      byStem.get(n.stem_x).push(n)
+    }
+    for (const group of byStem.values()) {
+      if (group.length < 2) continue
+      const xs = group.map((n) => n.x)
+      if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
     }
   }
   for (const r of ir.rests) {
     const staff = r.staff ?? 0
     r.voice = String(staff * 4 + 1)
+    r.voiceEvidence = 'staff-default'
   }
+  const singleVoice = splits === 0
+  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0
   ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
+  ir.voiceGraph = {
+    notes: ir.notes.length,
+    staves: new Set(ir.notes.map((n) => n.staff)).size,
+    voices: new Set(ir.notes.map((n) => n.voice)).size,
+    splits,
+    conflicts,
+    edgeStems,
+    unresolvedStems,
+    verified,
+  }
+  ir.voiceOwnership = verified ? 'verified' : 'inferred'
   return ir
 }
 
@@ -854,6 +914,7 @@ export function assessPianoVectorIr(ir) {
   if ((ir?.unresolvedAccidentals ?? 0) > 0) issues.push('unresolved-accidentals')
   if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
   if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
+  if ((ir?.voiceOwnership ?? 'inferred') !== 'verified') issues.push('voice-ownership-unverified')
   if ((ir?.incompletePages ?? 0) > 0) issues.push('incomplete-pages')
   if (ir?.crossPageContinuation === 'unresolved' && (ir?.pageCount ?? 1) > 1) issues.push('cross-page-continuation-unresolved')
   const resolvedCurves = (ir?.tieCount ?? 0) + (ir?.slurCount ?? 0)
@@ -902,11 +963,11 @@ export function assessPianoVectorIr(ir) {
     unresolvedRests: ir?.unresolvedRests ?? 0,
     badMeasures,
     badVoices,
-    voiceOwnership: 'staff+stem',
+    voiceOwnership: ir?.voiceOwnership ?? 'inferred',
+    voiceGraph: ir?.voiceGraph ?? null,
     issues,
     practiceReady,
     completeFidelity: practiceReady,
-    voiceOwnership: 'staff-only',
     warnings: issues.map((issue) => {
       switch (issue) {
         case 'no-vector-notes': return 'No readable vector piano notes were found.'
@@ -915,6 +976,7 @@ export function assessPianoVectorIr(ir) {
         case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
         case 'unresolved-rests': return 'Some rests could not be resolved.'
         case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
+        case 'voice-ownership-unverified': return 'Voice ownership is inferred; independent voices are not proven.'
         case 'voice-duration-invalid': return 'One or more independent voices do not fill the stated meter.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
