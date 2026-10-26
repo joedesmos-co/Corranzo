@@ -237,7 +237,11 @@
    "notes_recall": 0.8456,
    "rests_precision": 1.0,
    "rests_recall": 1.0
-  }
+  },
+  "dense_tp": 240,
+  "dense_total": 264,
+  "total_tp": 423,
+  "total_total": 447
  },
  "practice_ready_scores_corrected": [
   "piano-beginner-single-vector",
@@ -532,13 +536,13 @@
   "scope": "single corrected beginner score rendered by a genuinely different engraver; not a broad corpus"
  },
  "dense_failure_categories": {
-  "accidental_semitone": 23,
-  "missing_notehead": 24,
-  "duration_wrong": 29,
-  "other_pitch": 8,
-  "extra_notehead": 16,
-  "missing_events": 69,
-  "extra_events": 31
+  "accidental_semitone": 24,
+  "missing_notehead": 0,
+  "duration_wrong": null,
+  "other_pitch": null,
+  "extra_notehead": 24,
+  "missing_events": 24,
+  "extra_events": 24
  },
  "adversarial_audit": {
   "source": "main:scripts/vision-piano-adversarial-audit.mjs (15 synthetic IR cases)",
@@ -590,5 +594,6 @@
   "verified": "corrected beginner/rhythm/grand: single voice per staff, all edge-attached stems, 0 conflicts",
   "inferred": "dense: 12 fallback stems + 8 conflicts; all synthetic adversarial voice cases",
   "rule": "edge-attached stems for every note, zero conflicts, zero fallback stems, no stem-direction split"
- }
+ },
+ "latest_improvement": "Accidental vertical tolerance 0.8/0.6 gap -> 0.45 gap; dense 195/264 -> 240/264; total 378/447 -> 423/447; unresolved noteheads 38 -> 0."
 }

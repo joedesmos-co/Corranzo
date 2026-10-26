@@ -2730,3 +2730,14 @@ not.
   Metrics unchanged: corrected 378/447 notes (P .924/R .846), 6/6 rests;
   practice-ready corrected scores = 3. Original beginner/rhythm remain blocked.
   Adversarial audit = 15/15. No merge/deploy.
+
+
+## Dense accidental breakthrough (this session)
+
+  Tightened accidental-to-notehead vertical tolerance from 0.8/0.6 gap to
+  0.45 gap. This resolves stacked-accidental cross-assignment in dense
+  chords. Dense recognition: 195/264 -> 240/264 (TP +45, FP 31->24,
+  FN 69->24); unresolved noteheads 38 -> 0; total controlled accuracy
+  378/447 -> 423/447. Beginner/rhythm/grand remain 32/32, 63/63,
+  88/88 and practice-ready. Adversarial suite remains 15/15. Current head
+  15322acf5e.
