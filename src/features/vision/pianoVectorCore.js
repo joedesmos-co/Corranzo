@@ -212,7 +212,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const g = sys.staves[sti]
       const stems = vlines.filter((v) => v.lw < 0.95 &&
         1.8 * gap <= (v.y1 - v.y0) && (v.y1 - v.y0) <= 6.5 * gap &&
-        g[0] - gap <= (v.y0 + v.y1) / 2 && (v.y0 + v.y1) / 2 <= g[g.length - 1] + gap)
+        v.y0 <= g[g.length - 1] + 2 * gap && v.y1 >= g[0] - 2 * gap)
       const clefGlyphs = glyphs.filter((gl) => gl.h >= 2.0 * gap && gl.w >= 1.3 * gap &&
         g[0] - 4 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 4 * gap &&
         gl.x <= (bars.length ? bars[0] : gl.x) + 3 * gap)
@@ -249,10 +249,16 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const accGlyphs = glyphs.filter((gl) => [0xe260, 0xe261, 0xe262].includes(gl.code) &&
         !keyGlyphs.includes(gl) &&
         g[0] - 2 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 2 * gap)
-      for (const hd of heads) {
-        const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
-          Math.abs(a.cy - hd.cy) <= 0.6 * gap)
-        if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
+      for (const ag of accGlyphs) {
+        let best = null
+        for (const hd of heads) {
+          if (hd.acc != null) continue
+          if (!(ag.x <= hd.x && hd.x - ag.x <= 2 * gap)) continue
+          if (Math.abs(ag.cy - hd.cy) > 0.45 * gap) continue
+          const d = (hd.x - ag.x) + Math.abs(ag.cy - hd.cy)
+          if (!best || d < best.d) best = { d, hd }
+        }
+        if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
       }
       const clusters = []
       for (const hd of heads) {
@@ -269,13 +275,13 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           // Candidate stem ownership: prefer a stem whose x is near the expected
           // edge position (up-stem to the right of the head, down-stem to the
           // left). Falling back to the cluster centre is weaker evidence.
-          const hd0 = c.items[0]
-          const isUp = st.y0 < hd0.cy
-          const expected = isUp ? hd0.x + 1.25 * gap : hd0.x - 0.25 * gap
+          const head = c.items.reduce((a, b) => (a.cy < b.cy ? a : b))
+          const isUp = st.y0 < head.cy
+          const expected = isUp ? head.x + 1.25 * gap : head.x - 0.25 * gap
           let d = Math.abs(st.x - expected)
           let edge = d <= 0.9 * gap
           if (!edge) d = Math.abs(st.x - c.cx)
-          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
+          if (d <= 0.75 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
         }
         for (const hd of c.items) {
           if (!best) {
@@ -534,9 +540,11 @@ export function assignPianoVoices(ir) {
     r.voice = String(staff * 4 + 1)
     r.voiceEvidence = 'staff-default'
   }
+  const stemmed = notes.filter((n) => n.stem_x != null)
+  const stemmedAllEdge = stemmed.length > 0 && stemmed.every((n) => n.stemOwnership === 'edge')
   const singleVoice = splits === 0
   const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
-    notes.length > 0 && edgeStems === notes.length
+    notes.length > 0 && stemmedAllEdge
   ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
   ir.voiceGraph = {
     notes: notes.length,
