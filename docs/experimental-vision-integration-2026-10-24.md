@@ -333,3 +333,37 @@ tuplets; path key-region/decorative accidental safety remains unproven. See
 `c284e708158a83607243cf651730449a090ad07db3ae2969b3350a12678880ea`.
 Not deployed. Rollback target if deployed:
 `8748583b-da41-4f0c-be52-6d133da94185`.
+
+## 10. Round 6 — independent acceptance and voice-gate hardening
+
+**Live at round-6 start:** Worker
+`d367ee53-3cf6-4d1f-9117-36b9bc3b69a1`, bundle `index-BVw0gRmn.js`
+(SHA-256 matches the round-5 build).
+
+**Integrated product safety:** Piano practice eligibility now requires
+`voiceOwnership === 'verified'`. Current extraction reports only `staff-only`
+ownership, so the experimental Piano path is preview-only even where note/rest
+and measure counts are complete. This closes the corrected-beginner promotion
+observed during round-6 evaluation and the same-staff multi-voice false
+acceptance. `scripts/vision-piano-adversarial-audit.mjs` refuses 10/10 controls
+against production.
+
+**Evaluation improvements:** corrected CC0 Piano fixtures are kept separately;
+the canonical evaluator now reports note, rest, pitch-only, duration-only,
+full-event, measure, abstention and practice fields. Independent Verovio
+engravings (grand/rhythm/pickup-crossstaff) are held separately and must abstain
+from the vector route.
+
+**Not integrated:** Piano `0607fac9d7` / `b4f6dce882`. The corrected corpus
+reproduces 378/447 for the candidate (not the historical 377) and three
+candidate practice-ready scores, but the candidate still fails equal-pitch
+slur, same-staff multi-voice and decorative-curve controls. No extraction port.
+
+**Guitar:** `3b755220af` changes fixture artwork only; current recognition
+remains 21/21 noteheads, 15/21 confident onsets and 3/4 valid measures, with
+measure 3 explicitly null. No recognition code change.
+
+**Round-6 local bundle:** `dist/assets/index-nUlncSNZ.js`, SHA-256
+`8c8b5b165596299dc381ac7fef89a2327520c227f271dc26f4ca5061c6693402`.
+Not deployed. Rollback target if deployed:
+`d367ee53-3cf6-4d1f-9117-36b9bc3b69a1`.
