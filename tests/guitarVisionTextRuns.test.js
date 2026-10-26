@@ -6,6 +6,7 @@ import * as pdfjsLegacy from 'pdfjs-dist/legacy/build/pdf.mjs'
 import {
   notationNoteheads,
   recognizeGuitarTabPdf,
+  analyzeNotationRhythm,
   assessGuitarTabRecognition,
 } from '../src/features/vision/guitarTabCore.js'
 
@@ -69,7 +70,7 @@ describe('guitar notation notehead text runs', () => {
 })
 
 describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () => {
-  it('recovers all 21 noteheads but keeps every duration unknown', async () => {
+  it('recovers 21 noteheads and 15 evidenced onsets; measure 3 stays unknown', async () => {
     const result = await recognizeGuitarTabPdf(pdf('guitar-mixed-rhythm-vector'), {
       pdfjsLib: pdfjsLegacy,
       createCanvas,
@@ -77,11 +78,13 @@ describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () 
     expect(result.events).toHaveLength(60)
     expect(result.summary.rhythm.noteheads).toBe(21)
     expect(result.summary.rhythm.onsets).toBe(21)
-    expect(result.summary.rhythm.onsets_confident).toBe(0)
-    expect(result.summary.rhythm.measures_complete).toBe(0)
+    expect(result.summary.rhythm.onsets_confident).toBe(15)
+    expect(result.summary.rhythm.measures_complete).toBe(3)
     expect(result.summary.rhythm.measures_total).toBe(4)
     expect(result.summary.rhythm_recovered).toBe(false)
-    expect(result.events.every((event) => event.rhythm?.duration == null)).toBe(true)
+    const unknown = result.events.filter((event) => event.rhythm?.duration == null)
+    expect(unknown.length).toBeGreaterThan(0)
+    expect(unknown.every((event) => event.measure === 3)).toBe(true)
     const assessment = assessGuitarTabRecognition(result)
     expect(assessment.pitchOnly).toBe(true)
     expect(assessment.practiceReady).toBe(false)
@@ -89,12 +92,30 @@ describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () 
     expect(assessment.issues).toContain('measure-duration-invalid')
   })
 
-  it('does not write a measured type for an unknown mixed-rhythm event', async () => {
+  it('writes measured types only for validated measures and footnotes the unknown one', async () => {
     const result = await recognizeGuitarTabPdf(pdf('guitar-mixed-rhythm-vector'), {
       pdfjsLib: pdfjsLegacy,
       createCanvas,
     })
+    expect(result.xml).toContain('<type>quarter</type>')
+    expect(result.xml).toContain('<type>eighth</type>')
     expect(result.xml).toContain('duration not recovered')
-    expect(result.xml).not.toContain('<type>quarter</type>')
+    const measure3 = /<measure number="3">([\s\S]*?)<\/measure>/.exec(result.xml)?.[1] ?? ''
+    expect(measure3).toContain('duration not recovered')
+    expect(measure3).not.toContain('<type>')
+  })
+
+  it('keeps the notation-only mixed fixture at 16 eighths and 24 quarters', async () => {
+    const rhythm = await analyzeNotationRhythm(pdf('guitar-standard-chords-vector'), {
+      pdfjsLib: pdfjsLegacy,
+      createCanvas,
+    })
+    expect(rhythm.rows).toHaveLength(40)
+    expect(rhythm.rows.every((row) => row.confident)).toBe(true)
+    const counts = rhythm.rows.reduce((acc, row) => {
+      acc[row.duration] = (acc[row.duration] ?? 0) + 1
+      return acc
+    }, {})
+    expect(counts).toEqual({ 1: 24, 0.5: 16 })
   })
 })

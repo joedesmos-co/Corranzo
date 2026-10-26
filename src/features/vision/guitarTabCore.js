@@ -372,19 +372,23 @@ export function detectBeams(gray, width, height, thr = 128) {
   return mask
 }
 
-export function columnEvidence(col, gray, beamMask, width, height, minRun, sideTol, gapEst) {
+export function columnEvidence(col, gray, beamMask, width, height, minRun, sideTol, gapEst, { centerProbe = false } = {}) {
   const ink = y => gray[y * width] <= 128
   let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0] }
   for (const m of col.members) {
     const [x0, y0, x1, y1] = m.box.map(Math.round)
     for (const [edge, up] of [[x1, true], [x0, false]]) {
       for (let x = Math.max(Math.round(edge - sideTol), 0); x <= Math.min(Math.round(edge + sideTol), width - 1); x++) {
-        const start = up ? y0 : y1
-        let run = 0, gap = 0, yy = start
-        while (yy >= 0 && yy < height) {
-          if (gray[yy * width + x] <= 128) { run++; gap = 0 }
-          else { gap++; if (gap > 6) break }
-          yy += up ? -1 : 1
+        const starts = centerProbe ? (up ? [y0, (y0 + y1) >> 1, y1] : [y1, (y0 + y1) >> 1, y0]) : [up ? y0 : y1]
+        let run = 0
+        for (const start of starts) {
+          let gap = 0, yy = start, rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr++; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          if (rr > run) run = rr
         }
         if (run > best.run) {
           best = {
@@ -514,7 +518,7 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
         if (i) gaps.push(c.cx - cols[i - 1].cx)
         if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
         const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [s.gap]))))
-        const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap)
+        const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap, { centerProbe: true })
         const d = durationFromEvidence(c, ev)
         // A notehead plus absent/ambiguous stem/beam evidence is not a
         // written duration. Keep the value explicitly unknown instead of
