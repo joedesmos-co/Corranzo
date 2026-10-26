@@ -2741,3 +2741,12 @@ not.
   378/447 -> 423/447. Beginner/rhythm/grand remain 32/32, 63/63,
   88/88 and practice-ready. Adversarial suite remains 15/15. Current head
   15322acf5e.
+
+
+## Dense voice conflicts resolved (this session)
+
+  All 8 dense voice conflicts were false positives: chord members with
+  staggered notehead x positions (spread 2.5) sharing one stem. Threshold
+  for shared-stem x spread changed from 1.5 to 3.0. Dense voiceOwnership
+  is now verified; Practice remains blocked by 24 duration mismatches
+  (0.5 vs 1.0). Adversarial suite remains 15/15. Current head 332125bed2.
