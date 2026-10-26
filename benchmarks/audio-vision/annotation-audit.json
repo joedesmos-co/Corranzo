@@ -1,0 +1,8189 @@
+{
+ "generatedAt": "2026-10-26T16:03:20.401Z",
+ "note": "Per-truth-note waveform stratum classification. Strata: clear, short (<0.2s), grace-short (<0.1s), misaligned (energy onset >100ms from truth), weak (low RMS), negative-onset (started before clip). BP recall measured per stratum using aligned onsets.",
+ "strataCounts": {
+  "misaligned": 364,
+  "short": 204,
+  "clear": 167,
+  "negative-onset": 56,
+  "grace-short": 102,
+  "weak": 4
+ },
+ "strataRecall": {
+  "misaligned": {
+   "total": 364,
+   "hit": 208
+  },
+  "short": {
+   "total": 204,
+   "hit": 111
+  },
+  "clear": {
+   "total": 167,
+   "hit": 128
+  },
+  "negative-onset": {
+   "total": 56,
+   "hit": 8
+  },
+  "grace-short": {
+   "total": 102,
+   "hit": 37
+  },
+  "weak": {
+   "total": 4,
+   "hit": 2
+  }
+ },
+ "byInstrument": {
+  "piano": {
+   "misaligned": {
+    "total": 73,
+    "hit": 27
+   },
+   "short": {
+    "total": 40,
+    "hit": 15
+   },
+   "clear": {
+    "total": 9,
+    "hit": 1
+   },
+   "negative-onset": {
+    "total": 8,
+    "hit": 0
+   },
+   "grace-short": {
+    "total": 67,
+    "hit": 24
+   },
+   "weak": {
+    "total": 2,
+    "hit": 0
+   }
+  },
+  "acoustic-guitar": {
+   "negative-onset": {
+    "total": 32,
+    "hit": 3
+   },
+   "short": {
+    "total": 124,
+    "hit": 67
+   },
+   "clear": {
+    "total": 80,
+    "hit": 64
+   },
+   "misaligned": {
+    "total": 196,
+    "hit": 128
+   },
+   "grace-short": {
+    "total": 33,
+    "hit": 12
+   }
+  },
+  "electric-guitar": {
+   "misaligned": {
+    "total": 95,
+    "hit": 53
+   },
+   "short": {
+    "total": 40,
+    "hit": 29
+   },
+   "clear": {
+    "total": 78,
+    "hit": 63
+   },
+   "negative-onset": {
+    "total": 16,
+    "hit": 5
+   },
+   "weak": {
+    "total": 2,
+    "hit": 2
+   },
+   "grace-short": {
+    "total": 2,
+    "hit": 1
+   }
+  }
+ },
+ "notes": [
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 299,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 505,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 548,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 74,
+   "dur": 302,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 997,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 129,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 444,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 1011,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 71,
+   "dur": 126,
+   "eShift": 51,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 68,
+   "dur": 111,
+   "eShift": 10,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 73,
+   "dur": 649,
+   "eShift": 33,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 597,
+   "eShift": 25,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-single",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 562,
+   "eShift": 16,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 73,
+   "dur": 514,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 64,
+   "dur": 607,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 57,
+   "dur": 531,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 74,
+   "dur": 195,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 192,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 308,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 255,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 275,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 452,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 453,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 493,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 208,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 61,
+   "dur": 83,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 86,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 522,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 583,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dyad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 494,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 73,
+   "dur": 514,
+   "eShift": 31,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 607,
+   "eShift": 13,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 531,
+   "eShift": 4,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 74,
+   "dur": 195,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 193,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 308,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 255,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 275,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 452,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 453,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 493,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 76,
+   "dur": 208,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 61,
+   "dur": 83,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 86,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 73,
+   "dur": 434,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 74,
+   "dur": 507,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 247,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 318,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 557,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 543,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 485,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 695,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 455,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 321,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "weak",
+   "midi": 40,
+   "dur": 338,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 68,
+   "dur": 277,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 155,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 555,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 477,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 458,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart-dense",
+   "instrument": "piano",
+   "stratum": "weak",
+   "midi": 61,
+   "dur": 453,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 72,
+   "dur": 691,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 78,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 121,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 122,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 259,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 636,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 36,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 50,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 60,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 89,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 53,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 46,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 39,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 187,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 639,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 41,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 34,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 49,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 79,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 72,
+   "dur": 637,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 89,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 53,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 46,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 39,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 187,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 639,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 41,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 34,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 49,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 79,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 73,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 80,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 58,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 166,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 72,
+   "dur": 66,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 56,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 40,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 40,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 72,
+   "dur": 111,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 73,
+   "dur": 71,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 75,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 163,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 879,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 87,
+   "eShift": -74,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 65,
+   "eShift": -83,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 56,
+   "eShift": -80,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 121,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 122,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 259,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 637,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 36,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 50,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 60,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 89,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 53,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 46,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 39,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 187,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 639,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 41,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 34,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 49,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 48,
+   "dur": 79,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 73,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 80,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 57,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 166,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 72,
+   "dur": 66,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 58,
+   "dur": 56,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 40,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 40,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 72,
+   "dur": 111,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 73,
+   "dur": 71,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 75,
+   "dur": 159,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 163,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert-dense",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 879,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 713,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 579,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 559,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 74,
+   "dur": 97,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 61,
+   "dur": 85,
+   "eShift": -71,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 50,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 290,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 285,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 264,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 539,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 436,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 525,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "clear",
+   "midi": 76,
+   "dur": 242,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 239,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-mozart2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 235,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 72,
+   "dur": 1251,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 146,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 252,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 211,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 330,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 73,
+   "dur": 192,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 40,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 88,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 965,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 122,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 111,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 230,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 160,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 177,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 226,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 40,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 926,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 95,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 102,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-single",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 118,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "negative-onset",
+   "midi": 72,
+   "dur": 965,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 111,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 230,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 160,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 177,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 226,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 65,
+   "dur": 40,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 926,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 96,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 102,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 118,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 219,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 333,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 225,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 222,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 72,
+   "dur": 108,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 64,
+   "dur": 77,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 164,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 55,
+   "dur": 96,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 72,
+   "dur": 103,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 73,
+   "dur": 87,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "grace-short",
+   "midi": 75,
+   "dur": 95,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 73,
+   "dur": 931,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 183,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 389,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 65,
+   "dur": 223,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "piano-schubert2-triad",
+   "instrument": "piano",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 212,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 61,
+   "dur": 1574,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 53,
+   "dur": 134,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 174,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 1556,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 53,
+   "dur": 163,
+   "eShift": -13,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 174,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 55,
+   "dur": 174,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 169,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 1428,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 93,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 61,
+   "dur": 92,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 59,
+   "dur": 69,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 1928,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 1951,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 2038,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 1985,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 1927,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 1939,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 55,
+   "dur": 2241,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 59,
+   "dur": 1230,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 69,
+   "dur": 667,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 62,
+   "dur": 801,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 511,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 1254,
+   "eShift": -86,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 1254,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 1196,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 67,
+   "dur": 1115,
+   "eShift": -91,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 69,
+   "dur": 256,
+   "eShift": 13,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 67,
+   "dur": 162,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-bossa-chord",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 250,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 145,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 69,
+   "dur": 122,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 70,
+   "dur": 220,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 74,
+   "dur": 250,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 75,
+   "dur": 82,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 76,
+   "dur": 563,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 75,
+   "dur": 203,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 67,
+   "dur": 127,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 69,
+   "dur": 203,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 70,
+   "dur": 92,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 69,
+   "dur": 104,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 255,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 105,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 67,
+   "dur": 209,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 63,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 192,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 65,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 279,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 186,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 221,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 279,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-rock-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 49,
+   "dur": 267,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 343,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 243,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 383,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 110,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 49,
+   "dur": 168,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 296,
+   "eShift": 48,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 302,
+   "eShift": 42,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 221,
+   "eShift": 36,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 378,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 383,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 389,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 267,
+   "eShift": -88,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 81,
+   "eShift": 48,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 61,
+   "dur": 290,
+   "eShift": 34,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 279,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 319,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 645,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 320,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 42,
+   "dur": 296,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 49,
+   "dur": 284,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 42,
+   "dur": 360,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 360,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 110,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 42,
+   "dur": 325,
+   "eShift": 16,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 314,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 348,
+   "eShift": -16,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 58,
+   "dur": 627,
+   "eShift": -33,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 42,
+   "dur": 1063,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 296,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 383,
+   "eShift": 22,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 54,
+   "dur": 354,
+   "eShift": -16,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 58,
+   "dur": 406,
+   "eShift": -19,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 61,
+   "dur": 725,
+   "eShift": -42,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 661,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 459,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 482,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 42,
+   "dur": 320,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 49,
+   "dur": 627,
+   "eShift": -22,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 923,
+   "eShift": -39,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 42,
+   "dur": 290,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 267,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-power-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 42,
+   "dur": 1283,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 44,
+   "dur": 93,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 56,
+   "dur": 273,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 51,
+   "dur": 250,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 60,
+   "dur": 238,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 163,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 43,
+   "dur": 116,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 50,
+   "dur": 99,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 43,
+   "dur": 105,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 43,
+   "dur": 104,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 105,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 110,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 139,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 98,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 255,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 99,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 243,
+   "eShift": -86,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 43,
+   "dur": 87,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 104,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 127,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 238,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 145,
+   "eShift": 115,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 128,
+   "eShift": -25,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 151,
+   "eShift": -33,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 93,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 157,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 116,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 51,
+   "dur": 99,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 117,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 98,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 261,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 272,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 238,
+   "eShift": -86,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 104,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 249,
+   "eShift": -39,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 238,
+   "eShift": -42,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 244,
+   "eShift": -54,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 93,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 238,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 226,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 157,
+   "eShift": -51,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 180,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 169,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 128,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 255,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 128,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 93,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 110,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 122,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 54,
+   "dur": 92,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 140,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 110,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 139,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 122,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 75,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 256,
+   "eShift": -91,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 249,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 57,
+   "dur": 168,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 168,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 43,
+   "dur": 92,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 43,
+   "dur": 70,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 43,
+   "dur": 157,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 116,
+   "eShift": -68,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 45,
+   "dur": 99,
+   "eShift": 7,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 272,
+   "eShift": -83,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 255,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 232,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 267,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 116,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 105,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 180,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 204,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 180,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 163,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 157,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 377,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 267,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-funk-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 44,
+   "dur": 87,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 48,
+   "dur": 1016,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 52,
+   "dur": 278,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 55,
+   "dur": 459,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 64,
+   "dur": 714,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 60,
+   "dur": 302,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 331,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 180,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 278,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 110,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 459,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 157,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 441,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 43,
+   "dur": 1172,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 441,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 464,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 163,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 1207,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 256,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 453,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 615,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 290,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 319,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 157,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 43,
+   "dur": 964,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 593,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 139,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 464,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 163,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 510,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 313,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 569,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 290,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 372,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 325,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 128,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 45,
+   "dur": 842,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 52,
+   "dur": 592,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 57,
+   "dur": 116,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 442,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 151,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 1207,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 255,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 244,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 754,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 296,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 331,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 191,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 291,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 116,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 639,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 45,
+   "dur": 1063,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 452,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 157,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 1219,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 290,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 320,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 57,
+   "dur": 105,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 227,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 52,
+   "dur": 70,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 465,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 2554,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 134,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 1202,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 47,
+   "dur": 871,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 424,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 1208,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 580,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-strum-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 801,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 356,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 184,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 46,
+   "dur": 192,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 160,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 148,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 164,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 58,
+   "dur": 392,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 176,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 46,
+   "dur": 164,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 180,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 168,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-single",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 184,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 67,
+   "dur": 632,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 480,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 63,
+   "dur": 480,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 360,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 360,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 488,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 488,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 1032,
+   "eShift": -4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg07-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 1032,
+   "eShift": -4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 48,
+   "dur": 339,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 47,
+   "dur": 357,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 669,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 669,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 669,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 304,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 344,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 355,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 347,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 358,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 49,
+   "dur": 296,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 48,
+   "dur": 221,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 50,
+   "dur": 992,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 992,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 992,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 65,
+   "dur": 992,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 274,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 237,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 63,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 208,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg01-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 224,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 405,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 405,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 63,
+   "dur": 405,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 399,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 399,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 399,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 399,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 399,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 71,
+   "dur": 399,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 240,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 240,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 240,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 240,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 240,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 240,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 411,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 411,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 411,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 411,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 411,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 411,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 234,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 234,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 234,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 234,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 234,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 234,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 40,
+   "dur": 189,
+   "eShift": 45,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 189,
+   "eShift": 45,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 189,
+   "eShift": 45,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 189,
+   "eShift": 45,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 66,
+   "dur": 189,
+   "eShift": 45,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 71,
+   "dur": 189,
+   "eShift": 45,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 40,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 159,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 66,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 71,
+   "dur": 159,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 345,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 49,
+   "dur": 345,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 345,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 345,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 63,
+   "dur": 345,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg02-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 68,
+   "dur": 345,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 270,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 71,
+   "dur": 336,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 76,
+   "dur": 336,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 70,
+   "dur": 350,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 75,
+   "dur": 350,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 318,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 74,
+   "dur": 318,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "weak",
+   "midi": 64,
+   "dur": 344,
+   "eShift": 97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "weak",
+   "midi": 68,
+   "dur": 344,
+   "eShift": 97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 63,
+   "dur": 387,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 387,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 347,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg05-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 347,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 50,
+   "dur": 233,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 47,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 1720,
+   "eShift": 2,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 2140,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 2140,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg10-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 2140,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 70,
+   "dur": 309,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 1450,
+   "eShift": -27,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 1450,
+   "eShift": -27,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 1450,
+   "eShift": -27,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 69,
+   "dur": 1450,
+   "eShift": -27,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 338,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 1956,
+   "eShift": -59,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 1956,
+   "eShift": -59,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 1956,
+   "eShift": -59,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg03-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 71,
+   "dur": 1956,
+   "eShift": -59,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 51,
+   "dur": 144,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 124,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 136,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "grace-short",
+   "midi": 53,
+   "dur": 88,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 124,
+   "eShift": -80,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 144,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 248,
+   "eShift": 22,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 248,
+   "eShift": 22,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 65,
+   "dur": 248,
+   "eShift": 22,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 70,
+   "dur": 248,
+   "eShift": 22,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 48,
+   "dur": 140,
+   "eShift": 28,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 136,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 104,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 56,
+   "dur": 124,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "grace-short",
+   "midi": 53,
+   "dur": 96,
+   "eShift": 28,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 116,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg04-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 144,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 40,
+   "dur": 612,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 48,
+   "dur": 612,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 53,
+   "dur": 612,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 55,
+   "dur": 612,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 64,
+   "dur": 612,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 64,
+   "dur": 612,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 300,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 300,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 300,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 300,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 300,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 300,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 288,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 288,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 288,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 288,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 288,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 288,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 324,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 324,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 324,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 324,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 324,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 324,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 558,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 48,
+   "dur": 558,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 558,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 558,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 558,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 558,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 300,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 48,
+   "dur": 300,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 300,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 300,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 300,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 300,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 540,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 540,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 540,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 540,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 540,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 540,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 324,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 48,
+   "dur": 324,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 324,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 324,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 324,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg06-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 324,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 71,
+   "dur": 256,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 47,
+   "dur": 2358,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 2358,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 2358,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 47,
+   "dur": 1131,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 58,
+   "dur": 1131,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg08-triad",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 72,
+   "dur": 1131,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 52,
+   "dur": 1260,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 306,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 70,
+   "dur": 306,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 306,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 71,
+   "dur": 306,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 270,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 70,
+   "dur": 270,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 300,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg09-dyad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 71,
+   "dur": 300,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 45,
+   "dur": 1067,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 68,
+   "dur": 1067,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 50,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 1152,
+   "eShift": 7,
+   "hit": false
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 67,
+   "dur": 172,
+   "eShift": 13,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 148,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 63,
+   "dur": 168,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 300,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 63,
+   "dur": 128,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg11-dense",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 65,
+   "dur": 136,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 45,
+   "dur": 215,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 215,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 67,
+   "dur": 215,
+   "eShift": 2,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 48,
+   "dur": 271,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 54,
+   "dur": 271,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 271,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 200,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 200,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "short",
+   "midi": 67,
+   "dur": 200,
+   "eShift": 4,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 50,
+   "dur": 383,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 383,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "electric-eg12-triad",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 383,
+   "eShift": 7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 319,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 302,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 314,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 290,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 603,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 308,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 325,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 314,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 267,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 296,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 302,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 331,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 145,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 76,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 68,
+   "dur": 139,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 302,
+   "eShift": -94,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 279,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 290,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 66,
+   "dur": 296,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 302,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 331,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 54,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 76,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 68,
+   "dur": 139,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 302,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 279,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 290,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 377,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 57,
+   "dur": 70,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 279,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 68,
+   "dur": 238,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 99,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 435,
+   "eShift": -48,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-jazz-dyad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 54,
+   "dur": 452,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 63,
+   "dur": 122,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 162,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 99,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 151,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 60,
+   "dur": 99,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 111,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 60,
+   "dur": 116,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 61,
+   "dur": 168,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 116,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 337,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 139,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 62,
+   "dur": 82,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 151,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 69,
+   "dur": 221,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 145,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad-b",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 69,
+   "dur": 128,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 44,
+   "dur": 180,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 40,
+   "dur": 122,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 238,
+   "eShift": 42,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 215,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 447,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 918,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 406,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 226,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 44,
+   "dur": 731,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 256,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 911,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 465,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 209,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 44,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 476,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 256,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 314,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 55,
+   "dur": 325,
+   "eShift": 19,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 337,
+   "eShift": 10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 284,
+   "eShift": -13,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 63,
+   "dur": 476,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 51,
+   "dur": 453,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 55,
+   "dur": 435,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 51,
+   "dur": 191,
+   "eShift": -91,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 63,
+   "dur": 203,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 55,
+   "dur": 191,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 278,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 40,
+   "dur": 110,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 221,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 250,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 63,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 51,
+   "dur": 221,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 215,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 238,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 592,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 46,
+   "dur": 401,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 46,
+   "dur": 569,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 371,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 53,
+   "dur": 343,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 40,
+   "dur": 156,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 44,
+   "dur": 482,
+   "eShift": 36,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-bossa-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 51,
+   "dur": 476,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-funk-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 65,
+   "dur": 163,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-funk-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 66,
+   "dur": 139,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-funk-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 68,
+   "dur": 127,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-funk-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 70,
+   "dur": 191,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-funk-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 71,
+   "dur": 1585,
+   "eShift": -51,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 494,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 134,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 395,
+   "eShift": 65,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 47,
+   "dur": 383,
+   "eShift": 60,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 360,
+   "eShift": 57,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 365,
+   "eShift": 54,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 59,
+   "dur": 326,
+   "eShift": 51,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 64,
+   "dur": 319,
+   "eShift": 48,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 360,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 354,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 52,
+   "dur": 93,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 56,
+   "dur": 93,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 47,
+   "dur": 82,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "grace-short",
+   "midi": 40,
+   "dur": 75,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 110,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 56,
+   "dur": 215,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 47,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 40,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 40,
+   "dur": 871,
+   "eShift": -88,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 47,
+   "dur": 377,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 133,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 383,
+   "eShift": -86,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 180,
+   "eShift": -88,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 64,
+   "dur": 197,
+   "eShift": -91,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 59,
+   "dur": 535,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 64,
+   "dur": 203,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 116,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 291,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 174,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 232,
+   "eShift": 74,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 50,
+   "dur": 418,
+   "eShift": 74,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 62,
+   "dur": 232,
+   "eShift": -77,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 233,
+   "eShift": -85,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 221,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 221,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 220,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 215,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 215,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 243,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 221,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 220,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-dense",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 204,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 45,
+   "dur": 232,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 52,
+   "dur": 215,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 61,
+   "dur": 215,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "negative-onset",
+   "midi": 57,
+   "dur": 203,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 220,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 215,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 127,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 214,
+   "eShift": null,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 430,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 52,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 215,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 203,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 209,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 45,
+   "dur": 186,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 220,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 61,
+   "dur": 221,
+   "eShift": -91,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 256,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 244,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 215,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 204,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 204,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 57,
+   "dur": 186,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 61,
+   "dur": 209,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 220,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 52,
+   "dur": 232,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 61,
+   "dur": 204,
+   "eShift": -97,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 45,
+   "dur": 203,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 57,
+   "dur": 175,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 52,
+   "dur": 209,
+   "eShift": -94,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 61,
+   "dur": 157,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 261,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 55,
+   "dur": 256,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 59,
+   "dur": 198,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 494,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 50,
+   "dur": 465,
+   "eShift": -88,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 226,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 66,
+   "dur": 471,
+   "eShift": -97,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 238,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 50,
+   "dur": 197,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 209,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 198,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 50,
+   "dur": 250,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 62,
+   "dur": 221,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 57,
+   "dur": 221,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-rock-triad",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 66,
+   "dur": 192,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 261,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 56,
+   "dur": 232,
+   "eShift": -7,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 60,
+   "dur": 233,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 63,
+   "dur": 250,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "clear",
+   "midi": 63,
+   "dur": 226,
+   "eShift": 48,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 68,
+   "dur": 168,
+   "eShift": -10,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 67,
+   "dur": 227,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 62,
+   "dur": 151,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 61,
+   "dur": 146,
+   "eShift": -100,
+   "hit": false
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "misaligned",
+   "midi": 66,
+   "dur": 1138,
+   "eShift": -100,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 61,
+   "dur": 133,
+   "eShift": -7,
+   "hit": true
+  },
+  {
+   "clip": "acoustic-fresh-ss-single",
+   "instrument": "acoustic-guitar",
+   "stratum": "short",
+   "midi": 58,
+   "dur": 174,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-gtechs-low",
+   "instrument": "electric-guitar",
+   "stratum": "negative-onset",
+   "midi": 40,
+   "dur": 3736,
+   "eShift": null,
+   "hit": false
+  },
+  {
+   "clip": "electric-gtechs-low",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 41,
+   "dur": 3779,
+   "eShift": -16,
+   "hit": true
+  },
+  {
+   "clip": "electric-gtechs-mid",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 57,
+   "dur": 2168,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-gtechs-high",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 86,
+   "dur": 1625,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-gtechs-quiet",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 1312,
+   "eShift": -1,
+   "hit": true
+  },
+  {
+   "clip": "electric-gtechs-quiet",
+   "instrument": "electric-guitar",
+   "stratum": "clear",
+   "midi": 60,
+   "dur": 228,
+   "eShift": -10,
+   "hit": false
+  }
+ ]
+}
