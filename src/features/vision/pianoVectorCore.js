@@ -503,7 +503,7 @@ export function assignPianoVoices(ir) {
       if (n.stemOwnership === 'edge') edgeStems += 1
       if (n.stemOwnership === 'position-fallback') unresolvedStems += 1
     }
-    // Conflict: a stem claimed by notes in different x clusters.
+    // Conflict 1: a stem claimed by notes in different x clusters.
     const byStem = new Map()
     for (const n of grp) {
       if (n.stem_x == null) continue
@@ -514,6 +514,19 @@ export function assignPianoVoices(ir) {
       if (group.length < 2) continue
       const xs = group.map((n) => n.x)
       if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
+    }
+    // Conflict 2: several distinct stems on the same onset are not a chord
+    // unless they share one stem x. Catches same-direction second voices.
+    const onsetGroups = new Map()
+    for (const n of grp) {
+      if (n.stem_x == null) continue
+      const key = Math.round(n.x / 1.5)
+      if (!onsetGroups.has(key)) onsetGroups.set(key, [])
+      onsetGroups.get(key).push(n)
+    }
+    for (const group of onsetGroups.values()) {
+      const stems = new Set(group.map((n) => n.stem_x))
+      if (stems.size > 1) conflicts += 1
     }
   }
   for (const r of rests) {
