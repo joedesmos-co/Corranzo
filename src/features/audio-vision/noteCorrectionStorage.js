@@ -59,7 +59,10 @@ export function saveNoteCorrections(fingerprint, settings, corrections) {
   if (!key || typeof localStorage === 'undefined') return false
   try {
     const serialized = serializeNoteCorrections(corrections)
-    if (serialized.removed.length === 0) {
+    const empty = serialized.removed.length === 0 &&
+      Object.keys(serialized.notes ?? {}).length === 0 &&
+      (serialized.added ?? []).length === 0
+    if (empty) {
       localStorage.removeItem(key)
       return true
     }

@@ -393,6 +393,9 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     suppressedHarmonics,
     corrections: serializeNoteCorrections(parsedCorrections),
     correctionsApplied: corrected.removedCount,
+    correctionsEdited: corrected.editedCount,
+    correctionsAdded: corrected.addedCount,
+    correctionsSkipped: corrected.skippedAdditions.length,
     correctionsStale: correctionResolution.stale.length,
     staleCorrectionKeys: correctionResolution.stale,
     // The uncorrected arrangement is retained as the transcription evidence:
@@ -400,6 +403,8 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     // can distinguish "what was heard" from "what the musician kept".
     arrangementEvents,
     removedEvents: corrected.removedEvents,
+    removedAddedEvents: corrected.removedAddedNotes,
+    skippedAdditions: corrected.skippedAdditions,
     originalNoteCount: arrangementEvents.length,
     notation,
     transcriptionEvidence: {

@@ -1008,9 +1008,13 @@ export default function App() {
           // already corrected, and this record says what was removed.
           corrections: payload.corrections ?? null,
           correctionsApplied: payload.correctionsApplied ?? 0,
+          correctionsEdited: payload.correctionsEdited ?? 0,
+          correctionsAdded: payload.correctionsAdded ?? 0,
+          correctionsSkipped: payload.correctionsSkipped ?? 0,
           correctionsStale: payload.correctionsStale ?? 0,
           originalNoteCount: payload.originalNoteCount ?? null,
           removedNoteCount: payload.removedNoteCount ?? 0,
+          removedAddedNoteCount: payload.removedAddedNoteCount ?? 0,
         },
       },
     })

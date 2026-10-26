@@ -9,12 +9,14 @@ import { buildArrangementMusicXml } from './arrangementMusicXml.js'
 import { PART_INSTRUMENTS, DIFFICULTIES, measureComplexity } from './arrangementModel.js'
 import {
   addRemoval,
+  addUserNote,
   applyNoteCorrections,
-  clearRemovals,
+  clearAllCorrections,
   parseNoteCorrections,
   resolveCorrections,
   serializeNoteCorrections,
-  undoLastRemoval,
+  setNoteEdit,
+  undoLastEdit,
   undoRemoval,
 } from './noteCorrections.js'
 import { loadNoteCorrections, saveNoteCorrections } from './noteCorrectionStorage.js'
@@ -247,9 +249,14 @@ export function useAudioArrangement({ onReady = null } = {}) {
       musicXml,
       corrections: serializeNoteCorrections(corrections),
       correctionsApplied: corrected.removedCount,
+      correctionsEdited: corrected.editedCount,
+      correctionsAdded: corrected.addedCount,
+      correctionsSkipped: corrected.skippedAdditions.length,
       correctionsStale: resolution.stale.length,
       staleCorrectionKeys: resolution.stale,
       removedEvents: corrected.removedEvents,
+      removedAddedEvents: corrected.removedAddedNotes,
+      skippedAdditions: corrected.skippedAdditions,
       model: {
         ...previous.model,
         complexity: measureComplexity(kept.map((event) => ({ ...event, startSeconds: event.startBeat }))),
@@ -283,7 +290,7 @@ export function useAudioArrangement({ onReady = null } = {}) {
       if (!previous?.ok) return previous
       return rebuildWithCorrections(
         previous,
-        undoLastRemoval(parseNoteCorrections(previous.corrections)),
+        undoLastEdit(parseNoteCorrections(previous.corrections)),
       )
     })
   }, [rebuildWithCorrections])
@@ -291,9 +298,36 @@ export function useAudioArrangement({ onReady = null } = {}) {
   const clearNoteCorrections = useCallback(() => {
     setResult((previous) => {
       if (!previous?.ok) return previous
+      return rebuildWithCorrections(previous, clearAllCorrections())
+    })
+  }, [rebuildWithCorrections])
+
+  const editNote = useCallback((correctionKey, edit) => {
+    setResult((previous) => {
+      if (!previous?.ok || !correctionKey) return previous
       return rebuildWithCorrections(
         previous,
-        clearRemovals(parseNoteCorrections(previous.corrections)),
+        setNoteEdit(parseNoteCorrections(previous.corrections), correctionKey, edit),
+      )
+    })
+  }, [rebuildWithCorrections])
+
+  const resetNoteEdits = useCallback((correctionKey) => {
+    setResult((previous) => {
+      if (!previous?.ok || !correctionKey) return previous
+      return rebuildWithCorrections(
+        previous,
+        setNoteEdit(parseNoteCorrections(previous.corrections), correctionKey, null),
+      )
+    })
+  }, [rebuildWithCorrections])
+
+  const addNote = useCallback((note) => {
+    setResult((previous) => {
+      if (!previous?.ok) return previous
+      return rebuildWithCorrections(
+        previous,
+        addUserNote(parseNoteCorrections(previous.corrections), note),
       )
     })
   }, [rebuildWithCorrections])
@@ -316,9 +350,13 @@ export function useAudioArrangement({ onReady = null } = {}) {
       // still says which notes the musician removed and how many were heard.
       corrections: result.corrections ?? null,
       correctionsApplied: result.correctionsApplied ?? 0,
+      correctionsEdited: result.correctionsEdited ?? 0,
+      correctionsAdded: result.correctionsAdded ?? 0,
+      correctionsSkipped: result.correctionsSkipped ?? 0,
       correctionsStale: result.correctionsStale ?? 0,
       originalNoteCount: result.originalNoteCount ?? result.arrangementEvents?.length ?? null,
       removedNoteCount: result.removedEvents?.length ?? 0,
+      removedAddedNoteCount: result.removedAddedEvents?.length ?? 0,
     }
     onReady?.(payload)
     return payload
@@ -386,6 +424,9 @@ export function useAudioArrangement({ onReady = null } = {}) {
     undoNoteRemoval,
     undoLastNoteRemoval,
     clearNoteCorrections,
+    editNote,
+    resetNoteEdits,
+    addNote,
     reset: () => {
       cancelledRef.current = true
       setPhase('idle')
