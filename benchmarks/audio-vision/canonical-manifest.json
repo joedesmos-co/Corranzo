@@ -1,0 +1,2380 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-26T22:17:06.145Z",
+  "description": "Canonical real-audio evaluation manifest. Combines clip identity, source/license, reference timestamps, align-probe correction provenance, evaluation tolerances, model/extractor version, and per-clip metrics (raw and aligned).",
+  "model": {
+    "name": "Basic Pitch (released, TF.js)",
+    "path": "public/neural-model",
+    "weights": "released"
+  },
+  "extractor": {
+    "name": "production",
+    "onsetThreshold": 0.65,
+    "frameThreshold": 0.5,
+    "minNoteFrames": 3,
+    "onsetToleranceSec": 0.12
+  },
+  "audio": {
+    "sampleRate": 22050,
+    "mono": true
+  },
+  "splits": [
+    "dev",
+    "eval",
+    "eval-fresh"
+  ],
+  "excluded": [
+    {
+      "id": "piano-mozart2-dense",
+      "reason": "Annotation error, independently verified 2026-10-08: forte MIDI chord at 23.04 falls in near-silent audio (rms ~0.0005); music resumes at 23.3. Clip removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-single",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: truth attacks at 0.28-0.31 s sit in flat energy (no transient; audio loudest at clip start, decaying). Model reports the same pitches ~0.3 s early across 3 runs; guitar clips through the identical code path align at ~0.00 s. MIDI/audio take drift in Vienna Mozart p01. Removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-triad",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: first chord aligns (energy attack at 0.50 s) but later truth onsets drift up to ~0.6 s off model/energy evidence (median offset -0.115 s with wide scatter). Same Vienna Mozart p01 take drift. Removed, never retuned."
+    },
+    {
+      "id": "piano-mozart-dense",
+      "reason": "Annotation/audio drift, independently verified 2026-10-09: truth contains a negative onset (-0.38 s), audio decays from clip start, model/truth median offset -0.540 s with scattered signs. Same Vienna Mozart p01 take drift. Removed, never retuned."
+    }
+  ],
+  "provenance": {
+    "alignProbe": "benchmarks/audio-vision/align-probe.json (DSP: spectral-flux peaks, no model)",
+    "realBench": "benchmarks/audio-vision/real-bench.json (raw)",
+    "realBenchAligned": "benchmarks/audio-vision/real-bench-aligned.json (align-probe delta applied)",
+    "annotationAudit": "benchmarks/audio-vision/annotation-audit.json"
+  },
+  "aggregate": {
+    "raw": {
+      "clips": 50,
+      "truthNotes": 841,
+      "predNotes": 799,
+      "precision": 0.6,
+      "recall": 0.642,
+      "f1": 0.597,
+      "bassRecall": 0.656,
+      "midRecall": 0.636,
+      "highRecall": 0.405,
+      "shortRecall": 0.499,
+      "denseRecall": 0.517,
+      "denseF1": 0.386,
+      "octaveErrors": 54,
+      "falseNotes": 323,
+      "onsetMaeMs": 24.804,
+      "durationMaeMs": 298.152,
+      "negativeOnsetExcluded": 56
+    },
+    "aligned": {
+      "clips": 50,
+      "truthNotes": 841,
+      "predNotes": 799,
+      "precision": 0.6,
+      "recall": 0.642,
+      "f1": 0.597,
+      "bassRecall": 0.656,
+      "midRecall": 0.636,
+      "highRecall": 0.405,
+      "shortRecall": 0.499,
+      "denseRecall": 0.517,
+      "denseF1": 0.386,
+      "octaveErrors": 54,
+      "falseNotes": 323,
+      "onsetMaeMs": 24.804,
+      "durationMaeMs": 298.152,
+      "negativeOnsetExcluded": 56,
+      "precisionAligned": 0.588,
+      "recallAligned": 0.659,
+      "f1Aligned": 0.597,
+      "octaveErrorsAligned": 63,
+      "onsetMaeMsAligned": 35.104
+    }
+  },
+  "clips": [
+    {
+      "id": "piano-mozart-single",
+      "instrument": "piano",
+      "category": "single",
+      "split": "dev",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 11.82,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 13,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          74
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": null,
+        "alignProbeBestRate": null
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 1,
+          "falseNotes": 21
+        },
+        "aligned": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "piano-mozart-dyad",
+      "instrument": "piano",
+      "category": "dyad",
+      "split": "dev",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.07,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 17,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          59,
+          74
+        ],
+        "negativeOnsetCount": 3,
+        "alignProbeDelta": -0.525,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.061,
+          "precision": 0.053,
+          "recall": 0.071,
+          "onsetMaeMs": 112,
+          "octaveErrors": 0,
+          "falseNotes": 18
+        },
+        "aligned": {
+          "f1": 0.452,
+          "precision": 0.368,
+          "recall": 0.583,
+          "onsetMaeMs": 85,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "piano-mozart-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "split": "dev",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.41,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 14,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57,
+          64,
+          73
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": null,
+        "alignProbeBestRate": null
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.065,
+          "precision": 0.059,
+          "recall": 0.071,
+          "onsetMaeMs": 111,
+          "octaveErrors": 0,
+          "falseNotes": 16
+        },
+        "aligned": {
+          "f1": 0.065,
+          "precision": 0.059,
+          "recall": 0.071,
+          "onsetMaeMs": 111,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "piano-mozart-dense",
+      "instrument": "piano",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p01.mid",
+      "audio": {
+        "file": "clips/piano-mozart-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 21.52,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 17,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          66,
+          71,
+          74
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": null,
+        "alignProbeBestRate": null
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.056,
+          "precision": 0.05,
+          "recall": 0.063,
+          "onsetMaeMs": 63,
+          "octaveErrors": 1,
+          "falseNotes": 19
+        },
+        "aligned": {
+          "f1": 0.056,
+          "precision": 0.05,
+          "recall": 0.063,
+          "onsetMaeMs": 63,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-single",
+      "instrument": "piano",
+      "category": "single",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.45,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 19,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          48
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.125,
+        "alignProbeBestRate": 0.889
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.054,
+          "precision": 0.053,
+          "recall": 0.056,
+          "onsetMaeMs": 75,
+          "octaveErrors": 2,
+          "falseNotes": 18
+        },
+        "aligned": {
+          "f1": 0.162,
+          "precision": 0.158,
+          "recall": 0.167,
+          "onsetMaeMs": 22,
+          "octaveErrors": 4
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.05,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 27,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          60,
+          65
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.175,
+        "alignProbeBestRate": 0.92
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.115,
+          "precision": 0.115,
+          "recall": 0.115,
+          "onsetMaeMs": 12,
+          "octaveErrors": 1,
+          "falseNotes": 23
+        },
+        "aligned": {
+          "f1": 0.235,
+          "precision": 0.231,
+          "recall": 0.24,
+          "onsetMaeMs": 57,
+          "octaveErrors": 4
+        }
+      }
+    },
+    {
+      "id": "piano-schubert-dense",
+      "instrument": "piano",
+      "category": "dense",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "vn_Schubert_D783_no15_p01.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p01.mid",
+      "audio": {
+        "file": "clips/piano-schubert-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.35,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 30,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          58,
+          64,
+          72
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.825,
+        "alignProbeBestRate": 0.696
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.16,
+          "precision": 0.2,
+          "recall": 0.133,
+          "onsetMaeMs": 30,
+          "octaveErrors": 1,
+          "falseNotes": 16
+        },
+        "aligned": {
+          "f1": 0.233,
+          "precision": 0.25,
+          "recall": 0.217,
+          "onsetMaeMs": 27,
+          "octaveErrors": 4
+        }
+      }
+    },
+    {
+      "id": "piano-mozart2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "norm2_vn_mozart_p02.wav",
+      "sourceTruthFile": "vienna/midi/Mozart_K331_1st-mov_p02.mid",
+      "audio": {
+        "file": "clips/piano-mozart2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.23,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 15,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57,
+          64,
+          73
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.75,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.242,
+          "precision": 0.222,
+          "recall": 0.267,
+          "onsetMaeMs": 49,
+          "octaveErrors": 0,
+          "falseNotes": 14
+        },
+        "aligned": {
+          "f1": 0.2,
+          "precision": 0.167,
+          "recall": 0.25,
+          "onsetMaeMs": 75,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "piano-schubert2-single",
+      "instrument": "piano",
+      "category": "single",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.01,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 20,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          48
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.8,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 5,
+          "falseNotes": 25
+        },
+        "aligned": {
+          "f1": 0.791,
+          "precision": 0.68,
+          "recall": 0.944,
+          "onsetMaeMs": 6,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "piano-schubert2-triad",
+      "instrument": "piano",
+      "category": "triad",
+      "split": "eval",
+      "dataset": "vienna-4x22",
+      "license": "CC-BY-4.0",
+      "attribution": "The Vienna 4x22 Piano Corpus (Goebl, Univ. of Music and Performing Arts Vienna), DOI 10.21939/4X22, CC-BY-4.0",
+      "sourceFile": "norm2_vn_schubert_p02.wav",
+      "sourceTruthFile": "vienna/midi/Schubert_D783_no15_p02.mid",
+      "audio": {
+        "file": "clips/piano-schubert2-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.75,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 27,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          60,
+          65
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.85,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 9,
+          "falseNotes": 26
+        },
+        "aligned": {
+          "f1": 0.818,
+          "precision": 0.692,
+          "recall": 1,
+          "onsetMaeMs": 52,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-jazz-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "eval",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/04_Jazz2-110-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-jazz-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.34,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 6,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          53
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.909,
+          "precision": 0.833,
+          "recall": 1,
+          "onsetMaeMs": 18,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.909,
+          "precision": 0.833,
+          "recall": 1,
+          "onsetMaeMs": 18,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "split": "eval",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_04_Jazz2-110-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/04_Jazz2-110-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-jazz-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.16,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 8,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          60
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.75,
+          "precision": 0.667,
+          "recall": 0.857,
+          "onsetMaeMs": 31,
+          "octaveErrors": 0,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.75,
+          "precision": 0.667,
+          "recall": 0.857,
+          "onsetMaeMs": 31,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-bossa-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/00_BN3-119-G_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-bossa-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.25,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 6,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.075,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.706,
+          "precision": 0.545,
+          "recall": 1,
+          "onsetMaeMs": 14,
+          "octaveErrors": 0,
+          "falseNotes": 5
+        },
+        "aligned": {
+          "f1": 0.625,
+          "precision": 0.455,
+          "recall": 1,
+          "onsetMaeMs": 60,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-bossa-chord",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_00_BN3-119-G_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/00_BN3-119-G_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-bossa-chord.wav",
+        "sampleRate": 44100,
+        "startSeconds": 14.12,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 12,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          59,
+          62,
+          67
+        ],
+        "negativeOnsetCount": 4,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.696,
+          "precision": 0.533,
+          "recall": 1,
+          "onsetMaeMs": 21,
+          "octaveErrors": 0,
+          "falseNotes": 7
+        },
+        "aligned": {
+          "f1": 0.696,
+          "precision": 0.533,
+          "recall": 1,
+          "onsetMaeMs": 17,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-rock-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock2-142-D_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-rock-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.36,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 7,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          69
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.857,
+          "precision": 0.857,
+          "recall": 0.857,
+          "onsetMaeMs": 11,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.857,
+          "precision": 0.857,
+          "recall": 0.857,
+          "onsetMaeMs": 11,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-rock-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_03_Rock2-142-D_solo_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock2-142-D_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-rock-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 15.36,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 15,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          69,
+          70
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.966,
+          "precision": 1,
+          "recall": 0.933,
+          "onsetMaeMs": 10,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 0.966,
+          "precision": 1,
+          "recall": 0.933,
+          "onsetMaeMs": 10,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-power-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock1-90-C#_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-power-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.35,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 19,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          49,
+          56
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.725,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.765,
+          "precision": 0.813,
+          "recall": 0.722,
+          "onsetMaeMs": 16,
+          "octaveErrors": 0,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.345,
+          "precision": 0.313,
+          "recall": 0.385,
+          "onsetMaeMs": 38,
+          "octaveErrors": 2
+        }
+      }
+    },
+    {
+      "id": "acoustic-power-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_03_Rock1-90-C#_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/03_Rock1-90-C#_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-power-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 10.84,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 24,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          42,
+          49,
+          52,
+          58
+        ],
+        "negativeOnsetCount": 2,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.585,
+          "precision": 0.632,
+          "recall": 0.545,
+          "onsetMaeMs": 25,
+          "octaveErrors": 5,
+          "falseNotes": 7
+        },
+        "aligned": {
+          "f1": 0.585,
+          "precision": 0.632,
+          "recall": 0.545,
+          "onsetMaeMs": 25,
+          "octaveErrors": 5
+        }
+      }
+    },
+    {
+      "id": "acoustic-funk-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/02_Funk1-114-Ab_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-funk-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.38,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 39,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          43,
+          51,
+          56
+        ],
+        "negativeOnsetCount": 4,
+        "alignProbeDelta": -0.225,
+        "alignProbeBestRate": 0.969
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.582,
+          "precision": 0.8,
+          "recall": 0.457,
+          "onsetMaeMs": 15,
+          "octaveErrors": 1,
+          "falseNotes": 4
+        },
+        "aligned": {
+          "f1": 0.259,
+          "precision": 0.35,
+          "recall": 0.206,
+          "onsetMaeMs": 74,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "acoustic-funk-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_02_Funk1-114-Ab_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/02_Funk1-114-Ab_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-funk-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.62,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 43,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          44,
+          51,
+          54,
+          59
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.05,
+        "alignProbeBestRate": 0.977
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.603,
+          "precision": 0.95,
+          "recall": 0.442,
+          "onsetMaeMs": 13,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.635,
+          "precision": 1,
+          "recall": 0.465,
+          "onsetMaeMs": 45,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-strum-triad",
+      "instrument": "acoustic-guitar",
+      "category": "strum",
+      "split": "eval",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/01_SS3-98-C_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-strum-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.84,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 36,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          55,
+          59
+        ],
+        "negativeOnsetCount": 5,
+        "alignProbeDelta": -0.225,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.658,
+          "precision": 0.571,
+          "recall": 0.774,
+          "onsetMaeMs": 14,
+          "octaveErrors": 8,
+          "falseNotes": 18
+        },
+        "aligned": {
+          "f1": 0.394,
+          "precision": 0.333,
+          "recall": 0.483,
+          "onsetMaeMs": 68,
+          "octaveErrors": 8
+        }
+      }
+    },
+    {
+      "id": "acoustic-strum-dense",
+      "instrument": "acoustic-guitar",
+      "category": "strum",
+      "split": "eval",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_01_SS3-98-C_comp_mic.wav",
+      "sourceTruthFile": "guitarset/jams/01_SS3-98-C_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-strum-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.2,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 36,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          45,
+          52,
+          57,
+          60
+        ],
+        "negativeOnsetCount": 3,
+        "alignProbeDelta": -0.05,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.688,
+          "precision": 0.71,
+          "recall": 0.667,
+          "onsetMaeMs": 15,
+          "octaveErrors": 3,
+          "falseNotes": 9
+        },
+        "aligned": {
+          "f1": 0.688,
+          "precision": 0.71,
+          "recall": 0.667,
+          "onsetMaeMs": 40,
+          "octaveErrors": 4
+        }
+      }
+    },
+    {
+      "id": "electric-eg07-single",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_07.wav",
+      "sourceTruthFile": "egset12/07.jams",
+      "audio": {
+        "file": "clips/electric-eg07-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 12,
+        "anchorOnset": 0.36,
+        "anchorTones": [
+          55
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.828,
+          "precision": 0.706,
+          "recall": 1,
+          "onsetMaeMs": 8,
+          "octaveErrors": 3,
+          "falseNotes": 5
+        },
+        "aligned": {
+          "f1": 0.828,
+          "precision": 0.706,
+          "recall": 1,
+          "onsetMaeMs": 8,
+          "octaveErrors": 3
+        }
+      }
+    },
+    {
+      "id": "electric-eg07-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_07.wav",
+      "sourceTruthFile": "egset12/07.jams",
+      "audio": {
+        "file": "clips/electric-eg07-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 15.52,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 9,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          63
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.941,
+          "precision": 0.889,
+          "recall": 1,
+          "onsetMaeMs": 6,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.941,
+          "precision": 0.889,
+          "recall": 1,
+          "onsetMaeMs": 6,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg01-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_01.wav",
+      "sourceTruthFile": "egset12/01.jams",
+      "audio": {
+        "file": "clips/electric-eg01-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 4.37,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 10,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          54,
+          57,
+          62
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.857,
+          "precision": 0.75,
+          "recall": 1,
+          "onsetMaeMs": 7,
+          "octaveErrors": 3,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.857,
+          "precision": 0.75,
+          "recall": 1,
+          "onsetMaeMs": 7,
+          "octaveErrors": 3
+        }
+      }
+    },
+    {
+      "id": "electric-eg01-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_01.wav",
+      "sourceTruthFile": "egset12/01.jams",
+      "audio": {
+        "file": "clips/electric-eg01-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 10,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 11,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          50,
+          56,
+          60,
+          65
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.952,
+          "precision": 0.909,
+          "recall": 1,
+          "onsetMaeMs": 8,
+          "octaveErrors": 1,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.952,
+          "precision": 0.909,
+          "recall": 1,
+          "onsetMaeMs": 8,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "electric-eg02-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_02.wav",
+      "sourceTruthFile": "egset12/02.jams",
+      "audio": {
+        "file": "clips/electric-eg02-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.21,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 45,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          52,
+          59,
+          64,
+          66,
+          71
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.05,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.525,
+          "precision": 1,
+          "recall": 0.356,
+          "onsetMaeMs": 13,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 0.525,
+          "precision": 1,
+          "recall": 0.356,
+          "onsetMaeMs": 50,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg05-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "split": "dev",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_05.wav",
+      "sourceTruthFile": "egset12/05.jams",
+      "audio": {
+        "file": "clips/electric-eg05-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.54,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 13,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          71,
+          76
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.1,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.88,
+          "precision": 0.917,
+          "recall": 0.846,
+          "onsetMaeMs": 6,
+          "octaveErrors": 1,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.833,
+          "precision": 0.833,
+          "recall": 0.833,
+          "onsetMaeMs": 99,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg10-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_10.wav",
+      "sourceTruthFile": "egset12/10.jams",
+      "audio": {
+        "file": "clips/electric-eg10-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.47,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 10,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          47,
+          52,
+          55,
+          59,
+          64
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.6,
+          "precision": 0.545,
+          "recall": 0.667,
+          "onsetMaeMs": 51,
+          "octaveErrors": 0,
+          "falseNotes": 5
+        },
+        "aligned": {
+          "f1": 0.6,
+          "precision": 0.545,
+          "recall": 0.667,
+          "onsetMaeMs": 51,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg03-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_03.wav",
+      "sourceTruthFile": "egset12/03.jams",
+      "audio": {
+        "file": "clips/electric-eg03-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.54,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 10,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          55,
+          60,
+          64,
+          69
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.05,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.727,
+          "precision": 0.667,
+          "recall": 0.8,
+          "onsetMaeMs": 34,
+          "octaveErrors": 1,
+          "falseNotes": 4
+        },
+        "aligned": {
+          "f1": 0.762,
+          "precision": 0.667,
+          "recall": 0.889,
+          "onsetMaeMs": 34,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "electric-eg04-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_04.wav",
+      "sourceTruthFile": "egset12/04.jams",
+      "audio": {
+        "file": "clips/electric-eg04-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 8.91,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 17,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          53,
+          54
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 0.938
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.897,
+          "precision": 1,
+          "recall": 0.813,
+          "onsetMaeMs": 7,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 0.897,
+          "precision": 1,
+          "recall": 0.813,
+          "onsetMaeMs": 25,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg06-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_06.wav",
+      "sourceTruthFile": "egset12/06.jams",
+      "audio": {
+        "file": "clips/electric-eg06-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 7.92,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 48,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          48,
+          53,
+          55,
+          64
+        ],
+        "negativeOnsetCount": 6,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.603,
+          "precision": 0.71,
+          "recall": 0.524,
+          "onsetMaeMs": 21,
+          "octaveErrors": 2,
+          "falseNotes": 9
+        },
+        "aligned": {
+          "f1": 0.603,
+          "precision": 0.71,
+          "recall": 0.524,
+          "onsetMaeMs": 21,
+          "octaveErrors": 2
+        }
+      }
+    },
+    {
+      "id": "electric-eg08-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_08.wav",
+      "sourceTruthFile": "egset12/08.jams",
+      "audio": {
+        "file": "clips/electric-eg08-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.95,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 7,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          47,
+          58,
+          72
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0.125,
+        "alignProbeBestRate": 0.571
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.545,
+          "precision": 0.6,
+          "recall": 0.5,
+          "onsetMaeMs": 4,
+          "octaveErrors": 0,
+          "falseNotes": 2
+        },
+        "aligned": {
+          "f1": 0.167,
+          "precision": 0.2,
+          "recall": 0.143,
+          "onsetMaeMs": 31,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg09-dyad",
+      "instrument": "electric-guitar",
+      "category": "dyad",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_09.wav",
+      "sourceTruthFile": "egset12/09.jams",
+      "audio": {
+        "file": "clips/electric-eg09-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 9.6,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 9,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          70
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.941,
+          "precision": 0.889,
+          "recall": 1,
+          "onsetMaeMs": 9,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.941,
+          "precision": 0.889,
+          "recall": 1,
+          "onsetMaeMs": 9,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg11-dense",
+      "instrument": "electric-guitar",
+      "category": "dense",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_11.wav",
+      "sourceTruthFile": "egset12/11.jams",
+      "audio": {
+        "file": "clips/electric-eg11-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.17,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 14,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          50,
+          56,
+          57,
+          59,
+          66
+        ],
+        "negativeOnsetCount": 2,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.615,
+          "precision": 0.571,
+          "recall": 0.667,
+          "onsetMaeMs": 32,
+          "octaveErrors": 0,
+          "falseNotes": 6
+        },
+        "aligned": {
+          "f1": 0.615,
+          "precision": 0.571,
+          "recall": 0.667,
+          "onsetMaeMs": 32,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-eg12-triad",
+      "instrument": "electric-guitar",
+      "category": "triad",
+      "split": "eval",
+      "dataset": "egset12",
+      "license": "CC-BY-4.0",
+      "attribution": "EGSet12 (DAFx 2024), Zenodo record 11406378, CC-BY-4.0",
+      "sourceFile": "eg_12.wav",
+      "sourceTruthFile": "egset12/12.jams",
+      "audio": {
+        "file": "clips/electric-eg12-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 11.69,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 12,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          45,
+          62,
+          67
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 1,
+          "precision": 1,
+          "recall": 1,
+          "onsetMaeMs": 6,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 1,
+          "precision": 1,
+          "recall": 1,
+          "onsetMaeMs": 6,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_00_Jazz2-187-F#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-jazz-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 0.1,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 19,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          54,
+          66
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.2,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.895,
+          "precision": 0.895,
+          "recall": 0.895,
+          "onsetMaeMs": 8,
+          "octaveErrors": 1,
+          "falseNotes": 2
+        },
+        "aligned": {
+          "f1": 0.162,
+          "precision": 0.158,
+          "recall": 0.167,
+          "onsetMaeMs": 112,
+          "octaveErrors": 11
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-jazz-dyad",
+      "instrument": "acoustic-guitar",
+      "category": "dyad",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_00_Jazz2-187-F#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/00_Jazz2-187-F#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-jazz-dyad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 2.08,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 16,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56,
+          68
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.8,
+          "precision": 0.8,
+          "recall": 0.8,
+          "onsetMaeMs": 12,
+          "octaveErrors": 2,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.8,
+          "precision": 0.8,
+          "recall": 0.8,
+          "onsetMaeMs": 14,
+          "octaveErrors": 2
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad-b",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_01_Rock3-117-Bb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/01_Rock3-117-Bb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-triad-b.wav",
+        "sampleRate": 44100,
+        "startSeconds": 23.52,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 18,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          58,
+          60,
+          62
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.889,
+          "precision": 0.842,
+          "recall": 0.941,
+          "onsetMaeMs": 31,
+          "octaveErrors": 0,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.889,
+          "precision": 0.842,
+          "recall": 0.941,
+          "onsetMaeMs": 31,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_02_BN1-129-Eb_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/02_BN1-129-Eb_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-bossa-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 7.66,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 22,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          44,
+          51,
+          55
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.821,
+          "precision": 0.889,
+          "recall": 0.762,
+          "onsetMaeMs": 19,
+          "octaveErrors": 0,
+          "falseNotes": 2
+        },
+        "aligned": {
+          "f1": 0.821,
+          "precision": 0.889,
+          "recall": 0.762,
+          "onsetMaeMs": 28,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-bossa-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_02_BN1-129-Eb_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/02_BN1-129-Eb_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-bossa-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 13.45,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 25,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          51,
+          55,
+          62
+        ],
+        "negativeOnsetCount": 3,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.87,
+          "precision": 0.833,
+          "recall": 0.909,
+          "onsetMaeMs": 18,
+          "octaveErrors": 0,
+          "falseNotes": 4
+        },
+        "aligned": {
+          "f1": 0.87,
+          "precision": 0.833,
+          "recall": 0.909,
+          "onsetMaeMs": 28,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-funk-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_05_Funk2-108-Eb_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Funk2-108-Eb_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-funk-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 1.5,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 5,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          70
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.889,
+          "precision": 0.8,
+          "recall": 1,
+          "onsetMaeMs": 12,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.889,
+          "precision": 0.8,
+          "recall": 1,
+          "onsetMaeMs": 12,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-dense",
+      "instrument": "acoustic-guitar",
+      "category": "dense",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_05_Rock1-130-A_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Rock1-130-A_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-dense.wav",
+        "sampleRate": 44100,
+        "startSeconds": 14.73,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 46,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          40,
+          47,
+          52,
+          56,
+          59,
+          64
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.075,
+        "alignProbeBestRate": 0.864
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.765,
+          "precision": 0.886,
+          "recall": 0.674,
+          "onsetMaeMs": 16,
+          "octaveErrors": 1,
+          "falseNotes": 4
+        },
+        "aligned": {
+          "f1": 0.709,
+          "precision": 0.8,
+          "recall": 0.636,
+          "onsetMaeMs": 64,
+          "octaveErrors": 2
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-rock-triad",
+      "instrument": "acoustic-guitar",
+      "category": "triad",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_05_Rock1-130-A_comp_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_Rock1-130-A_comp.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-rock-triad.wav",
+        "sampleRate": 44100,
+        "startSeconds": 5.26,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 51,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          52,
+          57,
+          61
+        ],
+        "negativeOnsetCount": 4,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.857,
+          "precision": 0.973,
+          "recall": 0.766,
+          "onsetMaeMs": 13,
+          "octaveErrors": 1,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.857,
+          "precision": 0.973,
+          "recall": 0.766,
+          "onsetMaeMs": 27,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "acoustic-fresh-ss-single",
+      "instrument": "acoustic-guitar",
+      "category": "single",
+      "split": "eval-fresh",
+      "dataset": "guitarset",
+      "license": "CC-BY-4.0",
+      "attribution": "GuitarSet (Xi, Bittner, Pauwels, Mishra, Dixon, Benetos), Zenodo record 3371780, CC-BY-4.0",
+      "sourceFile": "gs_05_SS1-100-C#_solo_mic.wav",
+      "sourceTruthFile": "guitarset/fresh-jams/05_SS1-100-C#_solo.jams",
+      "audio": {
+        "file": "clips/acoustic-fresh-ss-single.wav",
+        "sampleRate": 44100,
+        "startSeconds": 19.58,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 12,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          56
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": 0,
+        "alignProbeBestRate": 0.833
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.8,
+          "precision": 1,
+          "recall": 0.667,
+          "onsetMaeMs": 11,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 0.8,
+          "precision": 1,
+          "recall": 0.667,
+          "onsetMaeMs": 11,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-gtechs-low",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "split": "eval",
+      "dataset": "guitar-techs",
+      "license": "CC-BY-4.0",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-low.wav",
+        "sampleRate": 44100,
+        "startSeconds": 3.521,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 2,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          41
+        ],
+        "negativeOnsetCount": 1,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.333,
+          "precision": 0.2,
+          "recall": 1,
+          "onsetMaeMs": 47,
+          "octaveErrors": 1,
+          "falseNotes": 4
+        },
+        "aligned": {
+          "f1": 0.333,
+          "precision": 0.2,
+          "recall": 1,
+          "onsetMaeMs": 22,
+          "octaveErrors": 1
+        }
+      }
+    },
+    {
+      "id": "electric-gtechs-mid",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "split": "eval",
+      "dataset": "guitar-techs",
+      "license": "CC-BY-4.0",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-mid.wav",
+        "sampleRate": 44100,
+        "startSeconds": 67.511,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 1,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          57
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.5,
+          "precision": 0.333,
+          "recall": 1,
+          "onsetMaeMs": 24,
+          "octaveErrors": 0,
+          "falseNotes": 2
+        },
+        "aligned": {
+          "f1": 0.5,
+          "precision": 0.333,
+          "recall": 1,
+          "onsetMaeMs": 1,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-gtechs-high",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "split": "eval",
+      "dataset": "guitar-techs",
+      "license": "CC-BY-4.0",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-high.wav",
+        "sampleRate": 44100,
+        "startSeconds": 547.447,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 1,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          86
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.667,
+          "precision": 0.5,
+          "recall": 1,
+          "onsetMaeMs": 36,
+          "octaveErrors": 0,
+          "falseNotes": 1
+        },
+        "aligned": {
+          "f1": 0.667,
+          "precision": 0.5,
+          "recall": 1,
+          "onsetMaeMs": 11,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "electric-gtechs-quiet",
+      "instrument": "electric-guitar",
+      "category": "single",
+      "split": "eval",
+      "dataset": "guitar-techs",
+      "license": "CC-BY-4.0",
+      "attribution": "Guitar-TECHS (Pedroza et al., ICASSP 2025), Zenodo record 14963133, CC-BY-4.0",
+      "sourceFile": "gt_singles.wav",
+      "sourceTruthFile": "gtechs/midi_allsinglenotes.mid",
+      "audio": {
+        "file": "clips/electric-gtechs-quiet.wav",
+        "sampleRate": 44100,
+        "startSeconds": 79.582,
+        "durationSeconds": 3
+      },
+      "reference": {
+        "noteCount": 2,
+        "anchorOnset": 0.5,
+        "anchorTones": [
+          60
+        ],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": -0.025,
+        "alignProbeBestRate": 1
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0.333,
+          "precision": 0.25,
+          "recall": 0.5,
+          "onsetMaeMs": 27,
+          "octaveErrors": 0,
+          "falseNotes": 3
+        },
+        "aligned": {
+          "f1": 0.333,
+          "precision": 0.25,
+          "recall": 0.5,
+          "onsetMaeMs": 2,
+          "octaveErrors": 0
+        }
+      }
+    },
+    {
+      "id": "pause-mozart",
+      "instrument": "piano",
+      "category": "pause",
+      "split": "eval",
+      "dataset": "same-as-audio",
+      "license": "CC-BY-4.0",
+      "attribution": "see source file entry",
+      "sourceFile": "vn_Mozart_K331_1st-mov_p01.wav",
+      "sourceTruthFile": null,
+      "audio": {
+        "file": "clips/pause-mozart.wav",
+        "sampleRate": 44100,
+        "startSeconds": 104,
+        "durationSeconds": 1.5
+      },
+      "reference": {
+        "noteCount": 0,
+        "anchorOnset": null,
+        "anchorTones": [],
+        "negativeOnsetCount": 0,
+        "alignProbeDelta": null,
+        "alignProbeBestRate": null
+      },
+      "metrics": {
+        "raw": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 0,
+          "falseNotes": 0
+        },
+        "aligned": {
+          "f1": 0,
+          "precision": 0,
+          "recall": 0,
+          "onsetMaeMs": null,
+          "octaveErrors": 0
+        }
+      }
+    }
+  ]
+}
