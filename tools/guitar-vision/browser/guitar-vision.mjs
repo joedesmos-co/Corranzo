@@ -405,23 +405,47 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
       for (const up of [true, false]) {
         // run from the notehead edge/centre outward
         const starts = up ? [y0, cy, y1] : [y1, cy, y0]
-        let run = 0
-        for (const start of starts) {
-          let gap = 0, yy = start, rr = 0
+        // gap-bridged run counting (matches Python _bridged_run) and
+        // tip derived from the start that produced the max run, so a
+        // centre/bottom start does not inflate the tip.
+        // Tip from the notehead-edge start (matches Python, avoids
+        // centre/bottom run inflation). Run/minRun from the best start
+        // (so stems drawn inside the bbox still qualify).
+        const edgeStart = up ? y0 : y1
+        let edgeRun = 0
+        { let gap = 0, yy = edgeStart, rr = 0
           while (yy >= 0 && yy < height) {
-            if (gray[yy * width + x] <= 128) { rr++; gap = 0 }
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
             else { gap++; if (gap > 6) break }
             yy += up ? -1 : 1
           }
-          if (rr > run) run = rr
+          edgeRun = rr
         }
+        let run = 0, startForRun = starts[0]
+        for (const start of starts) {
+          let gap = 0, yy = start, rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          if (rr > run) { run = rr; startForRun = start }
+        }
+        // Use edge tip when edge run is substantial; else fall back.
+        // tip from y0 (notehead edge) run, even if x is offset: avoids
+        // centre/bottom inflation. minRun uses the max run (below).
+        let runEdge = 0
+        { let gap = 0, yy = (up ? y0 : y1), rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          runEdge = rr
+        }
+        const tipY = up ? y0 - Math.max(runEdge, 1) : y1 + Math.max(runEdge, 1)
         if (run < 3) continue
-        const tip = up ? (starts[0] - run) : (starts[0] + run)
-        // Actually tip should be the far end of the run from the notehead:
-        // recompute tip as the extremal y reached.
-        // Use the notehead edge as anchor:
         const anchor = up ? y0 : y1
-        const tipY = up ? anchor - run : anchor + run
         // beam connection: does the stem run intersect any beam component?
         let beamConn = false
         const tx0 = Math.max(x - 4, 0), tx1 = Math.min(x + 4, width - 1)
