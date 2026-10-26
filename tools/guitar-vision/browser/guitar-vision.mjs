@@ -385,15 +385,26 @@ export function detectBeams(gray, width, height, thr = 128) {
 
 export function columnEvidence(col, gray, beamMask, width, height, minRun, sideTol, gapEst) {
   const ink = y => gray[y * width] <= 128
-  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0] }
+  // ---- Stem candidates (both directions), scored by beam connection.
+  // A per-note longest-run probe can be captured by an unrelated long
+  // vertical run (e.g. a stem from a neighbouring note or a barline).
+  // Prefer a stem whose tip actually reaches a beam component; this is
+  // the group-level cue that the note is beamed.
+  const candidates = []
   for (const m of col.members) {
     const [x0, y0, x1, y1] = m.box.map(Math.round)
-    for (const [edge, up] of [[x1, true], [x0, false]]) {
-      for (let x = Math.max(Math.round(edge - sideTol), 0); x <= Math.min(Math.round(edge + sideTol), width - 1); x++) {
-        // Start at the bbox edge AND the notehead centre: font bboxes
-        // include ascent padding, so a stem attached to the ink can sit
-        // entirely inside the bbox and be missed from the edge alone.
-        const starts = up ? [y0, (y0 + y1) >> 1, y1] : [y1, (y0 + y1) >> 1, y0]
+    const cy = (y0 + y1) >> 1
+    const edges = [x0, x1, cy > 0 ? (x0 + x1) >> 1 : (x0 + x1) >> 1]
+    const sideInt = Math.max(1, Math.round(sideTol))
+    const xs = new Set()
+    for (const e of edges) for (let dx = -sideInt; dx <= sideInt; dx++) {
+      const x = e + dx
+      if (x >= 0 && x < width) xs.add(x)
+    }
+    for (const x of xs) {
+      for (const up of [true, false]) {
+        // run from the notehead edge/centre outward
+        const starts = up ? [y0, cy, y1] : [y1, cy, y0]
         let run = 0
         for (const start of starts) {
           let gap = 0, yy = start, rr = 0
@@ -404,15 +415,33 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
           }
           if (rr > run) run = rr
         }
-        if (run > best.run) {
-          best = {
-            run, stem: run >= minRun, beams: 0, flags: 0, x,
-            tip: up ? y0 - run : y1 + run, up,
-            span: up ? [y0 - run, y0] : [y1, y1 + run],
+        if (run < 3) continue
+        const tip = up ? (starts[0] - run) : (starts[0] + run)
+        // Actually tip should be the far end of the run from the notehead:
+        // recompute tip as the extremal y reached.
+        // Use the notehead edge as anchor:
+        const anchor = up ? y0 : y1
+        const tipY = up ? anchor - run : anchor + run
+        // beam connection: does the stem run intersect any beam component?
+        let beamConn = false
+        const tx0 = Math.max(x - 4, 0), tx1 = Math.min(x + 4, width - 1)
+        const ys = up ? [tipY, anchor] : [anchor, tipY]
+        const yLoC = Math.min(...ys), yHiC = Math.max(...ys)
+        outer: for (let yy = Math.max(yLoC - 2, 0); yy <= Math.min(yHiC + 2, height - 1); yy++)
+          for (let xx = tx0; xx <= tx1; xx++) {
+            if (beamMask[yy * width + xx]) { beamConn = true; break outer }
           }
-        }
+        // score: beam connection dominates; then run length
+        const score = (beamConn ? 10000 : 0) + run
+        candidates.push({ run, stem: run >= minRun, beams: 0, flags: 0, x, tip: tipY, up,
+          span: up ? [tipY, y0] : [y1, tipY], score, beamConn })
       }
     }
+  }
+  // pick best candidate
+  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0], score: -1, beamConn: false }
+  for (const c of candidates) {
+    if (c.score > best.score) best = c
   }
   if (!best.stem) return best
   // Beams: distinct beam-mask row groups along the full stem column.
@@ -428,8 +457,6 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
   }
   best.beams = groups
   // Flags: ink beside the stem tip, beyond the measured stem width.
-  // Sample the stem on a clean section near the notehead end; a staff
-  // line crossing one sample would otherwise be measured as the stem.
   const fw = Math.max(12, Math.round(0.4 * gapEst))
   const fh = Math.max(12, Math.round(0.3 * gapEst))
   const runLen = Math.max(best.run, 1)
@@ -440,9 +467,9 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     const y = base + dy
     if (y < 0 || y >= height) continue
     let w = 1
-    if (best.up) { while (best.x + w < width && ink(y * width + best.x + w)) w++ }
-    else { while (best.x - w >= 0 && ink(y * width + best.x - w)) w++ }
-    if (ink(y * width + best.x)) widths.push(w)
+    if (best.up) { while (best.x + w < width && gray[y * width + best.x + w] <= 128) w++ }
+    else { while (best.x - w >= 0 && gray[y * width + best.x - w] <= 128) w++ }
+    if (gray[y * width + best.x] <= 128) widths.push(w)
   }
   let wstem = widths.length ? Math.min(...widths) : 1
   wstem = Math.min(wstem, Math.max(2, Math.round(0.2 * gapEst)))
@@ -457,9 +484,10 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     if (row > 0 && row < 0.8 * (fx1 - fx0)) inkCount += row
   }
   best.flags = inkCount >= 5 ? 1 : 0
+  // clean extra fields
+  delete best.score; delete best.beamConn
   return best
 }
-
 export function durationFromEvidence(col, ev) {
   const bases = [...new Set(col.members.map(m => m.base))].sort((a, b) => b - a)
   const base = bases[0]

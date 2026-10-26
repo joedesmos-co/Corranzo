@@ -1,0 +1,1106 @@
+{
+  "dpi": 150,
+  "width": 1275,
+  "height": 1650,
+  "staffs": [
+    {
+      "top": 499.5,
+      "bot": 583.5,
+      "gap": 16.8,
+      "digit_support": 27,
+      "aligned": 27,
+      "resid": 130.49999999999727
+    },
+    {
+      "top": 999.5,
+      "bot": 1083.5,
+      "gap": 16.8,
+      "digit_support": 33,
+      "aligned": 33,
+      "resid": 159.49999999999295
+    }
+  ],
+  "onsets": [
+    {
+      "staff": 0,
+      "measure": 1,
+      "onsetIndex": 0,
+      "onsetX": 145,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 0
+        },
+        {
+          "string": 2,
+          "fret": 1
+        },
+        {
+          "string": 3,
+          "fret": 0
+        }
+      ],
+      "notehead": {
+        "cx": 145,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 151,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 1,
+      "onsetIndex": 1,
+      "onsetX": 242.5,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 3
+        },
+        {
+          "string": 2,
+          "fret": 3
+        },
+        {
+          "string": 3,
+          "fret": 2
+        }
+      ],
+      "notehead": {
+        "cx": 242.50000000000003,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 249,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 1,
+      "onsetIndex": 2,
+      "onsetX": 307.5,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 3
+        },
+        {
+          "string": 2,
+          "fret": 3
+        },
+        {
+          "string": 3,
+          "fret": 2
+        }
+      ],
+      "notehead": {
+        "cx": 307.5,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 314,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 1,
+      "onsetIndex": 3,
+      "onsetX": 405,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 2,
+          "fret": 1
+        },
+        {
+          "string": 3,
+          "fret": 0
+        }
+      ],
+      "notehead": {
+        "cx": 405.00000000000006,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 411,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 1,
+      "onsetIndex": 4,
+      "onsetX": 535,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 0
+        },
+        {
+          "string": 2,
+          "fret": 1
+        }
+      ],
+      "notehead": {
+        "cx": 535.0000000000001,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 541,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 2,
+      "onsetIndex": 5,
+      "onsetX": 632.5,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 5
+        },
+        {
+          "string": 2,
+          "fret": 5
+        },
+        {
+          "string": 3,
+          "fret": 5
+        }
+      ],
+      "notehead": {
+        "cx": 632.5000000000001,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 639,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 2,
+      "onsetIndex": 6,
+      "onsetX": 697.5000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 5
+        },
+        {
+          "string": 2,
+          "fret": 5
+        },
+        {
+          "string": 3,
+          "fret": 5
+        }
+      ],
+      "notehead": {
+        "cx": 697.5000000000001,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 704,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 2,
+      "onsetIndex": 7,
+      "onsetX": 762.5000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 7
+        },
+        {
+          "string": 2,
+          "fret": 8
+        }
+      ],
+      "notehead": {
+        "cx": 762.5,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 769,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 2,
+      "onsetIndex": 8,
+      "onsetX": 827.5,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 7
+        },
+        {
+          "string": 2,
+          "fret": 8
+        }
+      ],
+      "notehead": {
+        "cx": 827.5,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 834,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 0,
+      "measure": 2,
+      "onsetIndex": 9,
+      "onsetX": 990.0000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 10
+        },
+        {
+          "string": 2,
+          "fret": 10
+        },
+        {
+          "string": 3,
+          "fret": 9
+        },
+        {
+          "string": 4,
+          "fret": 12
+        }
+      ],
+      "notehead": {
+        "cx": 990,
+        "kind": "half",
+        "base": 2
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 259,
+        "up": true,
+        "x": 996,
+        "span": [
+          259,
+          311
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 2,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 0,
+      "onsetX": 96.25000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 12
+        },
+        {
+          "string": 2,
+          "fret": 12
+        }
+      ],
+      "notehead": {
+        "cx": 96.25000000000001,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 103,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 2
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.25,
+        "beams": 2,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 1,
+      "onsetX": 128.75,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 12
+        },
+        {
+          "string": 2,
+          "fret": 12
+        }
+      ],
+      "notehead": {
+        "cx": 128.75,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 103,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 2
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.25,
+        "beams": 2,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 2,
+      "onsetX": 161.25,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 12
+        },
+        {
+          "string": 2,
+          "fret": 12
+        }
+      ],
+      "notehead": {
+        "cx": 161.25,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 135,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 2
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.25,
+        "beams": 2,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 3,
+      "onsetX": 193.75,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 12
+        },
+        {
+          "string": 2,
+          "fret": 12
+        }
+      ],
+      "notehead": {
+        "cx": 193.75,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 168,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 2
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.25,
+        "beams": 2,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 4,
+      "onsetX": 275.00000000000006,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 2
+        },
+        {
+          "string": 2,
+          "fret": 3
+        },
+        {
+          "string": 3,
+          "fret": 2
+        }
+      ],
+      "notehead": {
+        "cx": 275,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 281,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 3,
+      "onsetIndex": 5,
+      "onsetX": 470.0000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 0
+        },
+        {
+          "string": 2,
+          "fret": 1
+        },
+        {
+          "string": 3,
+          "fret": 0
+        },
+        {
+          "string": 4,
+          "fret": 2
+        },
+        {
+          "string": 5,
+          "fret": 3
+        }
+      ],
+      "notehead": {
+        "cx": 470,
+        "kind": "half",
+        "base": 2
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 476,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 2,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 4,
+      "onsetIndex": 6,
+      "onsetX": 665,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 7
+        },
+        {
+          "string": 2,
+          "fret": 8
+        },
+        {
+          "string": 3,
+          "fret": 7
+        }
+      ],
+      "notehead": {
+        "cx": 665,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 671,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 4,
+      "onsetIndex": 7,
+      "onsetX": 762.5000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 10
+        },
+        {
+          "string": 2,
+          "fret": 10
+        }
+      ],
+      "notehead": {
+        "cx": 762.5,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 769,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 4,
+      "onsetIndex": 8,
+      "onsetX": 827.5000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 10
+        },
+        {
+          "string": 2,
+          "fret": 10
+        }
+      ],
+      "notehead": {
+        "cx": 827.5,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 834,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 1
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 0.5,
+        "beams": 1,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 4,
+      "onsetIndex": 9,
+      "onsetX": 925.0000000000001,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 2
+        },
+        {
+          "string": 2,
+          "fret": 3
+        },
+        {
+          "string": 3,
+          "fret": 2
+        },
+        {
+          "string": 4,
+          "fret": 4
+        }
+      ],
+      "notehead": {
+        "cx": 925.0000000000001,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 931,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    },
+    {
+      "staff": 1,
+      "measure": 4,
+      "onsetIndex": 10,
+      "onsetX": 1055,
+      "matched": true,
+      "tabEvents": [
+        {
+          "string": 1,
+          "fret": 0
+        },
+        {
+          "string": 2,
+          "fret": 1
+        },
+        {
+          "string": 3,
+          "fret": 0
+        },
+        {
+          "string": 4,
+          "fret": 2
+        },
+        {
+          "string": 5,
+          "fret": 3
+        },
+        {
+          "string": 6,
+          "fret": 3
+        }
+      ],
+      "notehead": {
+        "cx": 1055,
+        "kind": "quarter",
+        "base": 1
+      },
+      "stem": {
+        "run": 52,
+        "stem": true,
+        "tip": 759,
+        "up": true,
+        "x": 1061,
+        "span": [
+          759,
+          811
+        ]
+      },
+      "beams": {
+        "count": 0
+      },
+      "flags": {
+        "count": 0
+      },
+      "duration": {
+        "duration": 1,
+        "beams": 0,
+        "flags": 0,
+        "stem": true,
+        "confident": true,
+        "ambiguous": false,
+        "beam_flag_conflict": false
+      }
+    }
+  ],
+  "noteheads": 21
+}
