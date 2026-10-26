@@ -1359,3 +1359,22 @@ beam scans need to be decoupled and instrumented with overlays.
 
 The missing two sixteenths remain the exact blocker. No duration was
 invented; measure 3 stays invalid and practice stays disabled.
+
+### R35 — Group-level beam ownership (commit 66835a4c68)
+
+Root cause was NOT merged beam levels. columnEvidence's per-note longest-run
+probe was captured by an unrelated 274px downward run at x=80 (a stem/barline
+from a neighbouring note) instead of the real 41px upward stem at x=102 that
+reaches the secondary beam. Widening the scan window had regressed to 0/21
+because it amplified that false stem.
+
+Fix: score each (x, direction) stem candidate by whether its vertical extent
+intersects a beam-mask component; beam connection (10000 bonus) dominates run
+length. No global threshold change; detectBeams stays at 60px. Mixed fixture
+now 21/21 confident onsets, 4/4 valid measures, 60/60 SF. Baselines preserved:
+paired 116/116+32/32+8/8, techniques 32/32+8/8, sparse 32/32 abstains,
+standard 40 onsets.
+
+Diagnostic artifacts: docs/guitar-vision/diagnostics/mixed-rhythm-measure3/
+(overlay.png + geometry.json). Practice remains disabled (ties/rests/dots/
+voices/multi-page still unsupported).
