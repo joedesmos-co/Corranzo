@@ -396,15 +396,13 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     const cy = (y0 + y1) >> 1
     const edges = [x0, x1, cy > 0 ? (x0 + x1) >> 1 : (x0 + x1) >> 1]
     const sideInt = Math.max(1, Math.round(sideTol))
-    const xs = new Set()
-    for (const e of edges) for (let dx = -sideInt; dx <= sideInt; dx++) {
-      const x = e + dx
-      if (x >= 0 && x < width) xs.add(x)
-    }
-    for (const x of xs) {
-      for (const up of [true, false]) {
-        // run from the notehead edge/centre outward
-        const starts = up ? [y0, cy, y1] : [y1, cy, y0]
+    // Convention pairs only (matches Python _stem_probe): right edge -> up,
+    // left edge -> down. Trying both directions at every x lets a
+    // neighbouring stem or beam fragment masquerade as this note's stem.
+    for (const [edge, up] of [[x1, true], [x0, false]]) {
+      for (let x = Math.max(edge - sideInt, 0); x <= Math.min(edge + sideInt, width - 1); x++) {
+        // run from the notehead edge outward
+        const starts = up ? [y0] : [y1]
         // gap-bridged run counting (matches Python _bridged_run) and
         // tip derived from the start that produced the max run, so a
         // centre/bottom start does not inflate the tip.
@@ -584,7 +582,7 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
         if (i) gaps.push(c.cx - cols[i - 1].cx)
         if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
         const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [s.gap]))))
-        const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap)
+        const ev = columnEvidence(c, gray, beamMask, width, height, 1.4 * s.gap, side, s.gap)
         const d = durationFromEvidence(c, ev)
         dur = d.duration; beams = d.beams; flags = d.flags
         stem = d.stem; conf = d.confident
@@ -731,7 +729,7 @@ export async function analyzeNotationRhythm(data, { dpi = 150, pageNo = 1, creat
       if (i) gaps.push(c.cx - cols[i - 1].cx)
       if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
       const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [gap]))))
-      const ev = columnEvidence(c, page.gray, beamMask, page.width, page.height, 1.6 * gap, side, gap)
+      const ev = columnEvidence(c, page.gray, beamMask, page.width, page.height, 1.4 * gap, side, gap)
       const d = durationFromEvidence(c, ev)
       rows.push({ system: si, x: +c.cx.toFixed(1), ...d })
     })
