@@ -367,3 +367,26 @@ measure 3 explicitly null. No recognition code change.
 `8c8b5b165596299dc381ac7fef89a2327520c227f271dc26f4ca5061c6693402`.
 Not deployed. Rollback target if deployed:
 `d367ee53-3cf6-4d1f-9117-36b9bc3b69a1`.
+
+## 11. Round 7 — voice hypothesis vs verified ownership; image fallback measured
+
+**Live at round-7 start:** Worker
+`43b01fef-02b9-45cb-93ea-40a917d0a7fb`, bundle `index-nUlncSNZ.js`
+(SHA-256 matches the round-6 gate build).
+
+**Piano `d9680e5703`:** same-input corrected corpus reproduces **378/447**
+notes and **6/6** rests, but the new `assignVoices` is only a stem-direction
+hypothesis. Its assessment object still exposes `voiceOwnership: 'staff-only'`
+(the candidate has a duplicate property) and never claims `verified`.
+Our expanded 15-control harness refuses **15/15** with production, but only
+**8/15** with the candidate. Matching stems, one-voice/opposite-stem cases and
+the existing curve cases can still become practice-ready. No port.
+
+**Independent engraver fallback:** the standard image OMR is executable on the
+three Verovio PDFs and produces workspace + parseable MusicXML, but the music
+is wrong: grand 15/88 exact notes, full precision/recall **0.238/0.170**;
+rhythm 3/63, **0.036/0.044**, 0/5 rests; pickup-crossstaff 0/11, **0/0**,
+0/2 rests. Successful fallback routing is not transcription success.
+
+**Round-7 app bundle:** unchanged `index-nUlncSNZ.js`; no deployment. Rollback
+target if needed: `43b01fef-02b9-45cb-93ea-40a917d0a7fb`.

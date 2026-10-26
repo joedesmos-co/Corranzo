@@ -19,6 +19,7 @@ const core = await import(pathToFileURL(resolve(ROOT, corePath)).href)
 const assess = core.assessPianoVectorIr
 const classify = core.classifyCurves
 const reconcile = core.reconcileMeasureRests
+const assignVoices = core.assignVoices
 if (typeof assess !== 'function') throw new Error('core has no assessPianoVectorIr')
 
 const note = (measure, x, y, midi, staff = 0, dur = '4', extra = {}) => ({
@@ -84,8 +85,39 @@ ir = base([note(0, 100, 100, 60)], [],
   { pageCount: 2, incompletePages: 1, crossPageContinuation: 'unresolved' })
 cases.push(['partial multi-page', ir])
 
+// Voice-ownership controls. These use stem_x because the candidate's
+// assignVoices() is a stem-direction hypothesis, not verified ownership.
+const voiceNote = (x, y, midi, staff, stem, dur = '1') => ({
+  measure: 0, x, y, midi, staff, stem_x: stem == null ? null : x + stem,
+  kind: 'note', type: dur === '1' ? 'quarter' : 'whole', dur_q: dur,
+  dots: 0, chord_root: true, chord_size: 1,
+})
+cases.push(['one voice, four quarters', base([
+  voiceNote(100, 100, 60, 0, 3), voiceNote(150, 100, 64, 0, 3),
+  voiceNote(200, 100, 67, 0, 3), voiceNote(250, 100, 72, 0, 3),
+])])
+cases.push(['two opposite-stem voices, each four quarters', base([
+  voiceNote(100, 100, 60, 0, 3), voiceNote(150, 100, 64, 0, 3),
+  voiceNote(200, 100, 67, 0, 3), voiceNote(250, 100, 72, 0, 3),
+  voiceNote(100, 120, 48, 0, -3), voiceNote(150, 120, 52, 0, -3),
+  voiceNote(200, 120, 55, 0, -3), voiceNote(250, 120, 60, 0, -3),
+])])
+cases.push(['two matching-stem voices, two beats each', base([
+  voiceNote(100, 100, 60, 0, 3), voiceNote(150, 100, 64, 0, 3),
+  voiceNote(200, 100, 67, 0, 3), voiceNote(250, 100, 72, 0, 3),
+])])
+cases.push(['one voice with changing stem direction', base([
+  voiceNote(100, 100, 60, 0, 3), voiceNote(150, 100, 64, 0, 3),
+  voiceNote(200, 100, 67, 0, -3), voiceNote(250, 100, 72, 0, -3),
+])])
+cases.push(['voice-specific rest', base([
+  voiceNote(100, 100, 60, 0, 3), voiceNote(150, 100, 64, 0, 3),
+  voiceNote(100, 120, 48, 0, -3), voiceNote(150, 120, 52, 0, -3),
+], [{ kind: 'rest', measure: 0, staff: 0, x: 300, y: 120, type: 'half', dur_q: '2', dots: 0 }])])
+
 let failures = 0
 for (const [name, ir] of cases) {
+  if (assignVoices) assignVoices(ir)
   const result = assess(ir)
   const falseAcceptance = result.practiceReady === true
   if (falseAcceptance) failures += 1

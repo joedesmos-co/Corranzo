@@ -116,3 +116,37 @@ The production gate now requires `voiceOwnership === 'verified'`; staff-only
 ownership can never make a score practice-ready. This deliberately leaves all
 currently extracted Piano scores preview-only until independent voice evidence
 exists.
+
+## Independent engraver image fallback — measured
+
+`scripts/browser-independent-engraver-fallback.mjs` uploads the Verovio PDFs
+through the standard product import, opens the score and compares the saved
+MusicXML with the reference. Fallback routing is treated as executable only if
+the workspace and XML exist; it is not treated as success by itself.
+
+| fixture | reference notes | generated notes | exact notes | full precision | full recall | rests |
+|---|---:|---:|---:|---:|---:|---:|
+| grand-voices | 88 | 63 | 15 | 0.238 | 0.170 | 0/0 |
+| rhythm-tuplets | 63 | 83 | 3 | 0.036 | 0.044 | 0/5 |
+| pickup-crossstaff | 11 | 16 | 0 | 0 | 0 | 0/2 |
+
+All three produced a visible PDF workspace and parseable MusicXML, with no
+console errors. The product fallback is therefore **executable**, but it
+produced plausible MusicXML with incorrect events; it did not abstain. This is
+a real image-OMR quality blocker, not a passing fallback result. No image
+recognition architecture was changed in this round.
+
+## Round-7 voice and fallback evidence
+
+The expanded adversarial corpus now has **15** controls (voice ownership,
+curves, rests, accidentals, pages). Current production refuses **15/15**.
+`d9680e5703` refuses **8/15**; false acceptances include matching-stem voices,
+one-voice/opposite-stem promotions whose ownership is still `staff-only`, and
+the three curve cases. A synthetic `3` marker near four notes is also grouped
+as a tuplet by the candidate; the grouping limits are better but not independently
+proven.
+
+The independent-engraver fallback harness is
+`scripts/browser-independent-engraver-fallback.mjs`. The real product fallback
+is executable but musically wrong; see the table above. This is recorded as an
+image-OMR quality blocker, not as a successful transcription.
