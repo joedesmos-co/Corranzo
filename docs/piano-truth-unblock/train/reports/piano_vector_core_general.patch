@@ -247,12 +247,16 @@
        const clusters = []
        for (const hd of heads) {
          const hcx = hd.x + hd.w / 2
-@@ -266,8 +402,17 @@
+@@ -266,12 +402,13 @@
          let best = null
          for (const st of stems) {
            if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
--          const d = Math.abs(st.x - c.cx)
--          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x }
+-          // Candidate stem ownership: prefer a stem whose x is near the expected
+-          // edge position (up-stem to the right of the head, down-stem to the
+-          // left). Falling back to the cluster centre is weaker evidence.
+-          const hd0 = c.items[0]
+-          const isUp = st.y0 < hd0.cy
+-          const expected = isUp ? hd0.x + 1.25 * gap : hd0.x - 0.25 * gap
 +          // Stem ownership by notehead edge: up-stems attach at the right
 +          // edge (~1.25 gaps), down-stems at the left edge (~0.25 gap).
 +          // Fall back to the cluster centre for chords/dense layouts where
@@ -260,32 +264,10 @@
 +          const head = c.items[0]
 +          const up = st.y0 < head.cy
 +          const expected = up ? head.x + 1.25 * gap : head.x - 0.25 * gap
-+          let d = Math.abs(st.x - expected)
-+          let edge = d <= 0.9 * gap
-+          if (!edge) d = Math.abs(st.x - c.cx)
-+          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
-         }
-         for (const hd of c.items) {
-           if (!best) {
-@@ -280,7 +425,7 @@
-               const midi = STEP_SEMI[STEP_NAMES[letter]] + 12 * (Math.floor(cidx / 7) + 1) + acc
-               notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
-                 measure: measureOf(hd.x), clef, kind: 'note', type: 'whole',
--                dots: 0, dur_q: '4', stem_x: null, beam_count: null,
-+                dots: 0, dur_q: '4', stem_x: null, stemOwnership: 'stemless', beam_count: null,
-                 accidental: acc || 0, key_fifths: keyFifths,
-                 confidence: 0.7, provenance: 'pdfjs-vector' })
-             } else {
-@@ -304,7 +449,7 @@
-           notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
-             measure: measureOf(hd.x), clef, kind: 'note', type: dtype,
-             dots: dotsN, dur_q: String(TYPE_Q[dtype] * (dotsN ? 1.5 : 1)),
--            stem_x: best.x, beam_count: bc, accidental: acc || 0,
-+            stem_x: best.x, stemOwnership: best.edge ? 'edge' : 'position-fallback', beam_count: bc, accidental: acc || 0,
-             key_fifths: keyFifths, confidence: 0.9,
-             provenance: 'pdfjs-vector' })
-         }
-@@ -331,22 +476,20 @@
+           let d = Math.abs(st.x - expected)
+           let edge = d <= 0.9 * gap
+           if (!edge) d = Math.abs(st.x - c.cx)
+@@ -339,22 +476,20 @@
          }
        }
      }
@@ -316,13 +298,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -360,13 +503,16 @@
- 
-   const keyVals = notes.map((n) => n.key_fifths)
-   const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
--  return { page: pageNo, size: [W, H], staves: staves.length,
-+  const ir = { page: pageNo, size: [W, H], staves: staves.length,
-     clefs, notes, rests, unresolved, key,
+@@ -373,8 +508,11 @@
      curveCount: curvePaths,
      unresolvedNotes: unresolved.length,
      unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
@@ -334,18 +310,18 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -374,6 +520,10 @@
+@@ -382,7 +520,9 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
+-  assignPianoVoices(ir)
 +  assignVoices(ir)
 +  reconcileMeasureRests(ir)
 +  classifyCurves(ir)
-+  return ir
+   return ir
  }
  
- function beamLevels(stemX, beams, g, gap) {
-@@ -391,6 +541,45 @@
+@@ -401,6 +541,45 @@
    return 0
  }
  
@@ -391,7 +367,7 @@
  export function toMusicXML(ir, divisions = 480) {
    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -433,17 +622,290 @@
+@@ -443,8 +622,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -409,21 +385,38 @@
        }
      }
      out.push('</measure>')
-   }
-   out.push('</part></score-partwise>')
-   return out.join('\n')
-+}
-+
-+
-+
-+
-+/**
+@@ -454,58 +641,161 @@
+ }
+ 
+ 
+-/** Recognize one page of a vector piano PDF. No reference metadata is read. */
+-export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
+-  if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
+-  const bytes = data instanceof Uint8Array ? data : new Uint8Array(data)
+-  return extractFromData(pdfjsLib, bytes, pageNo)
+-}
+ 
+-function measureBeatCount(meter) {
+-  if (!meter || !(meter.beats > 0) || !(meter.unit > 0)) return null
+-  return (meter.beats * 4) / meter.unit
+-}
+ 
+ /**
+- * Track voice ownership from stem direction. This is a hypothesis, not proof:
+- * a staff-level duration sum is not evidence that each voice is complete.
+- * `voiceOwnership` becomes 'verified' only when there is a single detected
+- * voice, no stem conflicts, no position-fallback stems, and every note has
+- * edge-detected stem evidence. Otherwise it stays 'inferred' and practice
+- * remains disabled.
 + * Classify curved paths as ties or slurs using endpoint-to-notehead
 + * proximity and pitch continuity. Ties require equal MIDI pitch and a
 + * non-decreasing measure; slurs require two different pitches. Curves whose
 + * endpoints cannot be paired are left ambiguous and keep the practice gate
 + * closed. No curve is merged into a duration without equal-pitch evidence.
-+ */
+  */
+-export function assignPianoVoices(ir) {
+-  const notes = ir?.notes ?? []
+-  const rests = ir?.rests ?? []
 +export function classifyCurves(ir) {
 +  const gap = ir.gap || 8
 +  const candidates = (x, y) => ir.notes.filter((n) =>
@@ -498,9 +491,9 @@
 +  ir.tieCount = ties
 +  ir.slurCount = slurs
 +  ir.ambiguousCurves = ambiguous
- }
- 
- 
++}
++
++
 +/**
 + * Assign voice IDs from stem direction. A staff with at least two up-stem
 + * and two down-stem notes is treated as two independent voices; each voice
@@ -544,79 +537,93 @@
 +}
 +
 +export function assignVoices(ir) {
-+  const byStaffMeasure = new Map()
+   const byStaffMeasure = new Map()
+-  for (const n of notes) {
+-    const key = `${n.staff ?? 0}:${n.measure ?? 0}`
 +  for (const n of ir.notes) {
 +    const key = `${n.measure}:${n.staff}`
-+    if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
-+    byStaffMeasure.get(key).push(n)
-+  }
+     if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
+     byStaffMeasure.get(key).push(n)
+   }
+-  let splits = 0
+-  let conflicts = 0
+-  let unresolvedStems = 0
+-  let edgeStems = 0
+-  for (const [key, grp] of byStaffMeasure) {
+-    const staff = grp[0]?.staff ?? 0
+-    const ups = grp.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
+-    const downs = grp.filter((n) => n.stem_x != null && n.stem_x < n.x - 1)
 +  let splits = 0, conflicts = 0, unresolvedStems = 0, edgeStems = 0
 +  for (const [key, notes] of byStaffMeasure) {
 +    const staff = notes[0]?.staff ?? 0
 +    const ups = notes.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
 +    const downs = notes.filter((n) => n.stem_x != null && n.stem_x < n.x - 1)
-+    const split = ups.length >= 2 && downs.length >= 2
-+    if (split) {
-+      splits += 1
-+      for (const n of ups) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'stem-direction' }
-+      for (const n of downs) { n.voice = String(staff * 4 + 2); n.voiceEvidence = 'stem-direction' }
-+    } else {
+     const split = ups.length >= 2 && downs.length >= 2
+     if (split) {
+       splits += 1
+       for (const n of ups) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'stem-direction' }
+       for (const n of downs) { n.voice = String(staff * 4 + 2); n.voiceEvidence = 'stem-direction' }
+     } else {
+-      for (const n of grp) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'staff-default' }
 +      for (const n of notes) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'staff-default' }
-+    }
+     }
+-    for (const n of grp) {
 +    for (const n of notes) {
-+      if (n.stemOwnership === 'edge') edgeStems += 1
-+      if (n.stemOwnership === 'position-fallback') unresolvedStems += 1
-+    }
+       if (n.stemOwnership === 'edge') edgeStems += 1
+       if (n.stemOwnership === 'position-fallback') unresolvedStems += 1
+     }
+-    // Conflict 1: a stem claimed by notes in different x clusters.
 +    // Conflict 1: one stem claimed by noteheads in different x clusters.
-+    const byStem = new Map()
+     const byStem = new Map()
+-    for (const n of grp) {
 +    for (const n of notes) {
-+      if (n.stem_x == null) continue
-+      if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
-+      byStem.get(n.stem_x).push(n)
-+    }
-+    for (const group of byStem.values()) {
-+      if (group.length < 2) continue
-+      const xs = group.map((n) => n.x)
-+      if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
-+    }
-+    // Conflict 2: several distinct stems on the same onset are not a chord
+       if (n.stem_x == null) continue
+       if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
+       byStem.get(n.stem_x).push(n)
+@@ -516,9 +806,10 @@
+       if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
+     }
+     // Conflict 2: several distinct stems on the same onset are not a chord
+-    // unless they share one stem x. Catches same-direction second voices.
 +    // unless they share one stem x. This catches same-direction second voices
 +    // that would otherwise be silently merged into one voice.
-+    const onsetGroups = new Map()
+     const onsetGroups = new Map()
+-    for (const n of grp) {
 +    for (const n of notes) {
-+      if (n.stem_x == null) continue
-+      const key = Math.round(n.x / 1.5)
-+      if (!onsetGroups.has(key)) onsetGroups.set(key, [])
-+      onsetGroups.get(key).push(n)
-+    }
-+    for (const group of onsetGroups.values()) {
-+      const stems = new Set(group.map((n) => n.stem_x))
-+      if (stems.size > 1) conflicts += 1
-+    }
-+  }
+       if (n.stem_x == null) continue
+       const key = Math.round(n.x / 1.5)
+       if (!onsetGroups.has(key)) onsetGroups.set(key, [])
+@@ -529,19 +820,21 @@
+       if (stems.size > 1) conflicts += 1
+     }
+   }
+-  for (const r of rests) {
 +  for (const r of ir.rests) {
-+    const staff = r.staff ?? 0
-+    r.voice = String(staff * 4 + 1)
-+    r.voiceEvidence = 'staff-default'
-+  }
-+  const singleVoice = splits === 0
-+  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
-+    ir.notes.length > 0 && edgeStems === ir.notes.length
-+  ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
-+  ir.voiceGraph = {
+     const staff = r.staff ?? 0
+     r.voice = String(staff * 4 + 1)
+     r.voiceEvidence = 'staff-default'
+   }
+   const singleVoice = splits === 0
++  const stemmed = ir.notes.filter((n) => n.stem_x != null)
++  const stemmedAllEdge = stemmed.length > 0 && stemmed.every((n) => n.stemOwnership === 'edge')
+   const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
+-    notes.length > 0 && edgeStems === notes.length
++    ir.notes.length > 0 && stemmedAllEdge
+   ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
+   ir.voiceGraph = {
+-    notes: notes.length,
+-    staves: new Set(notes.map((n) => n.staff)).size,
+-    voices: new Set(notes.map((n) => n.voice)).size,
 +    notes: ir.notes.length,
 +    staves: new Set(ir.notes.map((n) => n.staff)).size,
 +    voices: new Set(ir.notes.map((n) => n.voice)).size,
-+    splits,
-+    conflicts,
-+    edgeStems,
-+    unresolvedStems,
-+    verified,
-+  }
-+  ir.voiceOwnership = verified ? 'verified' : 'inferred'
-+  return ir
-+}
-+
+     splits,
+     conflicts,
+     edgeStems,
+@@ -552,7 +845,82 @@
+   return ir
+ }
+ 
 +const REST_UPGRADE = {
 +  eighth: ['quarter', 'half', 'whole'],
 +  quarter: ['half', 'whole'],
@@ -625,7 +632,7 @@
 +  '32nd': ['16th', 'eighth', 'quarter', 'half', 'whole'],
 +}
 +
-+/**
+ /**
 + * Measure-fill reconciliation for a single ambiguous rest.
 + *
 + * A rest glyph's written value can be wrong when a nonstandard notation font
@@ -680,10 +687,23 @@
 +  }
 +}
 +
- /** Recognize one page of a vector piano PDF. No reference metadata is read. */
- export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
-   if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
-@@ -471,28 +933,35 @@
++/** Recognize one page of a vector piano PDF. No reference metadata is read. */
++export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
++  if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
++  const bytes = data instanceof Uint8Array ? data : new Uint8Array(data)
++  return extractFromData(pdfjsLib, bytes, pageNo)
++}
++
++function measureBeatCount(meter) {
++  if (!meter || !(meter.beats > 0) || !(meter.unit > 0)) return null
++  return (meter.beats * 4) / meter.unit
++}
++
++/**
+  * Decide whether the vector result is trustworthy enough to become a
+  * playable practice score. The extractor is deliberately conservative:
+  * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
+@@ -567,13 +935,15 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -706,9 +726,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-+  const badVoices = []
-   if (beats != null && ir?.notes?.length) {
-     const byMeasure = new Map()
+@@ -583,25 +953,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -718,9 +736,20 @@
      }
      for (const [key, quarters] of byMeasure) {
 -      if (Math.abs(quarters - beats) > 0.02) badMeasures.push(key)
-+      if (Math.abs(quarters - beats) > 0.02) badVoices.push(key)
-     }
+-    }
 -    if (badMeasures.length) issues.push('measure-duration-invalid')
+-    // Per-voice duration validation: each independent voice must also fill.
+-    const byVoice = new Map()
+-    for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
+-      if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
+-      if (event.chord_root === false) continue
+-      const key = `${event.measure}:${event.staff}:${event.voice ?? 1}`
+-      byVoice.set(key, (byVoice.get(key) ?? 0) + Number(event.dur_q ?? 0))
+-    }
+-    for (const [key, quarters] of byVoice) {
+       if (Math.abs(quarters - beats) > 0.02) badVoices.push(key)
+     }
+-    if (badVoices.length) issues.push('voice-duration-invalid')
 +    for (const key of badVoices) badMeasures.push(key.split(':').slice(0, 2).join(':'))
 +    if (badVoices.length) {
 +      issues.push('measure-duration-invalid')
@@ -729,7 +758,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -507,13 +976,20 @@
+@@ -616,14 +978,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -741,7 +770,7 @@
      unresolvedNotes: ir?.unresolvedNotes ?? 0,
      unresolvedRests: ir?.unresolvedRests ?? 0,
      badMeasures,
-+    badVoices,
+     badVoices,
 +    voiceOwnership: ir?.voiceOwnership ?? 'inferred',
 +    voiceGraph: ir?.voiceGraph ?? null,
      issues,
@@ -751,7 +780,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -521,10 +997,16 @@
+@@ -631,10 +999,16 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

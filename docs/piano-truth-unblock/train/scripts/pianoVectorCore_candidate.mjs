@@ -826,8 +826,10 @@ export function assignVoices(ir) {
     r.voiceEvidence = 'staff-default'
   }
   const singleVoice = splits === 0
+  const stemmed = ir.notes.filter((n) => n.stem_x != null)
+  const stemmedAllEdge = stemmed.length > 0 && stemmed.every((n) => n.stemOwnership === 'edge')
   const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
-    ir.notes.length > 0 && edgeStems === ir.notes.length
+    ir.notes.length > 0 && stemmedAllEdge
   ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
   ir.voiceGraph = {
     notes: ir.notes.length,
