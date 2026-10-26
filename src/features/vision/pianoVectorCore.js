@@ -266,8 +266,16 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         let best = null
         for (const st of stems) {
           if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
-          const d = Math.abs(st.x - c.cx)
-          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x }
+          // Candidate stem ownership: prefer a stem whose x is near the expected
+          // edge position (up-stem to the right of the head, down-stem to the
+          // left). Falling back to the cluster centre is weaker evidence.
+          const hd0 = c.items[0]
+          const isUp = st.y0 < hd0.cy
+          const expected = isUp ? hd0.x + 1.25 * gap : hd0.x - 0.25 * gap
+          let d = Math.abs(st.x - expected)
+          let edge = d <= 0.9 * gap
+          if (!edge) d = Math.abs(st.x - c.cx)
+          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
         }
         for (const hd of c.items) {
           if (!best) {
@@ -280,7 +288,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
               const midi = STEP_SEMI[STEP_NAMES[letter]] + 12 * (Math.floor(cidx / 7) + 1) + acc
               notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
                 measure: measureOf(hd.x), clef, kind: 'note', type: 'whole',
-                dots: 0, dur_q: '4', stem_x: null, beam_count: null,
+                dots: 0, dur_q: '4', stem_x: null, stemOwnership: 'stemless', beam_count: null,
                 accidental: acc || 0, key_fifths: keyFifths,
                 confidence: 0.7, provenance: 'pdfjs-vector' })
             } else {
@@ -304,7 +312,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
             measure: measureOf(hd.x), clef, kind: 'note', type: dtype,
             dots: dotsN, dur_q: String(TYPE_Q[dtype] * (dotsN ? 1.5 : 1)),
-            stem_x: best.x, beam_count: bc, accidental: acc || 0,
+            stem_x: best.x, stemOwnership: best.edge ? 'edge' : 'position-fallback', beam_count: bc, accidental: acc || 0,
             key_fifths: keyFifths, confidence: 0.9,
             provenance: 'pdfjs-vector' })
         }
@@ -360,7 +368,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
 
   const keyVals = notes.map((n) => n.key_fifths)
   const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
-  return { page: pageNo, size: [W, H], staves: staves.length,
+  const ir = { page: pageNo, size: [W, H], staves: staves.length,
     clefs, notes, rests, unresolved, key,
     curveCount: curvePaths,
     unresolvedNotes: unresolved.length,
@@ -374,6 +382,8 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
       'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
       'Articulations/dynamics are not yet transcribed.'] }
+  assignPianoVoices(ir)
+  return ir
 }
 
 function beamLevels(stemX, beams, g, gap) {
@@ -457,6 +467,79 @@ function measureBeatCount(meter) {
 }
 
 /**
+ * Track voice ownership from stem direction. This is a hypothesis, not proof:
+ * a staff-level duration sum is not evidence that each voice is complete.
+ * `voiceOwnership` becomes 'verified' only when there is a single detected
+ * voice, no stem conflicts, no position-fallback stems, and every note has
+ * edge-detected stem evidence. Otherwise it stays 'inferred' and practice
+ * remains disabled.
+ */
+export function assignPianoVoices(ir) {
+  const notes = ir?.notes ?? []
+  const rests = ir?.rests ?? []
+  const byStaffMeasure = new Map()
+  for (const n of notes) {
+    const key = `${n.staff ?? 0}:${n.measure ?? 0}`
+    if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
+    byStaffMeasure.get(key).push(n)
+  }
+  let splits = 0
+  let conflicts = 0
+  let unresolvedStems = 0
+  let edgeStems = 0
+  for (const [key, grp] of byStaffMeasure) {
+    const staff = grp[0]?.staff ?? 0
+    const ups = grp.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
+    const downs = grp.filter((n) => n.stem_x != null && n.stem_x < n.x - 1)
+    const split = ups.length >= 2 && downs.length >= 2
+    if (split) {
+      splits += 1
+      for (const n of ups) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'stem-direction' }
+      for (const n of downs) { n.voice = String(staff * 4 + 2); n.voiceEvidence = 'stem-direction' }
+    } else {
+      for (const n of grp) { n.voice = String(staff * 4 + 1); n.voiceEvidence = 'staff-default' }
+    }
+    for (const n of grp) {
+      if (n.stemOwnership === 'edge') edgeStems += 1
+      if (n.stemOwnership === 'position-fallback') unresolvedStems += 1
+    }
+    // Conflict: a stem claimed by notes in different x clusters.
+    const byStem = new Map()
+    for (const n of grp) {
+      if (n.stem_x == null) continue
+      if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
+      byStem.get(n.stem_x).push(n)
+    }
+    for (const group of byStem.values()) {
+      if (group.length < 2) continue
+      const xs = group.map((n) => n.x)
+      if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
+    }
+  }
+  for (const r of rests) {
+    const staff = r.staff ?? 0
+    r.voice = String(staff * 4 + 1)
+    r.voiceEvidence = 'staff-default'
+  }
+  const singleVoice = splits === 0
+  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
+    notes.length > 0 && edgeStems === notes.length
+  ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
+  ir.voiceGraph = {
+    notes: notes.length,
+    staves: new Set(notes.map((n) => n.staff)).size,
+    voices: new Set(notes.map((n) => n.voice)).size,
+    splits,
+    conflicts,
+    edgeStems,
+    unresolvedStems,
+    verified,
+  }
+  ir.voiceOwnership = verified ? 'verified' : 'inferred'
+  return ir
+}
+
+/**
  * Decide whether the vector result is trustworthy enough to become a
  * playable practice score. The extractor is deliberately conservative:
  * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
@@ -481,6 +564,7 @@ export function assessPianoVectorIr(ir) {
 
   const beats = measureBeatCount(ir?.meter)
   const badMeasures = []
+  const badVoices = []
   if (beats != null && ir?.notes?.length) {
     const byMeasure = new Map()
     for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
@@ -493,6 +577,18 @@ export function assessPianoVectorIr(ir) {
       if (Math.abs(quarters - beats) > 0.02) badMeasures.push(key)
     }
     if (badMeasures.length) issues.push('measure-duration-invalid')
+    // Per-voice duration validation: each independent voice must also fill.
+    const byVoice = new Map()
+    for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
+      if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
+      if (event.chord_root === false) continue
+      const key = `${event.measure}:${event.staff}:${event.voice ?? 1}`
+      byVoice.set(key, (byVoice.get(key) ?? 0) + Number(event.dur_q ?? 0))
+    }
+    for (const [key, quarters] of byVoice) {
+      if (Math.abs(quarters - beats) > 0.02) badVoices.push(key)
+    }
+    if (badVoices.length) issues.push('voice-duration-invalid')
   } else if (ir?.notes?.length) {
     issues.push('measure-duration-unverifiable')
   }
@@ -510,6 +606,7 @@ export function assessPianoVectorIr(ir) {
     unresolvedNotes: ir?.unresolvedNotes ?? 0,
     unresolvedRests: ir?.unresolvedRests ?? 0,
     badMeasures,
+    badVoices,
     issues,
     practiceReady,
     completeFidelity: practiceReady,
