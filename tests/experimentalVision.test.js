@@ -78,6 +78,20 @@ describe('piano vector core', () => {
     expect(xml).toContain('<key><fifths>-2</fifths></key>')
   })
 
+  it('requires verified voice ownership before allowing practice', () => {
+    const base = {
+      route: 'vector', key: 0, meter: { beats: 4, unit: 4 },
+      notes: [{ midi: 60, measure: 0, staff: 0, dur_q: '4', chord_root: true }],
+      rests: [], curveCount: 0, unresolvedNotes: 0, unresolvedRests: 0,
+    }
+    const unverified = assessPianoVectorIr(base)
+    expect(unverified.issues).toContain('voice-ownership-unverified')
+    expect(unverified.practiceReady).toBe(false)
+    const verified = assessPianoVectorIr({ ...base, voiceOwnership: 'verified' })
+    expect(verified.issues).not.toContain('voice-ownership-unverified')
+    expect(verified.practiceReady).toBe(true)
+  })
+
   it('blocks practice when ties/slurs are present but not transcribed', () => {
     const assessment = assessPianoVectorIr({
       route: 'vector', notes: [{ midi: 60, measure: 0, staff: 0, dur_q: '1', chord_root: true }],

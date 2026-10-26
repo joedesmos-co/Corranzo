@@ -472,6 +472,12 @@ export function assessPianoVectorIr(ir) {
   if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
   if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
   if (ir?.curveCount > 0) issues.push('ties-or-slurs-not-transcribed')
+  // The extractor records staff ownership, not independent voice ownership.
+  // A staff-level duration sum is not proof that each voice is complete, so
+  // practice requires explicit verified voice evidence. Current extraction
+  // never makes that claim; these scores remain preview-only.
+  const voiceOwnership = ir?.voiceOwnership ?? 'staff-only'
+  if (voiceOwnership !== 'verified') issues.push('voice-ownership-unverified')
 
   const beats = measureBeatCount(ir?.meter)
   const badMeasures = []
@@ -507,7 +513,7 @@ export function assessPianoVectorIr(ir) {
     issues,
     practiceReady,
     completeFidelity: practiceReady,
-    voiceOwnership: 'staff-only',
+    voiceOwnership,
     warnings: issues.map((issue) => {
       switch (issue) {
         case 'no-vector-notes': return 'No readable vector piano notes were found.'
@@ -516,6 +522,7 @@ export function assessPianoVectorIr(ir) {
         case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
         case 'unresolved-rests': return 'Some rests could not be resolved.'
         case 'ties-or-slurs-not-transcribed': return 'Ties/slurs are not transcribed; repeated attacks may be wrong.'
+        case 'voice-ownership-unverified': return 'Independent voice ownership is not verified; a staff-level duration sum is not enough for practice.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
         default: return issue
