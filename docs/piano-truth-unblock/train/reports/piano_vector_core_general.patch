@@ -76,10 +76,11 @@
              staffLines.push(+(H - y0).toFixed(1))
            } else if (w < 1.5 && h > 0.02 * H) {
              vlines.push({ x: +x0.toFixed(1), y0: +(H - Math.max(y0, y1)).toFixed(1),
-@@ -116,6 +149,52 @@
+@@ -115,7 +148,53 @@
+           } else if (w >= 4 && w <= 12 && h >= 3 && h <= 8) {
              beams.push({ x0: +Math.min(x0, x1).toFixed(1), x1: +Math.max(x0, x1).toFixed(1),
                           y: +((H - y0) + (H - y1)) / 2 })
-           }
++          }
 +        } else if (paint === 22 || paint === 23) {
 +          // Path-drawn accidental (outlined font): sharp/natural/flat.
 +          const xs = [], ys = []
@@ -97,7 +98,7 @@
 +              }
 +              prev = [c[ci - 2], c[ci - 1]]
 +            }
-+          }
+           }
 +          for (const [a, b] of segs) {
 +            const p0 = pt(a[0], a[1]); const p1 = pt(b[0], b[1])
 +            xs.push(p0[0], p1[0]); ys.push(p0[1], p1[1])
@@ -181,10 +182,11 @@
        const accGlyphs = glyphs.filter((gl) => [0xe260, 0xe261, 0xe262].includes(gl.code) &&
          !keyGlyphs.includes(gl) &&
          g[0] - 2 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 2 * gap)
-@@ -254,6 +343,21 @@
+@@ -253,6 +342,21 @@
+         const ag = accGlyphs.find((a) => a.x <= hd.x && a.x >= hd.x - 2 * gap &&
            Math.abs(a.cy - hd.cy) <= 0.6 * gap)
          if (ag) hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
-       }
++      }
 +      // Path-drawn accidentals are assigned exclusively: each candidate path
 +      // belongs to the nearest unassigned notehead to its right. A single
 +      // accidental can never modify two unrelated notes.
@@ -199,10 +201,9 @@
 +          if (!best || d < best.d) best = { d, hd }
 +        }
 +        if (best) { best.hd.acc = pa.code; pa.used = true }
-+      }
+       }
        const clusters = []
        for (const hd of heads) {
-         const hcx = hd.x + hd.w / 2
 @@ -266,7 +370,15 @@
          let best = null
          for (const st of stems) {
@@ -220,7 +221,7 @@
            if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x }
          }
          for (const hd of c.items) {
-@@ -331,14 +443,23 @@
+@@ -331,22 +443,20 @@
          }
        }
      }
@@ -231,27 +232,18 @@
 -      if (marks.some((t) => Math.abs(t.x - (n.cx || n.x)) <= 0.4 * gap)) {
 -        n.tuplet = [3, 2]
 -        n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
+-      }
+-    }
 +    // tuplet marks: a '3' above THIS system marks the nearest chord cluster
 +    // as 3:2. Markers from other systems are excluded by the y band; all
 +    // chord members at the chosen x receive the tuplet.
 +    const marks = textMarks.filter((t) => t.s === '3' &&
 +      t.y < g0[0] - 0.5 * gap && t.y > g0[0] - 8.0 * gap)
 +    const sysNotes = notes.filter((n) => n.measure >= base && n.measure < base + count)
-+    // Assign each note to its NEAREST tuplet marker (within 2.2 gaps). This
-+    // groups a triplet run without one marker stealing a neighbouring note.
-+    for (const n of sysNotes) {
-+      let best = null
-+      for (const t of marks) {
-+        const d = Math.abs(t.x - n.x)
-+        if (!best || d < best.d) best = { d, t }
-       }
-+      if (!best || best.d > 2.2 * gap) continue
-+      n.tuplet = [3, 2]
-+      n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
-     }
++    assignTupletGroups(sysNotes, marks, gap)
      sys.beats = beats; sys.unit = unit
    }
-@@ -346,7 +467,7 @@
+ 
    // chords by x coincidence
    const byX = new Map()
    for (const n of notes) {
@@ -260,7 +252,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -360,13 +481,16 @@
+@@ -360,13 +470,16 @@
  
    const keyVals = notes.map((n) => n.key_fifths)
    const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
@@ -278,17 +270,18 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -374,6 +498,9 @@
+@@ -374,6 +487,10 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
++  assignVoices(ir)
 +  reconcileMeasureRests(ir)
 +  classifyCurves(ir)
 +  return ir
  }
  
  function beamLevels(stemX, beams, g, gap) {
-@@ -391,6 +518,45 @@
+@@ -391,6 +508,45 @@
    return 0
  }
  
@@ -334,23 +327,25 @@
  export function toMusicXML(ir, divisions = 480) {
    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -433,7 +599,15 @@
+@@ -433,8 +589,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
 +        if (e.tie_start) out.push('<tie type="start"/>')
 +        if (e.tie_end) out.push('<tie type="stop"/>')
          if (e.tuplet) out.push(`<time-modification><actual-notes>${e.tuplet[0]}</actual-notes><normal-notes>${e.tuplet[1]}</normal-notes></time-modification>`)
+-        out.push(`<voice>${st + 1}</voice><staff>${st + 1}</staff></note>`)
 +        const nots = []
 +        if (e.tie_start) nots.push('<tied type="start"/>')
 +        if (e.tie_end) nots.push('<tied type="stop"/>')
 +        if (e.slur_start) nots.push('<slur type="start" number="1"/>')
 +        if (e.slur_end) nots.push('<slur type="stop" number="1"/>')
 +        if (nots.length) out.push(`<notations>${nots.join('')}</notations>`)
-         out.push(`<voice>${st + 1}</voice><staff>${st + 1}</staff></note>`)
++        out.push(`<voice>${e.voice ?? (st + 1)}</voice><staff>${st + 1}</staff></note>`)
        }
      }
-@@ -444,6 +618,126 @@
+     out.push('</measure>')
+@@ -444,6 +608,222 @@
  }
  
  
@@ -379,9 +374,32 @@
 +    let tiePair = null
 +    for (const a of ca) for (const b of cb) {
 +      if (a === b || a.midi !== b.midi || a.measure > b.measure) continue
++      if (a.staff !== b.staff) continue
++      // Ties attach close to both noteheads (not a high decorative arc).
++      if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
++      // The two notes must be consecutive in the same staff/voice x order;
++      // an equal-pitch curve over an intervening note is a slur/ambiguous.
++      const lo = Math.min(a.measure, b.measure)
++      const hi = Math.max(a.measure, b.measure)
++      const between = ir.notes.some((n) => n.staff === a.staff && n !== a && n !== b && (
++        (a.measure === b.measure && n.measure === a.measure &&
++         n.x > Math.min(a.x, b.x) && n.x < Math.max(a.x, b.x)) ||
++        (a.measure !== b.measure &&
++         ((n.measure === a.measure && n.x > a.x) ||
++          (n.measure === b.measure && n.x < b.x) ||
++          (n.measure > lo && n.measure < hi)))
++      ))
++      if (between) continue
 +      const d = Math.abs(a.x - c.x0) + Math.abs(b.x - c.x1) +
 +        0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
 +      if (!tiePair || d < tiePair.d) tiePair = { d, a, b }
++    }
++    const hasSamePitchPair = ca.some((a) => cb.some((b) =>
++      a !== b && a.midi === b.midi && a.measure <= b.measure))
++    if (!tiePair && hasSamePitchPair) {
++      // Equal pitch but attachment/continuity is not tie-grade: abstain
++      // rather than promoting a possible slur/decoration to a tie.
++      c.kind = 'ambiguous'; ambiguous += 1; continue
 +    }
 +    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
 +      c.kind = 'ambiguous'; ambiguous += 1; continue
@@ -409,6 +427,79 @@
 +  ir.tieCount = ties
 +  ir.slurCount = slurs
 +  ir.ambiguousCurves = ambiguous
++}
++
++
++/**
++ * Assign voice IDs from stem direction. A staff with at least two up-stem
++ * and two down-stem notes is treated as two independent voices; each voice
++ * is validated separately later. This prevents two two-beat voices from
++ * summing to a valid four-beat measure.
++ */
++
++/**
++ * Group-aware tuplet ownership. A printed "3" may only own the nearest
++ * three chord/note clusters, the selected clusters must be compact, and a
++ * cluster can belong to at most one marker. This prevents a single numeral
++ * from turning six unrelated notes (or two groups) into a tuplet.
++ */
++export function assignTupletGroups(sysNotes, marks, gap) {
++  const clusters = []
++  for (const n of sysNotes) {
++    let c = clusters.find((c) => Math.abs(c.cx - n.x) <= 1.5)
++    if (!c) { c = { cx: n.x, notes: [] }; clusters.push(c) }
++    c.notes.push(n)
++    c.cx = c.notes.reduce((a, m) => a + m.x, 0) / c.notes.length
++  }
++  const used = new Set()
++  let groups = 0
++  for (const t of marks) {
++    const candidates = clusters.filter((c) => !used.has(c) && Math.abs(c.cx - t.x) <= 3.0 * gap)
++      .sort((a, b) => Math.abs(a.cx - t.x) - Math.abs(b.cx - t.x))
++      .slice(0, 3)
++    if (candidates.length < 1) continue
++    const xs = candidates.map((c) => c.cx)
++    if (Math.max(...xs) - Math.min(...xs) > 5.0 * gap) continue
++    for (const c of candidates) {
++      used.add(c)
++      for (const n of c.notes) {
++        n.tuplet = [3, 2]
++        n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
++      }
++    }
++    groups += 1
++  }
++  return groups
++}
++
++export function assignVoices(ir) {
++  const byStaffMeasure = new Map()
++  for (const n of ir.notes) {
++    const key = `${n.measure}:${n.staff}`
++    if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
++    byStaffMeasure.get(key).push(n)
++  }
++  let splits = 0
++  for (const [key, notes] of byStaffMeasure) {
++    const staff = notes[0]?.staff ?? 0
++    const ups = notes.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
++    const downs = notes.filter((n) => n.stem_x != null && n.stem_x < n.x - 1)
++    const split = ups.length >= 2 && downs.length >= 2
++    if (split) {
++      splits += 1
++      for (const n of ups) n.voice = String(staff * 4 + 1)
++      for (const n of downs) n.voice = String(staff * 4 + 2)
++      for (const n of notes) if (!n.voice) n.voice = String(staff * 4 + 1)
++    } else {
++      for (const n of notes) n.voice = String(staff * 4 + 1)
++    }
++  }
++  for (const r of ir.rests) {
++    const staff = r.staff ?? 0
++    r.voice = String(staff * 4 + 1)
++  }
++  ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
++  return ir
 +}
 +
 +const REST_UPGRADE = {
@@ -477,7 +568,7 @@
  /** Recognize one page of a vector piano PDF. No reference metadata is read. */
  export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
    if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
-@@ -471,7 +765,14 @@
+@@ -471,22 +851,34 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -493,7 +584,30 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -501,6 +802,11 @@
++  const badVoices = []
+   if (beats != null && ir?.notes?.length) {
+     const byMeasure = new Map()
+     for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
+       if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
+       if (event.chord_root === false) continue
+-      const key = `${event.measure}:${event.staff}`
++      const key = `${event.measure}:${event.staff}:${event.voice ?? (event.staff + 1)}`
+       byMeasure.set(key, (byMeasure.get(key) ?? 0) + Number(event.dur_q ?? 0))
+     }
+     for (const [key, quarters] of byMeasure) {
+-      if (Math.abs(quarters - beats) > 0.02) badMeasures.push(key)
++      if (Math.abs(quarters - beats) > 0.02) badVoices.push(key)
+     }
+-    if (badMeasures.length) issues.push('measure-duration-invalid')
++    for (const key of badVoices) badMeasures.push(key.split(':').slice(0, 2).join(':'))
++    if (badVoices.length) {
++      issues.push('measure-duration-invalid')
++      issues.push('voice-duration-invalid')
++    }
+   } else if (ir?.notes?.length) {
+     issues.push('measure-duration-unverifiable')
+   }
+@@ -501,9 +893,16 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -505,12 +619,18 @@
      unresolvedNotes: ir?.unresolvedNotes ?? 0,
      unresolvedRests: ir?.unresolvedRests ?? 0,
      badMeasures,
-@@ -515,9 +821,14 @@
++    badVoices,
++    voiceOwnership: 'staff+stem',
+     issues,
+     practiceReady,
+     completeFidelity: practiceReady,
+@@ -515,9 +914,15 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'
 -        case 'ties-or-slurs-not-transcribed': return 'Ties/slurs are not transcribed; repeated attacks may be wrong.'
 +        case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
++        case 'voice-duration-invalid': return 'One or more independent voices do not fill the stated meter.'
          case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
          case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
 +        case 'unresolved-accidentals': return 'A music-sized filled symbol could not be classified as an accidental.'

@@ -449,18 +449,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     const marks = textMarks.filter((t) => t.s === '3' &&
       t.y < g0[0] - 0.5 * gap && t.y > g0[0] - 8.0 * gap)
     const sysNotes = notes.filter((n) => n.measure >= base && n.measure < base + count)
-    // Assign each note to its NEAREST tuplet marker (within 2.2 gaps). This
-    // groups a triplet run without one marker stealing a neighbouring note.
-    for (const n of sysNotes) {
-      let best = null
-      for (const t of marks) {
-        const d = Math.abs(t.x - n.x)
-        if (!best || d < best.d) best = { d, t }
-      }
-      if (!best || best.d > 2.2 * gap) continue
-      n.tuplet = [3, 2]
-      n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
-    }
+    assignTupletGroups(sysNotes, marks, gap)
     sys.beats = beats; sys.unit = unit
   }
 
@@ -498,6 +487,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
       'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
       'Articulations/dynamics are not yet transcribed.'] }
+  assignVoices(ir)
   reconcileMeasureRests(ir)
   classifyCurves(ir)
   return ir
@@ -608,7 +598,7 @@ export function toMusicXML(ir, divisions = 480) {
         if (e.slur_start) nots.push('<slur type="start" number="1"/>')
         if (e.slur_end) nots.push('<slur type="stop" number="1"/>')
         if (nots.length) out.push(`<notations>${nots.join('')}</notations>`)
-        out.push(`<voice>${st + 1}</voice><staff>${st + 1}</staff></note>`)
+        out.push(`<voice>${e.voice ?? (st + 1)}</voice><staff>${st + 1}</staff></note>`)
       }
     }
     out.push('</measure>')
@@ -643,9 +633,32 @@ export function classifyCurves(ir) {
     let tiePair = null
     for (const a of ca) for (const b of cb) {
       if (a === b || a.midi !== b.midi || a.measure > b.measure) continue
+      if (a.staff !== b.staff) continue
+      // Ties attach close to both noteheads (not a high decorative arc).
+      if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
+      // The two notes must be consecutive in the same staff/voice x order;
+      // an equal-pitch curve over an intervening note is a slur/ambiguous.
+      const lo = Math.min(a.measure, b.measure)
+      const hi = Math.max(a.measure, b.measure)
+      const between = ir.notes.some((n) => n.staff === a.staff && n !== a && n !== b && (
+        (a.measure === b.measure && n.measure === a.measure &&
+         n.x > Math.min(a.x, b.x) && n.x < Math.max(a.x, b.x)) ||
+        (a.measure !== b.measure &&
+         ((n.measure === a.measure && n.x > a.x) ||
+          (n.measure === b.measure && n.x < b.x) ||
+          (n.measure > lo && n.measure < hi)))
+      ))
+      if (between) continue
       const d = Math.abs(a.x - c.x0) + Math.abs(b.x - c.x1) +
         0.25 * (Math.abs(a.y - c.y0) + Math.abs(b.y - c.y1))
       if (!tiePair || d < tiePair.d) tiePair = { d, a, b }
+    }
+    const hasSamePitchPair = ca.some((a) => cb.some((b) =>
+      a !== b && a.midi === b.midi && a.measure <= b.measure))
+    if (!tiePair && hasSamePitchPair) {
+      // Equal pitch but attachment/continuity is not tie-grade: abstain
+      // rather than promoting a possible slur/decoration to a tie.
+      c.kind = 'ambiguous'; ambiguous += 1; continue
     }
     if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
       c.kind = 'ambiguous'; ambiguous += 1; continue
@@ -673,6 +686,79 @@ export function classifyCurves(ir) {
   ir.tieCount = ties
   ir.slurCount = slurs
   ir.ambiguousCurves = ambiguous
+}
+
+
+/**
+ * Assign voice IDs from stem direction. A staff with at least two up-stem
+ * and two down-stem notes is treated as two independent voices; each voice
+ * is validated separately later. This prevents two two-beat voices from
+ * summing to a valid four-beat measure.
+ */
+
+/**
+ * Group-aware tuplet ownership. A printed "3" may only own the nearest
+ * three chord/note clusters, the selected clusters must be compact, and a
+ * cluster can belong to at most one marker. This prevents a single numeral
+ * from turning six unrelated notes (or two groups) into a tuplet.
+ */
+export function assignTupletGroups(sysNotes, marks, gap) {
+  const clusters = []
+  for (const n of sysNotes) {
+    let c = clusters.find((c) => Math.abs(c.cx - n.x) <= 1.5)
+    if (!c) { c = { cx: n.x, notes: [] }; clusters.push(c) }
+    c.notes.push(n)
+    c.cx = c.notes.reduce((a, m) => a + m.x, 0) / c.notes.length
+  }
+  const used = new Set()
+  let groups = 0
+  for (const t of marks) {
+    const candidates = clusters.filter((c) => !used.has(c) && Math.abs(c.cx - t.x) <= 3.0 * gap)
+      .sort((a, b) => Math.abs(a.cx - t.x) - Math.abs(b.cx - t.x))
+      .slice(0, 3)
+    if (candidates.length < 1) continue
+    const xs = candidates.map((c) => c.cx)
+    if (Math.max(...xs) - Math.min(...xs) > 5.0 * gap) continue
+    for (const c of candidates) {
+      used.add(c)
+      for (const n of c.notes) {
+        n.tuplet = [3, 2]
+        n.dur_q = String(parseFloat(n.dur_q) * 2 / 3)
+      }
+    }
+    groups += 1
+  }
+  return groups
+}
+
+export function assignVoices(ir) {
+  const byStaffMeasure = new Map()
+  for (const n of ir.notes) {
+    const key = `${n.measure}:${n.staff}`
+    if (!byStaffMeasure.has(key)) byStaffMeasure.set(key, [])
+    byStaffMeasure.get(key).push(n)
+  }
+  let splits = 0
+  for (const [key, notes] of byStaffMeasure) {
+    const staff = notes[0]?.staff ?? 0
+    const ups = notes.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
+    const downs = notes.filter((n) => n.stem_x != null && n.stem_x < n.x - 1)
+    const split = ups.length >= 2 && downs.length >= 2
+    if (split) {
+      splits += 1
+      for (const n of ups) n.voice = String(staff * 4 + 1)
+      for (const n of downs) n.voice = String(staff * 4 + 2)
+      for (const n of notes) if (!n.voice) n.voice = String(staff * 4 + 1)
+    } else {
+      for (const n of notes) n.voice = String(staff * 4 + 1)
+    }
+  }
+  for (const r of ir.rests) {
+    const staff = r.staff ?? 0
+    r.voice = String(staff * 4 + 1)
+  }
+  ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
+  return ir
 }
 
 const REST_UPGRADE = {
@@ -776,18 +862,23 @@ export function assessPianoVectorIr(ir) {
 
   const beats = measureBeatCount(ir?.meter)
   const badMeasures = []
+  const badVoices = []
   if (beats != null && ir?.notes?.length) {
     const byMeasure = new Map()
     for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
       if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
       if (event.chord_root === false) continue
-      const key = `${event.measure}:${event.staff}`
+      const key = `${event.measure}:${event.staff}:${event.voice ?? (event.staff + 1)}`
       byMeasure.set(key, (byMeasure.get(key) ?? 0) + Number(event.dur_q ?? 0))
     }
     for (const [key, quarters] of byMeasure) {
-      if (Math.abs(quarters - beats) > 0.02) badMeasures.push(key)
+      if (Math.abs(quarters - beats) > 0.02) badVoices.push(key)
     }
-    if (badMeasures.length) issues.push('measure-duration-invalid')
+    for (const key of badVoices) badMeasures.push(key.split(':').slice(0, 2).join(':'))
+    if (badVoices.length) {
+      issues.push('measure-duration-invalid')
+      issues.push('voice-duration-invalid')
+    }
   } else if (ir?.notes?.length) {
     issues.push('measure-duration-unverifiable')
   }
@@ -810,6 +901,8 @@ export function assessPianoVectorIr(ir) {
     unresolvedNotes: ir?.unresolvedNotes ?? 0,
     unresolvedRests: ir?.unresolvedRests ?? 0,
     badMeasures,
+    badVoices,
+    voiceOwnership: 'staff+stem',
     issues,
     practiceReady,
     completeFidelity: practiceReady,
@@ -822,6 +915,7 @@ export function assessPianoVectorIr(ir) {
         case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
         case 'unresolved-rests': return 'Some rests could not be resolved.'
         case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
+        case 'voice-duration-invalid': return 'One or more independent voices do not fill the stated meter.'
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
         case 'unresolved-accidentals': return 'A music-sized filled symbol could not be classified as an accidental.'

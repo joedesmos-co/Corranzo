@@ -1,0 +1,158 @@
+{
+ "baseline": {
+  "per_fixture": {
+   "piano-beginner-single-vector": {
+    "notes_tp": 32,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 32,
+    "notes_pred": 32,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 1,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 1,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-rhythm-tuplets-vector": {
+    "notes_tp": 45,
+    "notes_fp": 18,
+    "notes_fn": 18,
+    "notes_truth": 63,
+    "notes_pred": 63,
+    "notes_precision": 0.7143,
+    "notes_recall": 0.7143,
+    "rests_tp": 5,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 5,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-grand-voices-vector": {
+    "notes_tp": 76,
+    "notes_fp": 12,
+    "notes_fn": 12,
+    "notes_truth": 88,
+    "notes_pred": 88,
+    "notes_precision": 0.8636,
+    "notes_recall": 0.8636,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   },
+   "piano-dense-advanced-vector": {
+    "notes_tp": 154,
+    "notes_fp": 72,
+    "notes_fn": 110,
+    "notes_truth": 264,
+    "notes_pred": 226,
+    "notes_precision": 0.6814,
+    "notes_recall": 0.5833,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   }
+  },
+  "total": {
+   "notes_tp": 307,
+   "notes_fp": 102,
+   "notes_fn": 140,
+   "notes_truth": 447,
+   "rests_tp": 6,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 6,
+   "notes_precision": 0.7506,
+   "notes_recall": 0.6868,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  }
+ },
+ "candidate": {
+  "per_fixture": {
+   "piano-beginner-single-vector": {
+    "notes_tp": 32,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 32,
+    "notes_pred": 32,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 1,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 1,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-rhythm-tuplets-vector": {
+    "notes_tp": 63,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 63,
+    "notes_pred": 63,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 5,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 5,
+    "rests_precision": 1.0,
+    "rests_recall": 1.0
+   },
+   "piano-grand-voices-vector": {
+    "notes_tp": 88,
+    "notes_fp": 0,
+    "notes_fn": 0,
+    "notes_truth": 88,
+    "notes_pred": 88,
+    "notes_precision": 1.0,
+    "notes_recall": 1.0,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   },
+   "piano-dense-advanced-vector": {
+    "notes_tp": 195,
+    "notes_fp": 31,
+    "notes_fn": 69,
+    "notes_truth": 264,
+    "notes_pred": 226,
+    "notes_precision": 0.8628,
+    "notes_recall": 0.7386,
+    "rests_tp": 0,
+    "rests_fp": 0,
+    "rests_fn": 0,
+    "rests_truth": 0,
+    "rests_precision": 0.0,
+    "rests_recall": 0.0
+   }
+  },
+  "total": {
+   "notes_tp": 378,
+   "notes_fp": 31,
+   "notes_fn": 69,
+   "notes_truth": 447,
+   "rests_tp": 6,
+   "rests_fp": 0,
+   "rests_fn": 0,
+   "rests_truth": 6,
+   "notes_precision": 0.9242,
+   "notes_recall": 0.8456,
+   "rests_precision": 1.0,
+   "rests_recall": 1.0
+  }
+ }
+}

@@ -74,4 +74,32 @@ assert.equal(ir.tieCount, 1)
 assert.equal(ir.notes[0].tie_start, true)
 assert.equal(ir.notes[1].tie_start, undefined)
 
+
+// 8. equal pitch but the curve is far above the noteheads -> ambiguous
+ir = base([note(0, 100, 100, 69), note(1, 160, 100, 69)],
+  [{ x0: 100, y0: 140, x1: 160, y1: 140 }])
+classifyCurves(ir)
+assert.equal(ir.tieCount, 0)
+assert.equal(ir.ambiguousCurves, 1)
+
+// 9. equal pitch but an intervening note -> ambiguous, not a tie
+ir = base([note(0, 100, 100, 69), note(0, 130, 100, 72), note(0, 160, 100, 69)],
+  [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
+classifyCurves(ir)
+assert.equal(ir.tieCount, 0)
+assert.equal(ir.ambiguousCurves, 1)
+
+// 10. equal pitch across different staves -> ambiguous
+ir = base([note(0, 100, 100, 69, 0), note(1, 160, 100, 69, 1)],
+  [{ x0: 100, y0: 100, x1: 160, y1: 100 }])
+classifyCurves(ir)
+assert.equal(ir.tieCount, 0)
+assert.equal(ir.ambiguousCurves, 1)
+
+// 11. decorative curve with no attachable notes -> ambiguous
+ir = base([note(0, 100, 100, 69)], [{ x0: 500, y0: 500, x1: 560, y1: 500 }])
+classifyCurves(ir)
+assert.equal(ir.ambiguousCurves, 1)
+
 console.log('curve classification negative controls: OK')
+

@@ -2572,3 +2572,61 @@ not.
   font/engraver generalization beyond the CC0 generator; OSMD/save-reopen
   not run (no node_modules); multi-page Ao remains incomplete. No
   merge/deploy; sealed TEST untouched.
+
+
+## Independent engavers, voice safety and tuplet ownership (this session)
+
+  PHASE 1 — honest fixture baseline: original vs corrected corpus kept
+  separate. The original rhythm/beginner PDFs are visually underdetermined
+  (missing quarter-rest glyph, missing dotted-eighth/tuplet flags) and stay
+  blocked. On the SAME corrected inputs, the production baseline (e413f5b)
+  scores 307/447 notes (68.7%); the candidate scores 378/447 (84.6%):
+    rhythm 45->63/63, grand 76->88/88, dense 154->195/264, beginner 32/32.
+  This isolates +71 events of algorithmic improvement from artwork fixes.
+
+  PHASE 2 — voice-local timing: assignVoices splits a staff into up/down
+  stem voices; the gate validates each (measure, staff, voice) sum, not the
+  staff total. The exact integration false acceptance (two voices, two
+  beats each) is BLOCKED with voice-duration-invalid; two voices filling
+  four beats each are accepted. Regression in
+  piano_safety_controls.test.mjs.
+
+  PHASE 3 — curves: ties now require close notehead attachment (<=1.4
+  gaps), same staff, consecutive same-staff/voice x order, no intervening
+  note, compact span/height. Equal-pitch far/high curves, intervening-note
+  curves, cross-staff curves and unattached decorations are ambiguous, not
+  ties. Short adjacent equal-pitch curves remain ties by notation
+  convention. False-tie controls added; grand/rhythm ties still classified.
+
+  PHASE 4 — tuplets: one numeral may own at most three chord/note
+  clusters within 3 gaps and a 5-gap span; clusters are exclusive. A single
+  "3" can no longer assign six unrelated notes; a triplet of three two-note
+  chords still owns six noteheads. Adjacent markers do not steal each
+  other's notes. Corrected rhythm remains 63/63.
+
+  PHASE 5 — accidentals: exclusive assignment retained; chord/cluster and
+  voice ownership preserved. Dense improved 185->195 with exclusive
+  assignment. Path key-signature-region exclusion is still not
+  implemented; key=0 provenance remains.
+
+  PHASE 6 — independent engravers: Verovio is available, but Chrome/PyMuPDF
+  PDF export outlines glyphs (6 text items/1 SMuFL in the Chrome PDF; 0 in
+  PyMuPDF). The vector extractor correctly falls back to image; no
+  independent text-layer SMuFL PDF is available locally (MuseScore/LilyPond
+  absent). Independent-engraver accuracy is NOT claimed.
+
+  PHASE 7 — practice safety: 14 safety controls (now including the exact
+  two-voice false acceptance and tuplet over-ownership), 11 curve controls,
+  corrected-corpus gate test and original-corpus gate test all pass.
+  Original beginner/rhythm remain blocked; corrected beginner/rhythm/grand
+  are practice-ready in the browser (pdfjs 5.4.296).
+
+  PHASE 8 — browser: corrected beginner 32 notes/1 rest, rhythm 63/5,
+  grand 88/0; all practiceReady true. Original beginner remains false
+  (rest-duration-inferred/ambiguous). Reports: symbol_ownership.json,
+  corrected_baseline_vs_candidate.json, corrected_corpus.json,
+  independent_engraver_probe.json, browser_practice_gate.json.
+
+  Remaining blockers: dense 195/264 (69 unmatched), key-signature-region
+  exclusion, independent text-layer engraver corpus, OSMD/save-reopen,
+  multi-page Ao. No merge/deploy; sealed TEST untouched.

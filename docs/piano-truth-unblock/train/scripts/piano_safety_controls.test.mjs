@@ -13,6 +13,7 @@ import path from 'node:path'
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs'
 import {
   assessPianoVectorIr, classifyCurves, reconcileMeasureRests, extractFromData,
+  assignVoices, assignTupletGroups,
 } from './pianoVectorCore_candidate.mjs'
 
 const note = (measure, staff, x, y, midi, dur = '1', extra = {}) => ({
@@ -53,6 +54,51 @@ x = ir([...Array.from({ length: 4 }, (_, i) => note(0, 0, 100 + 50 * i, 100, 60 
 ready(x)
 x.notes.pop()
 blocked(x, 'measure-duration-invalid')
+
+// 4b. the integration agent's exact false acceptance: two voices each two
+// beats on one staff. Total is four, but neither voice fills the measure.
+x = ir([
+  note(0, 0, 100, 100, 60, '1', { voice: '1' }),
+  note(0, 0, 200, 100, 64, '1', { voice: '1' }),
+  note(0, 0, 100, 120, 48, '1', { voice: '2' }),
+  note(0, 0, 200, 120, 52, '1', { voice: '2' }),
+])
+blocked(x, 'voice-duration-invalid')
+assert.equal(assessPianoVectorIr(x).practiceReady, false)
+// Two voices that each fill four beats are legitimate.
+x = ir([
+  ...Array.from({ length: 4 }, (_, i) => note(0, 0, 100 + 50 * i, 100, 60 + i, '1', { voice: '1' })),
+  ...Array.from({ length: 4 }, (_, i) => note(0, 0, 100 + 50 * i, 120, 48 + i, '1', { voice: '2' })),
+])
+ready(x)
+// Stem-direction voice assignment produces two voices for two up/two down.
+x = ir([
+  { ...note(0, 0, 100, 100, 60), stem_x: 110 },
+  { ...note(0, 0, 200, 100, 64), stem_x: 210 },
+  { ...note(0, 0, 100, 130, 48), stem_x: 95 },
+  { ...note(0, 0, 200, 130, 52), stem_x: 195 },
+])
+assignVoices(x)
+assert.equal(new Set(x.notes.map((n) => n.voice)).size, 2)
+x.notes[0].voice = '1'; x.notes[1].voice = '1'
+x.notes[2].voice = '2'; x.notes[3].voice = '2'
+blocked(x, 'voice-duration-invalid')
+
+// 4c. one tuplet numeral must not own six unrelated clusters.
+const tupletNotes = [0, 10, 20, 30, 40, 50].map((xx) =>
+  ({ x: xx, dur_q: '0.5', type: 'eighth' }))
+assignTupletGroups(tupletNotes, [{ x: 25 }], 8)
+assert.equal(tupletNotes.filter((n) => n.tuplet).length, 3)
+// A triplet of three two-note chords may own six noteheads (three clusters).
+const chordNotes = [100, 100, 120, 120, 140, 140].map((xx) =>
+  ({ x: xx, dur_q: '0.5', type: 'eighth' }))
+assignTupletGroups(chordNotes, [{ x: 120 }], 8)
+assert.equal(chordNotes.filter((n) => n.tuplet).length, 6)
+// Two markers can own adjacent triples without stealing each other's notes.
+const twoGroups = [0, 10, 20, 30, 40, 50].map((xx) =>
+  ({ x: xx, dur_q: '0.5', type: 'eighth' }))
+assignTupletGroups(twoGroups, [{ x: 10 }, { x: 40 }], 8)
+assert.equal(twoGroups.filter((n) => n.tuplet).length, 6)
 
 // 5. missing rest
 x = ir([note(0, 0, 100, 100, 60), note(0, 0, 200, 100, 64), note(0, 0, 300, 100, 67)])

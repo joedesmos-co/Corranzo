@@ -1,0 +1,25 @@
+{
+ "verovio_chrome_pdf": {
+  "textItems": 6,
+  "smuflItems": 1,
+  "paths": 123,
+  "lines": 89,
+  "route": "image",
+  "reason": "Verovio/Chrome PDF export outlines most glyphs"
+ },
+ "verovio_pymupdf_pdf": {
+  "textItems": 0,
+  "smuflItems": 0,
+  "paths": 121,
+  "lines": 88,
+  "route": "image",
+  "reason": "SVG->PDF conversion outlines all glyphs"
+ },
+ "tools_available": {
+  "verovio": true,
+  "musescore": false,
+  "lilypond": false,
+  "chrome_pdf": true
+ },
+ "conclusion": "No independent text-layer SMuFL vector PDF was available locally. Verovio output becomes outlined paths; the vector extractor correctly falls back to image. Independent-engraver accuracy is NOT claimed."
+}
