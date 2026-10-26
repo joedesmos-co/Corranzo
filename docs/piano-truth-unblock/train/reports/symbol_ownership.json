@@ -539,5 +539,56 @@
   "extra_notehead": 16,
   "missing_events": 69,
   "extra_events": 31
+ },
+ "adversarial_audit": {
+  "source": "main:scripts/vision-piano-adversarial-audit.mjs (15 synthetic IR cases)",
+  "result": "15/15 refused practice (0 false acceptances)",
+  "false_acceptances_fixed": [
+   "same-staff two incomplete voices (sum fills)",
+   "equal-pitch short slur",
+   "cross-voice curve",
+   "decorative short curve",
+   "one voice, four quarters",
+   "two matching-stem voices, two beats each"
+  ],
+  "issue_codes": [
+   "rest-duration-inferred",
+   "rest-duration-ambiguous",
+   "voice-ownership-unverified",
+   "ties-or-slurs-not-transcribed",
+   "unresolved-accidentals",
+   "incomplete-pages",
+   "cross-page-continuation-unresolved",
+   "measure-duration-invalid",
+   "voice-duration-invalid"
+  ]
+ },
+ "path_key_fixture": {
+  "file": "/tmp/pathkey.pdf (generated, G major, one path-drawn sharp in key region)",
+  "result": "key=1 (G major), key accidental marked used, not assigned inline, 4/4 notes, practiceReady=true",
+  "validation": "path-key region exclusion now exercised; keyFifths propagated to notes"
+ },
+ "browser_verification": {
+  "pdfjs": "5.4.296",
+  "corrected_beginner": {
+   "notes": 32,
+   "rests": 1,
+   "practiceReady": true
+  },
+  "corrected_rhythm": {
+   "notes": 63,
+   "rests": 5,
+   "practiceReady": true
+  },
+  "corrected_grand": {
+   "notes": 88,
+   "rests": 0,
+   "practiceReady": true
+  }
+ },
+ "voice_ownership": {
+  "verified": "corrected beginner/rhythm/grand: single voice per staff, all edge-attached stems, 0 conflicts",
+  "inferred": "dense: 12 fallback stems + 8 conflicts; all synthetic adversarial voice cases",
+  "rule": "edge-attached stems for every note, zero conflicts, zero fallback stems, no stem-direction split"
  }
 }

@@ -164,7 +164,15 @@
        const clefGlyphs = glyphs.filter((gl) => gl.h >= 2.0 * gap && gl.w >= 1.3 * gap &&
          g[0] - 4 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 4 * gap &&
          gl.x <= (bars.length ? bars[0] : gl.x) + 3 * gap)
-@@ -244,16 +327,67 @@
+@@ -231,6 +314,7 @@
+       const sharps = keyGlyphs.filter((gl) => gl.code === 0xe262).length
+       const flats = keyGlyphs.filter((gl) => gl.code === 0xe260).length
+       let keyFifths = 0
++      let keySource = 'none'
+       if (sharps && !flats && sharps <= 7) keyFifths = sharps
+       else if (flats && !sharps && flats <= 7) keyFifths = -flats
+       else if (sharps || flats) keyFifths = null
+@@ -244,16 +328,68 @@
        }
        const bottom = BOTTOM[clef]
        const bottomIdx = STEP_NAMES.indexOf(bottom[0]) + 7 * bottom[1]
@@ -172,7 +180,7 @@
 -        g[0] - 3.5 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 3.5 * gap)
 +      // Key-signature region: path-drawn accidentals between the clef and
 +      // the time signature belong to the key, not to a single notehead.
-+      const clefGlyphForKey = clefs.length ? clefs.sort((a, b) => a.x - b.x)[0] : null
++      const clefGlyphForKey = clefGlyph || null
 +      const timeForStaff = timeGlyphX.filter((t) =>
 +        g[0] - 2 * gap <= t.y && t.y <= g[g.length - 1] + 2 * gap &&
 +        (!clefGlyphForKey || t.x > clefGlyphForKey.x))
@@ -181,7 +189,8 @@
 +        (clefGlyphForKey ? clefGlyphForKey.x + 5 * gap : 0)
 +      if (clefGlyphForKey) {
 +        const keyPathGlyphs = accPaths.filter((pa) => !pa.used &&
-+          pa.x > clefGlyphForKey.x + clefGlyphForKey.w && pa.x < keyEnd &&
++          pa.x + pa.w / 2 > clefGlyphForKey.x &&
++          pa.x < keyEnd + gap &&
 +          g[0] - 2 * gap <= pa.y && pa.y <= g[g.length - 1] + 2 * gap)
 +        if (keyPathGlyphs.length) {
 +          const sharps = keyPathGlyphs.filter((pa) => pa.code === 1).length
@@ -238,7 +247,7 @@
        const clusters = []
        for (const hd of heads) {
          const hcx = hd.x + hd.w / 2
-@@ -266,8 +400,17 @@
+@@ -266,8 +402,17 @@
          let best = null
          for (const st of stems) {
            if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
@@ -258,7 +267,7 @@
          }
          for (const hd of c.items) {
            if (!best) {
-@@ -280,7 +423,7 @@
+@@ -280,7 +425,7 @@
                const midi = STEP_SEMI[STEP_NAMES[letter]] + 12 * (Math.floor(cidx / 7) + 1) + acc
                notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
                  measure: measureOf(hd.x), clef, kind: 'note', type: 'whole',
@@ -267,7 +276,7 @@
                  accidental: acc || 0, key_fifths: keyFifths,
                  confidence: 0.7, provenance: 'pdfjs-vector' })
              } else {
-@@ -304,7 +447,7 @@
+@@ -304,7 +449,7 @@
            notes.push({ midi, x: hd.x, cx: +(hd.x + hd.w / 2).toFixed(1), y: hd.cy, staff: sti,
              measure: measureOf(hd.x), clef, kind: 'note', type: dtype,
              dots: dotsN, dur_q: String(TYPE_Q[dtype] * (dotsN ? 1.5 : 1)),
@@ -276,7 +285,7 @@
              key_fifths: keyFifths, confidence: 0.9,
              provenance: 'pdfjs-vector' })
          }
-@@ -331,22 +474,20 @@
+@@ -331,22 +476,20 @@
          }
        }
      }
@@ -307,7 +316,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -360,13 +501,16 @@
+@@ -360,13 +503,16 @@
  
    const keyVals = notes.map((n) => n.key_fifths)
    const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
@@ -325,7 +334,7 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -374,6 +518,10 @@
+@@ -374,6 +520,10 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
@@ -336,7 +345,7 @@
  }
  
  function beamLevels(stemX, beams, g, gap) {
-@@ -391,6 +539,45 @@
+@@ -391,6 +541,45 @@
    return 0
  }
  
@@ -382,7 +391,7 @@
  export function toMusicXML(ir, divisions = 480) {
    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -433,8 +620,16 @@
+@@ -433,17 +622,276 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -400,10 +409,12 @@
        }
      }
      out.push('</measure>')
-@@ -444,6 +639,251 @@
- }
- 
- 
+   }
+   out.push('</part></score-partwise>')
+   return out.join('\n')
++}
++
++
 +
 +
 +/**
@@ -430,6 +441,7 @@
 +    for (const a of ca) for (const b of cb) {
 +      if (a === b || a.midi !== b.midi || a.measure > b.measure) continue
 +      if (a.staff !== b.staff) continue
++      if (a.voice != null && b.voice != null && a.voice !== b.voice) continue
 +      // Ties attach close to both noteheads (not a high decorative arc).
 +      if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
 +      // The two notes must be consecutive in the same staff/voice x order;
@@ -456,7 +468,8 @@
 +      // rather than promoting a possible slur/decoration to a tie.
 +      c.kind = 'ambiguous'; ambiguous += 1; continue
 +    }
-+    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
++    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap ||
++        c.h < Math.max(3, 0.12 * Math.max(1, (c.w ?? Math.abs(c.x1 - c.x0)))))) {
 +      c.kind = 'ambiguous'; ambiguous += 1; continue
 +    }
 +    if (tiePair) {
@@ -464,6 +477,9 @@
 +      tiePair.a.tie_start = true; tiePair.b.tie_end = true
 +      tiePair.a.tie_to = tiePair.b.x; tiePair.b.tie_from = tiePair.a.x
 +      continue
++    }
++    if (c.h < Math.max(3, 0.12 * Math.max(1, (c.w ?? Math.abs(c.x1 - c.x0))))) {
++      c.kind = 'ambiguous'; ambiguous += 1; continue
 +    }
 +    let best = null
 +    for (const a of ca) for (const b of cb) {
@@ -482,9 +498,9 @@
 +  ir.tieCount = ties
 +  ir.slurCount = slurs
 +  ir.ambiguousCurves = ambiguous
-+}
-+
-+
+ }
+ 
+ 
 +/**
 + * Assign voice IDs from stem direction. A staff with at least two up-stem
 + * and two down-stem notes is treated as two independent voices; each voice
@@ -570,7 +586,8 @@
 +    r.voiceEvidence = 'staff-default'
 +  }
 +  const singleVoice = splits === 0
-+  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0
++  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
++    ir.notes.length > 0 && edgeStems === ir.notes.length
 +  ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
 +  ir.voiceGraph = {
 +    notes: ir.notes.length,
@@ -652,11 +669,17 @@
  /** Recognize one page of a vector piano PDF. No reference metadata is read. */
  export async function recognizePianoVectorPdf(data, { pageNo = 1, pdfjsLib }) {
    if (!pdfjsLib) throw new Error('recognizePianoVectorPdf requires a pdfjsLib')
-@@ -471,22 +911,35 @@
+@@ -471,28 +919,35 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
 -  if (ir?.curveCount > 0) issues.push('ties-or-slurs-not-transcribed')
+-  // The extractor records staff ownership, not independent voice ownership.
+-  // A staff-level duration sum is not proof that each voice is complete, so
+-  // practice requires explicit verified voice evidence. Current extraction
+-  // never makes that claim; these scores remain preview-only.
+-  const voiceOwnership = ir?.voiceOwnership ?? 'staff-only'
+-  if (voiceOwnership !== 'verified') issues.push('voice-ownership-unverified')
 +  if ((ir?.unresolvedAccidentals ?? 0) > 0) issues.push('unresolved-accidentals')
 +  if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
 +  if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
@@ -692,7 +715,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -501,13 +954,20 @@
+@@ -507,13 +962,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -710,15 +733,16 @@
      issues,
      practiceReady,
      completeFidelity: practiceReady,
--    voiceOwnership: 'staff-only',
+-    voiceOwnership,
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -515,9 +975,16 @@
+@@ -521,10 +983,16 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'
 -        case 'ties-or-slurs-not-transcribed': return 'Ties/slurs are not transcribed; repeated attacks may be wrong.'
+-        case 'voice-ownership-unverified': return 'Independent voice ownership is not verified; a staff-level duration sum is not enough for practice.'
 +        case 'ties-or-slurs-not-transcribed': return 'Some ties/slurs could not be classified; repeated attacks may be wrong.'
 +        case 'voice-ownership-unverified': return 'Voice ownership is inferred; independent voices are not proven.'
 +        case 'voice-duration-invalid': return 'One or more independent voices do not fill the stated meter.'

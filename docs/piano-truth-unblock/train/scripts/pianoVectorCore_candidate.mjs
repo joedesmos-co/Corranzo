@@ -314,6 +314,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const sharps = keyGlyphs.filter((gl) => gl.code === 0xe262).length
       const flats = keyGlyphs.filter((gl) => gl.code === 0xe260).length
       let keyFifths = 0
+      let keySource = 'none'
       if (sharps && !flats && sharps <= 7) keyFifths = sharps
       else if (flats && !sharps && flats <= 7) keyFifths = -flats
       else if (sharps || flats) keyFifths = null
@@ -329,7 +330,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const bottomIdx = STEP_NAMES.indexOf(bottom[0]) + 7 * bottom[1]
       // Key-signature region: path-drawn accidentals between the clef and
       // the time signature belong to the key, not to a single notehead.
-      const clefGlyphForKey = clefs.length ? clefs.sort((a, b) => a.x - b.x)[0] : null
+      const clefGlyphForKey = clefGlyph || null
       const timeForStaff = timeGlyphX.filter((t) =>
         g[0] - 2 * gap <= t.y && t.y <= g[g.length - 1] + 2 * gap &&
         (!clefGlyphForKey || t.x > clefGlyphForKey.x))
@@ -338,7 +339,8 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         (clefGlyphForKey ? clefGlyphForKey.x + 5 * gap : 0)
       if (clefGlyphForKey) {
         const keyPathGlyphs = accPaths.filter((pa) => !pa.used &&
-          pa.x > clefGlyphForKey.x + clefGlyphForKey.w && pa.x < keyEnd &&
+          pa.x + pa.w / 2 > clefGlyphForKey.x &&
+          pa.x < keyEnd + gap &&
           g[0] - 2 * gap <= pa.y && pa.y <= g[g.length - 1] + 2 * gap)
         if (keyPathGlyphs.length) {
           const sharps = keyPathGlyphs.filter((pa) => pa.code === 1).length
@@ -665,6 +667,7 @@ export function classifyCurves(ir) {
     for (const a of ca) for (const b of cb) {
       if (a === b || a.midi !== b.midi || a.measure > b.measure) continue
       if (a.staff !== b.staff) continue
+      if (a.voice != null && b.voice != null && a.voice !== b.voice) continue
       // Ties attach close to both noteheads (not a high decorative arc).
       if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
       // The two notes must be consecutive in the same staff/voice x order;
@@ -691,7 +694,8 @@ export function classifyCurves(ir) {
       // rather than promoting a possible slur/decoration to a tie.
       c.kind = 'ambiguous'; ambiguous += 1; continue
     }
-    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap)) {
+    if (tiePair && (c.h > 2.5 * gap || Math.abs(tiePair.b.x - tiePair.a.x) > 10 * gap ||
+        c.h < Math.max(3, 0.12 * Math.max(1, (c.w ?? Math.abs(c.x1 - c.x0)))))) {
       c.kind = 'ambiguous'; ambiguous += 1; continue
     }
     if (tiePair) {
@@ -699,6 +703,9 @@ export function classifyCurves(ir) {
       tiePair.a.tie_start = true; tiePair.b.tie_end = true
       tiePair.a.tie_to = tiePair.b.x; tiePair.b.tie_from = tiePair.a.x
       continue
+    }
+    if (c.h < Math.max(3, 0.12 * Math.max(1, (c.w ?? Math.abs(c.x1 - c.x0))))) {
+      c.kind = 'ambiguous'; ambiguous += 1; continue
     }
     let best = null
     for (const a of ca) for (const b of cb) {
@@ -805,7 +812,8 @@ export function assignVoices(ir) {
     r.voiceEvidence = 'staff-default'
   }
   const singleVoice = splits === 0
-  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0
+  const verified = singleVoice && conflicts === 0 && unresolvedStems === 0 &&
+    ir.notes.length > 0 && edgeStems === ir.notes.length
   ir.voiceSplit = (ir.voiceSplit ?? 0) + splits
   ir.voiceGraph = {
     notes: ir.notes.length,

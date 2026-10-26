@@ -2686,3 +2686,47 @@ not.
   corrected_baseline_vs_candidate.json, verovio_image_fallback.json,
   independent_engraver_probe.json, browser_practice_gate.json.
   No merge/deploy; sealed TEST untouched.
+
+
+## Evidence-based voice safety and real-world coverage (this session)
+
+  PHASE 1 — adversarial integration harness: ran the main-owned 15-case
+  synthetic IR audit against the candidate. Initial result 9/15; after
+  tightening, 15/15 refused practice with 0 false acceptances. Fixed false
+  accepts: same-staff two incomplete voices, equal-pitch short slur,
+  cross-voice curve, decorative short curve, one-voice-four-quarters,
+  matching-stem two-voice score. Duplicate voiceOwnership field resolved to a
+  single authoritative field; JSON serialization/reopen preserves the
+  assessment.
+
+  PHASE 2 — voice ownership: verified now requires edge-attached stems for
+  every note, zero conflicts, zero fallback stems, and no stem-direction split.
+  Stem direction alone is never sufficient. Synthetic controls with stem_x but
+  no edge stemOwnership are inferred and blocked.
+
+  PHASE 3 — curves: flat decorative arcs (height < max(3, 0.12*span)) are
+  ambiguous; ties require same voice when known. 11 negative controls pass;
+  corrected rhythm tie and grand tie/slur preserved. Equal-pitch short slur,
+  cross-voice and decorative curves now ambiguous.
+
+  PHASE 4 — tuplets/accidentals: tuplet exclusivity unchanged; path-key region
+  bug fixed (clefGlyph reference) and exercised with a generated G-major
+  fixture: key=1, sharp marked used, not reused inline, 4/4 notes,
+  practiceReady=true.
+
+  PHASE 5 — independent engraver: generated Verovio (SVG->Chrome PDF) probe
+  failed vector staff detection (image fallback route), consistent with the
+  earlier Verovio/Chrome outlined-PDF finding. The separate image fallback
+  remains the credible route for outlined engravers. No broad cross-engraver
+  claim added.
+
+  PHASE 6 — dense: unchanged 195/264; categories accidental semitone 23,
+  missing notehead 24, duration wrong 29, other pitch 8, extra notehead 16.
+
+  PHASE 7 — browser: pdfjs 5.4.296 under Chromium; corrected beginner
+  (32/1), rhythm (63/5), grand (88/0) all practiceReady=true. Assessments
+  survive JSON serialization/reopen.
+
+  Metrics unchanged: corrected 378/447 notes (P .924/R .846), 6/6 rests;
+  practice-ready corrected scores = 3. Original beginner/rhythm remain blocked.
+  Adversarial audit = 15/15. No merge/deploy.
