@@ -115,7 +115,7 @@ def draw(c):
                 c.setLineWidth(1.0)
                 c.setStrokeGray(0.05)
                 c.line(x(stem_x), y(ntop + 2 * 16.8 + 5),
-                       x(stem_x), y(ntop + 2 * 16.8 - 36))
+                       x(stem_x), y(ntop + 2 * 16.8 - 47))
             # beams: contiguous runs of sub-quarter values
             i = 0
             while i < len(onsets):

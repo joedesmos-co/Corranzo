@@ -1344,3 +1344,18 @@ null or invalid-measure flagged.
 
 REGRESSIONS: digital fixtures re-run after the probe change (see final
 report); no production files changed.
+
+### R34 — Double-beam root cause: fixture geometry, not detector alone
+The four-sixteenth group's secondary beam was drawn 6px ABOVE the stem
+tip (stems ended at -36, beams at -33/-42). Real engraving extends stems
+to the outermost beam, so the fixture was malformed. Stems now reach
+-47 (through both beams), and the PDF/MusicXML pair was regenerated.
+
+RESULT: unchanged at 15/21 complete, 3/4 valid, 6/8 sixteenths. So the
+floating secondary beam was a real artwork defect but NOT the only
+cause of the two missing sixteenths. Widening the beam scan window was
+tried and regressed confidence (0/21), so it was reverted; the stem and
+beam scans need to be decoupled and instrumented with overlays.
+
+The missing two sixteenths remain the exact blocker. No duration was
+invented; measure 3 stays invalid and practice stays disabled.
