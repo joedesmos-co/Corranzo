@@ -159,7 +159,7 @@
 +      const stems = vlines.filter((v) =>
          1.8 * gap <= (v.y1 - v.y0) && (v.y1 - v.y0) <= 6.5 * gap &&
 -        g[0] - gap <= (v.y0 + v.y1) / 2 && (v.y0 + v.y1) / 2 <= g[g.length - 1] + gap)
-+        g[0] - gap <= (v.y0 + v.y1) / 2 && (v.y0 + v.y1) / 2 <= g[g.length - 1] + gap &&
++        v.y0 <= g[g.length - 1] + 2 * gap && v.y1 >= g[0] - 2 * gap &&
 +        _headXs.some((hx) => Math.abs(hx - v.x) <= 1.5 * gap))
        const clefGlyphs = glyphs.filter((gl) => gl.h >= 2.0 * gap && gl.w >= 1.3 * gap &&
          g[0] - 4 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 4 * gap &&
@@ -223,7 +223,7 @@
 +        for (const hd of heads) {
 +          if (hd.acc != null) continue
 +          if (!(ag.x <= hd.x && hd.x - ag.x <= 2 * gap)) continue
-+          if (Math.abs(ag.cy - hd.cy) > 0.6 * gap) continue
++          if (Math.abs(ag.cy - hd.cy) > 0.45 * gap) continue
 +          const d = (hd.x - ag.x) + Math.abs(ag.cy - hd.cy)
 +          if (!best || d < best.d) best = { d, hd }
 +        }
@@ -238,7 +238,7 @@
 +        for (const hd of heads) {
 +          if (hd.acc != null) continue
 +          if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
-+          if (Math.abs(pa.y - hd.cy) > 0.8 * gap) continue
++          if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
 +          const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
 +          if (!best || d < best.d) best = { d, hd }
 +        }
@@ -247,7 +247,7 @@
        const clusters = []
        for (const hd of heads) {
          const hcx = hd.x + hd.w / 2
-@@ -266,12 +402,13 @@
+@@ -266,17 +402,19 @@
          let best = null
          for (const st of stems) {
            if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
@@ -261,13 +261,20 @@
 +          // edge (~1.25 gaps), down-stems at the left edge (~0.25 gap).
 +          // Fall back to the cluster centre for chords/dense layouts where
 +          // the edge estimate is unreliable.
-+          const head = c.items[0]
++          const head = c.items.reduce((a, b) => (a.cy < b.cy ? a : b))
 +          const up = st.y0 < head.cy
 +          const expected = up ? head.x + 1.25 * gap : head.x - 0.25 * gap
            let d = Math.abs(st.x - expected)
            let edge = d <= 0.9 * gap
            if (!edge) d = Math.abs(st.x - c.cx)
-@@ -339,22 +476,20 @@
+-          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
++          if (d <= 0.75 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
+         }
++
+         for (const hd of c.items) {
+           if (!best) {
+             if (hd.code === 0xe0a2) {
+@@ -339,22 +477,20 @@
          }
        }
      }
@@ -298,7 +305,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -373,8 +508,11 @@
+@@ -373,8 +509,11 @@
      curveCount: curvePaths,
      unresolvedNotes: unresolved.length,
      unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
@@ -310,7 +317,7 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -382,7 +520,9 @@
+@@ -382,7 +521,9 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
@@ -321,10 +328,12 @@
    return ir
  }
  
-@@ -401,6 +541,45 @@
+@@ -399,6 +540,45 @@
+   if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
+   for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
    return 0
- }
- 
++}
++
 +
 +/**
 + * Minimum general multi-page extraction: each page is recognized with the
@@ -362,12 +371,10 @@
 +    crossPageContinuation: pageCount > 1 ? 'unresolved' : 'not-applicable',
 +    credits: ['Multi-page extraction preserves page identity and measure order.',
 +      'Cross-page ties/slurs are not yet continued; practice is blocked when pages are incomplete.'] }
-+}
-+
+ }
+ 
  export function toMusicXML(ir, divisions = 480) {
-   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-   const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -443,8 +622,16 @@
+@@ -443,8 +623,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -385,7 +392,7 @@
        }
      }
      out.push('</measure>')
-@@ -454,58 +641,161 @@
+@@ -454,58 +642,161 @@
  }
  
  
@@ -580,7 +587,7 @@
        if (n.stem_x == null) continue
        if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
        byStem.get(n.stem_x).push(n)
-@@ -516,9 +806,10 @@
+@@ -516,9 +807,10 @@
        if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
      }
      // Conflict 2: several distinct stems on the same onset are not a chord
@@ -593,7 +600,7 @@
        if (n.stem_x == null) continue
        const key = Math.round(n.x / 1.5)
        if (!onsetGroups.has(key)) onsetGroups.set(key, [])
-@@ -529,19 +820,21 @@
+@@ -529,19 +821,21 @@
        if (stems.size > 1) conflicts += 1
      }
    }
@@ -620,7 +627,7 @@
      splits,
      conflicts,
      edgeStems,
-@@ -552,7 +845,82 @@
+@@ -552,7 +846,82 @@
    return ir
  }
  
@@ -703,7 +710,7 @@
   * Decide whether the vector result is trustworthy enough to become a
   * playable practice score. The extractor is deliberately conservative:
   * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
-@@ -567,13 +935,15 @@
+@@ -567,13 +936,15 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -726,7 +733,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -583,25 +953,17 @@
+@@ -583,25 +954,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -758,7 +765,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -616,14 +978,20 @@
+@@ -616,14 +979,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -780,7 +787,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -631,10 +999,16 @@
+@@ -631,10 +1000,16 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

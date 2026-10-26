@@ -294,7 +294,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
       const g = sys.staves[sti]
       const stems = vlines.filter((v) =>
         1.8 * gap <= (v.y1 - v.y0) && (v.y1 - v.y0) <= 6.5 * gap &&
-        g[0] - gap <= (v.y0 + v.y1) / 2 && (v.y0 + v.y1) / 2 <= g[g.length - 1] + gap &&
+        v.y0 <= g[g.length - 1] + 2 * gap && v.y1 >= g[0] - 2 * gap &&
         _headXs.some((hx) => Math.abs(hx - v.x) <= 1.5 * gap))
       const clefGlyphs = glyphs.filter((gl) => gl.h >= 2.0 * gap && gl.w >= 1.3 * gap &&
         g[0] - 4 * gap <= gl.cy && gl.cy <= g[g.length - 1] + 4 * gap &&
@@ -369,7 +369,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         for (const hd of heads) {
           if (hd.acc != null) continue
           if (!(ag.x <= hd.x && hd.x - ag.x <= 2 * gap)) continue
-          if (Math.abs(ag.cy - hd.cy) > 0.6 * gap) continue
+          if (Math.abs(ag.cy - hd.cy) > 0.45 * gap) continue
           const d = (hd.x - ag.x) + Math.abs(ag.cy - hd.cy)
           if (!best || d < best.d) best = { d, hd }
         }
@@ -384,7 +384,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
         for (const hd of heads) {
           if (hd.acc != null) continue
           if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
-          if (Math.abs(pa.y - hd.cy) > 0.8 * gap) continue
+          if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
           const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
           if (!best || d < best.d) best = { d, hd }
         }
@@ -406,14 +406,15 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
           // edge (~1.25 gaps), down-stems at the left edge (~0.25 gap).
           // Fall back to the cluster centre for chords/dense layouts where
           // the edge estimate is unreliable.
-          const head = c.items[0]
+          const head = c.items.reduce((a, b) => (a.cy < b.cy ? a : b))
           const up = st.y0 < head.cy
           const expected = up ? head.x + 1.25 * gap : head.x - 0.25 * gap
           let d = Math.abs(st.x - expected)
           let edge = d <= 0.9 * gap
           if (!edge) d = Math.abs(st.x - c.cx)
-          if (d <= 1.4 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
+          if (d <= 0.75 * gap && (!best || d < best.d)) best = { d, x: st.x, edge }
         }
+
         for (const hd of c.items) {
           if (!best) {
             if (hd.code === 0xe0a2) {
