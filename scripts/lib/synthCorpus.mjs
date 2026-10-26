@@ -408,3 +408,60 @@ export function hasIsolatedOnset(spec, index, toleranceSeconds = 0.03) {
   const note = spec.notes[index]
   return !spec.notes.some((other, j) => j !== index && Math.abs(other.onsetSeconds - note.onsetSeconds) < toleranceSeconds)
 }
+
+/* --------------------------------------------------------------- masking */
+
+/**
+ * Turn a composition into a MASKED mixture: the same notes, but with the
+ * level balance and sustain behaviour that make real polyphony hard.
+ *
+ * Real recordings are not a flat mix. The accompaniment and the upper voices
+ * are louder than the bass fundamental and the inner voices, partials of
+ * different notes collide, and notes sustain into the next attack (pedal on
+ * piano, ringing strings on guitar). All of that is applied to the NOTE LIST
+ * here, before rendering, so every change is reflected in the ground truth
+ * (velocity, offset) rather than being painted on afterwards.
+ */
+export function maskComposition(spec, {
+  bassGain = 0.32,
+  midGain = 0.85,
+  highGain = 1.15,
+  innerVoiceGain = 0.4,
+  sustainExtra = 0.0,
+  rng: rngOverride = null,
+} = {}) {
+  const rng = rngOverride ?? makeRng(`mask:${spec.id}:${spec.seed}`)
+  const byOnset = new Map()
+  for (const note of spec.notes) {
+    const key = note.onsetSeconds.toFixed(3)
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(note)
+  }
+  const masked = []
+  for (const note of spec.notes) {
+    const key = note.onsetSeconds.toFixed(3)
+    const group = byOnset.get(key) ?? [note]
+    const ordered = [...group].sort((a, b) => a.midi - b.midi)
+    const isTop = ordered.length > 1 && ordered[ordered.length - 1].midi === note.midi
+    const regGain = note.midi < 48 ? bassGain : (note.midi < 72 ? midGain : highGain)
+    let velocity = note.velocity * regGain
+    if (ordered.length > 1 && !isTop) velocity *= innerVoiceGain + rng() * 0.15
+    velocity = Math.max(0.05, Math.min(1, velocity))
+    let offset = note.offsetSeconds + sustainExtra
+    if (sustainExtra > 0) offset = Math.max(offset, note.onsetSeconds + 0.08)
+    masked.push({
+      midi: note.midi,
+      onsetSeconds: note.onsetSeconds,
+      offsetSeconds: Math.round(offset * 10000) / 10000,
+      velocity: Math.round(velocity * 100) / 100,
+      instrument: note.instrument,
+      symbolicOnsetSeconds: note.symbolicOnsetSeconds ?? note.onsetSeconds,
+      symbolicOffsetSeconds: note.symbolicOffsetSeconds ?? note.offsetSeconds,
+      rolled: note.rolled,
+      performed: note.performed,
+      masked: true,
+    })
+  }
+  masked.sort((a, b) => a.onsetSeconds - b.onsetSeconds || a.midi - b.midi)
+  return { ...spec, notes: masked, masking: { bassGain, midGain, highGain, innerVoiceGain, sustainExtra } }
+}
