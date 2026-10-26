@@ -143,17 +143,31 @@ export function compositionSpec({ id, instrument = 'piano', texture = 'melody', 
 
 /* ------------------------------------------------------------------ render */
 
-function partialGains(instrument, midi, rng) {
+/**
+ * Partial gains, tuned against measured real recordings (domains: real
+ * acoustic guitar centroid 247 Hz, H1 share 0.56, even/odd 1.71; real piano
+ * H1 share 0.064 - i.e. NOT fundamental-dominated). The first renderer was far
+ * too bright on guitar and far too dark on piano.
+ */
+function partialGains(instrument, midi, velocity, rng) {
   const h = []
   if (instrument === 'guitar') {
-    const count = 9
-    for (let i = 1; i <= count; i += 1) h.push(1 / Math.pow(i, 1.05))
-    // pluck position colouring: a slight dip on the 2nd partial is realistic
-    h[1] *= 0.6 + rng() * 0.3
+    const count = 10
+    for (let i = 1; i <= count; i += 1) h.push(1 / Math.pow(i, 1.75))
+    // pluck position: a comb notch where the string is excited (0.12-0.3)
+    const pluck = 0.12 + rng() * 0.18
+    for (let i = 1; i <= count; i += 1) h[i - 1] *= Math.abs(Math.sin(Math.PI * i * pluck)) + 0.25
+    // body resonance lift around 100-260 Hz (partials 2-4 of a low note)
+    for (let i = 1; i <= count; i += 1) {
+      const freq = 440 * 2 ** ((midi - 69) / 12) * i
+      if (freq > 80 && freq < 280) h[i - 1] *= 1.35
+    }
   } else {
-    const count = 12
+    const count = 16
     const low = Math.max(0, (60 - midi) / 24)
-    for (let i = 1; i <= count; i += 1) h.push(1 / Math.pow(i, 1.5 + low * 0.4))
+    // velocity brightens the spectrum (hammer harder -> more upper partials)
+    const bright = 0.9 + velocity * 0.9
+    for (let i = 1; i <= count; i += 1) h.push((1 + (bright - 1) * (i / 8)) / Math.pow(i, 1.25 + low * 0.3))
   }
   return h
 }
@@ -168,22 +182,59 @@ function partialFreq(f0, h, instrument) {
  * Render a composition to mono float32 at 22050 Hz with the exact event list.
  * Pure arithmetic: no samples, no external assets.
  */
-export function renderComposition(spec, { sampleRate = SAMPLE_RATE } = {}) {
+export function renderComposition(spec, { sampleRate = SAMPLE_RATE, realistic = true } = {}) {
   const { notes, durationSeconds } = spec
   const length = Math.ceil(durationSeconds * sampleRate)
   const out = new Float32Array(length)
   const rng = makeRng(`render:${spec.id}:${spec.seed}:${spec.instrument}`)
   const isGuitar = spec.instrument === 'guitar'
-  const attack = isGuitar ? 0.002 : 0.004
-  const decay = isGuitar ? 0.55 : 1.25
+  // Real attacks are slower than a sample-loop start: measured 5.8 ms on
+  // acoustic guitar and ~30-50 ms on a mic'd piano. Decay is register
+  // dependent: a real acoustic guitar rings ~190 ms at mid pitches, a piano
+  // low string far longer.
+  const attack = realistic ? (isGuitar ? 0.006 : 0.030) : (isGuitar ? 0.002 : 0.004)
+  if (realistic) {
+    // A recording is never digitally silent: broadband floor at about -55 dBFS.
+    for (let i = 0; i < length; i += 1) out[i] += (rng() - 0.5) * 0.0035
+  }
+  // Strum: chord notes do not start on the same sample. Deterministic stagger
+  // by pitch, recorded in the truth so the labels stay exact.
+  const byOnset = new Map()
+  for (const note of notes) {
+    const key = note.onsetSeconds.toFixed(3)
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(note)
+  }
+  const renderedOnset = new Map()
+  for (const [, group] of byOnset) {
+    if (group.length === 1) { renderedOnset.set(group[0], group[0].onsetSeconds); continue }
+    const ordered = [...group].sort((a, b) => a.midi - b.midi)
+    ordered.forEach((note, index) => {
+      const spread = isGuitar && realistic ? index * (0.006 + (rng() * 0.012)) : 0
+      renderedOnset.set(note, note.onsetSeconds + spread)
+    })
+  }
+  const renderedNotes = []
   for (const note of notes) {
     const f0 = 440 * 2 ** ((note.midi - 69) / 12)
-    const s0 = Math.floor(note.onsetSeconds * sampleRate)
+    const onset = renderedOnset.get(note) ?? note.onsetSeconds
+    const s0 = Math.floor(onset * sampleRate)
     const s1 = Math.min(length, Math.floor(note.offsetSeconds * sampleRate))
     if (s1 <= s0) continue
-    const gains = partialGains(spec.instrument, note.midi, rng)
-    // low notes ring longer, high notes die faster (both instruments)
-    const tau = decay * (1.6 - Math.min(1, (note.midi - 40) / 60) * 0.8)
+    renderedNotes.push({
+      midi: note.midi,
+      onsetSeconds: Math.round(onset * 10000) / 10000,
+      offsetSeconds: note.offsetSeconds,
+      velocity: note.velocity,
+      instrument: note.instrument,
+      symbolicOnsetSeconds: note.onsetSeconds,
+    })
+    const gains = partialGains(spec.instrument, note.midi, note.velocity, rng)
+    // Measured: real acoustic guitar tau ~190 ms at mid pitches, longer low;
+    // piano tau ~900 ms with low strings ringing longest.
+    const tau = isGuitar
+      ? (realistic ? 0.19 : 0.55) * (1.5 - Math.min(1, (note.midi - 40) / 60) * 0.6)
+      : (realistic ? 0.9 : 1.25) * (1.6 - Math.min(1, (note.midi - 40) / 60) * 0.6)
     const amp = 0.10 + note.velocity * 0.32
     const attackSamples = Math.max(1, Math.floor(attack * sampleRate))
     for (let i = s0; i < s1; i += 1) {
@@ -201,6 +252,12 @@ export function renderComposition(spec, { sampleRate = SAMPLE_RATE } = {}) {
         // a single decay for every partial sounds static and synthetic.
         const partialEnv = h === 1 ? 1 : Math.exp(-t * (h - 1) * 0.45 / tau)
         v += gains[h - 1] * partialEnv * Math.sin(2 * Math.PI * freq * t + h * 0.7)
+        if (realistic && h <= 3) {
+          // two strings slightly apart beat against each other (piano unison,
+          // guitar paired string): a small detune, not random noise
+          const detune = spec.instrument === 'piano' ? 0.0009 : 0.0004
+          v += 0.5 * gains[h - 1] * partialEnv * Math.sin(2 * Math.PI * freq * (1 + detune) * t + h * 0.3)
+        }
       }
       out[i] += amp * env * v
     }
@@ -213,14 +270,30 @@ export function renderComposition(spec, { sampleRate = SAMPLE_RATE } = {}) {
       }
     }
   }
-  // soft clip-free normalisation
+  // Microphone/body tilt: a first-order low pass, stronger for the guitar
+  // (measured centroid 247 Hz on real acoustic guitar versus 1032 Hz for the
+  // first renderer). Applied before normalisation.
+  if (realistic) {
+    const cutoff = isGuitar ? 1400 : 5200
+    const alpha = 1 - Math.exp((-2 * Math.PI * cutoff) / sampleRate)
+    let y = 0
+    for (let i = 0; i < out.length; i += 1) { y += alpha * (out[i] - y); out[i] = y }
+  }
   let peak = 0
   for (let i = 0; i < out.length; i += 1) peak = Math.max(peak, Math.abs(out[i]))
   if (peak > 0) {
     const gain = 0.85 / peak
     for (let i = 0; i < out.length; i += 1) out[i] *= gain
   }
-  return { samples: out, sampleRate, notes: notes.map((n) => ({ ...n })) }
+  // The label is the AUDIBLE onset, not the sample-loop start: a 30 ms piano
+  // attack is audibly late by ~7 ms, and a training label that ignores it
+  // teaches the model a bias. Measured here from the rendered waveform, and
+  // kept next to the symbolic onset so the provenance is explicit.
+  for (const note of renderedNotes) {
+    const measured = measureAudibleOnset(out, sampleRate, note)
+    note.audibleOnsetSeconds = measured == null ? note.onsetSeconds : Math.round(measured * 10000) / 10000
+  }
+  return { samples: out, sampleRate, notes: renderedNotes }
 }
 
 /* -------------------------------------------------- audible-onset verification */

@@ -62,9 +62,17 @@ function writeWavFile(path, samples, sampleRate) {
 
 const plan = []
 let n = 0
+// Distribute the requested plan size EXACTLY across the instrument x texture
+// cells (integer division used to round 150 down to 144 with no record of the
+// difference). Leftover cells get one extra composition.
+const cells = INSTRUMENTS.length * TEXTURES.length
+const base = Math.floor(planSize / cells)
+const remainder = planSize - base * cells
+let cellIndex = 0
 for (const instrument of INSTRUMENTS) {
   for (const texture of TEXTURES) {
-    const count = Math.max(1, Math.round(planSize / (INSTRUMENTS.length * TEXTURES.length)))
+    const count = base + (cellIndex < remainder ? 1 : 0)
+    cellIndex += 1
     for (let i = 0; i < count; i += 1) {
       const id = `${instrument}-${texture}-${String(i).padStart(3, '0')}`
       plan.push({ id, instrument, texture, split: splitForComposition(id), bars: 4, bpm: 92 + ((n * 7) % 40) })
@@ -72,6 +80,7 @@ for (const instrument of INSTRUMENTS) {
     }
   }
 }
+if (plan.length !== planSize) throw new Error(`plan size mismatch: ${plan.length} != ${planSize}`)
 const planSummary = plan.reduce((acc, spec) => {
   acc[spec.split] = (acc[spec.split] ?? 0) + 1
   return acc
@@ -131,7 +140,7 @@ for (const [index, spec] of chosen.entries()) {
   // 2. the released model on the same audio
   const bp = await predictBasicPitchNode(rendered.samples, { modelDir: join(root, 'public/neural-model') })
   const notes = bp.notes.map((n) => ({ midi: n.midi, onset: n.startSeconds, duration: (n.endSeconds ?? n.startSeconds) - n.startSeconds }))
-  const truth = rendered.notes.map((n) => ({ midi: n.midi, onset: n.onsetSeconds, offset: n.offsetSeconds }))
+  const truth = rendered.notes.map((n) => ({ midi: n.midi, onset: n.audibleOnsetSeconds ?? n.onsetSeconds, offset: n.offsetSeconds }))
   const strict = scoreEvents(notes, truth, { tolerance: 0.06 })
   const loose = scoreEvents(notes, truth, { tolerance: 0.12 })
   rows.push({
@@ -180,7 +189,10 @@ const report = {
   renderer: 'in-house additive synthesis (no samples, no external assets)',
   sampleRate: SAMPLE_RATE,
   plan: {
+    requested: planSize,
     compositions: plan.length,
+    everyCompositionInOneSplit: plan.every((s) => ['train', 'val', 'test'].includes(s.split)),
+    splitSum: Object.values(planSummary).reduce((a, b) => a + b, 0),
     bySplit: planSummary,
     byInstrument: Object.fromEntries(INSTRUMENTS.map((i) => [i, plan.filter((p) => p.instrument === i).length])),
     byTexture: Object.fromEntries(TEXTURES.map((t) => [t, plan.filter((p) => p.texture === t).length])),

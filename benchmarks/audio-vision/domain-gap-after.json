@@ -1,0 +1,397 @@
+{
+ "generatedAt": "2026-10-26T01:28:45.626Z",
+ "features": {
+  "real-guitar": {
+   "notes": 128,
+   "attackMs": 5.804988662131519,
+   "decayTauMs": 188,
+   "centroidHz": 247,
+   "h1Share": 0.56,
+   "evenOdd": 1.71,
+   "noiseFloorDb": -8.8
+  },
+  "real-piano": {
+   "notes": 2,
+   "attackMs": 49.342403628117914,
+   "decayTauMs": 930,
+   "centroidHz": 528,
+   "h1Share": 0.064,
+   "evenOdd": 6.91,
+   "noiseFloorDb": -2.2
+  },
+  "synth-piano": {
+   "notes": 4,
+   "attackMs": 26.122448979591837,
+   "decayTauMs": 1077,
+   "centroidHz": 196,
+   "h1Share": 0.495,
+   "evenOdd": 2.9,
+   "noiseFloorDb": -56
+  },
+  "synth-guitar": {
+   "notes": 4,
+   "attackMs": 5.804988662131519,
+   "decayTauMs": 260,
+   "centroidHz": 700,
+   "h1Share": 0.898,
+   "evenOdd": 7.23,
+   "noiseFloorDb": -55.1
+  }
+ },
+ "model": {
+  "real-guitar": {
+   "recordings": 4,
+   "f1": 0.862,
+   "precision": 0.929,
+   "recall": 0.816,
+   "bassRecall": 0.425
+  },
+  "real-piano": {
+   "recordings": 4,
+   "f1": 0.143,
+   "precision": 0.119,
+   "recall": 0.179,
+   "bassRecall": 0
+  },
+  "synth-guitar": {
+   "recordings": 2,
+   "f1": 0.955,
+   "precision": 1,
+   "recall": 0.917,
+   "bassRecall": 0
+  },
+  "synth-piano": {
+   "recordings": 2,
+   "f1": 0.978,
+   "precision": 1,
+   "recall": 0.959,
+   "bassRecall": 0.5
+  }
+ },
+ "perSource": [
+  {
+   "id": "real:02_BN1-129-Eb_comp",
+   "kind": "real-guitar",
+   "notes": 154,
+   "predicted": 125,
+   "f1": 0.832,
+   "precision": 0.928,
+   "recall": 0.753,
+   "onsetMaeMs": 17,
+   "register": {
+    "bass": {
+     "notes": 20,
+     "recall": 0.7,
+     "precision": 0.824
+    },
+    "mid": {
+     "notes": 134,
+     "recall": 0.761,
+     "precision": 0.944
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:02_BN1-129-Eb_solo",
+   "kind": "real-guitar",
+   "notes": 57,
+   "predicted": 61,
+   "f1": 0.932,
+   "precision": 0.902,
+   "recall": 0.965,
+   "onsetMaeMs": 14,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 57,
+     "recall": 0.965,
+     "precision": 0.932
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:02_BN1-147-Gb_comp",
+   "kind": "real-guitar",
+   "notes": 200,
+   "predicted": 132,
+   "f1": 0.741,
+   "precision": 0.932,
+   "recall": 0.615,
+   "onsetMaeMs": 14,
+   "register": {
+    "bass": {
+     "notes": 11,
+     "recall": 1,
+     "precision": 1
+    },
+    "mid": {
+     "notes": 189,
+     "recall": 0.593,
+     "precision": 0.926
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:02_BN1-147-Gb_solo",
+   "kind": "real-guitar",
+   "notes": 44,
+   "predicted": 43,
+   "f1": 0.943,
+   "precision": 0.953,
+   "recall": 0.932,
+   "onsetMaeMs": 14,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 44,
+     "recall": 0.932,
+     "precision": 0.976
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:piano-mozart-single",
+   "kind": "real-piano",
+   "notes": 13,
+   "predicted": 21,
+   "f1": 0,
+   "precision": 0,
+   "recall": 0,
+   "onsetMaeMs": null,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 9,
+     "recall": 0,
+     "precision": 0
+    },
+    "high": {
+     "notes": 4,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:piano-mozart-dyad",
+   "kind": "real-piano",
+   "notes": 12,
+   "predicted": 19,
+   "f1": 0.452,
+   "precision": 0.368,
+   "recall": 0.583,
+   "onsetMaeMs": 85,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 9,
+     "recall": 0.444,
+     "precision": 0.286
+    },
+    "high": {
+     "notes": 3,
+     "recall": 1,
+     "precision": 0.6
+    }
+   }
+  },
+  {
+   "id": "real:piano-mozart-triad",
+   "kind": "real-piano",
+   "notes": 14,
+   "predicted": 17,
+   "f1": 0.065,
+   "precision": 0.059,
+   "recall": 0.071,
+   "onsetMaeMs": 111,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 9,
+     "recall": 0.111,
+     "precision": 0.083
+    },
+    "high": {
+     "notes": 5,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "real:piano-mozart-dense",
+   "kind": "real-piano",
+   "notes": 16,
+   "predicted": 20,
+   "f1": 0.056,
+   "precision": 0.05,
+   "recall": 0.063,
+   "onsetMaeMs": 63,
+   "register": {
+    "bass": {
+     "notes": 2,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 12,
+     "recall": 0.083,
+     "precision": 0.063
+    },
+    "high": {
+     "notes": 2,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "synth:piano-single",
+   "kind": "synth-piano",
+   "notes": 4,
+   "predicted": 4,
+   "f1": 1,
+   "precision": 1,
+   "recall": 1,
+   "onsetMaeMs": 3,
+   "register": {
+    "bass": {
+     "notes": 2,
+     "recall": 1,
+     "precision": 1
+    },
+    "mid": {
+     "notes": 2,
+     "recall": 1,
+     "precision": 1
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "synth:piano-chords",
+   "kind": "synth-piano",
+   "notes": 12,
+   "predicted": 11,
+   "f1": 0.957,
+   "precision": 1,
+   "recall": 0.917,
+   "onsetMaeMs": 10,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 12,
+     "recall": 0.917,
+     "precision": 1
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  },
+  {
+   "id": "synth:guitar-single",
+   "kind": "synth-guitar",
+   "notes": 4,
+   "predicted": 4,
+   "f1": 1,
+   "precision": 1,
+   "recall": 1,
+   "onsetMaeMs": 8,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 2,
+     "recall": 1,
+     "precision": 1
+    },
+    "high": {
+     "notes": 2,
+     "recall": 1,
+     "precision": 1
+    }
+   }
+  },
+  {
+   "id": "synth:guitar-chords",
+   "kind": "synth-guitar",
+   "notes": 12,
+   "predicted": 10,
+   "f1": 0.909,
+   "precision": 1,
+   "recall": 0.833,
+   "onsetMaeMs": 15,
+   "register": {
+    "bass": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    },
+    "mid": {
+     "notes": 12,
+     "recall": 0.833,
+     "precision": 1
+    },
+    "high": {
+     "notes": 0,
+     "recall": 0,
+     "precision": 0
+    }
+   }
+  }
+ ]
+}

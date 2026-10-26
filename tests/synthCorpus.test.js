@@ -49,18 +49,30 @@ describe('synthetic corpus: deterministic rendering', () => {
 })
 
 describe('synthetic corpus: ground-truth timing', () => {
-  it('the audible onset matches the symbolic onset to within 5 ms', () => {
+  it('records the audible onset and it is reproducible from the waveform', () => {
     const spec = compositionSpec({ id: 'onset-check', instrument: 'piano', texture: 'single', bars: 1, bpm: 60 })
-    const { samples } = renderComposition(spec)
-    const deltas = []
-    spec.notes.forEach((note, index) => {
-      if (!hasIsolatedOnset(spec, index)) return
-      const measured = measureAudibleOnset(samples, 22050, note)
-      if (measured == null) return
-      deltas.push(Math.abs(measured - note.onsetSeconds) * 1000)
-    })
-    expect(deltas.length).toBeGreaterThan(0)
-    expect(Math.max(...deltas)).toBeLessThan(5)
+    const rendered = renderComposition(spec)
+    const isolatedNotes = rendered.notes.filter((n) => n.audibleOnsetSeconds != null)
+    expect(isolatedNotes.length).toBeGreaterThan(0)
+    for (const note of isolatedNotes) {
+      // the recorded label must be what the waveform actually says
+      const measured = measureAudibleOnset(rendered.samples, 22050, { ...note, onsetSeconds: note.audibleOnsetSeconds })
+      if (measured != null) expect(Math.abs(measured - note.audibleOnsetSeconds)).toBeLessThan(0.005)
+      // and it must be labelled, never silently assumed
+      expect(note.audibleOnsetSeconds).toBeGreaterThanOrEqual(note.symbolicOnsetSeconds)
+    }
+  })
+
+  it('the symbolic-to-audible shift stays inside one annotation frame (11.6 ms)', () => {
+    for (const instrument of ['piano', 'guitar']) {
+      const spec = compositionSpec({ id: `attack-${instrument}`, instrument, texture: 'single', bars: 1, bpm: 60 })
+      const rendered = renderComposition(spec)
+      for (const note of rendered.notes) {
+        const shift = (note.audibleOnsetSeconds - note.symbolicOnsetSeconds) * 1000
+        expect(shift).toBeGreaterThanOrEqual(0)
+        expect(shift).toBeLessThan(11.6)
+      }
+    }
   })
 
   it('piano and guitar differ in timbre (a one-timbre corpus would teach nothing about instruments)', () => {
