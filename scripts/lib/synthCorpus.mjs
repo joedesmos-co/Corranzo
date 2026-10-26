@@ -141,6 +141,76 @@ export function compositionSpec({ id, instrument = 'piano', texture = 'melody', 
   return { id, instrument, texture, bpm, seed: seed ?? `comp:${id}`, durationSeconds, notes }
 }
 
+/* ------------------------------------------------------------- performance */
+
+/**
+ * Turn a composition into a PERFORMANCE: the same notes, played by a human.
+ *
+ * Every transformation here changes when or how long a note sounds, so the
+ * performed event is what gets rendered and what gets labelled. The symbolic
+ * grid position is kept beside it (`symbolicOnsetSeconds`) - applying jitter
+ * after annotation, as a "recording effect", would silently corrupt the
+ * ground truth, which is exactly what this layer exists to avoid.
+ *
+ * Seeded from the composition id, so a performance is reproducible.
+ */
+export function performComposition(spec, {
+  jitterMs = 18,          // note-on timing deviation (sd, roughly)
+  rollMs = 28,            // chord roll: spread across members, by pitch
+  velocitySpread = 0.35,  // +-35 % per-note velocity
+  innerVoiceGain = 0.45,  // inner voices quieter than the top line
+  staccato = 0.25,        // probability a note is shortened
+  legato = 0.2,           // probability a note is lengthened / held over
+  damping = 0.15,         // probability a note is cut early (muted)
+  bassGain = 0.85,
+  melodyGain = 1.1,
+  rng: rngOverride = null,
+} = {}) {
+  const rng = rngOverride ?? makeRng(`perf:${spec.id}:${spec.seed}`)
+  const byOnset = new Map()
+  for (const note of spec.notes) {
+    const key = note.onsetSeconds.toFixed(3)
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(note)
+  }
+  const performed = []
+  for (const [, group] of byOnset) {
+    const ordered = [...group].sort((a, b) => a.midi - b.midi)
+    const isChord = ordered.length > 1
+    ordered.forEach((note, index) => {
+      // human timing: a small random deviation plus a roll through chord members
+      const jitter = ((rng() + rng() + rng()) / 3 - 0.5) * 2 * (jitterMs / 1000)
+      const roll = isChord ? (index / Math.max(1, ordered.length - 1)) * (rollMs / 1000) * (0.5 + rng()) : 0
+      const onset = Math.max(0, note.onsetSeconds + jitter + roll)
+      let duration = note.offsetSeconds - note.onsetSeconds
+      // articulation
+      const p = rng()
+      if (p < staccato) duration *= 0.35 + rng() * 0.2
+      else if (p < staccato + legato) duration *= 1.1 + rng() * 0.2
+      if (rng() < damping) duration *= 0.5 + rng() * 0.3
+      // dynamics: per-note spread, a quieter inner voice, register balance
+      let velocity = note.velocity * (1 - velocitySpread / 2 + rng() * velocitySpread)
+      const isTop = index === ordered.length - 1
+      if (isChord && !isTop) velocity *= innerVoiceGain + rng() * 0.25
+      if (note.midi < 48) velocity *= bassGain
+      if (isTop) velocity *= melodyGain
+      velocity = Math.max(0.08, Math.min(1, velocity))
+      performed.push({
+        midi: note.midi,
+        onsetSeconds: Math.round(onset * 10000) / 10000,
+        offsetSeconds: Math.round((onset + Math.max(0.04, duration)) * 10000) / 10000,
+        velocity: Math.round(velocity * 100) / 100,
+        instrument: note.instrument,
+        symbolicOnsetSeconds: note.onsetSeconds,
+        symbolicOffsetSeconds: note.offsetSeconds,
+        rolled: isChord && roll > 0.001,
+      })
+    })
+  }
+  performed.sort((a, b) => a.onsetSeconds - b.onsetSeconds || a.midi - b.midi)
+  return { ...spec, notes: performed, performance: { jitterMs, rollMs, velocitySpread, innerVoiceGain, staccato, legato, damping, bassGain, melodyGain } }
+}
+
 /* ------------------------------------------------------------------ render */
 
 /**
@@ -182,8 +252,12 @@ function partialFreq(f0, h, instrument) {
  * Render a composition to mono float32 at 22050 Hz with the exact event list.
  * Pure arithmetic: no samples, no external assets.
  */
-export function renderComposition(spec, { sampleRate = SAMPLE_RATE, realistic = true } = {}) {
-  const { notes, durationSeconds } = spec
+export function renderComposition(spec, { sampleRate = SAMPLE_RATE, realistic = true, performance = false, performanceOptions = {} } = {}) {
+  // A performance changes onsets and durations, so it is applied BEFORE the
+  // render and the performed events become the truth (symbolic positions kept).
+  const performedSpec = performance ? performComposition(spec, performanceOptions) : spec
+  const { notes } = performedSpec
+  const durationSeconds = Math.max(spec.durationSeconds, ...notes.map((n) => n.offsetSeconds + 0.4))
   const length = Math.ceil(durationSeconds * sampleRate)
   const out = new Float32Array(length)
   const rng = makeRng(`render:${spec.id}:${spec.seed}:${spec.instrument}`)
@@ -227,7 +301,10 @@ export function renderComposition(spec, { sampleRate = SAMPLE_RATE, realistic = 
       offsetSeconds: note.offsetSeconds,
       velocity: note.velocity,
       instrument: note.instrument,
-      symbolicOnsetSeconds: note.onsetSeconds,
+      symbolicOnsetSeconds: note.symbolicOnsetSeconds ?? note.onsetSeconds,
+      symbolicOffsetSeconds: note.symbolicOffsetSeconds ?? note.offsetSeconds,
+      rolled: Boolean(note.rolled),
+      performed: Boolean(performance),
     })
     const gains = partialGains(spec.instrument, note.midi, note.velocity, rng)
     // Measured: real acoustic guitar tau ~190 ms at mid pitches, longer low;
@@ -293,7 +370,7 @@ export function renderComposition(spec, { sampleRate = SAMPLE_RATE, realistic = 
     const measured = measureAudibleOnset(out, sampleRate, note)
     note.audibleOnsetSeconds = measured == null ? note.onsetSeconds : Math.round(measured * 10000) / 10000
   }
-  return { samples: out, sampleRate, notes: renderedNotes }
+  return { samples: out, sampleRate, notes: renderedNotes, performance: performedSpec.performance ?? null }
 }
 
 /* -------------------------------------------------- audible-onset verification */
