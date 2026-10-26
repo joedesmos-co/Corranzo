@@ -2526,3 +2526,49 @@ not.
   browser_practice_gate.json, safety_correction.json,
   piano_vector_core_general.patch (465 lines), minrest patch (107 lines).
   No merge/deploy; sealed TEST untouched.
+
+
+## Corrected CC0 engravings: generator defects vs recognition (this session)
+
+  Root cause of the last rhythm/beginner errors: the benchmark corpus
+  generator had two engraving defects, not recognition defects:
+    1. The benchmark font had no quarter-rest glyph. The generator mapped
+       duration 12 (quarter rest) to 0xE4E6 (eighth rest), so the printed
+       PDF showed an eighth rest while the reference said quarter.
+    2. Flags were drawn only for duration <= 6, so dotted-eighth (9) and
+       tuplet eighth (4) values were printed without a flag/beam and looked
+       like quarters.
+  These defects make the original beginner/rhythm PDFs visually
+  underdetermined. They remain blocked for practice (rest-duration-inferred
+  / ambiguous); no reference answer was hardcoded.
+
+  Corrected corpus: benchmarks/omr-fixtures-corrected (same CC0 reference
+  MusicXML, separate PDFs/font; original corpus preserved). The corrected
+  font adds SMuFL 0xE4E5 quarter rest; the corrected generator draws one
+  flag for durations 4/6/9 and two for 3. Provenance in the corrected
+  README. This is reference-backed validation material, not training data.
+
+  Results with the SAME recognition candidate (pdfjs 5.4.296):
+    beginner 32/32 notes, 1/1 rest (provenance pdfjs-vector, no inference),
+             8/8 valid measures, practiceREADY
+    rhythm   63/63 notes, 5/5 rests, 8/8 valid measures, tie classified,
+             practiceREADY
+    grand    88/88 notes, 0/0 rests, 8/8 valid measures, tie+slur,
+             practiceREADY
+    dense    195/264 notes, 4 invalid measures, blocked
+    corrected total 378/447 notes (P .924/R .846), rests 6/6.
+  Browser (pdfjs 5.4.296, Chromium): corrected beginner/rhythm/grand all
+  practiceReady true; reports/browser_practice_gate.json.
+
+  This is the primary success: another complete reference-backed score
+  (rhythm 63/63 + 5/5 rests, 0 invalid measures) and a safely restored
+  beginner, through corrected engraving evidence rather than relaxed gates
+  or hardcoded answers. The original corpus remains honestly blocked.
+  Correctness-on-reference vs readiness-without-reference remain separate:
+  the corrected corpus is reference-scored, while readiness uses only the
+  recognition IR (visual rest glyph, flags, meter, curves, measures).
+
+  Remaining blockers: dense 195/264 (69 unmatched); independent
+  font/engraver generalization beyond the CC0 generator; OSMD/save-reopen
+  not run (no node_modules); multi-page Ao remains incomplete. No
+  merge/deploy; sealed TEST untouched.
