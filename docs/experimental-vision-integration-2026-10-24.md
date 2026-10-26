@@ -303,3 +303,33 @@ short curves; path accidentals remain unverified. See
 `79808654cb4a4ba3a46eb9f19de9a4a957b51cf46d53722c7a7e9166eb0bcf06`.
 Not deployed. Rollback target if deployed:
 `0ccc559c-10d5-43df-92db-42a5715790cb`.
+
+## 9. Round 5 — Guitar stem probe scoped; Piano ownership rejected
+
+**Live at round-5 start:** Worker
+`8748583b-da41-4f0c-be52-6d133da94185`, bundle `index-DJy6qAU3.js`. Its
+SHA-256 matches the round-4 local build; Audio Vision v3 and the round-4 text
+run split are live.
+
+**Integrated:** `248a20b5bd` — edge+centre stem starts for TAB `attachRhythm`
+only. The new half-note fixture PDF is included. Mixed result: 21/21 noteheads,
+60/60 string/fret, **15/21 confident onsets**, **3/4 valid measures**, 15
+complete timed events; the 16 events in measure 3 remain `duration:null` and
+carry the explicit placeholder footnote. `rhythm_recovered=false`; practice
+disabled. Paired/chords and techniques remain 32/32 and 8/8. Sparse abstains.
+
+The probe was **not** applied to `analyzeNotationRhythm`: doing so changed the
+notation-only fixture from 16 eighths + 24 quarters to 40 quarters. That
+diagnostic keeps the old edge-only probe and remains exact.
+
+**Not integrated:** Piano `b4f6dce882`. It reproduces 377/447, tuplets 62/63,
+grand 88/88 and dense 195/264, and exclusive path ownership is an improvement.
+But equal-pitch short slurs, same-staff two-voice sums and decorative short
+curves still open practice; a decorative `3` marker can mark six notes as
+tuplets; path key-region/decorative accidental safety remains unproven. See
+`docs/piano-vector-safety-repair-audit-2026-10-25.md`.
+
+**Round-5 local bundle:** `dist/assets/index-BVw0gRmn.js`, SHA-256
+`c284e708158a83607243cf651730449a090ad07db3ae2969b3350a12678880ea`.
+Not deployed. Rollback target if deployed:
+`8748583b-da41-4f0c-be52-6d133da94185`.
