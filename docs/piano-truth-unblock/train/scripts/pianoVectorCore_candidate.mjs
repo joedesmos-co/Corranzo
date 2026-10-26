@@ -778,6 +778,7 @@ export function assignVoices(ir) {
     byStaffMeasure.get(key).push(n)
   }
   let splits = 0, conflicts = 0, unresolvedStems = 0, edgeStems = 0
+  const conflictDetails = []
   for (const [key, notes] of byStaffMeasure) {
     const staff = notes[0]?.staff ?? 0
     const ups = notes.filter((n) => n.stem_x != null && n.stem_x > n.x + 1)
@@ -801,10 +802,19 @@ export function assignVoices(ir) {
       if (!byStem.has(n.stem_x)) byStem.set(n.stem_x, [])
       byStem.get(n.stem_x).push(n)
     }
-    for (const group of byStem.values()) {
+    for (const [stem, group] of byStem.entries()) {
       if (group.length < 2) continue
       const xs = group.map((n) => n.x)
-      if (Math.max(...xs) - Math.min(...xs) > 1.5) conflicts += 1
+      if (Math.max(...xs) - Math.min(...xs) > 3.0) {
+        conflicts += 1
+        conflictDetails.push({
+          type: 'shared-stem-multiple-onsets',
+          measure: group[0].measure,
+          staff: group[0].staff,
+          stem_x: stem,
+          notes: group.map((n) => ({ x: n.x, y: n.y, midi: n.midi, voice: n.voice ?? null, stemOwnership: n.stemOwnership ?? null })),
+        })
+      }
     }
     // Conflict 2: several distinct stems on the same onset are not a chord
     // unless they share one stem x. This catches same-direction second voices
@@ -816,9 +826,19 @@ export function assignVoices(ir) {
       if (!onsetGroups.has(key)) onsetGroups.set(key, [])
       onsetGroups.get(key).push(n)
     }
-    for (const group of onsetGroups.values()) {
+    for (const [onset, group] of onsetGroups.entries()) {
       const stems = new Set(group.map((n) => n.stem_x))
-      if (stems.size > 1) conflicts += 1
+      if (stems.size > 1) {
+        conflicts += 1
+        conflictDetails.push({
+          type: 'same-onset-distinct-stems',
+          measure: group[0].measure,
+          staff: group[0].staff,
+          onset_cluster: onset,
+          stems: [...stems],
+          notes: group.map((n) => ({ x: n.x, y: n.y, midi: n.midi, stem_x: n.stem_x, voice: n.voice ?? null, stemOwnership: n.stemOwnership ?? null })),
+        })
+      }
     }
   }
   for (const r of ir.rests) {
@@ -843,6 +863,7 @@ export function assignVoices(ir) {
     verified,
   }
   ir.voiceOwnership = verified ? 'verified' : 'inferred'
+  ir.voiceConflictDetails = conflictDetails
   return ir
 }
 
