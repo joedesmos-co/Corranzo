@@ -17,6 +17,13 @@ const SMUFL_NOTEHEADS = {
   '\ue0a3': ['half', 2.0],
   '\ue0a4': ['quarter', 1.0],
 }
+const SMUFL_RESTS = {
+  '\ue4e3': ['whole', 4.0],
+  '\ue4e4': ['half', 2.0],
+  '\ue4e5': ['quarter', 1.0],
+  '\ue4e6': ['eighth', 0.5],
+  '\ue4e7': ['sixteenth', 0.25],
+}
 const TYPE_BASES = [[4.0, 'whole'], [2.0, 'half'], [1.0, 'quarter'],
   [0.5, 'eighth'], [0.25, '16th'], [0.125, '32nd']]
 
@@ -277,6 +284,20 @@ export function notationNoteheads(items) {
       }
       cursor += adv
     }
+  }
+  out.sort((a, b) => a.cx - b.cx)
+  return out
+}
+
+export function notationRests(items) {
+  const out = []
+  for (const it of items) {
+    const txt = (it.text || '').trim()
+    if (txt.length !== 1 || !SMUFL_RESTS[txt]) continue
+    const [x0, y0, x1, y1] = it.bbox
+    const [kind, base] = SMUFL_RESTS[txt]
+    out.push({ kind, base, box: [x0, y0, x1, y1],
+      cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, w: x1 - x0, h: y1 - y0 })
   }
   out.sort((a, b) => a.cx - b.cx)
   return out
@@ -675,6 +696,7 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
     stats: {
       time_signature: `${ts[0]}/${ts[1]}`, time_signature_source: tsSource,
       noteheads: noteheads.length, notehead_source: source,
+      rests: notationRests(items).length, rest_source: 'smufl-glyphs',
       onsets: onsets.length, onsets_confident: confident,
       duration_source: 'smufl-notehead+stem/beam/flag evidence',
       measures_complete: valid, measures_total: byMeasure.size,
@@ -797,7 +819,7 @@ export async function analyzeNotationRhythm(data, { dpi = 150, pageNo = 1, creat
       rows.push({ system: si, x: +c.cx.toFixed(1), ...d })
     })
   })
-  return { rows, noteheads: nh.length, systems: systems.length }
+  return { rows, noteheads: nh.length, systems: systems.length, rests: notationRests(page.items).length }
 }
 
 // ------------------------------------------------------------------- main
