@@ -11,32 +11,29 @@
 - Conservative dot detection added (0 false positives)
 - Diagnostic overlay + geometry JSON committed
 
-### Product branch: codex/guitar-vision-product @ ac20d3fdf5
+### Product branch: codex/guitar-vision-product @ ae3cb54fa4
 - Ported all standalone fixes to src/features/vision/guitarTabCore.js
 - Mixed: 21/21 conf, 4/4 meas; Standard: 16/24; Paired/Techniques/Sparse preserved
 - All 4 guitarVisionRhythm.test.js tests pass
-- Mixed fixture PDF updated to corrected stems version (MD5 695b8fc327fbaccd74117f55fdbc0fc3)
-
-### Root cause of product gap (15/21 -> 21/21)
-centerProbe=true inflated stem tips -> flags fired incorrectly -> beam_flag_conflict
--> durations nulled -> measure 3 failed -> 6 onsets unconfident.
-Fix: convention-only stem pairs + gap-bridged runs + edge-derived tips +
-beam-connected scoring + min_run 1.4 + dot detection.
+- Mixed fixture PDF updated to corrected stems version
+- SMuFL rest glyph recognition added (U+E4E3-E4E7, 0 false positives)
+- Rest counts reported in summary and analyzeNotationRhythm
 
 ## Unfinished milestones
 1. Browser (Chromium/WebKit) verification: NOT run
 2. Independent layout generalization: NOT done
-3. Rest recognition: NOT implemented (separate detectVectorRests.js module exists)
-4. Dot positive verification: NOT tested (only 0 false positives)
-5. Ties/sustain/techniques: NOT implemented
-6. Multiple voices: NOT implemented
+3. Dot positive verification: NOT tested (only 0 false positives)
+4. Ties/sustain/techniques: NOT implemented
+5. Multiple voices: NOT implemented
+6. Multi-page/TAB-only/scanned: NOT implemented
 7. Integration handoff: NOT prepared
 
 ## Next executable steps
-1. Run Playwright browser test: load product module in Chromium, verify recognition
-2. Create dotted-note positive references
-3. Implement rest detection in guitarTabCore.js (SMuFL rest glyphs U+E4E3-E4E7)
-4. Prepare integration patch spec
+1. Run Playwright browser test on product module
+2. Create dotted-note positive references and verify dot detection recall
+3. Implement rest MusicXML emission (currently detection only)
+4. Implement tie detection for same-pitch ties
+5. Prepare integration patch spec
 
 ## Resource status
 - Disk: 14 GiB free (above 5 GiB threshold)
