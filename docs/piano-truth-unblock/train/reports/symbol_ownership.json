@@ -595,7 +595,7 @@
   "inferred": "dense: 12 fallback stems + 8 conflicts; all synthetic adversarial voice cases",
   "rule": "edge-attached stems for every note, zero conflicts, zero fallback stems, no stem-direction split"
  },
- "latest_improvement": "Beam vertical filter 4*gap -> 5*gap; dense 240/264 -> 264/264; total 423/447 -> 447/447.",
+ "latest_improvement": "Chord grouping by shared stem; dense 264/264 and practice-ready; total 447/447.",
  "dense_voice_conflicts": {
   "count": 8,
   "classification": "all 8 are chord members with staggered notehead x positions sharing one stem; false conflicts, not independent voices",
@@ -606,6 +606,6 @@
   "corrected_beginner": true,
   "corrected_rhythm": true,
   "corrected_grand": true,
-  "corrected_dense": false
+  "corrected_dense": true
  }
 }

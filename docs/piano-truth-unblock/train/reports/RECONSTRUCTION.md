@@ -2761,3 +2761,12 @@ not.
   practice-ready. Dense voice ownership is verified, but Practice remains
   blocked by measure-duration-invalid due to voice grouping. Adversarial
   suite remains 15/15. Current head 63a8f2ddb9.
+
+
+## Complete controlled recognition (this session)
+
+  Fixed chord grouping to use shared stem anchors instead of 2-unit x bins.
+  This resolved staggered chord noteheads and invalid voice/measure totals.
+  All corrected fixtures now exact: 32/32, 63/63, 88/88, 264/264
+  (447/447), 6/6 rests. All four are practice-ready. Dense voice ownership
+  verified. Adversarial suite remains 15/15. Current head 1b8cc6d33f.

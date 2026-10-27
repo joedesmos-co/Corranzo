@@ -487,10 +487,11 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     sys.beats = beats; sys.unit = unit
   }
 
-  // chords by x coincidence
+  // chords by shared stem (or x proximity for stemless notes)
   const byX = new Map()
   for (const n of notes) {
-    const key = `${n.measure}:${n.staff}:${Math.round(n.x / 2)}`
+    const anchor = n.stem_x != null ? Math.round(n.stem_x) : Math.round(n.x / 2)
+    const key = `${n.measure}:${n.staff}:${anchor}`
     if (!byX.has(key)) byX.set(key, [])
     byX.get(key).push(n)
   }
