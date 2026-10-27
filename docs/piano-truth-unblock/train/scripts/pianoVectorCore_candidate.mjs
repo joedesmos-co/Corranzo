@@ -514,6 +514,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
     gap: systems[0]?.gap ?? 8,
     curves: curves,
+    vlines: vlines,
     meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
     route: notes.length ? 'vector' : 'image',
     schema: 'corranzo-notation-ir/1',
@@ -528,7 +529,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
 }
 
 function beamLevels(stemX, beams, g, gap) {
-  const local = beams.filter((b) => b.y >= g[0] - 4 * gap && b.y <= g[g.length - 1] + 4 * gap)
+  const local = beams.filter((b) => b.y >= g[0] - 6 * gap && b.y <= g[g.length - 1] + 6 * gap)
   const left = local.filter((b) => Math.abs(b.x1 - stemX) <= 1.5)
   const right = local.filter((b) => Math.abs(b.x0 - stemX) <= 1.5)
   return Math.max(left.length, right.length)
