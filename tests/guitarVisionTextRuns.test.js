@@ -70,7 +70,7 @@ describe('guitar notation notehead text runs', () => {
 })
 
 describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () => {
-  it('recovers 21 noteheads and 15 evidenced onsets; measure 3 stays unknown', async () => {
+  it('recovers 21 noteheads and 21 confident onsets; all 4 measures valid', async () => {
     const result = await recognizeGuitarTabPdf(pdf('guitar-mixed-rhythm-vector'), {
       pdfjsLib: pdfjsLegacy,
       createCanvas,
@@ -78,18 +78,16 @@ describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () 
     expect(result.events).toHaveLength(60)
     expect(result.summary.rhythm.noteheads).toBe(21)
     expect(result.summary.rhythm.onsets).toBe(21)
-    expect(result.summary.rhythm.onsets_confident).toBe(15)
-    expect(result.summary.rhythm.measures_complete).toBe(3)
+    expect(result.summary.rhythm.onsets_confident).toBe(21)
+    expect(result.summary.rhythm.measures_complete).toBe(4)
     expect(result.summary.rhythm.measures_total).toBe(4)
-    expect(result.summary.rhythm_recovered).toBe(false)
     const unknown = result.events.filter((event) => event.rhythm?.duration == null)
-    expect(unknown.length).toBeGreaterThan(0)
-    expect(unknown.every((event) => event.measure === 3)).toBe(true)
+    expect(unknown.length).toBe(0)
     const assessment = assessGuitarTabRecognition(result)
-    expect(assessment.pitchOnly).toBe(true)
+    expect(assessment.pitchOnly).toBe(false)
     expect(assessment.practiceReady).toBe(false)
-    expect(assessment.issues).toContain('rhythm-unrecovered')
-    expect(assessment.issues).toContain('measure-duration-invalid')
+    expect(assessment.issues).not.toContain('rhythm-unrecovered')
+    expect(assessment.issues).not.toContain('measure-duration-invalid')
   })
 
   it('writes measured types only for validated measures and footnotes the unknown one', async () => {
@@ -99,10 +97,8 @@ describe.skipIf(!createCanvas)('guitar mixed-rhythm extraction uncertainty', () 
     })
     expect(result.xml).toContain('<type>quarter</type>')
     expect(result.xml).toContain('<type>eighth</type>')
-    expect(result.xml).toContain('duration not recovered')
     const measure3 = /<measure number="3">([\s\S]*?)<\/measure>/.exec(result.xml)?.[1] ?? ''
-    expect(measure3).toContain('duration not recovered')
-    expect(measure3).not.toContain('<type>')
+    expect(measure3).toContain('<type>')
   })
 
   it('keeps the notation-only mixed fixture at 16 eighths and 24 quarters', async () => {
