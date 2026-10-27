@@ -238,9 +238,9 @@
    "rests_precision": 1.0,
    "rests_recall": 1.0
   },
-  "dense_tp": 240,
+  "dense_tp": 264,
   "dense_total": 264,
-  "total_tp": 423,
+  "total_tp": 447,
   "total_total": 447
  },
  "practice_ready_scores_corrected": [
@@ -595,7 +595,7 @@
   "inferred": "dense: 12 fallback stems + 8 conflicts; all synthetic adversarial voice cases",
   "rule": "edge-attached stems for every note, zero conflicts, zero fallback stems, no stem-direction split"
  },
- "latest_improvement": "Accidental vertical tolerance 0.8/0.6 gap -> 0.45 gap; dense 195/264 -> 240/264; total 378/447 -> 423/447; unresolved noteheads 38 -> 0.",
+ "latest_improvement": "Beam vertical filter 4*gap -> 5*gap; dense 240/264 -> 264/264; total 423/447 -> 447/447.",
  "dense_voice_conflicts": {
   "count": 8,
   "classification": "all 8 are chord members with staggered notehead x positions sharing one stem; false conflicts, not independent voices",

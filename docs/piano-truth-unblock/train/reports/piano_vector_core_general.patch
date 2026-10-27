@@ -217,11 +217,10 @@
        for (const ag of accGlyphs) {
          let best = null
          for (const hd of heads) {
-@@ -259,6 +374,21 @@
-           if (!best || d < best.d) best = { d, hd }
+@@ -260,6 +375,21 @@
          }
          if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
-+      }
+       }
 +      // Path-drawn accidentals are assigned exclusively: each candidate path
 +      // belongs to the nearest unassigned notehead to its right. A single
 +      // accidental can never modify two unrelated notes.
@@ -236,9 +235,10 @@
 +          if (!best || d < best.d) best = { d, hd }
 +        }
 +        if (best) { best.hd.acc = pa.code; pa.used = true }
-       }
++      }
        const clusters = []
        for (const hd of heads) {
+         const hcx = hd.x + hd.w / 2
 @@ -272,17 +402,19 @@
          let best = null
          for (const st of stems) {
@@ -295,7 +295,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -379,8 +509,11 @@
+@@ -379,8 +509,12 @@
      curveCount: curvePaths,
      unresolvedNotes: unresolved.length,
      unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
@@ -304,10 +304,11 @@
      systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
 +    gap: systems[0]?.gap ?? 8,
 +    curves: curves,
++    vlines: vlines,
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -388,7 +521,9 @@
+@@ -388,12 +522,14 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
@@ -318,10 +319,18 @@
    return ir
  }
  
-@@ -407,6 +542,45 @@
+ function beamLevels(stemX, beams, g, gap) {
+-  const local = beams.filter((b) => b.y >= g[0] - 4 * gap && b.y <= g[g.length - 1] + 4 * gap)
++  const local = beams.filter((b) => b.y >= g[0] - 6 * gap && b.y <= g[g.length - 1] + 6 * gap)
+   const left = local.filter((b) => Math.abs(b.x1 - stemX) <= 1.5)
+   const right = local.filter((b) => Math.abs(b.x0 - stemX) <= 1.5)
+   return Math.max(left.length, right.length)
+@@ -405,6 +541,45 @@
+   if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
+   for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
    return 0
- }
- 
++}
++
 +
 +/**
 + * Minimum general multi-page extraction: each page is recognized with the
@@ -359,12 +368,10 @@
 +    crossPageContinuation: pageCount > 1 ? 'unresolved' : 'not-applicable',
 +    credits: ['Multi-page extraction preserves page identity and measure order.',
 +      'Cross-page ties/slurs are not yet continued; practice is blocked when pages are incomplete.'] }
-+}
-+
+ }
+ 
  export function toMusicXML(ir, divisions = 480) {
-   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-   const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -449,8 +623,16 @@
+@@ -449,8 +624,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -382,7 +389,7 @@
        }
      }
      out.push('</measure>')
-@@ -460,96 +642,220 @@
+@@ -460,96 +643,220 @@
  }
  
  
@@ -649,7 +656,7 @@
      splits,
      conflicts,
      edgeStems,
-@@ -557,10 +863,86 @@
+@@ -557,10 +864,86 @@
      verified,
    }
    ir.voiceOwnership = verified ? 'verified' : 'inferred'
@@ -736,7 +743,7 @@
   * Decide whether the vector result is trustworthy enough to become a
   * playable practice score. The extractor is deliberately conservative:
   * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
-@@ -575,13 +957,15 @@
+@@ -575,13 +958,15 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -759,7 +766,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -591,25 +975,17 @@
+@@ -591,25 +976,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -791,7 +798,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -624,14 +1000,20 @@
+@@ -624,14 +1001,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -813,7 +820,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -639,10 +1021,16 @@
+@@ -639,10 +1022,16 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

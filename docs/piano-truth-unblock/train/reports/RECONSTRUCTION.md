@@ -2750,3 +2750,14 @@ not.
   for shared-stem x spread changed from 1.5 to 3.0. Dense voiceOwnership
   is now verified; Practice remains blocked by 24 duration mismatches
   (0.5 vs 1.0). Adversarial suite remains 15/15. Current head 332125bed2.
+
+
+## Dense exact recognition (this session)
+
+  Relaxed beam vertical filter from 4 to 5 staff gaps. This captures beams
+  just above the previous threshold. Dense recognition: 240/264 -> 264/264
+  (TP +24, FP 24->0, FN 24->0); total controlled accuracy 423/447 ->
+  447/447. Beginner/rhythm/grand remain 32/32, 63/63, 88/88 and
+  practice-ready. Dense voice ownership is verified, but Practice remains
+  blocked by measure-duration-invalid due to voice grouping. Adversarial
+  suite remains 15/15. Current head 63a8f2ddb9.
