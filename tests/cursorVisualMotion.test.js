@@ -7,6 +7,7 @@ import {
   isSameSystemCursor,
   resolveVisualMaxX,
   shouldUseVisualCursorMotion,
+  systemKeyForCursor,
 } from '../src/features/score-follow/cursorVisualMotion.js'
 import * as F from './helpers/buildXml.js'
 
@@ -251,5 +252,18 @@ describe('system line transition', () => {
     expect(endOfSystem.x).toBeLessThanOrEqual(0.88 + 0.001)
     expect(nextSystem.x).toBeCloseTo(0.1, 2)
     expect(nextSystem.nextSameSystem).toBe(false)
+  })
+})
+
+describe('systemKeyForCursor tolerance', () => {
+  it('returns the same key for Y values within the same system', () => {
+    const a = systemKeyForCursor({ page: 1, y: 0.30001 })
+    const b = systemKeyForCursor({ page: 1, y: 0.30009 })
+    expect(a).toBe(b)
+  })
+  it('returns different keys for different systems', () => {
+    const a = systemKeyForCursor({ page: 1, y: 0.3 })
+    const b = systemKeyForCursor({ page: 1, y: 0.5 })
+    expect(a).not.toBe(b)
   })
 })

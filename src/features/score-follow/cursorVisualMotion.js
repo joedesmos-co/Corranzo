@@ -26,7 +26,11 @@ export function systemKeyForCursor(target) {
   if (!target) {
     return ''
   }
-  return `${target.page ?? 1}:${(target.y ?? 0).toFixed(4)}`
+  // Round Y to a coarse tolerance so that minor floating-point or note-position
+  // fluctuations within the same system do not produce a different key and
+  // trigger a cursor reset / jump. Systems on different lines differ by far
+  // more than this tolerance (typically > 0.1 in normalised page coords).
+  return `${target.page ?? 1}:${(target.y ?? 0).toFixed(2)}`
 }
 
 export function isSameSystemCursor(a, b) {
