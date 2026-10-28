@@ -54,6 +54,24 @@ function restEvents(xml) {
   return out.sort((a, b) => a.measure - b.measure || a.quarters - b.quarters)
 }
 
+/** Dotted note events with measure, written quarters and pitch. */
+function dottedEvents(xml) {
+  const out = []
+  let divisions = 1
+  for (const m of xml.matchAll(/<measure number="(\d+)"[^>]*>([\s\S]*?)<\/measure>/g)) {
+    const div = m[2].match(/<divisions>(\d+)<\/divisions>/)
+    if (div) divisions = Number(div[1])
+    for (const n of m[2].matchAll(/<note[^>]*>([\s\S]*?)<\/note>/g)) {
+      const body = n[1]
+      if (!/<dot\s*\/>/.test(body)) continue
+      const duration = Number(body.match(/<duration>(\d+)<\/duration>/)?.[1] ?? 0)
+      const pitch = (body.match(/<step>([^<]+)<\/step>/)?.[1] ?? '') + (body.match(/<octave>([^<]+)<\/octave>/)?.[1] ?? '')
+      out.push({ measure: Number(m[1]), quarters: +(duration / divisions).toFixed(3), pitch })
+    }
+  }
+  return out
+}
+
 async function generate(name) {
   const { pdf } = readFixture(name)
   const result = await runPdfOmrClient(pdf, {
@@ -78,7 +96,7 @@ afterAll(() => {
   setPdfAnalysisCanvasFactory(null)
 })
 
-describe.skipIf(!canvasAvailable)('rest semantics against independent references', () => {
+describe.skipIf(!canvasAvailable)('rest and dot semantics against independent references', () => {
   it('recovers printed rests with zero false positives (corrected rhythm)', async () => {
     const name = 'piano-rhythm-tuplets-vector'
     const { reference } = readFixture(name)
@@ -114,6 +132,26 @@ describe.skipIf(!canvasAvailable)('rest semantics against independent references
     expect(ref).toEqual([{ measure: 7, type: 'quarter', quarters: 1 }])
     expect(generated).toEqual(ref)
   })
+
+  it('recovers every dotted note exactly with zero promotions', async () => {
+    const { result } = await generate('piano-rhythm-tuplets-vector')
+    const { reference } = readFixture('piano-rhythm-tuplets-vector')
+    expect(dottedEvents(result.musicXml)).toEqual(dottedEvents(reference))
+    expect(dottedEvents(result.musicXml)).toEqual([
+      { measure: 4, quarters: 1.5, pitch: 'A4' },
+      { measure: 8, quarters: 0.75, pitch: 'F4' },
+    ])
+    const beginner = await generate('piano-beginner-single-vector')
+    const beginnerRef = readFixture('piano-beginner-single-vector')
+    expect(dottedEvents(beginner.result.musicXml)).toEqual(dottedEvents(beginnerRef.reference))
+    expect(dottedEvents(beginner.result.musicXml)).toHaveLength(1)
+  }, 30000)
+
+  it('never promotes an undotted reference to dotted (corrected dense)', async () => {
+    const name = 'piano-dense-advanced-vector'
+    const { result } = await generate(name)
+    expect(dottedEvents(result.musicXml)).toEqual([])
+  }, 30000)
 
   it('emits no rests on a reference with none (corrected grand)', async () => {
     const name = 'piano-grand-voices-vector'
