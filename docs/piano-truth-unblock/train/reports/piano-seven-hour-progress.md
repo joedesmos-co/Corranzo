@@ -41,3 +41,23 @@ is resolved.
 - Independent matcher: 440/453 (unchanged recognition).
 - Practice safety controls: OK, including the new ambiguity case.
 - 15/15 integration adversarial controls still refused.
+
+
+## Stacked-accidental offset fix (latest)
+
+The dense swaps were caused by accidentals placed at a consistent horizontal
+offset from their chord. Using the median accidental-to-notehead offset for
+each staff/system, the assignment now prefers the chord whose offset matches
+the layout instead of the nearest x.
+
+Independent matcher result after the fix:
+
+- Dense: 264/264 full events (was 252/264).
+- Total: 452/453 (was 440/453).
+- Beginner/rhythm/grand/dense all practice-ready.
+- The only remaining mismatch is a grand reference/engraving tie inconsistency:
+  the source curve connects measure 3's last note to measure 4's first note,
+  while the reference MusicXML marks a tie to a different pitch at the end of
+  measure 4. The candidate's visual tie is consistent with the curve; the
+  reference is internally inconsistent.
+- 15/15 adversarial controls still refused; safety controls pass.

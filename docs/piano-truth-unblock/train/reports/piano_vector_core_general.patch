@@ -226,7 +226,7 @@
        for (const ag of accGlyphs) {
          let best = null
          for (const hd of heads) {
-@@ -259,6 +376,28 @@
+@@ -259,6 +376,44 @@
            if (!best || d < best.d) best = { d, hd }
          }
          if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
@@ -234,28 +234,44 @@
 +      // Path-drawn accidentals are assigned exclusively: each candidate path
 +      // belongs to the nearest unassigned notehead to its right. A single
 +      // accidental can never modify two unrelated notes.
++      const pathOffsets = []
 +      for (const pa of accPaths) {
 +        if (pa.used) continue
-+        let best = null
++        let nearest = null
++        for (const hd of heads) {
++          if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
++          if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
++          const dx = hd.x - pa.x
++          if (nearest == null || dx < nearest) nearest = dx
++        }
++        if (nearest != null) pathOffsets.push(nearest)
++      }
++      pathOffsets.sort((a, b) => a - b)
++      const typicalOffset = pathOffsets.length
++        ? pathOffsets[Math.floor(pathOffsets.length / 2)]
++        : null
++      for (const pa of accPaths) {
++        if (pa.used) continue
++        let best = null, second = null
 +        for (const hd of heads) {
 +          if (hd.acc != null) continue
 +          if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
 +          if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
-+          const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
-+          if (!best || d < best.d) best = { d, hd }
++          const dx = hd.x - pa.x
++          const d = typicalOffset == null
++            ? dx + Math.abs(pa.y - hd.cy)
++            : 2 * Math.abs(dx - typicalOffset) + Math.abs(pa.y - hd.cy)
++          if (!best || d < best.d) { second = best; best = { d, hd } }
++          else if (!second || d < second.d) second = { d, hd }
 +        }
-+        const onsetCandidates = heads.filter((hd) =>
-+          pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap &&
-+          Math.abs(pa.y - hd.cy) <= 0.45 * gap)
-+        if (onsetCandidates.length) {
-+          const xs = onsetCandidates.map((hd) => hd.x)
-+          if (Math.max(...xs) - Math.min(...xs) > 1.5) ambiguousAccidentals += 1
++        if (best && second && Math.abs(second.d - best.d) <= 2.0) {
++          ambiguousAccidentals += 1
 +        }
 +        if (best) { best.hd.acc = pa.code; pa.used = true }
        }
        const clusters = []
        for (const hd of heads) {
-@@ -272,17 +411,19 @@
+@@ -272,17 +427,19 @@
          let best = null
          for (const st of stems) {
            if (!c.items.every((hd) => st.y0 <= hd.cy + 0.9 * gap && st.y1 >= hd.cy - 0.9 * gap)) continue
@@ -280,7 +296,7 @@
          for (const hd of c.items) {
            if (!best) {
              if (hd.code === 0xe0a2) {
-@@ -345,22 +486,21 @@
+@@ -345,22 +502,21 @@
          }
        }
      }
@@ -313,7 +329,7 @@
      if (!byX.has(key)) byX.set(key, [])
      byX.get(key).push(n)
    }
-@@ -374,13 +514,17 @@
+@@ -374,13 +530,17 @@
  
    const keyVals = notes.map((n) => n.key_fifths)
    const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
@@ -332,7 +348,7 @@
      meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
      route: notes.length ? 'vector' : 'image',
      schema: 'corranzo-notation-ir/1',
-@@ -388,12 +532,14 @@
+@@ -388,12 +548,14 @@
        'Time signature decoded from SMuFL digits when present; otherwise unresolved.',
        'Rest durations from SMuFL rest glyphs; unknown glyphs omitted.',
        'Articulations/dynamics are not yet transcribed.'] }
@@ -349,7 +365,7 @@
    const left = local.filter((b) => Math.abs(b.x1 - stemX) <= 1.5)
    const right = local.filter((b) => Math.abs(b.x0 - stemX) <= 1.5)
    return Math.max(left.length, right.length)
-@@ -405,6 +551,45 @@
+@@ -405,6 +567,45 @@
    if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
    for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
    return 0
@@ -395,7 +411,7 @@
  }
  
  export function toMusicXML(ir, divisions = 480) {
-@@ -438,8 +623,21 @@
+@@ -438,8 +639,21 @@
          out.push(`<backup><duration>${Math.max(1, Math.round(sum * divisions))}</duration></backup>`)
        }
        firstStaff = false
@@ -418,7 +434,7 @@
          if (e.kind === 'rest' && (!e.type || !e.dur_q)) continue
          out.push('<note>')
          if (e.kind === 'rest') out.push('<rest/>')
-@@ -449,8 +647,16 @@
+@@ -449,8 +663,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -436,7 +452,7 @@
        }
      }
      out.push('</measure>')
-@@ -460,96 +666,220 @@
+@@ -460,96 +682,220 @@
  }
  
  
@@ -703,7 +719,7 @@
      splits,
      conflicts,
      edgeStems,
-@@ -557,10 +887,86 @@
+@@ -557,10 +903,86 @@
      verified,
    }
    ir.voiceOwnership = verified ? 'verified' : 'inferred'
@@ -790,7 +806,7 @@
   * Decide whether the vector result is trustworthy enough to become a
   * playable practice score. The extractor is deliberately conservative:
   * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
-@@ -575,13 +981,16 @@
+@@ -575,13 +997,16 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -814,7 +830,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -591,25 +1000,17 @@
+@@ -591,25 +1016,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -846,7 +862,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -624,14 +1025,20 @@
+@@ -624,14 +1041,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -868,7 +884,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -639,10 +1046,17 @@
+@@ -639,10 +1062,17 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

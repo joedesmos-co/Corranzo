@@ -380,22 +380,38 @@ const staffY = groupLines(staffLines, 1).map((g) => g[0])
       // Path-drawn accidentals are assigned exclusively: each candidate path
       // belongs to the nearest unassigned notehead to its right. A single
       // accidental can never modify two unrelated notes.
+      const pathOffsets = []
       for (const pa of accPaths) {
         if (pa.used) continue
-        let best = null
+        let nearest = null
+        for (const hd of heads) {
+          if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
+          if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
+          const dx = hd.x - pa.x
+          if (nearest == null || dx < nearest) nearest = dx
+        }
+        if (nearest != null) pathOffsets.push(nearest)
+      }
+      pathOffsets.sort((a, b) => a - b)
+      const typicalOffset = pathOffsets.length
+        ? pathOffsets[Math.floor(pathOffsets.length / 2)]
+        : null
+      for (const pa of accPaths) {
+        if (pa.used) continue
+        let best = null, second = null
         for (const hd of heads) {
           if (hd.acc != null) continue
           if (!(pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap)) continue
           if (Math.abs(pa.y - hd.cy) > 0.45 * gap) continue
-          const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
-          if (!best || d < best.d) best = { d, hd }
+          const dx = hd.x - pa.x
+          const d = typicalOffset == null
+            ? dx + Math.abs(pa.y - hd.cy)
+            : 2 * Math.abs(dx - typicalOffset) + Math.abs(pa.y - hd.cy)
+          if (!best || d < best.d) { second = best; best = { d, hd } }
+          else if (!second || d < second.d) second = { d, hd }
         }
-        const onsetCandidates = heads.filter((hd) =>
-          pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap &&
-          Math.abs(pa.y - hd.cy) <= 0.45 * gap)
-        if (onsetCandidates.length) {
-          const xs = onsetCandidates.map((hd) => hd.x)
-          if (Math.max(...xs) - Math.min(...xs) > 1.5) ambiguousAccidentals += 1
+        if (best && second && Math.abs(second.d - best.d) <= 2.0) {
+          ambiguousAccidentals += 1
         }
         if (best) { best.hd.acc = pa.code; pa.used = true }
       }

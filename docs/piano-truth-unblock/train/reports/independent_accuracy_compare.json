@@ -1064,31 +1064,29 @@
       },
       "piano-dense-advanced-vector": {
         "emitted": 264,
-        "matched": 252,
+        "matched": 264,
         "truth": 264,
-        "practiceReady": false,
-        "issues": [
-          "accidental-ownership-ambiguous"
-        ],
+        "practiceReady": true,
+        "issues": [],
         "exactNoteMatch": {
-          "tp": 252,
-          "fp": 12,
-          "fn": 12,
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
           "truth": 264,
           "predicted": 264,
-          "precision": 0.955,
-          "recall": 0.955,
-          "f1": 0.955
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
         },
         "fullEvent": {
-          "tp": 252,
-          "fp": 12,
-          "fn": 12,
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
           "truth": 264,
           "predicted": 264,
-          "precision": 0.955,
-          "recall": 0.955,
-          "f1": 0.955
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
         },
         "pitchOnly": {
           "tp": 264,
@@ -1135,7 +1133,7 @@
     },
     "total": {
       "emitted": 453,
-      "matched": 440,
+      "matched": 452,
       "truth": 453
     }
   }
