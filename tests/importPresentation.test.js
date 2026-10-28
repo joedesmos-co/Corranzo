@@ -22,6 +22,7 @@ describe('truthful import presentation', () => {
     [{ message: 'Password required' }, 'This PDF is locked'],
     [{ code: 'OMR_TOO_DIFFICULT' }, 'We couldn’t read enough of the score'],
     [{ message: 'Worker timed out' }, 'This score needs another try'],
+    [{ message: 'Generated score measures do not match the time signature — review before practicing.' }, 'This score needs another try'],
     [{ message: 'Internal recognition graph exploded at checkpoint 19' }, 'We couldn’t prepare playback'],
   ])('keeps recovery actionable and technical exceptions out of normal copy', (error, title) => {
     const result = describePreparationFailure(error)

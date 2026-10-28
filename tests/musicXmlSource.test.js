@@ -17,6 +17,7 @@ import {
   shouldShowLibraryOmrPanel,
   validateRestoredOmrPlayback,
   validateOmrMusicXmlMeasureRhythm,
+  validateOmrSourceMeta,
 } from '../src/features/import/musicXmlSource.js'
 import { buildSessionMeta, validateRestoredSession } from '../src/features/session/sessionPersistence.js'
 
@@ -404,6 +405,38 @@ describe('validateOmrMusicXmlMeasureRhythm', () => {
     const result = validateOmrMusicXmlMeasureRhythm(xml)
     expect(result.ok).toBe(false)
     expect(result.badMeasures).toBeGreaterThan(0)
+  })
+
+  it('gates an OMR source that the rhythm check rejects (import-hang regression)', () => {
+    // Three short non-leading measures: the Library would not consider this
+    // timing-ready. handleOmrGenerated must reject it BEFORE applying it,
+    // otherwise the OMR panel stays READY with no action ("Checking your score").
+    const shortMeasure = '<attributes></attributes><note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>'
+    const fullMeasure = '<attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>' +
+      '<note><pitch><step>C</step><octave>4</octave></pitch><duration>16</duration><type>whole</type><voice>1</voice><staff>1</staff></note>'
+    const xml = '<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0"><part id="P1">' +
+      `<measure number="1">${fullMeasure}</measure>` +
+      `<measure number="2">${shortMeasure}</measure>` +
+      `<measure number="3">${shortMeasure}</measure>` +
+      `<measure number="4">${shortMeasure}</measure>` +
+      '</part></score-partwise>'
+    const source = createMusicXmlSource('score.omr.musicxml', xml, {
+      source: 'omr',
+      ownerPdfIdentity: 'score.pdf::10::20',
+      omrMeta: {
+        noteCount: 4,
+        measureCount: 4,
+        durationSeconds: 8,
+        title: 'score',
+        pdfFingerprint: 'score.pdf::10::20',
+        createdAt: new Date().toISOString(),
+      },
+    })
+    const check = validateOmrSourceMeta(source)
+    expect(check.ok).toBe(false)
+    expect(check.message).toMatch(/time signature|measures/i)
+    expect(isLibraryScoreTimingReady(source)).toBe(false)
+    expect(shouldShowLibraryOmrPanel({ hasPdf: true, musicXmlSource: source, pdfIdentity: 'score.pdf::10::20' })).toBe(true)
   })
 
   it('allows a leading partial (pickup) measure', () => {
