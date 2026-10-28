@@ -121,6 +121,9 @@ x = ir([note(0, 0, 100, 100, 61), note(0, 0, 200, 100, 64), note(0, 0, 300, 100,
 blocked(x, 'unresolved-accidentals')
 x.unresolvedAccidentals = 0
 ready(x)
+x = ir([note(0, 0, 100, 100, 60)], [], { ambiguousAccidentals: 1 })
+blocked(x, 'accidental-ownership-ambiguous')
+x.ambiguousAccidentals = 0
 
 // 8. tied vs repeated notes
 x = ir([note(0, 0, 100, 100, 69), note(1, 0, 160, 100, 69)],

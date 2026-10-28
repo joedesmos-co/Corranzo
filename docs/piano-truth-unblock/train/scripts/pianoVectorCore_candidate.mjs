@@ -88,6 +88,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
   const dots = []
   const accPaths = []
   let unresolvedAccidentals = 0
+  let ambiguousAccidentals = 0
   const curves = []
   const timeGlyphX = []
   let curvePaths = 0
@@ -389,6 +390,13 @@ const staffY = groupLines(staffLines, 1).map((g) => g[0])
           const d = (hd.x - pa.x) + Math.abs(pa.y - hd.cy)
           if (!best || d < best.d) best = { d, hd }
         }
+        const onsetCandidates = heads.filter((hd) =>
+          pa.x <= hd.x && hd.x - pa.x <= 2.5 * gap &&
+          Math.abs(pa.y - hd.cy) <= 0.45 * gap)
+        if (onsetCandidates.length) {
+          const xs = onsetCandidates.map((hd) => hd.x)
+          if (Math.max(...xs) - Math.min(...xs) > 1.5) ambiguousAccidentals += 1
+        }
         if (best) { best.hd.acc = pa.code; pa.used = true }
       }
       const clusters = []
@@ -512,12 +520,11 @@ const ir = { page: pageNo, size: [W, H], staves: staves.length,
     unresolvedNotes: unresolved.length,
     unresolvedRests: rests.filter((rest) => !rest.type || !rest.dur_q).length,
     unresolvedAccidentals,
+    ambiguousAccidentals,
     key_source: key === 0 ? 'no-key-glyph' : key == null ? 'unresolved' : 'glyph-sequence',
     systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
     gap: systems[0]?.gap ?? 8,
     curves: curves,
-    accPaths: accPaths,
-    vlines: vlines,
     meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
     route: notes.length ? 'vector' : 'image',
     schema: 'corranzo-notation-ir/1',
@@ -975,6 +982,7 @@ export function assessPianoVectorIr(ir) {
   if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
   if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
   if ((ir?.unresolvedAccidentals ?? 0) > 0) issues.push('unresolved-accidentals')
+  if ((ir?.ambiguousAccidentals ?? 0) > 0) issues.push('accidental-ownership-ambiguous')
   if ((ir?.restInferred ?? 0) > 0) issues.push('rest-duration-inferred')
   if ((ir?.rests ?? []).some((r) => r.visualEvidence === 'ambiguous-glyph-shape')) issues.push('rest-duration-ambiguous')
   if ((ir?.voiceOwnership ?? 'inferred') !== 'verified') issues.push('voice-ownership-unverified')
@@ -1044,6 +1052,7 @@ export function assessPianoVectorIr(ir) {
         case 'measure-duration-invalid': return 'One or more measures do not fill the stated meter.'
         case 'measure-duration-unverifiable': return 'Measure timing could not be validated.'
         case 'unresolved-accidentals': return 'A music-sized filled symbol could not be classified as an accidental.'
+        case 'accidental-ownership-ambiguous': return 'An accidental could belong to noteheads at different onsets; pitch ownership is unresolved.'
         case 'rest-duration-inferred': return 'A rest duration was inferred from measure arithmetic, not visual glyph evidence.'
         case 'rest-duration-ambiguous': return 'The rest glyph shape does not uniquely identify its written duration.'
         case 'incomplete-pages': return 'One or more pages could not be read; the score is incomplete.'
