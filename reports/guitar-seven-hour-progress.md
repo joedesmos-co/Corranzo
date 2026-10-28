@@ -105,3 +105,19 @@ This is the "abstain rather than fabricate" path, not a claim of dot support.
 ### Recognition baseline re-verified after every change
 mixed 21/21 conf, 4/4; paired 32/32, 8/8; techniques 32/32, 8/8;
 sparse 32/32 SF with 32 null durations; standard 16 eighths + 24 quarters.
+
+## Continuation — rests emitted, dots measured, independent engraver gap
+
+Commit `dc86789899` (rest placement) and `15ec8501d5` (dot reference tests).
+Full matrix: `reports/guitar-notation-generalization.md`.
+
+- Controlled corpus rests: 5/6 exact, 0 false positives (the one abstention is
+  an inconsistent measure that cannot hold a quarter rest).
+- Controlled corpus dots: 3/3 exact, 0 promotions.
+- Independent Verovio engraver: 0/7 rests, 47 false dots. This is a real
+  generalization gap in duration reconstruction (not the dot glyph
+  assignment, whose provenance is empty). It is documented, not papered over,
+  and no Practice gate was relaxed.
+- Guitar benchmarks unchanged: mixed 21/21 / 4/4, paired 32/32 / 8/8,
+  techniques 32/32 / 8/8, sparse abstains, standard 16 eighths + 24 quarters.
+- 176 vector-rhythm/rest tests + 133 rhythm/voice tests pass.
