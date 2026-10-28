@@ -77,3 +77,19 @@ import/musicXmlSource/viewer-recovery: 36/36 pass.
 - Committed browser regression suite.
 - Further notation work (rests emission, dots, ties, voices) unchanged and
   still practice-disabled.
+
+## Integration verification (this round)
+
+- Cherry-picked import lifecycle fix: `6477e73ca3` (5-min total timeout),
+  `205c6f336c` (reject unusable OMR before side effects + panel watchdog),
+  `a5825b4505` (abort logging + expanded suite).
+- Import lifecycle browser suite:
+  - Chromium 6/6 PASS (valid, partial-measure recoverable, corrupt recoverable,
+    failure→retry READY, cancel PAUSED, save/reopen READY).
+  - WebKit 6/6 PASS.
+- Cursor: `0870192706` (stable layout systemIndex) verified in Chromium via
+  `browser-practice-score-follow-e2e.mjs`: 17 passed / 0 failed, covering WFY
+  advance/no-advance, chord completion, Play Along shared cursor, zoom, and
+  zero console errors. WebKit cursor E2E not available (Chromium-only script).
+- Focused unit tests: 75/75 pass across musicXmlSource, OMR banner/recovery,
+  cursor motion, experimental vision, guitar extraction, PDF OMR.
