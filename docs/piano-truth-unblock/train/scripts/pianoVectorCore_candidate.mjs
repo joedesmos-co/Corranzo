@@ -191,7 +191,8 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
                 unresolvedAccidentals += 1
               } else {
                 accPaths.push({ code, x: (Math.min(...xs) + Math.max(...xs)) / 2,
-                  y: H - (Math.min(...ys) + Math.max(...ys)) / 2, w, h })
+                  y: H - (Math.min(...ys) + Math.max(...ys)) / 2,
+                  w, h })
               }
             }
           }
@@ -235,7 +236,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     if (TIME_DIGIT[code] != null) timeGlyphX.push({ x: +x.toFixed(1), y: +y.toFixed(1), d: TIME_DIGIT[code] })
   }
 
-  const staffY = groupLines(staffLines, 1).map((g) => g[0])
+const staffY = groupLines(staffLines, 1).map((g) => g[0])
   const staves = []
   for (let i = 0; i + 4 < staffY.length;) {
     const g = staffY.slice(i, i + 5)
@@ -505,7 +506,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
 
   const keyVals = notes.map((n) => n.key_fifths)
   const key = keyVals.length && keyVals.every((v) => v === keyVals[0]) ? keyVals[0] : null
-  const ir = { page: pageNo, size: [W, H], staves: staves.length,
+const ir = { page: pageNo, size: [W, H], staves: staves.length,
     clefs, notes, rests, unresolved, key,
     curveCount: curvePaths,
     unresolvedNotes: unresolved.length,
@@ -515,6 +516,7 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
     systems: systemInfo.map((s, i) => ({ ...s, beats: systems[i].beats, unit: systems[i].unit })),
     gap: systems[0]?.gap ?? 8,
     curves: curves,
+    accPaths: accPaths,
     vlines: vlines,
     meter: systems.every((s) => s.beats && s.unit) ? { beats: systems[0].beats, unit: systems[0].unit } : null,
     route: notes.length ? 'vector' : 'image',
@@ -614,7 +616,20 @@ export function toMusicXML(ir, divisions = 480) {
         out.push(`<backup><duration>${Math.max(1, Math.round(sum * divisions))}</duration></backup>`)
       }
       firstStaff = false
-      evs.sort((a, b) => a.x - b.x || (a.midi || 0) - (b.midi || 0))
+      const chordAnchor = new Map()
+      for (const e of evs) {
+        if (e.chord_id) {
+          const prev = chordAnchor.get(e.chord_id)
+          if (prev == null || e.x < prev) chordAnchor.set(e.chord_id, e.x)
+        }
+      }
+      evs.sort((a, b) => {
+        const ax = a.chord_id ? chordAnchor.get(a.chord_id) : a.x
+        const bx = b.chord_id ? chordAnchor.get(b.chord_id) : b.x
+        if (ax !== bx) return ax - bx
+        if ((a.chord_root === false) !== (b.chord_root === false)) return a.chord_root === false ? 1 : -1
+        return (a.midi || 0) - (b.midi || 0)
+      })
       for (const e of evs) {
         if (e.kind === 'rest' && (!e.type || !e.dur_q)) continue
         out.push('<note>')
