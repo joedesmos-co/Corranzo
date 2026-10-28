@@ -26,6 +26,11 @@ export function describePreparationFailure(error) {
     quality: true,
   }
   if (/timeout|timed out|took too long/i.test(raw)) return { title: 'This score needs another try', message: 'Preparation took too long. Try again, or choose a smaller PDF with fewer pages.', quality: false }
+  if (/measures? do not match|time signature|measure rhythm|unreliable timing/i.test(raw)) return {
+    title: 'This score needs another try',
+    message: 'Corranzo read the page but could not build reliable timing for every measure. Try a clearer copy, or add a matching MusicXML or MXL file under Advanced.',
+    quality: false,
+  }
   return { title: 'We couldn’t prepare playback', message: 'Your PDF is still here. Try again, or choose another copy of the score.', quality: false }
 }
 
