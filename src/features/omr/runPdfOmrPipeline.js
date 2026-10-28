@@ -294,7 +294,9 @@ export async function runPdfOmrPipeline(pdfSource, options = {}) {
       pageCount,
     })
   } catch (error) {
-    logOmrFailure({
+    // A user-initiated cancel is not a recognition failure; logging it as one
+    // pollutes the console and error telemetry on every successful cancel.
+    if (error?.name !== 'AbortError') logOmrFailure({
       scoreId: jobScoreId,
       runId: traceRunId,
       pdfHash: jobPdfHash,

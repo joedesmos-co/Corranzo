@@ -46,13 +46,21 @@ Chromium — 4/4 scenarios PASS:
 - corrupt PDF → RECOVERABLE in 1.6s
 - failure then retry with valid PDF → READY in 8.2s
 
-WebKit (Safari engine) — 4/4 scenarios PASS with the same outcomes.
+Expanded suite (six scenarios, fresh context each) — Chromium 6/6 PASS:
+- cancel mid-preparation (16-page PDF) → PAUSED in 0.9s, no hang, no
+  OMR-failure console noise (user aborts are no longer logged as failures)
+- save then reopen after reload → READY restored, Open score renders the
+  viewer (34 canvas/svg nodes)
+
+WebKit (Safari engine) — 5/5 suite scenarios + save/reopen PASS with the same
+outcomes.
 
 Run:
 ```
 npx vite --port 5200 --strictPort
-node scripts/guitar-import-lifecycle-suite.mjs            # chromium
-BROWSER=webkit node scripts/guitar-import-lifecycle-suite.mjs
+node scripts/guitar-import-lifecycle-suite.mjs                       # chromium
+BROWSER=webkit node scripts/guitar-import-lifecycle-suite.mjs       # webkit
+ONLY=cancel node scripts/guitar-import-lifecycle-suite.mjs          # subset
 ```
 
 ## Milestone D — recognition quality preserved
