@@ -27,12 +27,14 @@ const SCENARIOS = [
   { name: 'failure then retry with valid PDF', pdf: join(FIX, 'partial-measure-5p.pdf'), thenPdf: join(FIX, 'valid-standard-5p.pdf'), expect: 'READY' },
   { name: 'cancel mid-preparation', pdf: join(FIX, 'slow-standard-16p.pdf'), cancel: true, expect: 'PAUSED' },
   { name: 'save then reopen after reload', pdf: join(FIX, 'valid-standard-5p.pdf'), persist: true, expect: 'READY' },
+  { name: 'paired notation + TAB', pdf: join(FIX, 'paired-tab.pdf'), expect: 'READY' },
+  { name: 'sparse TAB (pitch-only source)', pdf: join(FIX, 'sparse-tab.pdf'), expect: 'READY' },
 ]
 
 function classifier(text) {
   if (/Preparation paused|Continue whenever you.re ready/.test(text)) return 'PAUSED'
-  if (/Cancel preparation|Starting…|Cleaning up page|Detecting notes/.test(text)) return 'PREPARING'
-  if (/Your score is ready/.test(text)) return 'READY'
+  if (/Cancel preparation|Starting…|Cleaning up page|Detecting notes|Reading your score|Understand the notes|From page to playback/.test(text)) return 'PREPARING'
+  if (/Your score is ready|Ready for a closer look/.test(text)) return 'READY'
   if (/isn.t ready to open/.test(text)) return 'AVAILABLE_ERROR'
   if (/Checking your score/.test(text) && !/Try again/.test(text)) return 'CHECKING'
   if (/Try again/.test(text)) return 'RECOVERABLE'
@@ -55,9 +57,8 @@ async function waitSettled(page, maxMs = MAX_MS) {
     if (state === 'PAUSED') return 'PAUSED'
     if (state !== last) { console.log(`    [${Date.now() - start}ms] ${state}`); last = state }
     if (state === 'READY' || state === 'RECOVERABLE' || state === 'AVAILABLE_ERROR') {
-      // A stale READY frame can appear before the new run starts; failures
-      // (corrupt PDF) legitimately land here before any PREPARING frame.
-      if (state === 'READY' && !sawPreparing) { await page.waitForTimeout(1200); continue }
+      // Every scenario runs in a fresh context, so there is no stale restored
+      // score to mistake for the current import.
       return state
     }
     await page.waitForTimeout(1000)

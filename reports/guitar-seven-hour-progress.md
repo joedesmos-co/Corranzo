@@ -46,14 +46,16 @@ Chromium — 4/4 scenarios PASS:
 - corrupt PDF → RECOVERABLE in 1.6s
 - failure then retry with valid PDF → READY in 8.2s
 
-Expanded suite (six scenarios, fresh context each) — Chromium 6/6 PASS:
+Expanded suite (eight scenarios, fresh context each) — Chromium 8/8 PASS:
 - cancel mid-preparation (16-page PDF) → PAUSED in 0.9s, no hang, no
   OMR-failure console noise (user aborts are no longer logged as failures)
 - save then reopen after reload → READY restored, Open score renders the
   viewer (34 canvas/svg nodes)
+- paired notation + TAB → READY
+- sparse TAB (pitch-only source) → READY (standard preparation path)
 
-WebKit (Safari engine) — 5/5 suite scenarios + save/reopen PASS with the same
-outcomes.
+WebKit (Safari engine) — 8/8 suite scenarios PASS with the same outcomes,
+including save/reopen and cancel.
 
 Run:
 ```
