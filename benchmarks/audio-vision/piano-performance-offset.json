@@ -1,0 +1,139 @@
+{
+ "generatedAt": "2026-10-28T21:40:40.690Z",
+ "description": "Piano evaluation with per-performance documented take drift (Vienna 4x22). Mozart p02 is the aligned control. Offsets applied uniformly per performance, not per clip.",
+ "offsets": {
+  "vienna-mozart-p01": 0.525,
+  "vienna-schubert-p01": 0.42,
+  "vienna-mozart-p02": 0,
+  "vienna-schubert-p02": 0.71
+ },
+ "rows": [
+  {
+   "id": "piano-mozart-single",
+   "performance": "vienna-mozart-p01",
+   "offset": 0.525,
+   "refNotes": 13,
+   "modelNotes": 21,
+   "rawF1": 0,
+   "correctedF1": 0.529,
+   "correctedP": 0.429,
+   "correctedR": 0.692,
+   "onsetMae": 83
+  },
+  {
+   "id": "piano-mozart-dyad",
+   "performance": "vienna-mozart-p01",
+   "offset": 0.525,
+   "refNotes": 14,
+   "modelNotes": 19,
+   "rawF1": 0.061,
+   "correctedF1": 0.545,
+   "correctedP": 0.474,
+   "correctedR": 0.643,
+   "onsetMae": 69
+  },
+  {
+   "id": "piano-mozart-triad",
+   "performance": "vienna-mozart-p01",
+   "offset": 0.525,
+   "refNotes": 14,
+   "modelNotes": 17,
+   "rawF1": 0.065,
+   "correctedF1": 0.71,
+   "correctedP": 0.647,
+   "correctedR": 0.786,
+   "onsetMae": 76
+  },
+  {
+   "id": "piano-mozart-dense",
+   "performance": "vienna-mozart-p01",
+   "offset": 0.525,
+   "refNotes": 16,
+   "modelNotes": 20,
+   "rawF1": 0.056,
+   "correctedF1": 0.889,
+   "correctedP": 0.8,
+   "correctedR": 1,
+   "onsetMae": 80
+  },
+  {
+   "id": "piano-schubert-single",
+   "performance": "vienna-schubert-p01",
+   "offset": 0.42,
+   "refNotes": 18,
+   "modelNotes": 19,
+   "rawF1": 0.054,
+   "correctedF1": 0.432,
+   "correctedP": 0.421,
+   "correctedR": 0.444,
+   "onsetMae": 37
+  },
+  {
+   "id": "piano-schubert-triad",
+   "performance": "vienna-schubert-p01",
+   "offset": 0.42,
+   "refNotes": 26,
+   "modelNotes": 26,
+   "rawF1": 0.115,
+   "correctedF1": 0.462,
+   "correctedP": 0.462,
+   "correctedR": 0.462,
+   "onsetMae": 65
+  },
+  {
+   "id": "piano-schubert-dense",
+   "performance": "vienna-schubert-p01",
+   "offset": 0.42,
+   "refNotes": 30,
+   "modelNotes": 20,
+   "rawF1": 0.16,
+   "correctedF1": 0.48,
+   "correctedP": 0.6,
+   "correctedR": 0.4,
+   "onsetMae": 71
+  },
+  {
+   "id": "piano-mozart2-triad",
+   "performance": "vienna-mozart-p02",
+   "offset": 0,
+   "refNotes": 15,
+   "modelNotes": 18,
+   "rawF1": 0.242,
+   "correctedF1": 0.242,
+   "correctedP": 0.222,
+   "correctedR": 0.267,
+   "onsetMae": 49
+  },
+  {
+   "id": "piano-schubert2-single",
+   "performance": "vienna-schubert-p02",
+   "offset": 0.71,
+   "refNotes": 19,
+   "modelNotes": 25,
+   "rawF1": 0,
+   "correctedF1": 0.773,
+   "correctedP": 0.68,
+   "correctedR": 0.895,
+   "onsetMae": 86
+  },
+  {
+   "id": "piano-schubert2-triad",
+   "performance": "vienna-schubert-p02",
+   "offset": 0.71,
+   "refNotes": 26,
+   "modelNotes": 26,
+   "rawF1": 0,
+   "correctedF1": 0.769,
+   "correctedP": 0.769,
+   "correctedR": 0.769,
+   "onsetMae": 86
+  }
+ ],
+ "aggregate": {
+  "rawF1": 0.075,
+  "correctedF1": 0.583,
+  "correctedP": 0.55,
+  "correctedR": 0.636,
+  "onsetMae": 70.2
+ }
+}
