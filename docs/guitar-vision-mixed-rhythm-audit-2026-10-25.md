@@ -112,3 +112,36 @@ without experimental practice metadata.
 The paired/chords and techniques fixtures remain unchanged: 116/116 and 32/32
 events, 32/32 confident onsets, 8/8 measures. Sparse remains pitch-only with
 null timing. The new fixture and tests are committed with the extraction change.
+
+## Round-5 stem probe: scoped TAB-only integration
+
+`3446fed810` adds an edge+centre stem start probe. The isolated change was
+ported **only to TAB `attachRhythm`**. `analyzeNotationRhythm` keeps the old
+edge-only probe, because the new probe changed the notation-only mixed fixture
+from 16 eighths + 24 quarters to 40 quarters in this environment. The product
+TAB path and the notation-only diagnostic now have separate evidence.
+
+Using the corrected half-note fixture PDF from `3446`:
+
+| metric | main before | scoped integrated |
+|---|---:|---:|
+| string/fret | 60/60 | **60/60** |
+| noteheads | 21/21 | **21/21** |
+| confident onsets | 0/21 | **15/21** |
+| valid measures | 0/4 | **3/4** |
+| complete timed events | 0/21 | **15/21** |
+| measure-3 events | all null | **16 null** |
+
+The 15 valid events match the reference string/fret, onset group and written
+duration exactly. Measure 3 remains invalid; all 16 events there are emitted
+with `duration:null`, no `<type>`, and the explicit `duration not recovered`
+footnote. The missing double-beam evidence for the sixteenth group is not
+papered over.
+
+Actual browser PDF.js extraction in Chromium **and** WebKit reproduces 21
+noteheads, 15 confident onsets, 3/4 valid measures, durations
+`{quarter, eighth, half, null}`, 16 unknown measure-3 events, no `<type>` in
+measure 3 and `rhythm_recovered=false`.
+Practice remains disabled. Paired/chords and techniques remain 116/116 and
+32/32 with 32/32 confident onsets and 8/8 measures. Sparse stays pitch-only.
+The notation-only standard fixture remains 16 eighths + 24 quarters.

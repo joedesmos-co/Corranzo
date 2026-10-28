@@ -96,3 +96,66 @@ page 2 is image/incomplete; 117 notes; cross-page continuation unresolved; gate
 
 No production Piano files changed. Current main remains **306/447 notes, 3/6
 rests**, with beginner and grand practice-disabled.
+
+## Round-5 candidate `b4f6dce882` — ownership improvements, same gate risk
+
+Independently reproduced:
+
+| fixture | exact notes | notes |
+|---|---:|---:|
+| beginner | 32/32 | 1 rest, practice false |
+| rhythm/tuplets | **62/63** | one bad measure `7:0`, practice false |
+| grand | **88/88** | practice true |
+| dense | **195/264** | practice false |
+| **total** | **377/447** | rests 4/5 |
+
+The path-accidental change is a real improvement: each path is assigned to one
+nearest unassigned notehead (`pa.used`), so a path cannot modify two unrelated
+notes. The stem ownership now tries an edge-derived expected stem position and
+falls back to the cluster centre. Tuplet assignment is Y-banded to the system
+and assigns the nearest marker within 2.2 gaps.
+
+Those ownership changes do not close the practice false-acceptance controls:
+
+| control | `b4f6` result | gate |
+|---|---|---|
+| legitimate eighth + missed note | rest inferred | false (fixed) |
+| pickup/incomplete bar | rest inferred | false (fixed) |
+| wrong meter | invalid | false |
+| same-staff two voices, each 2 beats | staff sum 4 | **true — voice ownership ignored** |
+| equal-pitch short slur | classified tie | **true — false acceptance** |
+| decorative short curve between pitches | classified slur | **true — false acceptance** |
+| long/high equal-pitch curve | ambiguous | false |
+| unresolved accidental | issue | false |
+| partial multi-page | issue | false |
+
+### Tuplet over-assignment control
+
+A single unrelated `3` text marker placed near the grand-staff notes made the
+new nearest-marker rule mark **6 notes as 3:2** (pitches at x=127.8, 144.3,
+160.8, with two chord members duplicated). The affected measures failed
+validation, but the extraction is wrong: there is no tuplet group size,
+exclusivity, or marker-to-first-note ownership. A decorative/lyric `3` near a
+note can change written durations.
+
+### Path accidentals
+
+Path assignment is now exclusive, but there is still no key-signature-region
+exclusion and no independent negative corpus for decorative/articulation
+paths. Text-glyph accidentals still use the old shared `.find` path. The
+grand 88/88 result therefore cannot be treated as practice safety evidence.
+
+### Conclusion
+
+- Notehead/stem geometry: improves fixture counts, but remains coupled to
+  unsafe path/curve evidence; no port.
+- Tuplet association: improved fixture count but nearest-marker rule has no
+  group/exclusivity proof; rejected.
+- Path accidental detection/ownership: exclusive ownership is good, but
+  key-region/decorative negatives absent; rejected.
+- Tie/slur: still unsafe; rejected.
+- Multi-page: honest incompleteness, practice false; not needed.
+- Practice safety/provenance: rest fix remains good, but gate false acceptances
+  remain; no port.
+
+Current production remains **306/447**, beginner and grand practice-disabled.

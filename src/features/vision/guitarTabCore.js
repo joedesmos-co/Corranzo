@@ -374,27 +374,85 @@ export function detectBeams(gray, width, height, thr = 128) {
 
 export function columnEvidence(col, gray, beamMask, width, height, minRun, sideTol, gapEst) {
   const ink = y => gray[y * width] <= 128
-  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0] }
+  // ---- Stem candidates (both directions), scored by beam connection.
+  // A per-note longest-run probe can be captured by an unrelated long
+  // vertical run (e.g. a stem from a neighbouring note or a barline).
+  // Prefer a stem whose tip actually reaches a beam component; this is
+  // the group-level cue that the note is beamed.
+  const candidates = []
   for (const m of col.members) {
     const [x0, y0, x1, y1] = m.box.map(Math.round)
+    const cy = (y0 + y1) >> 1
+    const edges = [x0, x1, cy > 0 ? (x0 + x1) >> 1 : (x0 + x1) >> 1]
+    const sideInt = Math.max(1, Math.round(sideTol))
+    // Convention pairs only (matches Python _stem_probe): right edge -> up,
+    // left edge -> down. Trying both directions at every x lets a
+    // neighbouring stem or beam fragment masquerade as this note's stem.
     for (const [edge, up] of [[x1, true], [x0, false]]) {
-      for (let x = Math.max(Math.round(edge - sideTol), 0); x <= Math.min(Math.round(edge + sideTol), width - 1); x++) {
-        const start = up ? y0 : y1
-        let run = 0, gap = 0, yy = start
-        while (yy >= 0 && yy < height) {
-          if (gray[yy * width + x] <= 128) { run++; gap = 0 }
-          else { gap++; if (gap > 6) break }
-          yy += up ? -1 : 1
-        }
-        if (run > best.run) {
-          best = {
-            run, stem: run >= minRun, beams: 0, flags: 0, x,
-            tip: up ? y0 - run : y1 + run, up,
-            span: up ? [y0 - run, y0] : [y1, y1 + run],
+      for (let x = Math.max(edge - sideInt, 0); x <= Math.min(edge + sideInt, width - 1); x++) {
+        // run from the notehead edge outward
+        const starts = up ? [y0] : [y1]
+        // gap-bridged run counting (matches Python _bridged_run) and
+        // tip derived from the start that produced the max run, so a
+        // centre/bottom start does not inflate the tip.
+        // Tip from the notehead-edge start (matches Python, avoids
+        // centre/bottom run inflation). Run/minRun from the best start
+        // (so stems drawn inside the bbox still qualify).
+        const edgeStart = up ? y0 : y1
+        let edgeRun = 0
+        { let gap = 0, yy = edgeStart, rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
           }
+          edgeRun = rr
         }
+        let run = 0, startForRun = starts[0]
+        for (const start of starts) {
+          let gap = 0, yy = start, rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          if (rr > run) { run = rr; startForRun = start }
+        }
+        // Use edge tip when edge run is substantial; else fall back.
+        // tip from y0 (notehead edge) run, even if x is offset: avoids
+        // centre/bottom inflation. minRun uses the max run (below).
+        let runEdge = 0
+        { let gap = 0, yy = (up ? y0 : y1), rr = 0
+          while (yy >= 0 && yy < height) {
+            if (gray[yy * width + x] <= 128) { rr += gap + 1; gap = 0 }
+            else { gap++; if (gap > 6) break }
+            yy += up ? -1 : 1
+          }
+          runEdge = rr
+        }
+        const tipY = up ? y0 - Math.max(runEdge, 1) : y1 + Math.max(runEdge, 1)
+        if (run < 3) continue
+        const anchor = up ? y0 : y1
+        // beam connection: does the stem run intersect any beam component?
+        let beamConn = false
+        const tx0 = Math.max(x - 4, 0), tx1 = Math.min(x + 4, width - 1)
+        const ys = up ? [tipY, anchor] : [anchor, tipY]
+        const yLoC = Math.min(...ys), yHiC = Math.max(...ys)
+        outer: for (let yy = Math.max(yLoC - 2, 0); yy <= Math.min(yHiC + 2, height - 1); yy++)
+          for (let xx = tx0; xx <= tx1; xx++) {
+            if (beamMask[yy * width + xx]) { beamConn = true; break outer }
+          }
+        // score: beam connection dominates; then run length
+        const score = (beamConn ? 10000 : 0) + run
+        candidates.push({ run, stem: run >= minRun, beams: 0, flags: 0, x, tip: tipY, up,
+          span: up ? [tipY, y0] : [y1, tipY], score, beamConn })
       }
     }
+  }
+  // pick best candidate
+  let best = { run: 0, stem: false, beams: 0, flags: 0, x: 0, tip: 0, up: true, span: [0, 0], score: -1, beamConn: false }
+  for (const c of candidates) {
+    if (c.score > best.score) best = c
   }
   if (!best.stem) return best
   // Beams: distinct beam-mask row groups along the full stem column.
@@ -410,8 +468,6 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
   }
   best.beams = groups
   // Flags: ink beside the stem tip, beyond the measured stem width.
-  // Sample the stem on a clean section near the notehead end; a staff
-  // line crossing one sample would otherwise be measured as the stem.
   const fw = Math.max(12, Math.round(0.4 * gapEst))
   const fh = Math.max(12, Math.round(0.3 * gapEst))
   const runLen = Math.max(best.run, 1)
@@ -422,9 +478,9 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     const y = base + dy
     if (y < 0 || y >= height) continue
     let w = 1
-    if (best.up) { while (best.x + w < width && ink(y * width + best.x + w)) w++ }
-    else { while (best.x - w >= 0 && ink(y * width + best.x - w)) w++ }
-    if (ink(y * width + best.x)) widths.push(w)
+    if (best.up) { while (best.x + w < width && gray[y * width + best.x + w] <= 128) w++ }
+    else { while (best.x - w >= 0 && gray[y * width + best.x - w] <= 128) w++ }
+    if (gray[y * width + best.x] <= 128) widths.push(w)
   }
   let wstem = widths.length ? Math.min(...widths) : 1
   wstem = Math.min(wstem, Math.max(2, Math.round(0.2 * gapEst)))
@@ -439,6 +495,66 @@ export function columnEvidence(col, gray, beamMask, width, height, minRun, sideT
     if (row > 0 && row < 0.8 * (fx1 - fx0)) inkCount += row
   }
   best.flags = inkCount >= 5 ? 1 : 0
+  // Dots: small filled circular ink to the right of the notehead.
+  // Conservative: require a compact, roughly circular blob whose centre
+  // sits 0.4-1.2 staff gaps right of the notehead and within 0.3 gap
+  // vertically of the notehead centre. Count at most 2 (double dot).
+  let dots = 0
+  const g = (Number.isFinite(gapEst) && gapEst > 0) ? gapEst : 16.8
+  const noteCx = (col.x0 + col.x1) / 2
+  const noteCy = (col.y0 + col.y1) / 2
+  const rMin = 0.12 * g, rMax = 0.45 * g
+  const dotCandidates = []
+  // scan a region to the right of the notehead
+  const rx0 = Math.round(col.x1 + 0.3 * g)
+  const rx1 = Math.min(width - 1, Math.round(col.x1 + 1.4 * g))
+  const ry0 = Math.max(0, Math.round(noteCy - 0.6 * g))
+  const ry1 = Math.min(height - 1, Math.round(noteCy + 0.6 * g))
+  // find connected components of ink in this region
+  const seen = new Uint8Array(width * height)
+  for (let sy = ry0; sy <= ry1; sy++) for (let sx = rx0; sx <= rx1; sx++) {
+    if (gray[sy * width + sx] > 128 || seen[sy * width + sx]) continue
+    // flood fill
+    const stack = [sy * width + sx]; seen[sy * width + sx] = 1
+    const pix = []
+    let minX = sx, maxX = sx, minY = sy, maxY = sy
+    while (stack.length) {
+      const j = stack.pop(); pix.push(j)
+      const yy = (j / width) | 0, xx = j % width
+      if (xx < minX) minX = xx; if (xx > maxX) maxX = xx
+      if (yy < minY) minY = yy; if (yy > maxY) maxY = yy
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = xx + dx, ny = yy + dy
+        if (nx < rx0 || nx > rx1 || ny < ry0 || ny > ry1) continue
+        const k = ny * width + nx
+        if (gray[k] <= 128 && !seen[k]) { seen[k] = 1; stack.push(k) }
+      }
+    }
+    const w = maxX - minX + 1, hh = maxY - minY + 1
+    const area = pix.length
+    const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2
+    const aspect = w / Math.max(hh, 1)
+    if (w >= rMin && w <= rMax && hh >= rMin && hh <= rMax &&
+        aspect >= 0.7 && aspect <= 1.3 &&
+        area >= 0.5 * Math.PI * (Math.min(w, hh) / 2) ** 2 * 0.6) {
+      // vertical proximity to notehead centre
+      if (Math.abs(cy - noteCy) <= 0.35 * g) {
+        dotCandidates.push({ cx, cy, w, hh, area })
+      }
+    }
+  }
+  // count distinct dots (sorted by x), at most 2
+  dotCandidates.sort((a, b) => a.cx - b.cx)
+  const chosen = []
+  for (const cd of dotCandidates) {
+    if (chosen.length && cd.cx - chosen[chosen.length - 1].cx < 0.25 * g) continue
+    chosen.push(cd)
+    if (chosen.length >= 2) break
+  }
+  dots = chosen.length
+  best.dots = dots
+  // clean extra fields
+  delete best.score; delete best.beamConn
   return best
 }
 
@@ -448,6 +564,7 @@ export function durationFromEvidence(col, ev) {
   const ambiguous = bases.length > 1
   const beams = ev.beams || 0
   const flags = ev.flags || 0
+  const dots = ev.dots || 0
   let dur, conf
   if (base >= 4) { dur = 4; conf = true }
   else if (base >= 2) { dur = 2; conf = true }
@@ -457,7 +574,8 @@ export function durationFromEvidence(col, ev) {
     dur = 1 / (2 ** steps)
     conf = !!ev.stem && !conflict
   }
-  return { duration: dur, beams, flags, stem: !!ev.stem,
+  if (dots > 0) dur = dur * (1.5 ** dots)
+  return { duration: dur, beams, flags, dots, stem: !!ev.stem,
     confident: conf && !ambiguous, ambiguous, beam_flag_conflict: beams > 0 && flags > 0 }
 }
 
@@ -514,7 +632,7 @@ function attachRhythm(events, items, staves, gray, width, height, beamMask) {
         if (i) gaps.push(c.cx - cols[i - 1].cx)
         if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
         const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [s.gap]))))
-        const ev = columnEvidence(c, gray, beamMask, width, height, 1.6 * s.gap, side, s.gap)
+        const ev = columnEvidence(c, gray, beamMask, width, height, 1.4 * s.gap, side, s.gap)
         const d = durationFromEvidence(c, ev)
         // A notehead plus absent/ambiguous stem/beam evidence is not a
         // written duration. Keep the value explicitly unknown instead of
@@ -674,7 +792,7 @@ export async function analyzeNotationRhythm(data, { dpi = 150, pageNo = 1, creat
       if (i) gaps.push(c.cx - cols[i - 1].cx)
       if (i + 1 < cols.length) gaps.push(cols[i + 1].cx - c.cx)
       const side = Math.max(3, Math.min(16, 0.45 * Math.min(...(gaps.length ? gaps : [gap]))))
-      const ev = columnEvidence(c, page.gray, beamMask, page.width, page.height, 1.6 * gap, side, gap)
+      const ev = columnEvidence(c, page.gray, beamMask, page.width, page.height, 1.4 * gap, side, gap)
       const d = durationFromEvidence(c, ev)
       rows.push({ system: si, x: +c.cx.toFixed(1), ...d })
     })

@@ -234,6 +234,24 @@ export function validateOmrSourceMeta(source) {
       message: 'Restored experimental playback timestamp was invalid — regenerate from PDF in Library.',
     }
   }
+  // Musical validity: OMR-generated MusicXML must have measures that fill their
+  // time signature. Grossly malformed transcription (e.g. every measure wrong)
+  // is not practice-ready even when structural metadata passes.
+  try {
+    if (source?.data) {
+      const bytes = source.data instanceof ArrayBuffer ? new Uint8Array(source.data) : new Uint8Array(source.data)
+      const xml = new TextDecoder().decode(bytes)
+      const rhythmCheck = validateOmrMusicXmlMeasureRhythm(xml)
+      if (!rhythmCheck.ok) {
+        return {
+          ok: false,
+          message: 'Generated score measures do not match the time signature — review before practicing.',
+        }
+      }
+    }
+  } catch {
+    // Do not block on a parse failure of the validity check itself.
+  }
   return { ok: true }
 }
 
@@ -352,4 +370,86 @@ export function validateRestoredOmrPlayback(source) {
       message: 'Restored experimental playback could not be read — regenerate from PDF in Library.',
     }
   }
+}
+
+/**
+ * Lightweight musical-validity check for OMR-generated MusicXML.
+ *
+ * Parses each <measure> block and verifies that every non-leading measure fills
+ * its stated time signature on every staff. A leading partial measure is
+ * allowed (pickup). Chord notes share the previous note's duration and are not
+ * double-counted. Returns { ok, badMeasures, totalMeasures }.
+ *
+ * This is deliberately structural (measure fill), not a claim of musical
+ * correctness: it catches grossly malformed transcription (e.g. every measure
+ * wrong) without inventing an accuracy percentage.
+ */
+export function validateOmrMusicXmlMeasureRhythm(xmlString) {
+  if (typeof xmlString !== 'string' || xmlString.length === 0) {
+    return { ok: true, badMeasures: 0, totalMeasures: 0 }
+  }
+  const measureRegex = /<measure\b[^>]*>([\s\S]*?)<\/measure>/g
+  const measures = []
+  let match
+  while ((match = measureRegex.exec(xmlString)) !== null) {
+    measures.push(match[1])
+  }
+  if (measures.length === 0) {
+    return { ok: true, badMeasures: 0, totalMeasures: 0 }
+  }
+  let divisions = 0
+  let beats = 4
+  let beatType = 4
+  let badCount = 0
+  let nonLeadingBadCount = 0
+  measures.forEach((body, index) => {
+    const divMatch = body.match(/<divisions>(\d+)<\/divisions>/)
+    if (divMatch) divisions = Number(divMatch[1])
+    const beatsMatch = body.match(/<beats>(\d+)<\/beats>/)
+    const beatTypeMatch = body.match(/<beat-type>(\d+)<\/beat-type>/)
+    if (beatsMatch) beats = Number(beatsMatch[1])
+    if (beatTypeMatch) beatType = Number(beatTypeMatch[1])
+    if (!divisions || !beats || !beatType) {
+      // Cannot validate this measure; do not penalise.
+      return
+    }
+    const target = (beats * divisions * 4) / beatType
+    const byStaff = new Map()
+    const noteRegex = /<note\b[^>]*>([\s\S]*?)<\/note>/g
+    let noteMatch
+    while ((noteMatch = noteRegex.exec(body)) !== null) {
+      const noteBody = noteMatch[1]
+      const durMatch = noteBody.match(/<duration>(\d+)<\/duration>/)
+      if (!durMatch) continue
+      if (/<chord\s*\/>/.test(noteBody)) continue
+      if (/<grace\b/.test(noteBody)) continue
+      const staffMatch = noteBody.match(/<staff>(\d+)<\/staff>/)
+      const staff = staffMatch ? Number(staffMatch[1]) : 1
+      const dur = Number(durMatch[1])
+      byStaff.set(staff, (byStaff.get(staff) ?? 0) + dur)
+    }
+    if (byStaff.size === 0) return
+    // Leading (first) measure may be a pickup: allow any sum <= target.
+    const isLeading = index === 0
+    let measureBad = false
+    for (const sum of byStaff.values()) {
+      const diff = Math.abs(sum - target)
+      if (diff > 1) {
+        if (isLeading && sum < target) {
+          // Plausible pickup: partial leading measure.
+          continue
+        }
+        measureBad = true
+      }
+    }
+    if (measureBad) {
+      badCount += 1
+      if (!isLeading) nonLeadingBadCount += 1
+    }
+  })
+  // Strict per-staff fill check. Cross-staff notation can leave up to two
+  // non-leading measures per-staff imbalanced, so tolerate fewer than three
+  // bad non-leading measures to avoid false-rejecting legitimate cross-staff
+  // scores while still catching grossly malformed transcription.
+  return { ok: nonLeadingBadCount < 3, badMeasures: badCount, totalMeasures: measures.length }
 }

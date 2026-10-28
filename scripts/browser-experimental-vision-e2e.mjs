@@ -235,12 +235,13 @@ try {
   // ------------------------------------- uncertain guitar mixed rhythm
   await openImport({ mode: 'guitar-vector', instrument: 'guitar' })
   await upload(mixedGuitarPdf, 'mixed guitar rhythm')
-  await waitReady('mixed guitar rhythm', { expectExperimental: false })
+  await waitReady('mixed guitar rhythm', { expectExperimental: true })
   const mixedSaved = await readSaved()
-  if (!(mixedSaved?.meta?.omrMeta?.experimentalVision)) {
-    pass('mixed guitar rhythm: unknown timing stays experimental-disabled')
+  const mixedEv = mixedSaved?.meta?.omrMeta?.experimentalVision ?? null
+  if (mixedEv && mixedEv.engine === 'guitar-tab-vector' && mixedEv.rhythmRecovered === true && mixedEv.practiceReady === false) {
+    pass('mixed guitar rhythm: rhythm recovered; practice still disabled pending tie/rest/voice audit')
   } else {
-    fail('mixed guitar rhythm: unknown timing stays experimental-disabled', JSON.stringify(mixedSaved?.meta?.omrMeta?.experimentalVision))
+    fail('mixed guitar rhythm: unexpected experimental vision state', JSON.stringify(mixedEv))
   }
 
   // ------------------------------------------------ unsupported piano PDF

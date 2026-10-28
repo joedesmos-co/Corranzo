@@ -16,6 +16,7 @@ import {
   UPLOAD_MUSICXML_SOURCE,
   shouldShowLibraryOmrPanel,
   validateRestoredOmrPlayback,
+  validateOmrMusicXmlMeasureRhythm,
 } from '../src/features/import/musicXmlSource.js'
 import { buildSessionMeta, validateRestoredSession } from '../src/features/session/sessionPersistence.js'
 
@@ -355,5 +356,70 @@ describe('musicXmlSource', () => {
     )
     expect(restored.ok).toBe(false)
     expect(restored.issues).toContain('missing-pdf-meta')
+  })
+})
+
+describe('validateOmrMusicXmlMeasureRhythm', () => {
+  it('accepts a well-formed single measure', () => {
+    const xml = buildOmrMusicXml({
+      title: 'Test',
+      measures: [
+        {
+          measureNumber: 1,
+          uncertain: false,
+          events: [
+            { type: 'note', startDivision: 0, durationDivisions: 4, durationType: 'quarter', notes: [{ midi: 60 }] },
+            { type: 'note', startDivision: 4, durationDivisions: 4, durationType: 'quarter', notes: [{ midi: 62 }] },
+            { type: 'note', startDivision: 8, durationDivisions: 4, durationType: 'quarter', notes: [{ midi: 64 }] },
+            { type: 'note', startDivision: 12, durationDivisions: 4, durationType: 'quarter', notes: [{ midi: 67 }] },
+          ],
+        },
+      ],
+    })
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(0)
+  })
+
+  it('rejects when a non-leading measure does not fill the time signature', () => {
+    // First measure fills; second measure has only one quarter (should be 4).
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0"><part id="P1">
+<measure number="1"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+<measure number="2"><attributes></attributes>
+<note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+<measure number="3"><attributes></attributes>
+<note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+<measure number="4"><attributes></attributes>
+<note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+</part></score-partwise>`
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(false)
+    expect(result.badMeasures).toBeGreaterThan(0)
+  })
+
+  it('allows a leading partial (pickup) measure', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0"><part id="P1">
+<measure number="1"><attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+<measure number="2"><attributes></attributes>
+<note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>F</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+<note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>
+</measure>
+</part></score-partwise>`
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
   })
 })

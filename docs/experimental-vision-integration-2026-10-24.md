@@ -303,3 +303,90 @@ short curves; path accidentals remain unverified. See
 `79808654cb4a4ba3a46eb9f19de9a4a957b51cf46d53722c7a7e9166eb0bcf06`.
 Not deployed. Rollback target if deployed:
 `0ccc559c-10d5-43df-92db-42a5715790cb`.
+
+## 9. Round 5 — Guitar stem probe scoped; Piano ownership rejected
+
+**Live at round-5 start:** Worker
+`8748583b-da41-4f0c-be52-6d133da94185`, bundle `index-DJy6qAU3.js`. Its
+SHA-256 matches the round-4 local build; Audio Vision v3 and the round-4 text
+run split are live.
+
+**Integrated:** `248a20b5bd` — edge+centre stem starts for TAB `attachRhythm`
+only. The new half-note fixture PDF is included. Mixed result: 21/21 noteheads,
+60/60 string/fret, **15/21 confident onsets**, **3/4 valid measures**, 15
+complete timed events; the 16 events in measure 3 remain `duration:null` and
+carry the explicit placeholder footnote. `rhythm_recovered=false`; practice
+disabled. Paired/chords and techniques remain 32/32 and 8/8. Sparse abstains.
+
+The probe was **not** applied to `analyzeNotationRhythm`: doing so changed the
+notation-only fixture from 16 eighths + 24 quarters to 40 quarters. That
+diagnostic keeps the old edge-only probe and remains exact.
+
+**Not integrated:** Piano `b4f6dce882`. It reproduces 377/447, tuplets 62/63,
+grand 88/88 and dense 195/264, and exclusive path ownership is an improvement.
+But equal-pitch short slurs, same-staff two-voice sums and decorative short
+curves still open practice; a decorative `3` marker can mark six notes as
+tuplets; path key-region/decorative accidental safety remains unproven. See
+`docs/piano-vector-safety-repair-audit-2026-10-25.md`.
+
+**Round-5 local bundle:** `dist/assets/index-BVw0gRmn.js`, SHA-256
+`c284e708158a83607243cf651730449a090ad07db3ae2969b3350a12678880ea`.
+Not deployed. Rollback target if deployed:
+`8748583b-da41-4f0c-be52-6d133da94185`.
+
+## 10. Round 6 — independent acceptance and voice-gate hardening
+
+**Live at round-6 start:** Worker
+`d367ee53-3cf6-4d1f-9117-36b9bc3b69a1`, bundle `index-BVw0gRmn.js`
+(SHA-256 matches the round-5 build).
+
+**Integrated product safety:** Piano practice eligibility now requires
+`voiceOwnership === 'verified'`. Current extraction reports only `staff-only`
+ownership, so the experimental Piano path is preview-only even where note/rest
+and measure counts are complete. This closes the corrected-beginner promotion
+observed during round-6 evaluation and the same-staff multi-voice false
+acceptance. `scripts/vision-piano-adversarial-audit.mjs` refuses 10/10 controls
+against production.
+
+**Evaluation improvements:** corrected CC0 Piano fixtures are kept separately;
+the canonical evaluator now reports note, rest, pitch-only, duration-only,
+full-event, measure, abstention and practice fields. Independent Verovio
+engravings (grand/rhythm/pickup-crossstaff) are held separately and must abstain
+from the vector route.
+
+**Not integrated:** Piano `0607fac9d7` / `b4f6dce882`. The corrected corpus
+reproduces 378/447 for the candidate (not the historical 377) and three
+candidate practice-ready scores, but the candidate still fails equal-pitch
+slur, same-staff multi-voice and decorative-curve controls. No extraction port.
+
+**Guitar:** `3b755220af` changes fixture artwork only; current recognition
+remains 21/21 noteheads, 15/21 confident onsets and 3/4 valid measures, with
+measure 3 explicitly null. No recognition code change.
+
+**Round-6 local bundle:** `dist/assets/index-nUlncSNZ.js`, SHA-256
+`8c8b5b165596299dc381ac7fef89a2327520c227f271dc26f4ca5061c6693402`.
+Not deployed. Rollback target if deployed:
+`d367ee53-3cf6-4d1f-9117-36b9bc3b69a1`.
+
+## 11. Round 7 — voice hypothesis vs verified ownership; image fallback measured
+
+**Live at round-7 start:** Worker
+`43b01fef-02b9-45cb-93ea-40a917d0a7fb`, bundle `index-nUlncSNZ.js`
+(SHA-256 matches the round-6 gate build).
+
+**Piano `d9680e5703`:** same-input corrected corpus reproduces **378/447**
+notes and **6/6** rests, but the new `assignVoices` is only a stem-direction
+hypothesis. Its assessment object still exposes `voiceOwnership: 'staff-only'`
+(the candidate has a duplicate property) and never claims `verified`.
+Our expanded 15-control harness refuses **15/15** with production, but only
+**8/15** with the candidate. Matching stems, one-voice/opposite-stem cases and
+the existing curve cases can still become practice-ready. No port.
+
+**Independent engraver fallback:** the standard image OMR is executable on the
+three Verovio PDFs and produces workspace + parseable MusicXML, but the music
+is wrong: grand 15/88 exact notes, full precision/recall **0.238/0.170**;
+rhythm 3/63, **0.036/0.044**, 0/5 rests; pickup-crossstaff 0/11, **0/0**,
+0/2 rests. Successful fallback routing is not transcription success.
+
+**Round-7 app bundle:** unchanged `index-nUlncSNZ.js`; no deployment. Rollback
+target if needed: `43b01fef-02b9-45cb-93ea-40a917d0a7fb`.
