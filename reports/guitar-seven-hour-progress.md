@@ -79,3 +79,29 @@ import/musicXmlSource/viewer-recovery: 36/36 pass.
 - Committed browser regression suite.
 - Further notation work (rests emission, dots, ties, voices) unchanged and
   still practice-disabled.
+
+## Milestone C/E — regression tests and notation evidence
+
+Committed `c5ce7def9e`:
+- `tests/musicXmlSource.test.js`: locks the exact gate that caused the hang
+  (3 short non-leading measures -> `validateOmrSourceMeta` false -> Library
+  would re-open preparation).
+- `tests/importPresentation.test.js`: measure-rhythm failure copy.
+- `tests/guitarVisionRests.test.js`: positive SMuFL rest recognition from a
+  real text layer (whole/half/quarter/eighth/16th), negative articulation and
+  notehead glyphs, and zero invented rests on all scored fixtures.
+- `tests/guitarVisionDots.test.js`: honest abstention on ambiguous small ink
+  (no dotted durations promoted); zero dots on scored fixtures.
+
+### Dot detection decision (measured, reverted)
+A disk-density dot detector was prototyped and rejected: on the standard
+fixture it read chord-symbol/annotation glyph bowls as dots (2 false dotted
+quarters), corrupting durations. A two-scale density test, a next-column
+bound, and a text-box exclusion still could not separate glyph loops from
+dots at 150 dpi. The conservative connected-component detector is retained;
+genuine dotted-note recovery remains UNSUPPORTED and practice stays disabled.
+This is the "abstain rather than fabricate" path, not a claim of dot support.
+
+### Recognition baseline re-verified after every change
+mixed 21/21 conf, 4/4; paired 32/32, 8/8; techniques 32/32, 8/8;
+sparse 32/32 SF with 32 null durations; standard 16 eighths + 24 quarters.
