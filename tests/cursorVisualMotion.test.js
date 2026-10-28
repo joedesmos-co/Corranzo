@@ -256,7 +256,13 @@ describe('system line transition', () => {
 })
 
 describe('systemKeyForCursor tolerance', () => {
-  it('returns the same key for Y values within the same system', () => {
+  it('prefers stable logical systemIndex over Y geometry', () => {
+    const a = systemKeyForCursor({ page: 1, y: 0.3, meta: { systemIndex: 2 } })
+    const b = systemKeyForCursor({ page: 1, y: 0.31, meta: { systemIndex: 2 } })
+    expect(a).toBe(b)
+    expect(a).toBe('1:sys2')
+  })
+  it('falls back to coarse Y rounding when systemIndex is unavailable', () => {
     const a = systemKeyForCursor({ page: 1, y: 0.30001 })
     const b = systemKeyForCursor({ page: 1, y: 0.30009 })
     expect(a).toBe(b)
@@ -264,6 +270,11 @@ describe('systemKeyForCursor tolerance', () => {
   it('returns different keys for different systems', () => {
     const a = systemKeyForCursor({ page: 1, y: 0.3 })
     const b = systemKeyForCursor({ page: 1, y: 0.5 })
+    expect(a).not.toBe(b)
+  })
+  it('returns different keys for different pages', () => {
+    const a = systemKeyForCursor({ page: 1, y: 0.3, meta: { systemIndex: 0 } })
+    const b = systemKeyForCursor({ page: 2, y: 0.3, meta: { systemIndex: 0 } })
     expect(a).not.toBe(b)
   })
 })
