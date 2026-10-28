@@ -337,7 +337,36 @@ function tryApplyStaffRest(events, rest, totalDivisions, measureBox) {
         }
       }
     }
-    return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
+    // Long rests (quarter and above) can land inside a sustained note when
+    // the engraver compresses horizontal spacing: the geometric estimate is
+    // proportional, not metrical. Move to the nearest free slot that can hold
+    // the written rest instead of dropping a glyph that is clearly printed.
+    // Only the rest's *place* is chosen; its written duration is preserved.
+    const longGlyphDuration =
+      OMR_DURATION_DIVISIONS[rest.durationType] ?? OMR_DIVISIONS_PER_QUARTER
+    if (longGlyphDuration > OMR_DURATION_DIVISIONS.eighth) {
+      const starts = new Set([0])
+      for (const interval of intervals) {
+        starts.add(Math.min(interval.start, totalDivisions))
+        starts.add(Math.min(interval.end, totalDivisions))
+      }
+      const fitting = [...starts]
+        .map((start) => ({ start, gap: findGapContaining(intervals, start, totalDivisions) }))
+        .filter((entry) =>
+          entry.gap &&
+          entry.gap.gapStart === entry.start &&
+          entry.gap.gapEnd - entry.gap.gapStart >= longGlyphDuration)
+        .sort((left, right) =>
+          Math.abs(left.start - preferredStart) - Math.abs(right.start - preferredStart) ||
+          left.start - right.start)
+      if (fitting.length) {
+        preferredStart = fitting[0].start
+      } else {
+        return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
+      }
+    } else {
+      return { applied: false, reason: VECTOR_REST_SKIP_REASONS.OVERLAPS_STAFF_NOTES }
+    }
   }
 
   const firstNotePosition = firstNotePositionOnStaff(events, clef)
