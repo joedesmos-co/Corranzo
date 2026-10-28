@@ -1,6 +1,12 @@
 // Guitar import lifecycle browser suite (real app, real PDF.js).
 //
-// Prereq: dev server running (default http://localhost:5200).
+// Prereq: dev server running (default http://localhost:5200) with a real
+// `node_modules` inside the project, or a Vite config whose `server.fs.allow`
+// includes the symlink target. If pdfjs's worker cannot be fetched, the PDF
+// preview fails and every scenario degrades to a recoverable error — that is
+// a harness problem, not an import regression. Check the browser console for
+// "Setting up fake worker failed".
+//
 // Usage:  node scripts/guitar-import-lifecycle-suite.mjs [baseUrl]
 //
 // Every scenario runs in a FRESH browser context (no restored score) and must
