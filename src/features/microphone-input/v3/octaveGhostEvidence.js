@@ -160,6 +160,15 @@ export function semitoneLeakFromResolution(frame, expectedMidis = [], options = 
   if (evidence.expectedMidi !== expectedMidis[0]) {
     return null
   }
+  // A leak veto is only valid when the independent monophonic tracker is on
+  // the semitone neighbour (or elsewhere), not on the expected pitch itself.
+  // Measured: GuitarSet jazz F3 is detected at confidence 0.9 with dominant
+  // exactly 53, but an 8192-window decay frame flags neighbour 54; the veto
+  // invalidated the real note. Agreeing dominant means decay, not leakage.
+  const dominant = dominantPitch(frame)
+  if (dominant != null && Math.round(dominant) === expectedMidis[0]) {
+    return null
+  }
   const floor = Number.isFinite(options.resolutionLeakFloor) ? options.resolutionLeakFloor : 1.35
   const factor = Number.isFinite(options.resolutionLeakFactor) ? options.resolutionLeakFactor : 1.8
   // The expectation must be UNSUPPORTED at resolution (below the detector

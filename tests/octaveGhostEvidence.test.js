@@ -30,6 +30,21 @@ describe('semitoneLeakFromResolution', () => {
     expect(semitoneLeakFromResolution(frame(evidence()), [56])).toBe(55)
   })
 
+  it('does not veto a real note when the dominant tracker agrees with it', () => {
+    const agreeing = {
+      resolutionEvidence: evidence({ expectedMidi: 53, expectedRatio: 1.0, neighbors: [{ midi: 54, ratio: 3 }] }),
+      dominantPitchMidiFloat: 53.02,
+      v2Notes: [{ midi: 53, detected: true, confidence: 0.9, ratio: 5.2 }],
+    }
+    expect(semitoneLeakFromResolution(agreeing, [53])).toBe(null)
+    const leaking = {
+      resolutionEvidence: evidence({ expectedMidi: 56, expectedRatio: 1.0, neighbors: [{ midi: 55, ratio: 3 }] }),
+      dominantPitchMidiFloat: 55.01,
+      v2Notes: [{ midi: 56, detected: false, confidence: 0.2, ratio: 1.1 }],
+    }
+    expect(semitoneLeakFromResolution(leaking, [56])).toBe(55)
+  })
+
   it('keeps a real note whose own ratio clears the floor', () => {
     expect(semitoneLeakFromResolution(frame(evidence({ expectedRatio: 3.06 })), [56])).toBe(null)
   })
