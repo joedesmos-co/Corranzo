@@ -54,6 +54,62 @@ function durationNotation(divisions) {
 }
 
 /**
+ * Estimate a key signature from the transcribed pitch-class content so the
+ * score is engraved in the key the music is actually in, instead of always
+ * C major (which forces an accidental on every non-diatonic note and reads as
+ * wrong even when every pitch is correct). Display-only: <alter> stays explicit,
+ * so sounding pitches and playback are unchanged.
+ *
+ * Krumhansl-Kessler major/minor profiles, duration-weighted histogram.
+ */
+const KK_MAJOR = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88]
+const KK_MINOR = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17]
+
+function pearson(a, b) {
+  const n = a.length
+  let ma = 0, mb = 0
+  for (let i = 0; i < n; i += 1) { ma += a[i]; mb += b[i] }
+  ma /= n; mb /= n
+  let num = 0, da = 0, db = 0
+  for (let i = 0; i < n; i += 1) {
+    const x = a[i] - ma, y = b[i] - mb
+    num += x * y; da += x * x; db += y * y
+  }
+  return da > 0 && db > 0 ? num / Math.sqrt(da * db) : 0
+}
+
+function fifthsForTonic(tonicPc) {
+  // Major-key fifths = (pc * 7) mod 12, mapped to the nearest of -5..+6.
+  const raw = ((tonicPc * 7) % 12 + 12) % 12
+  return raw > 6 ? raw - 12 : raw
+}
+
+/** Returns { fifths, mode, confidence }. Empty input -> C major, confidence 0. */
+export function detectKeySignature(events = []) {
+  const hist = new Array(12).fill(0)
+  let total = 0
+  for (const e of events) {
+    if (!Number.isFinite(e?.midi)) continue
+    const weight = Math.max(0.25, Number(e.durBeats) || 0.5)
+    hist[((Math.round(e.midi) % 12) + 12) % 12] += weight
+    total += weight
+  }
+  if (total <= 0) return { fifths: 0, mode: 'major', confidence: 0 }
+  let best = { fifths: 0, mode: 'major', score: -Infinity }
+  for (let tonic = 0; tonic < 12; tonic += 1) {
+    for (const [mode, profile] of [['major', KK_MAJOR], ['minor', KK_MINOR]]) {
+      const rotated = profile.map((_, i) => hist[(i + tonic) % 12])
+      const score = pearson(rotated, profile)
+      if (score > best.score) {
+        const fifths = mode === 'major' ? fifthsForTonic(tonic) : fifthsForTonic((tonic + 3) % 12)
+        best = { fifths, mode, score }
+      }
+    }
+  }
+  return { fifths: best.fifths, mode: best.mode, confidence: Math.round(best.score * 1000) / 1000 }
+}
+
+/**
  * events: arranged events with startBeat/durBeats (beats, quarter=1).
  * Layout: measures of beatsPerMeasure; voices: piano RH=1/staff1, LH=2/staff2; guitar voice 1.
  */
@@ -90,7 +146,8 @@ export function buildArrangementMusicXml({ events, targetPart, bpm, beatsPerMeas
     xml += `    <measure number="${m + 1}">\n`
     if (m === 0) {
       xml += `      <attributes><divisions>${ARR_DIVISIONS}</divisions>`
-      xml += `<key><fifths>0</fifths></key>`
+      const keySignature = detectKeySignature(events)
+      xml += `<key><fifths>${keySignature.fifths}</fifths><mode>${keySignature.mode}</mode></key>`
       xml += `<time><beats>${beats}</beats><beat-type>4</beat-type></time>`
       if (isPiano) {
         xml += `<staves>2</staves><clef number="1"><sign>G</sign><line>2</line></clef><clef number="2"><sign>F</sign><line>4</line></clef>`
