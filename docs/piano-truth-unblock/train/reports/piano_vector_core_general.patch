@@ -226,11 +226,10 @@
        for (const ag of accGlyphs) {
          let best = null
          for (const hd of heads) {
-@@ -259,6 +376,44 @@
-           if (!best || d < best.d) best = { d, hd }
+@@ -260,6 +377,44 @@
          }
          if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
-+      }
+       }
 +      // Path-drawn accidentals are assigned exclusively: each candidate path
 +      // belongs to the nearest unassigned notehead to its right. A single
 +      // accidental can never modify two unrelated notes.
@@ -268,9 +267,10 @@
 +          ambiguousAccidentals += 1
 +        }
 +        if (best) { best.hd.acc = pa.code; pa.used = true }
-       }
++      }
        const clusters = []
        for (const hd of heads) {
+         const hcx = hd.x + hd.w / 2
 @@ -272,17 +427,19 @@
          let best = null
          for (const st of stems) {
@@ -365,12 +365,10 @@
    const left = local.filter((b) => Math.abs(b.x1 - stemX) <= 1.5)
    const right = local.filter((b) => Math.abs(b.x0 - stemX) <= 1.5)
    return Math.max(left.length, right.length)
-@@ -405,6 +567,45 @@
-   if (names.includes(pc)) return names.indexOf(pc) + 7 * (Math.floor(midi / 12) - 1)
-   for (let k = 1; k < 3; k++) if (names.includes((midi - k + 12) % 12)) return names.indexOf((midi - k + 12) % 12) + 7 * (Math.floor((midi - k) / 12) - 1)
+@@ -407,6 +569,45 @@
    return 0
-+}
-+
+ }
+ 
 +
 +/**
 + * Minimum general multi-page extraction: each page is recognized with the
@@ -408,9 +406,11 @@
 +    crossPageContinuation: pageCount > 1 ? 'unresolved' : 'not-applicable',
 +    credits: ['Multi-page extraction preserves page identity and measure order.',
 +      'Cross-page ties/slurs are not yet continued; practice is blocked when pages are incomplete.'] }
- }
- 
++}
++
  export function toMusicXML(ir, divisions = 480) {
+   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+   const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
 @@ -438,8 +639,21 @@
          out.push(`<backup><duration>${Math.max(1, Math.round(sum * divisions))}</duration></backup>`)
        }
@@ -452,7 +452,7 @@
        }
      }
      out.push('</measure>')
-@@ -460,96 +682,220 @@
+@@ -460,96 +682,223 @@
  }
  
  
@@ -504,6 +504,9 @@
 +      if (a.voice != null && b.voice != null && a.voice !== b.voice) continue
 +      // Ties attach close to both noteheads (not a high decorative arc).
 +      if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
++      // A tie endpoint must actually reach the notehead horizontally; a
++      // deliberately short decorative arc is not a tie.
++      if (Math.abs(a.x - c.x0) > 1.25 * gap || Math.abs(b.x - c.x1) > 1.25 * gap) continue
 +      // The two notes must be consecutive in the same staff/voice x order;
 +      // an equal-pitch curve over an intervening note is a slur/ambiguous.
 +      const lo = Math.min(a.measure, b.measure)
@@ -719,7 +722,7 @@
      splits,
      conflicts,
      edgeStems,
-@@ -557,10 +903,86 @@
+@@ -557,10 +906,86 @@
      verified,
    }
    ir.voiceOwnership = verified ? 'verified' : 'inferred'
@@ -806,7 +809,7 @@
   * Decide whether the vector result is trustworthy enough to become a
   * playable practice score. The extractor is deliberately conservative:
   * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
-@@ -575,13 +997,16 @@
+@@ -575,13 +1000,16 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -830,7 +833,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -591,25 +1016,17 @@
+@@ -591,25 +1019,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -862,7 +865,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -624,14 +1041,20 @@
+@@ -624,14 +1044,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -884,7 +887,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -639,10 +1062,17 @@
+@@ -639,10 +1065,17 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

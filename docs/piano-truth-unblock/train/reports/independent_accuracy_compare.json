@@ -996,29 +996,31 @@
       },
       "piano-grand-voices-vector": {
         "emitted": 88,
-        "matched": 87,
+        "matched": 88,
         "truth": 88,
-        "practiceReady": true,
-        "issues": [],
+        "practiceReady": false,
+        "issues": [
+          "ties-or-slurs-not-transcribed"
+        ],
         "exactNoteMatch": {
-          "tp": 87,
-          "fp": 1,
-          "fn": 1,
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
           "truth": 88,
           "predicted": 88,
-          "precision": 0.989,
-          "recall": 0.989,
-          "f1": 0.989
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
         },
         "fullEvent": {
-          "tp": 87,
-          "fp": 1,
-          "fn": 1,
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
           "truth": 88,
           "predicted": 88,
-          "precision": 0.989,
-          "recall": 0.989,
-          "f1": 0.989
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
         },
         "pitchOnly": {
           "tp": 88,
@@ -1041,14 +1043,14 @@
           "f1": 1
         },
         "writtenDuration": {
-          "tp": 87,
-          "fp": 1,
-          "fn": 1,
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
           "truth": 88,
           "predicted": 88,
-          "precision": 0.989,
-          "recall": 0.989,
-          "f1": 0.989
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
         },
         "restExact": {
           "tp": 0,
@@ -1133,7 +1135,7 @@
     },
     "total": {
       "emitted": 453,
-      "matched": 452,
+      "matched": 453,
       "truth": 453
     }
   }

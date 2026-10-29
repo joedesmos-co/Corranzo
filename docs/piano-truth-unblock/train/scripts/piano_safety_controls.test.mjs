@@ -167,12 +167,13 @@ const beginnerGate = assessPianoVectorIr(beginnerIr)
 assert.equal(beginnerGate.practiceReady, false)
 assert.equal(beginnerGate.issues.includes('rest-duration-inferred'), true)
 
-// 14. actual recognition: grand has no rests; tie/slur resolved -> ready
+// 14. actual recognition: grand has a short unattached curve; ambiguity blocks practice
 const grand = new Uint8Array(fs.readFileSync(path.join(FIX, 'piano-grand-voices-vector', 'piano-grand-voices-vector.pdf')))
 const grandIr = await extractFromData(pdfjs, grand, 1)
 const grandGate = assessPianoVectorIr(grandIr)
-assert.equal(grandGate.practiceReady, true)
-assert.equal(grandGate.tieCount, 1)
+assert.equal(grandGate.practiceReady, false)
+assert.equal(grandGate.issues.includes('ties-or-slurs-not-transcribed'), true)
 assert.equal(grandGate.slurCount, 1)
+assert.equal(grandGate.ambiguousCurves, 1)
 
 console.log('practice safety controls: OK')

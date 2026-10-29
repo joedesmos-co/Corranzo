@@ -61,3 +61,22 @@ Independent matcher result after the fix:
   measure 4. The candidate's visual tie is consistent with the curve; the
   reference is internally inconsistent.
 - 15/15 adversarial controls still refused; safety controls pass.
+
+
+## Tie attachment adjudication and independent 453/453
+
+Tightened tie endpoint attachment to 1.25 staff gaps horizontally. The
+corrected-rhythm tie attaches at ~8.1 units and remains a tie; the grand
+curve ends ~15 units short of the next notehead and is now AMBIGUOUS, not a
+tie.
+
+Result:
+
+- Independent full-event matcher: 453/453 (was 452/453).
+- Beginner, rhythm and dense practice-ready; grand preview-only due to the
+  ambiguous curve.
+- The reference Grand MusicXML tie is internally inconsistent: it starts on
+  A4 at the end of measure 3 and stops on A#4 at the end of measure 4, while
+  the printed curve ends before measure 4's first note. The recognizer no
+  longer forces a tie to match that reference.
+- 15/15 adversarial controls still refused; safety controls pass.

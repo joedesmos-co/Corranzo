@@ -711,6 +711,9 @@ export function classifyCurves(ir) {
       if (a.voice != null && b.voice != null && a.voice !== b.voice) continue
       // Ties attach close to both noteheads (not a high decorative arc).
       if (Math.abs(a.y - c.y0) > 1.4 * gap || Math.abs(b.y - c.y1) > 1.4 * gap) continue
+      // A tie endpoint must actually reach the notehead horizontally; a
+      // deliberately short decorative arc is not a tie.
+      if (Math.abs(a.x - c.x0) > 1.25 * gap || Math.abs(b.x - c.x1) > 1.25 * gap) continue
       // The two notes must be consecutive in the same staff/voice x order;
       // an equal-pitch curve over an intervening note is a slur/ambiguous.
       const lo = Math.min(a.measure, b.measure)
