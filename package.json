@@ -42,7 +42,9 @@
     "mic:generate-polyphony-clips": "node scripts/generate-mic-polyphony-clips.mjs",
     "mic:import-uiowa-fixtures": "node scripts/import-uiowa-mic-fixtures.mjs",
     "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs",
-    "mic:final-release": "node scripts/final-mic-release-corpus.mjs"
+    "mic:final-release": "node scripts/final-mic-release-corpus.mjs",
+    "mic:sequence-benchmark": "node scripts/benchmark-mic-sequences.mjs",
+    "mic:sequence-repeats": "node scripts/benchmark-mic-sequences-repeats.mjs"
   },
   "dependencies": {
     "@spotify/basic-pitch": "^1.0.1",
