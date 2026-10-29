@@ -34,24 +34,33 @@ never stretched; the rest is never invented. Commit `dc86789899`.
 | corrected rhythm tuplets | 2 | 2 | 2 | 0 | 0 |
 | corrected beginner | 1 | 1 | 1 | 0 | 0 |
 | corrected dense advanced | 0 | 0 | 0 | 0 | 0 |
-| Verovio rhythm tuplets | 2 | 32 | 0 | 32 | 2 |
-| Verovio pickup crossstaff | 0 | 3 | 0 | 3 | 0 |
-| Verovio grand voices | 0 | 12 | 0 | 12 | 0 |
+| Verovio rhythm tuplets | 2 | 0 | 0 | 0 | 2 |
+| Verovio pickup crossstaff | 0 | 0 | 0 | 0 | 0 |
+| Verovio grand voices | 0 | 0 | 0 | 0 | 0 |
 
 Controlled corpus: **3/3 exactly, 0 promotions**. Independent Verovio:
-**0/2 recall, 47 false dots** — a genuine cross-engraver failure.
+**0 false dots (was 47)**, recall 0/2 — the reconstructed durations do not
+corroborate the two printed dots, so the emitter abstains instead of claiming
+a dotted value. This is a precision-first result, not fabricated notation.
 
-### Diagnosis
-- `rhythmProvenance.dotCandidates` is **empty** on Verovio, so the false dots
-  are not from the augmentation-dot glyph/path assignment.
-- They are produced later by duration reconstruction (beam-topology /
-  polyphonic rhythm assembly) choosing a dotted written value when measured
-  spacing is between grid values. The dotted candidates in
-  `jointPolyphonicRhythm.durationMeta` are already gated by `dottedEvidence`;
-  the remaining path is `applyVectorBeamTopology.writtenMetaForDuration`,
-  which maps a measured 1.5×eighth to a dotted eighth from duration alone.
-- Corrected SMuFL dots come from vector **paths** (2 paths, 4.9 px, 4 curves),
-  so path dots cannot simply be disabled.
+### Diagnosis (resolved)
+The false dots were **not** from dot detection. Verovio has no vector
+noteheads (4 text items only), so the page runs the raster pipeline. Duration
+reconstruction set `event.dotted` while the written duration stayed a plain
+value (e.g. `type=quarter`, `duration=4`), and the emitter still wrote
+`<dot/>`. Articulation marks (12 staccato + 12 accent on grand voices) also
+leaked into the beside-head raster scan.
+
+Fix (commit `b2038e89c3`):
+- `buildOmrMusicXml` emits `<dot/>` only when the written duration actually
+  equals 1.5× the base (12% tolerance); tuplets are exempt.
+- Leading pickup measures additionally require that corroboration; a 1.5×
+  pickup length is not promoted to a dotted value.
+- When a dot is suppressed but the length is exactly dotted, `<type>` is
+  omitted rather than claiming an unsupported written value.
+- The raster dot scan rejects candidates inside sibling noteheads and on
+  notes that already carry a printed articulation.
+- `tests/omrDotPrecision.test.js` locks 0 dots on all three Verovio fixtures.
 
 ### Safety position
 - The experimental guitar path keeps its conservative dot detector and does

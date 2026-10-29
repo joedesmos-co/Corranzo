@@ -82,12 +82,24 @@ This is additive to main's accepted stem fix (main lacks `SMUFL_RESTS`).
 Rests are **detected and reported only** — not emitted into MusicXML, because
 rest-to-beat alignment is not yet evidence-backed. Practice stays disabled.
 
+## Patch D — cross-engraver dot precision (commit `b2038e89c3`)
+
+- `src/features/omr/buildOmrMusicXml.js`: `<dot/>` only when the written
+  duration corroborates 1.5x the base; pickup measures require the same;
+  inconsistent `<type>` omitted.
+- `src/features/omr/detectNoteRhythmFeatures.js` + `assembleOmrMeasureRhythm.js`:
+  raster dot rejects sibling-notehead ink and articulated notes.
+- `tests/omrDotPrecision.test.js`: 0 dots on all three Verovio fixtures.
+
+Result: 47 independent-engraver false dots -> 0, controlled 3/3 dots kept.
+
 ## Explicitly NOT included
 
-- **Dotted-note recovery**: a disk-density detector was prototyped and
-  rejected after it read chord-symbol glyph bowls as dots (2 false dotted
-  quarters on the standard fixture). `tests/guitarVisionDots.test.js` locks the
-  conservative abstention. Do not merge any dot-promotion change.
+- **Dotted-note recall on independent engravers**: reconstruction does not yet
+  corroborate the two printed Verovio dots, so the emitter abstains (0/2).
+  The experimental guitar `guitarTabCore` dot detector also stays conservative
+  (`tests/guitarVisionDots.test.js`). Do not merge any dot-promotion change
+  without a reference-backed positive.
 - Ties, independent voices, multi-page Guitar experimental recognition,
   TAB-only rhythm slashes, scanned PDFs.
 
