@@ -19,6 +19,7 @@ import {
   goertzelMagnitude,
   hannWindow,
 } from './micSpectralAnalysis.js'
+import { applyLocalChordProminenceRescue } from './localChordProminence.js'
 
 export const SCORE_INFORMED_DEFAULTS = {
   fftSize: DEFAULT_FFT_SIZE,
@@ -628,6 +629,20 @@ export function scoreInformedChordWindow(samples, sampleRate, expectedMidis = []
         lowPeerNotes: confirmedLowPeers,
       })
     }
+  }
+
+  // Bounded local-prominence rescue for a genuinely present but quiet chord
+  // tone. It only probes expected notes, requires a strong detected peer and
+  // independent local/subharmonic evidence, and never bypasses an explicit
+  // octave/adjacent/artifact guard set by the normal pass.
+  if (options.localProminenceRescue !== false && expectedMidis.length >= 2) {
+    applyLocalChordProminenceRescue({
+      samples,
+      sampleRate,
+      notes,
+      expectedMidis,
+      options: options.localProminenceOptions ?? {},
+    })
   }
 
   const detectedMidis = notes.filter((note) => note.detected).map((note) => note.midi)

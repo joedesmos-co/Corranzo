@@ -393,6 +393,14 @@ export function evaluatePianoRecognition({
   if (next.windowStartMs == null) next.windowStartMs = now
   const windowMs = recognitionWindowMs(expectation, next, options)
   pruneState(next, now, windowMs)
+  // New chord-tone evidence belongs to the strike, not the whole sustain.
+  // The longer sustain window may keep already-matched ringing notes, but a
+  // pitch that first appears after the attack/roll window is a late resonance.
+  const attackWindowMs = Math.max(
+    1,
+    finite(expectation?.timing?.rollToleranceMs, 0),
+    options.rollingWindowMs,
+  )
 
   const attack = normalizeAttack(attackInput, frame, expectation, now)
   const withinAttempt = next.attemptStartMs != null && now - next.attemptStartMs <= windowMs
@@ -441,9 +449,30 @@ export function evaluatePianoRecognition({
   } else {
     const hasAttackAuthority = Boolean(next.activeAttackId)
     if (hasAttackAuthority) {
+      // A chord attempt is bounded by its attack window. Once the window has
+      // expired, a newly appearing pitch is a later resonance/ghost, not a
+      // chord tone from this attack. (Measured: a C-major triad replayed
+      // against Cmaj7 produced a false B4 relief 1.2 s after the attack while
+      // C/G rang; completing on it was a false chord advance.)
+      const withinAttackWindow = next.attemptStartMs != null &&
+        now - next.attemptStartMs <= attackWindowMs
+      // A physically depressed sustain pedal legitimately lets later notes of
+      // an arpeggiated/pedaled chord count; a score note's nominal duration
+      // alone does not.
+      const sustainAllowsLateTone = Boolean(next.sustainPedalDown && withinAttempt)
+      // A single-note expectation has no chord-tone accumulation to protect:
+      // a held/sustained note must remain matchable as before. The bounded
+      // attack window applies to chords, where a later resonance can complete
+      // a chord that was never struck.
+      const canAddFromAttempt = expected.length === 1 ||
+        withinAttackWindow ||
+        sustainAllowsLateTone ||
+        attack.fresh
       for (const note of detected) {
         const staleRing = next.ringingMidis.includes(note.midi) && !withinAttempt && !attack.fresh
-        if (!staleRing) addEvidence(next, note, now, next.activeAttackId, next.sustainPedalDown)
+        if (!staleRing && canAddFromAttempt) {
+          addEvidence(next, note, now, next.activeAttackId, next.sustainPedalDown)
+        }
       }
     }
     const matched = matchedMidis(next)

@@ -464,6 +464,12 @@ export function evaluateGuitarRecognition({
   }
   const windowMs = rollingWindowMs(expectation, options)
   pruneMatchedNotes(next, now, windowMs)
+  // New chord-tone evidence belongs to the strike/strum, not the whole ring.
+  const attackWindowMs = Math.max(
+    1,
+    finite(expectation?.timing?.rollToleranceMs, 0),
+    options.rollingWindowMs,
+  )
 
   const attack = normalizeAttack(attackInput, now, expectation, frame)
   const withinAttempt =
@@ -508,8 +514,17 @@ export function evaluateGuitarRecognition({
   } else {
     const hasAttackAuthority = Boolean(next.activeAttackId || attack.legato)
     if (hasAttackAuthority) {
+      const withinAttackWindow = next.attemptStartMs != null &&
+        now - next.attemptStartMs <= attackWindowMs
+      const canAddFromAttempt = expected.length === 1 ||
+        withinAttackWindow ||
+        attack.fresh ||
+        attack.legato
       for (const entry of evidence) {
         if (next.ringingMidis.includes(entry.midi) && !withinAttempt && !attack.fresh && !attack.legato) {
+          continue
+        }
+        if (!canAddFromAttempt) {
           continue
         }
         addMatchedEvidence(next, entry, expectation, now, next.activeAttackId)
