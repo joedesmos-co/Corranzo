@@ -77,3 +77,35 @@ npx vitest run tests/omrVectorRestDotReference.test.js
 ```
 The test runs the corrected rhythm/beginner/grand fixtures and asserts the
 exact rest and dot sets above (including the intentional m8 abstention).
+
+## Verovio rest investigation (Priority 1)
+
+Printed rest shapes were measured at 150 dpi on
+`piano-rhythm-tuplets-verovio` after rendering at analysis width 1000:
+
+- **Quarter rest**: a tall zigzag, ~10 px wide x 24 px tall, spanning about
+  2.2 staff spaces (staff gap ~8 px). Example at x≈358, y≈164–187.
+- **Whole rest**: a solid rectangle hanging from a staff line (not yet
+  isolated from the surrounding chord stems).
+- Staff lines are at y=160/167/175/183/191 in that region, and chord stems
+  (2 px wide, 30 px tall) sit nearby.
+
+The current raster rest model (`detectOmrRests.detectRestsInMeasure`) scans a
+7x7 window with `dark` 8–32 and rejects any candidate with a vertical ink run
+> 10. A quarter rest's run is ~24 px, so the model structurally cannot accept
+it; widening the run limit produced **963 candidate windows** on one page
+(noteheads, stems, beams, articulations), so a permissive version would invent
+rests. Shipping that would violate the precision requirement.
+
+**Decision: keep abstention.** Verovio rest recall stays 0/7 with **0 false
+rests**, locked by `tests/omrDotPrecision.test.js`. A real fix needs a
+connected-component classifier with staff-relative shape templates (whole /
+half rectangle, quarter zigzag, eighth/sixteenth hooks) plus notehead/stem
+exclusion, and measure/voice ownership verified against the reference.
+
+### Why measure ownership is hard here
+The pipeline's raster measure grid does not always align 1:1 with the
+reference's measure numbering on this engraving (a quarter-rest shape at
+x≈358 falls inside grid measure 6 while the reference places the whole rest
+there and the quarter rest in measure 5). Any rest insertion must therefore
+prove a free timing gap in the *same* measure, not just a plausible shape.

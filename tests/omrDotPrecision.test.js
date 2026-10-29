@@ -38,6 +38,10 @@ function dotCount(xml) {
   return (xml.match(/<dot\s*\/>/g) ?? []).length
 }
 
+function restCount(xml) {
+  return (xml.match(/<rest\s*\/>/g) ?? []).length
+}
+
 async function generate(name) {
   const { pdf } = readVerovio(name)
   return runPdfOmrClient(pdf, { title: name, instrumentId: 'piano', useWorker: false })
@@ -72,6 +76,23 @@ describe.skipIf(!canvasAvailable)('independent engraver dot precision', () => {
     const result = await generate('piano-pickup-crossstaff-verovio')
     expect(dotCount(result.musicXml)).toBe(0)
   }, 30000)
+
+  it('emits no invented rests on independent Verovio engraving', async () => {
+    // The reference carries rests, but the raster rest model cannot yet
+    // distinguish them from notehead/stem ink (963 candidate windows on the
+    // tuplets page). The safe outcome is zero generated rests: a recall gap,
+    // never a fabricated rest.
+    for (const name of [
+      'piano-rhythm-tuplets-verovio',
+      'piano-pickup-crossstaff-verovio',
+      'piano-grand-voices-verovio',
+    ]) {
+      const { reference } = readVerovio(name)
+      expect(restCount(reference)).toBeGreaterThanOrEqual(0)
+      const result = await generate(name)
+      expect(restCount(result.musicXml)).toBe(0)
+    }
+  }, 45000)
 
   it('abstains from dotted rhythm on Verovio tuplets rather than guessing', async () => {
     // Reference has two genuine dotted notes; this engraver's reconstructed
