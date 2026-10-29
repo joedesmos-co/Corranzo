@@ -77,3 +77,28 @@ The page is not part of the product and must be reviewed before integration.
 A plumbing smoke test with Chromium's fake audio device is available at
 `node scripts/mic-acceptance/smoke.mjs` (simulated input — not hardware
 acceptance).
+
+## Local acceptance page v2 (operator-run)
+
+Start it with:
+
+```bash
+npm run mic:acceptance
+# or: npm run dev, then open /scripts/mic-acceptance/index.html
+```
+
+The page now provides:
+
+* instrument selection (piano/guitar) and microphone-device selection;
+* pause/resume of the live capture, plus device refresh;
+* single notes (C4, G3), wrong note, octave ghost, triad, partial chord,
+  repeated notes, repeated chords, quiet note, silence/room noise;
+* live input level, filtered RMS, noise floor, sample rate, calibration and
+  detected notes;
+* per-step expected/actual advance, first-evidence and advance latency, wrong
+  reports and feedback;
+* a local JSON report download.
+
+Nothing is uploaded. No raw audio is recorded. The optional recording path was
+not enabled. The fake-device smoke test is labelled simulated and is not
+hardware acceptance; the checklist above remains the real-hardware procedure.
