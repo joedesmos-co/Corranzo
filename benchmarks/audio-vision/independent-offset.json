@@ -1,0 +1,122 @@
+{
+ "generatedAt": "2026-10-29T01:36:10.560Z",
+ "description": "Model-free audio/reference offset from spectral-flux cross-correlation; per performance aggregate.",
+ "rows": [
+  {
+   "id": "piano-mozart-single",
+   "performance": "vienna-mozart-p01",
+   "notes": 13,
+   "bestDelta": -0.7,
+   "bestScore": 0.399,
+   "zeroScore": 0.356
+  },
+  {
+   "id": "piano-mozart-dyad",
+   "performance": "vienna-mozart-p01",
+   "notes": 14,
+   "bestDelta": -0.7,
+   "bestScore": 0.546,
+   "zeroScore": 0.218
+  },
+  {
+   "id": "piano-mozart-triad",
+   "performance": "vienna-mozart-p01",
+   "notes": 14,
+   "bestDelta": -0.7,
+   "bestScore": 0.66,
+   "zeroScore": 0.372
+  },
+  {
+   "id": "piano-mozart-dense",
+   "performance": "vienna-mozart-p01",
+   "notes": 16,
+   "bestDelta": -0.69,
+   "bestScore": 0.609,
+   "zeroScore": 0.085
+  },
+  {
+   "id": "piano-schubert-single",
+   "performance": "vienna-schubert-p01",
+   "notes": 18,
+   "bestDelta": -0.45,
+   "bestScore": 0.456,
+   "zeroScore": 0.168
+  },
+  {
+   "id": "piano-schubert-triad",
+   "performance": "vienna-schubert-p01",
+   "notes": 26,
+   "bestDelta": -0.2,
+   "bestScore": 0.344,
+   "zeroScore": 0.178
+  },
+  {
+   "id": "piano-schubert-dense",
+   "performance": "vienna-schubert-p01",
+   "notes": 30,
+   "bestDelta": -0.32,
+   "bestScore": 0.309,
+   "zeroScore": 0.135
+  },
+  {
+   "id": "piano-mozart2-triad",
+   "performance": "vienna-mozart-p02",
+   "notes": 15,
+   "bestDelta": -0.88,
+   "bestScore": 0.721,
+   "zeroScore": 0.26
+  },
+  {
+   "id": "piano-schubert2-single",
+   "performance": "vienna-schubert-p02",
+   "notes": 19,
+   "bestDelta": 0.28,
+   "bestScore": 0.529,
+   "zeroScore": 0.17
+  },
+  {
+   "id": "piano-schubert2-triad",
+   "performance": "vienna-schubert-p02",
+   "notes": 26,
+   "bestDelta": -0.85,
+   "bestScore": 0.383,
+   "zeroScore": 0.15
+  }
+ ],
+ "summary": {
+  "vienna-mozart-p01": {
+   "clips": 4,
+   "weightedMeanDelta": -0.697,
+   "deltas": [
+    -0.7,
+    -0.7,
+    -0.7,
+    -0.69
+   ]
+  },
+  "vienna-schubert-p01": {
+   "clips": 3,
+   "weightedMeanDelta": -0.309,
+   "deltas": [
+    -0.45,
+    -0.2,
+    -0.32
+   ]
+  },
+  "vienna-mozart-p02": {
+   "clips": 1,
+   "weightedMeanDelta": -0.88,
+   "deltas": [
+    -0.88
+   ]
+  },
+  "vienna-schubert-p02": {
+   "clips": 2,
+   "weightedMeanDelta": -0.373,
+   "deltas": [
+    0.28,
+    -0.85
+   ]
+  }
+ }
+}
