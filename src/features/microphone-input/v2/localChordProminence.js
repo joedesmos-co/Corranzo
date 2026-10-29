@@ -28,7 +28,6 @@
 
 import { midiToFrequency } from '../micSyntheticClips.js'
 import {
-  applyWindow,
   goertzelMagnitude,
   hannWindow,
   SPECTRAL_NOISE_FLOOR_ABSOLUTE_MIN,
@@ -55,6 +54,10 @@ export const LOCAL_PROMINENCE_DEFAULTS = Object.freeze({
 })
 
 const windowCache = new Map()
+// Reused long-window scratch. The rescue is synchronous and single-threaded;
+// this avoids a fresh 32 KB Float32Array on every incomplete chord frame while
+// preserving the exact sample*window products and Goertzel inputs.
+let windowedScratch = new Float32Array(0)
 
 function cachedHann(size) {
   if (!windowCache.has(size)) {
@@ -135,7 +138,14 @@ export function applyLocalChordProminenceRescue({
   const tail = samples.length > size
     ? samples.subarray(samples.length - size)
     : samples
-  const windowed = applyWindow(tail, cachedHann(size))
+  const hann = cachedHann(size)
+  if (windowedScratch.length !== size) {
+    windowedScratch = new Float32Array(size)
+  }
+  for (let index = 0; index < size; index += 1) {
+    windowedScratch[index] = tail[index] * hann[index]
+  }
+  const windowed = windowedScratch
   const rescuedMidis = []
 
   for (const note of notes) {

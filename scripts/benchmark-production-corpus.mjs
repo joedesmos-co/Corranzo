@@ -56,6 +56,7 @@ const SCENARIO_FILTERS = (arg('scenario', null) ?? '')
   .map((entry) => entry.trim())
   .filter(Boolean)
 const JSON_OUT = arg('json', null)
+const CPU_THROTTLE = Math.max(1, Number(arg('cpu-throttle', '1')) || 1)
 
 // ---- clip collection (same corpora and expectations as the A/B) ----------
 const SPECS = {
@@ -158,6 +159,10 @@ function loadSamples(clip) {
 
 async function runScenario(pageUrl, clip, expected) {
   const page = await browser.newPage()
+  if (CPU_THROTTLE > 1) {
+    const cdp = await page.context().newCDPSession(page)
+    await cdp.send('Emulation.setCPUThrottlingRate', { rate: CPU_THROTTLE })
+  }
   try {
     await page.goto(pageUrl, { waitUntil: 'load' })
     const samples = loadSamples(clip)
@@ -258,6 +263,7 @@ for (const clip of clips) {
 }
 
 const summary = {
+  cpuThrottle: CPU_THROTTLE,
   clips: clips.length,
   trueComplete: trueCompletes,
   trueCompleteRate: clips.length ? trueCompletes / clips.length : 0,
