@@ -44,7 +44,8 @@
     "mic:capture-real-fixture": "node scripts/capture-real-mic-fixture.mjs",
     "mic:final-release": "node scripts/final-mic-release-corpus.mjs",
     "mic:sequence-benchmark": "node scripts/benchmark-mic-sequences.mjs",
-    "mic:sequence-repeats": "node scripts/benchmark-mic-sequences-repeats.mjs"
+    "mic:sequence-repeats": "node scripts/benchmark-mic-sequences-repeats.mjs",
+    "mic:acceptance": "vite --open /scripts/mic-acceptance/index.html"
   },
   "dependencies": {
     "@spotify/basic-pitch": "^1.0.1",

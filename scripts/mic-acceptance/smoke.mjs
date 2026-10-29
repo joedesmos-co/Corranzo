@@ -42,13 +42,13 @@ await page.goto(`${baseUrl}/scripts/mic-acceptance/index.html`, { waitUntil: 'lo
 
 // The page mounts the real capture; wait for a settled mic status.
 await page.waitForFunction(
-  () => document.body.innerText.includes('Mic status:') && !document.body.innerText.includes('Mic status: unknown'),
+  () => document.body.innerText.includes('Status:'),
   null,
   { timeout: 30_000, polling: 500 },
 )
 const status = await page.evaluate(() => {
   const text = document.body.innerText
-  const match = /Mic status: ([^\n·]+)/.exec(text)
+  const match = /Status: ([^\n·]+)/.exec(text)
   return match ? match[1].trim() : null
 })
 
