@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>production mic sequence harness</title>
+</head>
+<body>
+  <main>production mic sequence harness (real capture, multi-checkpoint) — results in window.__liveSequenceResults</main>
+  <script>
+    // Match the live harness: V3 owns chord decisions by default.
+    // ?v3=0 exercises the V2 fallback path.
+    if (new URLSearchParams(location.search).get('v3') === '0') {
+      window.__SCOREFLOW_FLAGS__ = { ...(window.__SCOREFLOW_FLAGS__ || {}), micEngineV3: false }
+    }
+  </script>
+  <script type="module" src="/scripts/mic-live/sequence.js"></script>
+</body>
+</html>
