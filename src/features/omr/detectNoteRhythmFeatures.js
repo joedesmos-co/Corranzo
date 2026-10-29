@@ -256,6 +256,7 @@ export function detectDot(
   threshold,
   staffSpace = DEFAULT_STAFF_SPACE,
   stem = null,
+  siblings = null,
 ) {
   const scale = Number.isFinite(staffSpace) && staffSpace >= 3
     ? staffSpace
@@ -282,6 +283,31 @@ export function detectDot(
         inkAt(imageData, dotX, yCenter - isolationProbe, threshold) ||
         inkAt(imageData, dotX, yCenter + isolationProbe, threshold)
       ) {
+        continue
+      }
+      // Compactness: an augmentation dot is a small round mark. Measure the
+      // contiguous ink run through the candidate in both axes. A stem gives a
+      // long vertical run (and a 1px-wide candidate below), a staff line a
+      // long horizontal run, and an accent/wedge a wide horizontal run.
+      // This is staff-relative, so it holds across engravers.
+      const maxRun = Math.max(2, Math.round(scale * 0.55))
+      let vRun = 1
+      for (let y = yCenter - 1; y >= 0 && inkAt(imageData, dotX, y, threshold); y -= 1) vRun += 1
+      for (let y = yCenter + 1; y < imageData.height && inkAt(imageData, dotX, y, threshold); y += 1) vRun += 1
+      let hRun = 1
+      for (let x = dotX - 1; x >= 0 && inkAt(imageData, x, yCenter, threshold); x -= 1) hRun += 1
+      for (let x = dotX + 1; x < imageData.width && inkAt(imageData, x, yCenter, threshold); x += 1) hRun += 1
+      if (vRun > maxRun || hRun > maxRun) {
+        continue
+      }
+      // A candidate that lands inside another notehead's ink is not an
+      // augmentation dot. Dense chords displace chord tones horizontally, so
+      // the beside-head scan window of one tone can overlap the next tone.
+      if (Array.isArray(siblings) && siblings.some((sibling) =>
+        sibling &&
+        !(Math.abs(sibling.cx - cx) < 1e-6 && Math.abs(sibling.cy - cy) < 1e-6) &&
+        Math.abs(dotX - sibling.cx) <= scale * 1.2 &&
+        Math.abs(yCenter - sibling.cy) <= scale * 0.5)) {
         continue
       }
       return true
@@ -359,7 +385,7 @@ export function inferNoteDuration({
   return { durationType, durationDivisions, confidence }
 }
 
-export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThreshold, bounds) {
+export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThreshold, bounds, siblings = null) {
   const staffMidY = Math.round(
     ((measureBox.y0 + measureBox.y1) / 2) * imageData.height,
   )
@@ -403,13 +429,18 @@ export function enrichNoteheadRhythm(imageData, notehead, measureBox, inkThresho
   const beams = beamTipOnStaffLine
     ? 0
     : countBeams(imageData, stem, inkThreshold, bounds)
-  const dotted = detectDot(
+  // A note that already carries a printed articulation is not evidence for an
+  // augmentation dot: dense articulation marks (staccato/accent) are compact
+  // shapes in the same beside/near-head region a raster dot scan looks at.
+  const hasArticulationEvidence = Boolean(notehead.articulation || notehead.accentArticulation)
+  const dotted = !hasArticulationEvidence && detectDot(
     imageData,
     notehead.cx,
     notehead.cy,
     inkThreshold,
     staffSpace,
     stem,
+    siblings,
   )
   const tieStart = detectTieToNext(imageData, notehead.cx, notehead.cy, inkThreshold, bounds)
   const rhythm = inferNoteDuration({

@@ -344,7 +344,7 @@ export function assembleMeasureRhythm(
 
   const enriched = filterRecoveredStemFragments(
     noteheads.map((notehead) =>
-      enrichNoteheadRhythm(imageData, notehead, measureBox, inkThreshold, bounds),
+      enrichNoteheadRhythm(imageData, notehead, measureBox, inkThreshold, bounds, noteheads),
     ),
     imageData.height,
   )
