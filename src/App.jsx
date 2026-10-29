@@ -134,6 +134,7 @@ import {
   musicXmlSourceKey,
   isOmrGeneratedPlayback,
   isPracticePlaybackReady,
+  validateOmrSourceMeta,
   validateRestoredOmrPlayback,
 } from './features/import/musicXmlSource.js'
 import {
@@ -1361,6 +1362,24 @@ export default function App() {
       }),
       callbackToken.callbackScoreId ?? activeScoreRef.current?.scoreId,
     )
+    // The same validity gate the Library uses to decide whether this OMR
+    // source is timing-ready. Checking it BEFORE any side effect keeps the
+    // panel from completing into a state the Library immediately re-opens
+    // as "Checking your score" with no action left for the user.
+    const generatedSourceCheck = validateOmrSourceMeta(nextMusicXmlSource)
+    if (!generatedSourceCheck.ok) {
+      logScoreSourceLifecycle('omr-result-rejected-unreadable-source', {
+        ...callbackToken,
+        reason: 'invalid-generated-source',
+        message: generatedSourceCheck.message ?? null,
+      })
+      return {
+        ok: false,
+        message: generatedSourceCheck.message
+          ?? 'Corranzo could not build reliable timing from this PDF. The score stays unopened; try a clearer copy or another file.',
+      }
+    }
+
     const generatedContent = describeMusicXmlContent(nextMusicXmlSource, musicXml)
     const pdfContent = describePdfContent(stablePdfMeta, commitPdfBuffer)
     pushScoreSourceContentTrace('omr-generated-input', {

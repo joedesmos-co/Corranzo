@@ -124,6 +124,23 @@ export default function PdfOmrPlaybackPanel({
     autoStartedKeyRef.current = null
   }, [pdfIdentity, practiceSessionEpoch])
 
+  // Defense in depth: a completed run that the Library does not accept as
+  // timing-ready leaves this panel mounted in READY, which has no actions.
+  // Never let that state persist — surface a recoverable retry instead.
+  useEffect(() => {
+    if (status !== OMR_STATUS.READY) return undefined
+    if (!completedRunRef.current) return undefined
+    const timer = setTimeout(() => {
+      if (status !== OMR_STATUS.READY) return
+      const message = 'The score finished preparing but did not open. Try again, or choose another copy of the PDF.'
+      setError(message)
+      setFailureCopy({ title: 'This score needs another try', message })
+      setSummary(null)
+      setStatus(OMR_STATUS.FAILED)
+    }, 20000)
+    return () => clearTimeout(timer)
+  }, [status])
+
   const handleCancel = useCallback(() => {
     omrTrace('ui:handleCancel')
     setCancelled(true)

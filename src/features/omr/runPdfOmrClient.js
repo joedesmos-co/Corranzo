@@ -176,18 +176,27 @@ export async function runPdfOmrClient(pdfSource, options = {}) {
   const canUseWorker = useWorker && typeof Worker !== 'undefined'
   omrTrace('client:runPdfOmrClient:enter', { useWorker: canUseWorker }, traceRunId)
 
+  const OMR_TOTAL_TIMEOUT_MS = 300000
   try {
     const ownedPdfSource = await resolveOmrPdfSource({
       pdfSource,
       pdfFileUrl,
       traceRunId,
     })
-    return await runPdfOmrPipeline(ownedPdfSource, {
+    const pipelinePromise = runPdfOmrPipeline(ownedPdfSource, {
       ...rest,
       signal,
       traceRunId,
       analyzePage: canUseWorker ? createRetryingWorkerAnalyzer(signal, traceRunId) : null,
     })
+    const timeoutPromise = new Promise((_, reject) => {
+      const id = setTimeout(() => {
+        reject(new Error('OMR timed out after 5 minutes. Try a smaller score or upload a timing file.'))
+      }, OMR_TOTAL_TIMEOUT_MS)
+      // Allow the pipeline to clear the timeout if it finishes
+      pipelinePromise.finally(() => clearTimeout(id)).catch(() => {})
+    })
+    return await Promise.race([pipelinePromise, timeoutPromise])
   } finally {
     terminateActiveWorker()
     omrTrace('client:runPdfOmrClient:exit', null, traceRunId)
