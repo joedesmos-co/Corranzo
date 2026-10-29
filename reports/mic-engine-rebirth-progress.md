@@ -8,6 +8,12 @@ merged locally as `4e81922bc6`.
 **Production changes:** only the WFY mic attack/checkpoint lifecycle. No
 deployment, no main merge, neural recognition stays OFF by default.
 
+**Commits (this branch):**
+`fbe79d173b` initial repeated-checkpoint fix · `be4afe2b1c` sequence harness ·
+`725ab36dba` audit/results doc · `9cd205f129` seed/quiet-retrigger hardening ·
+`4012fd51ef` merge of `origin/main` (`98c511676a`). The branch is not merged to
+main and nothing is deployed.
+
 ## 1. Audit — the production data flow
 
 `getUserMedia` → `useMicrophoneCapture` (AudioContext + analyser + calibration)
@@ -131,7 +137,9 @@ expected pitch set repeats, independent of the latch's previous state.
   refusal, several-checkpoint melody, cursor travel, Play Along timed mic
   events, neural-disabled fallback, permission denial, and model-404 fallback.
   The final lifecycle matrix repeats (5 runs) pass every repeated-note/chord,
-  recovery and octave-ghost step with 0 false and 0 early advances.
+  recovery and octave-ghost step with 0 false and 0 early advances. A second
+  full E2E run after the final hardening repeated **23 passed, 0 failed,
+  1 skipped**.
 
 ## 5. What remains limited
 
