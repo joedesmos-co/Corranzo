@@ -279,13 +279,23 @@ function hasLowNoteTransientEvidence(
     return false
   }
   const noteEvidence = bestExpectedNoteEvidence(frame, lowExpected)
+  const detectedExpected = (frame.v2DetectedMidis ?? []).some((midi) =>
+    lowExpected.includes(midi),
+  )
+  const freshTransientExpected = Boolean(newAttackTransient && detectedExpected)
   if (
     !noteEvidence ||
     (noteEvidence.confidence ?? 0) < scoreConfidence ||
     (noteEvidence.ratio ?? 0) < scoreRatio ||
     (noteEvidence.harmonicSupport ?? 0) < 0.45
   ) {
-    return false
+    // A real low-string re-attack can arrive while the previous note still
+    // rings, depressing the harmonic confidence. A fresh transient plus the
+    // expected pitch being detected is independent evidence of a new attack;
+    // V3 still has to accept the note on its own terms.
+    if (!freshTransientExpected) {
+      return false
+    }
   }
   if (frame.signalShape !== 'sustained' && frame.signalShape !== 'distorted') {
     return false
@@ -332,7 +342,10 @@ function hasLowNoteTransientEvidence(
   const credibleAttackEdge = !derivativeTracked || risingAttackEdge
   return (
     (transientRise && credibleAttackEdge) ||
-    (derivativeRise && risingAttackEdge) ||
+    // A repeat can be quieter than the still-ringing previous note (same-pitch
+    // retrigger inside a loud ring). In that case RMS is falling but the new
+    // derivative spike is unambiguous; a strong new-attack transient is enough.
+    (derivativeRise && (risingAttackEdge || newAttackTransient)) ||
     lowEnergyRise
   )
 }
@@ -471,10 +484,6 @@ export function getMicAttackRearmReason(
   ) {
     return 'energy-rise'
   }
-  if (state.staleBoundary) {
-    return null
-  }
-
   // A bass re-attack can be obvious in the hammer/pluck transient while a
   // long, compressed decay barely changes whole-window RMS. Require a coherent
   // expected low-note harmonic family and a sharp first-difference-energy rise
@@ -510,6 +519,12 @@ export function getMicAttackRearmReason(
     })
   ) {
     return 'high-note-transient'
+  }
+  if (state.staleBoundary) {
+    // Low/high derivative paths above may prove a real new attack. Pitch-only
+    // dominance and score-transition paths are not allowed to beat the stale
+    // boundary.
+    return null
   }
 
   // 2. Different-note dominance: the next checkpoint expects a note the

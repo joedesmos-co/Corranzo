@@ -158,6 +158,74 @@ describe('micAttackLatch', () => {
     ).toBe('energy-rise')
   })
 
+  it('admits a quieter same-pitch low retrigger by its derivative transient', () => {
+    const latch = createMicAttackLatchState()
+    markMicAttackConsumed(latch, { consumedMidis: [55], staleBoundary: true })
+    // Loud first attack, then decay; the second pluck is quieter than the
+    // still-ringing first note, so RMS is falling while the derivative spikes.
+    const frames = [
+      [0.16, 0.012], [0.15, 0.011], [0.13, 0.010], [0.11, 0.009],
+      [0.09, 0.009], [0.08, 0.009], [0.075, 0.009],
+    ]
+    for (const [rms, transientRms] of frames) {
+      updateMicAttackRelease(latch, true, { rms, transientRms, spectralEnergy: 0.005 })
+    }
+    expect(
+      getMicAttackRearmReason(
+        latch,
+        {
+          gateOpen: true,
+          filteredRms: 0.085,
+          transientRms: 0.0155,
+          spectralEnergy: 0.037,
+          signalShape: 'sustained',
+          v2DetectedMidis: [55],
+          v2Notes: [{
+            midi: 55,
+            detected: true,
+            confidence: 0.42,
+            ratio: 1.9,
+            harmonicSupport: 0.5,
+          }],
+        },
+        { expectedMidis: [55] },
+      ),
+    ).toBe('low-note-transient')
+  })
+
+  it('does not let a stale dyad ring re-arm on a spectral wobble', () => {
+    const latch = createMicAttackLatchState()
+    markMicAttackConsumed(latch, { consumedMidis: [55, 59], staleBoundary: true })
+    const frames = [
+      [0.085, 0.0048], [0.083, 0.0046], [0.073, 0.0043], [0.066, 0.0042],
+      [0.059, 0.0040], [0.050, 0.0037], [0.045, 0.0036],
+    ]
+    for (const [rms, transientRms] of frames) {
+      updateMicAttackRelease(latch, true, { rms, transientRms, spectralEnergy: 0.0026 })
+    }
+    expect(
+      getMicAttackRearmReason(
+        latch,
+        {
+          gateOpen: true,
+          filteredRms: 0.045,
+          transientRms: 0.0035,
+          spectralEnergy: 0.0061,
+          signalShape: 'sustained',
+          v2DetectedMidis: [55, 59],
+          v2Notes: [{
+            midi: 55,
+            detected: true,
+            confidence: 0.5,
+            ratio: 2.4,
+            harmonicSupport: 0.6,
+          }],
+        },
+        { expectedMidis: [55, 59] },
+      ),
+    ).toBeNull()
+  })
+
   it('does not let a brief gate flicker release a stale wrong-note boundary', () => {
     const latch = createMicAttackLatchState()
     markMicAttackConsumed(latch, { consumedMidis: [], staleBoundary: true })

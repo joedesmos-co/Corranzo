@@ -78,8 +78,14 @@ checkpoint (guitar dyad early at −1.47 s).
 * increasing RMS alone is no longer a new attack (it was the attack still
   reaching its peak);
 * after a wrong report, or whenever the next checkpoint asks for the same pitch
-  set, a **layout-effect boundary** requires a genuine new attack or a real
-  release (8 quiet frames) before the new checkpoint can complete.
+  set, a **synchronous frame boundary plus a layout-effect boundary** requires
+  a genuine new attack or a real release (8 quiet frames) before the new
+  checkpoint can complete. The boundary is seeded from the *first* checkpoint's
+  pitch set, because otherwise the first same-set transition compared against
+  an empty set and could slip through once;
+* a same-pitch re-attack that is quieter than the still-ringing note (a 400 ms
+  retrigger inside the previous ring) is admitted by a strong new derivative
+  transient even when RMS is falling; plateau wobble is not.
 
 The latch is pure and tested in `tests/micAttackLatch.test.js` (10 tests,
 including the rising-envelope false re-arm, decayed re-attack, compressed low
@@ -91,10 +97,10 @@ re-attack, stale-boundary release, and pitch-only block).
 |---|---|---|
 | piano single C4 ×3 + tail hold | 1/4 steps, 1 false/early | **4/4**, ×5 runs, p50 15–24 ms, 0 false |
 | guitar single G3 ×3 + tail hold | 1/4 steps, 1 false/early | **4/4**, ×8 runs, 0 false |
-| guitar G3 400 ms retrigger | 1/2 (early −268 ms) | **2/2**, ×6 runs, p50 ≈100 ms |
-| guitar dyad (G3+B3) repeated 2.2 s | 1/3 (early −1472 ms, false hold) | **3/3**, ×3 runs, 0 false |
+| guitar G3 400 ms retrigger | 1/2 (early −268 ms) | **2/2**, ×6 runs; final 5/5 runs, p50 ≈100 ms |
+| guitar dyad (G3+B3) repeated 2.2 s | 1/3 (early −1472 ms, false hold) | **3/3**, final 5/5 runs, 0 false |
 | wrong note → correct note, same checkpoint | pass | **pass** (V3 and V2 fallback) |
-| octave ghost then real C4 | 1/5 early advance | **0 early**, 7/8 step recovery; 1 same-pitch recovery miss |
+| octave ghost then real C4 | 1/5 early advance | **2/2**, final 5/5 runs, 0 early |
 
 The repeated-chord guard is structural: it applies to any checkpoint whose
 expected pitch set repeats, independent of the latch's previous state.
@@ -106,8 +112,8 @@ expected pitch set repeats, independent of the latch's previous state.
   the fix; previous research baseline p50 49–66 ms, p95 90 ms). The false
   matrix is unchanged at 0/24.
 * Full mic/WFY unit suite: **618 passed, 5 skipped, 67 files**.
-* Full sequence matrix (22 scenarios / 48 steps): **38 passed, 0 false,
-  0 early, 10 missed**, latency p50 36 ms / p95 490 ms. The misses are
+* Full sequence matrix (24 scenarios / 54 steps): **40 passed, 0 false,
+  0 early, 14 missed**, latency p50 34 ms / p95 387 ms. The misses are
   detection recall on construction-truth or dense natural excerpts, not
   premature advancement:
   * UIowa C-major composite: E4 is below the scorer's detection floor at every
@@ -116,14 +122,16 @@ expected pitch set repeats, independent of the latch's previous state.
     weak-low-E limitation.
   * Vienna Mozart second triad and GuitarSet jazz first F3: quiet/dense
     excerpts; single-checkpoint true rate already varies.
-  * Fast natural power-chord stress at 450 ms: first two attacks complete at
-    ≈170–247 ms; the later attacks arrive before the confirmation budget.
-    A 2.2 s repeated-dyad control passes 3/3.
+  * Fast natural power-chord stress at 450 ms: the first attack completes in
+    ≈170–247 ms; later attacks arrive before the confirmation budget. A 2.2 s
+    repeated-dyad control passes 3/3 (and 5/5 in the final lifecycle repeat).
 * Full-app browser E2E (`scripts/browser-unified-practice-mic-e2e.mjs`,
   fake audio device — **not physical microphone verification**):
   **23 passed, 0 failed, 1 skipped**, including correct C4 advance, wrong-note
   refusal, several-checkpoint melody, cursor travel, Play Along timed mic
   events, neural-disabled fallback, permission denial, and model-404 fallback.
+  The final lifecycle matrix repeats (5 runs) pass every repeated-note/chord,
+  recovery and octave-ghost step with 0 false and 0 early advances.
 
 ## 5. What remains limited
 

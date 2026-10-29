@@ -392,6 +392,8 @@ export default function useWaitForYouMicInput({
   const lastCheckpointWrongRef = useRef(false)
   const previousCheckpointIdRef = useRef(currentCheckpoint?.id ?? null)
   const previousCheckpointMidisRef = useRef([])
+  const handledCheckpointIdRef = useRef(currentCheckpoint?.id ?? null)
+  const handledCheckpointMidisRef = useRef([])
   const [v2RuntimeError, setV2RuntimeError] = useState(null)
 
   const detectEnabled = Boolean(active && microphone?.isListening)
@@ -549,6 +551,8 @@ export default function useWaitForYouMicInput({
       lastCheckpointWrongRef.current = false
       previousCheckpointIdRef.current = null
       previousCheckpointMidisRef.current = []
+      handledCheckpointIdRef.current = null
+      handledCheckpointMidisRef.current = []
       musicalTimingRef.current = null
       guitarRecognitionRef.current = null
       pianoRecognitionRef.current = null
@@ -821,6 +825,44 @@ export default function useWaitForYouMicInput({
       let matchResultForTrace = null
       let advancedForTrace = false
       let attackRearmReason = null
+
+      // Synchronous checkpoint-boundary guard. Effects can lose the race with
+      // the first audio frame of a new checkpoint; this check runs inside the
+      // frame itself. A repeated pitch set (or a preceding wrong report) must
+      // not be satisfied by the previous attack's ring.
+      const frameCheckpointId = currentCheckpoint?.id ?? null
+      if (
+        handledCheckpointIdRef.current != null &&
+        frameCheckpointId !== handledCheckpointIdRef.current
+      ) {
+        const previousMidis = [...handledCheckpointMidisRef.current].sort((a, b) => a - b)
+        const currentMidis = [...expectedMidis].sort((a, b) => a - b)
+        const samePitchSet = Boolean(
+          previousMidis.length &&
+          previousMidis.length === currentMidis.length &&
+          previousMidis.every((midi, index) => midi === currentMidis[index]),
+        )
+        if (
+          (lastCheckpointWrongRef.current || samePitchSet) &&
+          performanceExpectation?.event?.kind !== 'tied-hold'
+        ) {
+          markMicAttackConsumed(attackLatchRef.current, {
+            consumedMidis: [],
+            staleBoundary: true,
+          })
+        }
+        lastCheckpointWrongRef.current = false
+        handledCheckpointMidisRef.current = [...currentMidis]
+      } else if (!handledCheckpointMidisRef.current.length && expectedMidis.length) {
+        // Seed the active checkpoint's pitch set on its first frame. Without
+        // this, the FIRST checkpoint change compares against an empty set and
+        // a repeated note/chord can slip through once.
+        handledCheckpointMidisRef.current = [...expectedMidis]
+        if (!previousCheckpointMidisRef.current.length) {
+          previousCheckpointMidisRef.current = [...expectedMidis]
+        }
+      }
+      handledCheckpointIdRef.current = frameCheckpointId
 
       const pushTrace = () => {
         pushMicTraceFrame(
