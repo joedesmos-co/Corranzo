@@ -1,0 +1,63 @@
+{
+  "engraver": "Verovio 6.3.0 + Chromium PDF",
+  "pdfjs": "5.4.296",
+  "route": "image fallback required",
+  "fixtures": {
+    "piano-grand-voices-verovio": {
+      "pdfSha256": "c3694171042b802d47ae76f61a59357af836ded399f969e9007163f6f8e5aed9",
+      "truthSha256": "bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561",
+      "route": "image",
+      "notes": 0,
+      "error": "no staff systems",
+      "practiceReady": false,
+      "issues": [
+        "no-vector-notes",
+        "time-signature-unknown",
+        "key-signature-unknown",
+        "voice-ownership-unverified"
+      ],
+      "emitted": 0,
+      "matched": 0,
+      "truth": 88
+    },
+    "piano-rhythm-tuplets-verovio": {
+      "pdfSha256": "84258b590827d9bf9ae7a2190af97f9e4b646f144fbd9f38155ac9885bf3a866",
+      "truthSha256": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b",
+      "route": "image",
+      "notes": 0,
+      "error": "no staff systems",
+      "practiceReady": false,
+      "issues": [
+        "no-vector-notes",
+        "time-signature-unknown",
+        "key-signature-unknown",
+        "voice-ownership-unverified"
+      ],
+      "emitted": 0,
+      "matched": 0,
+      "truth": 68
+    },
+    "piano-pickup-crossstaff-verovio": {
+      "pdfSha256": "682010fbfce3d0cdd8632d21ac8d3226c6b30ad8460473a58be60c41a0b7a227",
+      "truthSha256": "529ed4faa5d0d6c127b30f36a345dcc001d3925d36df789334111eb5dad4b080",
+      "route": "image",
+      "notes": 0,
+      "error": "no staff systems",
+      "practiceReady": false,
+      "issues": [
+        "no-vector-notes",
+        "time-signature-unknown",
+        "key-signature-unknown",
+        "voice-ownership-unverified"
+      ],
+      "emitted": 0,
+      "matched": 0,
+      "truth": 13
+    }
+  },
+  "total": {
+    "emitted": 0,
+    "matched": 0,
+    "truth": 169
+  }
+}

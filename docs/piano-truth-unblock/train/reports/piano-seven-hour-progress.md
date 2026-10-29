@@ -80,3 +80,20 @@ Result:
   the printed curve ends before measure 4's first note. The recognizer no
   longer forces a tie to match that reference.
 - 15/15 adversarial controls still refused; safety controls pass.
+
+
+## Frozen baseline and independent engraver route
+
+Frozen baseline at `3fdbbce726` is recorded in
+`reports/frozen_baseline_3fd.json` with PDF and MusicXML SHA-256 hashes.
+Independent QA matcher: 453/453 full events on the four corrected fixtures.
+
+The QA worktree's Verovio 6.3.0 + Chromium fixtures were evaluated separately:
+
+- grand-voices, rhythm-tuplets and pickup-crossstaff: vector route abstains
+  with `route=image`, no notes, `no staff systems`.
+- Vector-route full events: 0/169; Practice refused.
+- `toMusicXML` now returns a safe empty score with an explicit unsupported
+  route credit instead of throwing on image-route IRs.
+- Raster/image fallback accuracy is not claimed because no approved image
+  engine was available in this run.

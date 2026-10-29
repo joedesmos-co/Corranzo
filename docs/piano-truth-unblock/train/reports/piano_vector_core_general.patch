@@ -77,10 +77,11 @@
              staffLines.push(+(H - y0).toFixed(1))
            } else if (w < 1.5 && h > 0.02 * H) {
              vlines.push({ x: +x0.toFixed(1), y0: +(H - Math.max(y0, y1)).toFixed(1),
-@@ -116,6 +150,53 @@
+@@ -115,6 +149,53 @@
+           } else if (w >= 4 && w <= 12 && h >= 3 && h <= 8) {
              beams.push({ x0: +Math.min(x0, x1).toFixed(1), x1: +Math.max(x0, x1).toFixed(1),
                           y: +((H - y0) + (H - y1)) / 2 })
-           }
++          }
 +        } else if (paint === 22 || paint === 23) {
 +          // Path-drawn accidental (outlined font): sharp/natural/flat.
 +          const xs = [], ys = []
@@ -127,10 +128,9 @@
 +                  w, h })
 +              }
 +            }
-+          }
+           }
          } else if ((paint === 22 || paint === 23 ||
                      (Array.isArray(args[0]) && args[0][0] === 13 && args[0].includes(15))) &&
-                    pops.includes(2) && c.length >= 8) {
 @@ -150,13 +231,13 @@
      const x = tr[4]
      const y = tr[5] // PDF.js viewport transform already uses top-left
@@ -226,10 +226,11 @@
        for (const ag of accGlyphs) {
          let best = null
          for (const hd of heads) {
-@@ -260,6 +377,44 @@
+@@ -259,6 +376,44 @@
+           if (!best || d < best.d) best = { d, hd }
          }
          if (best) best.hd.acc = ag.code === 0xe262 ? 1 : ag.code === 0xe260 ? -1 : 0
-       }
++      }
 +      // Path-drawn accidentals are assigned exclusively: each candidate path
 +      // belongs to the nearest unassigned notehead to its right. A single
 +      // accidental can never modify two unrelated notes.
@@ -267,10 +268,9 @@
 +          ambiguousAccidentals += 1
 +        }
 +        if (best) { best.hd.acc = pa.code; pa.used = true }
-+      }
+       }
        const clusters = []
        for (const hd of heads) {
-         const hcx = hd.x + hd.w / 2
 @@ -272,17 +427,19 @@
          let best = null
          for (const st of stems) {
@@ -365,7 +365,7 @@
    const left = local.filter((b) => Math.abs(b.x1 - stemX) <= 1.5)
    const right = local.filter((b) => Math.abs(b.x0 - stemX) <= 1.5)
    return Math.max(left.length, right.length)
-@@ -407,6 +569,45 @@
+@@ -407,18 +569,61 @@
    return 0
  }
  
@@ -411,7 +411,26 @@
  export function toMusicXML(ir, divisions = 480) {
    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
-@@ -438,8 +639,21 @@
+     '<miscellaneous><miscellaneous-field name="corranzo_notation_ir">corranzo-notation-ir/1</miscellaneous-field></miscellaneous>']
+-  for (const c of ir.credits) out.push(`<credit><credit-words>${esc(c)}</credit-words></credit>`)
++  const credits = Array.isArray(ir?.credits) ? ir.credits : []
++  if (ir?.route !== 'vector') credits.push('Unsupported vector route; image fallback required.')
++  for (const c of credits) out.push(`<credit><credit-words>${esc(c)}</credit-words></credit>`)
+   out.push('<part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list><part id="P1">')
++  const notes = Array.isArray(ir?.notes) ? ir.notes : []
++  const rests = Array.isArray(ir?.rests) ? ir.rests : []
+   const byMeasure = new Map()
+-  for (const e of [...ir.notes, ...ir.rests]) {
++  for (const e of [...notes, ...rests]) {
+     if (!byMeasure.has(e.measure)) byMeasure.set(e.measure, [])
+     byMeasure.get(e.measure).push(e)
+   }
+-  const staves = [...new Set([...ir.notes, ...ir.rests].map((e) => e.staff))].sort()
++  const staves = [...new Set([...notes, ...rests].map((e) => e.staff))].sort()
+   for (const mi of [...byMeasure.keys()].sort((a, b) => a - b)) {
+     out.push(`<measure number="${mi + 1}">`)
+     out.push(`<attributes><divisions>${divisions}</divisions>`)
+@@ -438,8 +643,21 @@
          out.push(`<backup><duration>${Math.max(1, Math.round(sum * divisions))}</duration></backup>`)
        }
        firstStaff = false
@@ -434,7 +453,7 @@
          if (e.kind === 'rest' && (!e.type || !e.dur_q)) continue
          out.push('<note>')
          if (e.kind === 'rest') out.push('<rest/>')
-@@ -449,8 +663,16 @@
+@@ -449,8 +667,16 @@
          }
          out.push(`<duration>${Math.round(parseFloat(e.dur_q) * divisions)}</duration><type>${e.type}</type>`)
          for (let d = 0; d < (e.dots || 0); d++) out.push('<dot/>')
@@ -452,7 +471,7 @@
        }
      }
      out.push('</measure>')
-@@ -460,96 +682,223 @@
+@@ -460,96 +686,223 @@
  }
  
  
@@ -722,7 +741,7 @@
      splits,
      conflicts,
      edgeStems,
-@@ -557,10 +906,86 @@
+@@ -557,10 +910,86 @@
      verified,
    }
    ir.voiceOwnership = verified ? 'verified' : 'inferred'
@@ -809,7 +828,7 @@
   * Decide whether the vector result is trustworthy enough to become a
   * playable practice score. The extractor is deliberately conservative:
   * unknown key/time, unresolved glyphs, slurs/ties and invalid measure fill
-@@ -575,13 +1000,16 @@
+@@ -575,13 +1004,16 @@
    if (ir?.key == null) issues.push('key-signature-unknown')
    if (ir?.unresolvedNotes > 0) issues.push('unresolved-noteheads')
    if (ir?.unresolvedRests > 0) issues.push('unresolved-rests')
@@ -833,7 +852,7 @@
  
    const beats = measureBeatCount(ir?.meter)
    const badMeasures = []
-@@ -591,25 +1019,17 @@
+@@ -591,25 +1023,17 @@
      for (const event of [...(ir.notes ?? []), ...(ir.rests ?? [])]) {
        if (event.kind === 'rest' && (!event.type || !event.dur_q)) continue
        if (event.chord_root === false) continue
@@ -865,7 +884,7 @@
    } else if (ir?.notes?.length) {
      issues.push('measure-duration-unverifiable')
    }
-@@ -624,14 +1044,20 @@
+@@ -624,14 +1048,20 @@
      key: ir?.key ?? null,
      meter: ir?.meter ?? null,
      curveCount: ir?.curveCount ?? 0,
@@ -887,7 +906,7 @@
      warnings: issues.map((issue) => {
        switch (issue) {
          case 'no-vector-notes': return 'No readable vector piano notes were found.'
-@@ -639,10 +1065,17 @@
+@@ -639,10 +1069,17 @@
          case 'key-signature-unknown': return 'The key signature is ambiguous; accidentals may be wrong.'
          case 'unresolved-noteheads': return 'Some noteheads had no trustworthy stem/voice evidence.'
          case 'unresolved-rests': return 'Some rests could not be resolved.'

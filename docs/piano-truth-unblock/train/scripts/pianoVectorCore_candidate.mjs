@@ -612,14 +612,18 @@ export function toMusicXML(ir, divisions = 480) {
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   const out = ['<?xml version="1.0" encoding="UTF-8"?>', '<score-partwise version="4.0">',
     '<miscellaneous><miscellaneous-field name="corranzo_notation_ir">corranzo-notation-ir/1</miscellaneous-field></miscellaneous>']
-  for (const c of ir.credits) out.push(`<credit><credit-words>${esc(c)}</credit-words></credit>`)
+  const credits = Array.isArray(ir?.credits) ? ir.credits : []
+  if (ir?.route !== 'vector') credits.push('Unsupported vector route; image fallback required.')
+  for (const c of credits) out.push(`<credit><credit-words>${esc(c)}</credit-words></credit>`)
   out.push('<part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list><part id="P1">')
+  const notes = Array.isArray(ir?.notes) ? ir.notes : []
+  const rests = Array.isArray(ir?.rests) ? ir.rests : []
   const byMeasure = new Map()
-  for (const e of [...ir.notes, ...ir.rests]) {
+  for (const e of [...notes, ...rests]) {
     if (!byMeasure.has(e.measure)) byMeasure.set(e.measure, [])
     byMeasure.get(e.measure).push(e)
   }
-  const staves = [...new Set([...ir.notes, ...ir.rests].map((e) => e.staff))].sort()
+  const staves = [...new Set([...notes, ...rests].map((e) => e.staff))].sort()
   for (const mi of [...byMeasure.keys()].sort((a, b) => a - b)) {
     out.push(`<measure number="${mi + 1}">`)
     out.push(`<attributes><divisions>${divisions}</divisions>`)

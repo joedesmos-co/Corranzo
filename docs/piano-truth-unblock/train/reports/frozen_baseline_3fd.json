@@ -1,0 +1,315 @@
+{
+  "head": "3fdbbce726",
+  "pdfjs": "5.4.296",
+  "fixtures": {
+    "piano-beginner-single-vector": {
+      "pdfSha256": "7b6e5058755509e4d73059845d17f33ad23c81de9abd85f409f1ef71c267bbad",
+      "truthSha256": "5b1627f9133ef1f876359b25cdc76de1c81b4106086a74b78a8771841f261498",
+      "emitted": 33,
+      "matched": 33,
+      "truth": 33,
+      "practiceReady": true,
+      "issues": [],
+      "metrics": {
+        "exactNoteMatch": {
+          "tp": 32,
+          "fp": 0,
+          "fn": 0,
+          "truth": 32,
+          "predicted": 32,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "pitchOnly": {
+          "tp": 32,
+          "fp": 0,
+          "fn": 0,
+          "truth": 32,
+          "predicted": 32,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "exactOnset": {
+          "tp": 32,
+          "fp": 0,
+          "fn": 0,
+          "truth": 32,
+          "predicted": 32,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "writtenDuration": {
+          "tp": 32,
+          "fp": 0,
+          "fn": 0,
+          "truth": 32,
+          "predicted": 32,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "restExact": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "truth": 1,
+          "predicted": 1,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "fullEvent": {
+          "tp": 33,
+          "fp": 0,
+          "fn": 0,
+          "truth": 33,
+          "predicted": 33,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "voiceCoverage": 1,
+        "voiceValues": [
+          1
+        ]
+      }
+    },
+    "piano-rhythm-tuplets-vector": {
+      "pdfSha256": "7ba08f4cdf2c7992ba4569fa44342c1a50324db65876a0d2e25d8c207f65445d",
+      "truthSha256": "cd1812a1e8b757f6de61f3aaa9946ef83e96f6b95d37ccd96cd053fb4a6fdc7b",
+      "emitted": 68,
+      "matched": 68,
+      "truth": 68,
+      "practiceReady": true,
+      "issues": [],
+      "metrics": {
+        "exactNoteMatch": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 0,
+          "truth": 63,
+          "predicted": 63,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "pitchOnly": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 0,
+          "truth": 63,
+          "predicted": 63,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "exactOnset": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 0,
+          "truth": 63,
+          "predicted": 63,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "writtenDuration": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 0,
+          "truth": 63,
+          "predicted": 63,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "restExact": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "truth": 5,
+          "predicted": 5,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "fullEvent": {
+          "tp": 68,
+          "fp": 0,
+          "fn": 0,
+          "truth": 68,
+          "predicted": 68,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "voiceCoverage": 1,
+        "voiceValues": [
+          1
+        ]
+      }
+    },
+    "piano-grand-voices-vector": {
+      "pdfSha256": "059fda18716c31dcc14818b2ad6ca72f0235cb9f2c418649a56fbed5cfb58999",
+      "truthSha256": "bed10cc9a31873d47fdbad060b453795dd2a7d967224f0e7fd289694f747e561",
+      "emitted": 88,
+      "matched": 88,
+      "truth": 88,
+      "practiceReady": false,
+      "issues": [
+        "ties-or-slurs-not-transcribed"
+      ],
+      "metrics": {
+        "exactNoteMatch": {
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
+          "truth": 88,
+          "predicted": 88,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "pitchOnly": {
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
+          "truth": 88,
+          "predicted": 88,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "exactOnset": {
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
+          "truth": 88,
+          "predicted": 88,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "writtenDuration": {
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
+          "truth": 88,
+          "predicted": 88,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "restExact": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "fullEvent": {
+          "tp": 88,
+          "fp": 0,
+          "fn": 0,
+          "truth": 88,
+          "predicted": 88,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "voiceCoverage": 1,
+        "voiceValues": [
+          1,
+          5
+        ]
+      }
+    },
+    "piano-dense-advanced-vector": {
+      "pdfSha256": "161fd478c4295254adc15e7940c80e7075fab721d78af49b2d6e18f8d6809fd7",
+      "truthSha256": "0951bd7d7a833886fccfb22cfd0c3b5f2437fecfcb42b853df992383fbef87d8",
+      "emitted": 264,
+      "matched": 264,
+      "truth": 264,
+      "practiceReady": true,
+      "issues": [],
+      "metrics": {
+        "exactNoteMatch": {
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
+          "truth": 264,
+          "predicted": 264,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "pitchOnly": {
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
+          "truth": 264,
+          "predicted": 264,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "exactOnset": {
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
+          "truth": 264,
+          "predicted": 264,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "writtenDuration": {
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
+          "truth": 264,
+          "predicted": 264,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "restExact": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "fullEvent": {
+          "tp": 264,
+          "fp": 0,
+          "fn": 0,
+          "truth": 264,
+          "predicted": 264,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "voiceCoverage": 1,
+        "voiceValues": [
+          1,
+          5
+        ]
+      }
+    }
+  },
+  "total": {
+    "emitted": 453,
+    "matched": 453,
+    "truth": 453
+  }
+}
