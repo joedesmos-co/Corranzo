@@ -8,6 +8,10 @@
 attack-window temporal invariant. No global detection threshold was lowered;
 no main merge, no deployment, neural inference OFF.
 
+**Commits (this branch):** `42baa9ccb1` start · `698b0e5867` production
+rescue + chord-only attack window · `47b2ca788f` docs/harness/diagnostics
+(final head at the time of this report). The branch is pushed and not merged.
+
 ## 1. Baseline frozen
 
 Before this round:
