@@ -80,7 +80,7 @@ function step(id, {
   }
 }
 
-function build(placements, steps, { preludeSeconds = 4, tailSeconds = 1.5 } = {}) {
+function build(placements, steps, { preludeSeconds = 8, tailSeconds = 1.5 } = {}) {
   const segments = placements.map((placement) => ({
     samples: placement.clip.samples,
     sampleRate: placement.clip.sampleRate,
@@ -668,6 +668,8 @@ for (const scenario of selected) {
       feedback: entry?.feedback ?? null,
       decisionReason: entry?.decision?.reason ?? null,
       decision: entry?.decision ?? null,
+      decisionHistory: entry?.decisionHistory ?? [],
+      expectation: entry?.expectation ?? null,
       trace: entry?.trace ?? [],
     }
   })

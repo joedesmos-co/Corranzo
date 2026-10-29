@@ -86,6 +86,8 @@ function SequenceMic({ microphone }) {
   const feedbackRef = useRef(null)
   const detectedRef = useRef([])
   const lastDecisionRef = useRef(null)
+  const decisionHistoryRef = useRef([])
+  const historyStartedRef = useRef(false)
   const finishedRef = useRef(false)
   const micRef = useRef(null)
   const traceArchiveRef = useRef(new Map())
@@ -122,7 +124,11 @@ function SequenceMic({ microphone }) {
   }
 
   const moveOn = (entry) => {
+    entry.decisionHistory = [...decisionHistoryRef.current]
+    entry.micStatus = micRef.current?.micStatusLabel ?? null
+    entry.calibrationReady = micRef.current?.calibration?.ready ?? null
     pushResult(entry)
+    decisionHistoryRef.current = []
     stepIndexRef.current += 1
     wrongRef.current = 0
     setStepIndex(stepIndexRef.current)
@@ -188,6 +194,15 @@ function SequenceMic({ microphone }) {
         detectedMidis: detectedRef.current,
         feedback: feedbackRef.current,
         trace: recentTrace(advancedAtTimestamp),
+        expectation: window.SCOREFLOW_MIC_DEBUG?.performanceExpectation
+          ? {
+              id: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.id,
+              kind: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.event?.kind,
+              expectedMidis: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.event?.expectedMidis,
+              timing: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.timing,
+              sustain: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.sustain,
+            }
+          : null,
         decision: decision
           ? {
               outcome: decision.outcome,
@@ -210,6 +225,18 @@ function SequenceMic({ microphone }) {
     },
     onRecognitionDecision: (decision) => {
       lastDecisionRef.current = decision
+      decisionHistoryRef.current.push({
+        atMs: decision.timeMs,
+        outcome: decision.outcome,
+        reason: decision.reason,
+        matchedMidis: decision.matchedMidis,
+        missingMidis: decision.missingMidis,
+        unexpectedMidis: decision.unexpectedMidis,
+        attackId: decision.attackId,
+        timing: decision.timing,
+        confidence: decision.confidence?.overall ?? null,
+      })
+      if (decisionHistoryRef.current.length > 180) decisionHistoryRef.current.shift()
     },
   })
 
@@ -236,6 +263,10 @@ function SequenceMic({ microphone }) {
     const interval = setInterval(() => {
       const sequence = window.__liveSeq
       if (!sequence?.startedAt || finishedRef.current) return
+      if (!historyStartedRef.current) {
+        historyStartedRef.current = true
+        decisionHistoryRef.current = []
+      }
       const index = stepIndexRef.current
       const step = steps[index]
       if (!step) {
@@ -264,6 +295,15 @@ function SequenceMic({ microphone }) {
         detectedMidis: detectedRef.current,
         feedback: feedbackRef.current,
         trace: recentTrace(traceCenterTimestamp),
+        expectation: window.SCOREFLOW_MIC_DEBUG?.performanceExpectation
+          ? {
+              id: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.id,
+              kind: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.event?.kind,
+              expectedMidis: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.event?.expectedMidis,
+              timing: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.timing,
+              sustain: window.SCOREFLOW_MIC_DEBUG.performanceExpectation.sustain,
+            }
+          : null,
         decision: lastDecisionRef.current
           ? {
               outcome: lastDecisionRef.current.outcome,

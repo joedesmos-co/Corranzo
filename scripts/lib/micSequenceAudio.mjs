@@ -49,7 +49,7 @@ function resampleLinear(samples, fromRate, toRate) {
  */
 export function buildSequenceAudio({
   segments = [],
-  preludeSeconds = 4,
+  preludeSeconds = 8,
   tailSeconds = 1.5,
   sampleRate = DEFAULT_SAMPLE_RATE,
   noiseAmplitude = 0.0015,
