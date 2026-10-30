@@ -237,7 +237,7 @@ describe('Mic V3 Piano recognition', () => {
 })
 
 describe('Mic V3 Piano real-timbre evaluation gate', () => {
-  it('accepts every complete existing piano replay and does not infer the known masked Cmaj7 tone', () => {
+  it('accepts complete piano replays including the locally resolved Cmaj7 E4, and refuses a missing B4', () => {
     const manifest = loadMicPolyphonyManifest(manifestPath)
     const pianoClips = manifest.clips.filter((clip) => clip.instrument === 'piano' && clip.label === 'chord')
     expect(pianoClips).toHaveLength(12)
@@ -292,12 +292,57 @@ describe('Mic V3 Piano real-timbre evaluation gate', () => {
           break
         }
       }
-      if (clip.id === 'uiowa-piano-mf-cmaj7') {
-        expect(accepted, clip.id).toBe(false)
-        expect(state.matchedNotes.map((note) => note.midi).sort((a, b) => a - b)).toEqual([60, 67, 71])
-      } else {
-        expect(accepted, clip.id).toBe(true)
+      expect(accepted, clip.id).toBe(true)
+    }
+  })
+
+  it('does not infer a missing B4 when the C-major triad is replayed against Cmaj7', () => {
+    const manifest = loadMicPolyphonyManifest(manifestPath)
+    const clip = manifest.clips.find((entry) => entry.id === 'uiowa-piano-mf-c-major-triad')
+    expect(clip).toBeTruthy()
+    const wav = readWavPcm(join(root, 'benchmarks/mic-polyphony', clip.file))
+    const samples = sliceClipSamples(wav.samples, wav.sampleRate, {
+      startMs: clip.startMs,
+      endMs: clip.endMs,
+    })
+    const expected = [60, 64, 67, 71]
+    const replay = replayScoreInformedPolyphonyClip(samples, wav.sampleRate, {
+      expectedMidis: expected,
+      chordType: 'block',
+      expectedOnsetMs: clip.expectedOnsetMs,
+    })
+    const target = expectation(expected, {
+      id: 'uiowa-c-triad-as-cmaj7-negative',
+      rollingWindowMs: 900,
+    })
+    let state = createPianoRecognitionState(target)
+    let accepted = false
+    let attackStarted = false
+    for (const replayFrame of replay.frames) {
+      if (!replayFrame.detectedMidis.length) continue
+      const result = evaluatePianoRecognition({
+        expectation: target,
+        state,
+        timeMs: replayFrame.timeMs,
+        frame: {
+          ...replayFrame,
+          sampleRate: wav.sampleRate,
+          windowMs: replay.fftSize / wav.sampleRate * 1000,
+          gateOpen: true,
+          musical: true,
+          v2Notes: replayFrame.notes,
+        },
+        attack: { id: 'c-triad-negative-attack', fresh: !attackStarted, confidence: 0.9 },
+        musical: true,
+      })
+      state = result.state
+      attackStarted = true
+      if (result.decision.advance) {
+        accepted = true
+        break
       }
     }
+    expect(accepted).toBe(false)
+    expect(state.matchedNotes.map((note) => note.midi)).not.toContain(71)
   })
 })

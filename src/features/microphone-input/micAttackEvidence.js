@@ -207,6 +207,39 @@ export function captureAttackSnapshots({
 }
 
 /**
+ * Attack flux for a window's model notes, computed from the capture ring
+ * tail (live-path parity with the benchmark scorer, which queries the
+ * clip envelope directly — both normalize against the same 10 s
+ * fluxContextSeconds trailing window).
+ *
+ * @param ring { samples, startCaptureMs, inputRate }
+ * @param notes [{ midi, startOffsetSeconds, endOffsetSeconds }]
+ * @param windowStartCaptureMs capture ms of this window's sample 0
+ * @returns Map key = `${midi}@${Math.round(onsetMs)}` -> flux (0..1)
+ */
+export function attackFluxForNotes(ring, notes, windowStartCaptureMs) {
+  const out = new Map()
+  const samples = ring?.samples
+  const inputRate = ring?.inputRate
+  if (!samples?.length || !Number.isFinite(inputRate) || inputRate <= 0 || !Number.isFinite(windowStartCaptureMs)) {
+    return out
+  }
+  const keepSamples = Math.min(samples.length, Math.floor(ATTACK_EVIDENCE.fluxContextSeconds * inputRate))
+  const tail = Float32Array.from(samples.slice(samples.length - keepSamples))
+  const bufferStartMs = ring.startCaptureMs + ((samples.length - keepSamples) / inputRate) * 1000
+  const envelope = computeFluxEnvelope(tail, inputRate)
+  for (const note of notes ?? []) {
+    const midi = Math.round(note?.midi)
+    const onsetMs = windowStartCaptureMs + (note?.startOffsetSeconds ?? 0) * 1000
+    if (!Number.isFinite(midi) || !Number.isFinite(onsetMs) || onsetMs < bufferStartMs) {
+      continue
+    }
+    out.set(`${midi}@${Math.round(onsetMs)}`, fluxAtMs(envelope, onsetMs, bufferStartMs))
+  }
+  return out
+}
+
+/**
  * Emission evidence bundle (observation only): given ring audio and fresh
  * stream attacks, refresh attack snapshots and score per-attack flux +
  * comb presence. Returns { byKey (midi@onsetMs -> { attackFlux,

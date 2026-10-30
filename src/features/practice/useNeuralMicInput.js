@@ -49,6 +49,7 @@ import {
   shouldSkipFlatNoise,
 } from '../microphone-input/micNoiseFlatness.js'
 import {
+  attackFluxForNotes,
   describeEmissionEvidence,
 } from '../microphone-input/micAttackEvidence.js'
 import {
@@ -662,16 +663,21 @@ export default function useNeuralMicInput({
       }
     }
 
-    const handleNeuralNotes = (notes, windowStartCaptureMs) => {
+    const handleNeuralNotes = (notes, windowStartCaptureMs, fluxByOnset = null) => {
       // Drain (not the emit return): state.emitted would otherwise grow
       // without bound across a take. Draining returns the same events.
       emitNeuralStreamNotes(
         streamRef.current,
-        (notes ?? []).map((note) => ({
-          midi: note.midi,
-          startOffsetSeconds: note.startOffsetSeconds,
-          endOffsetSeconds: note.endOffsetSeconds,
-        })),
+        (notes ?? []).map((note) => {
+          const onsetMs = windowStartCaptureMs + (note.startOffsetSeconds ?? 0) * 1000
+          const flux = fluxByOnset?.get(`${note.midi}@${Math.round(onsetMs)}`)
+          return {
+            midi: note.midi,
+            startOffsetSeconds: note.startOffsetSeconds,
+            endOffsetSeconds: note.endOffsetSeconds,
+            attackFlux: Number.isFinite(flux) ? flux : null,
+          }
+        }),
         windowStartCaptureMs,
       )
       debugRef.current.streamStats = { ...streamRef.current.stats }
@@ -779,7 +785,17 @@ export default function useNeuralMicInput({
         debug.lastWindowNotes = notes?.length ?? 0
         debug.lastPumpReason = 'ok'
         debug.lastError = null
-        handleNeuralNotes(notes, windowStartCaptureMs)
+        // Capture-derived attack flux per note (O(96 frames) per hop):
+        // feeds the stream's attack-conditioned octave gate so true
+        // later octaves in dense passages survive (measured: 3 eval
+        // misses recovered, zero new false completions).
+        let fluxByOnset = null
+        try {
+          fluxByOnset = attackFluxForNotes(ring, notes, windowStartCaptureMs)
+        } catch {
+          fluxByOnset = null
+        }
+        handleNeuralNotes(notes, windowStartCaptureMs, fluxByOnset)
       } catch (error) {
         // Single-window failures must not stall the stream.
         debug.lastPumpReason = 'error'

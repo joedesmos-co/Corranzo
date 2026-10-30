@@ -52,6 +52,25 @@ function loadCompositeClip(id) {
   }
 }
 
+function resampleTo(samples, fromRate, toRate) {
+  if (fromRate === toRate) {
+    return Array.from(samples)
+  }
+  const ratio = fromRate / toRate
+  const out = new Array(Math.floor(samples.length / ratio))
+  for (let i = 0; i < out.length; i += 1) {
+    const pos = i * ratio
+    const lo = Math.floor(pos)
+    const hi = Math.min(samples.length - 1, lo + 1)
+    out[i] = samples[lo] * (1 - (pos - lo)) + samples[hi] * (pos - lo)
+  }
+  return out
+}
+
+function gainScaled(samples, gain) {
+  return Array.from(samples, (value) => value * gain)
+}
+
 describe('neural live injection (real browser, real model, real clips)', () => {
   let viteServer
   let browser
@@ -776,5 +795,114 @@ describe('neural live injection (real browser, real model, real clips)', () => {
     // Generous CPU-headless bound: guards against pathological stalls
     // (frozen pools, starved rings), not a product latency claim.
     expect(e2eMs).toBeLessThan(60_000)
+  }, 240_000)
+
+  it('recognizes the same clip at 48kHz capture (rate robustness)', async () => {
+    // M1/M4: flux + flatness constants were calibrated on 44.1kHz data.
+    // This drives the whole pipeline (AudioContext, ring, resampler,
+    // evidence) at 48kHz and asserts the note still advances.
+    const clip = loadAccuracyClip('real-piano-c4.wav')
+    const samples = resampleTo(clip.samples, clip.sampleRate, 48000)
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ samples }) => window.__liveApi.inject({
+        samples,
+        sampleRate: 48000,
+        expectedMidis: [60],
+        checkpointId: 'live-48k',
+        forceListen: true,
+      }),
+      { samples },
+    )
+    // 240 s: headless model compile under parallel-suite load can take
+    // several times the standalone time. Load headroom, not latency.
+    await page.waitForFunction(
+      () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.phase === 'unavailable'),
+      null,
+      { timeout: 240_000, polling: 2000 },
+    )
+    const results = await page.evaluate(() => window.__liveResults)
+    console.log('RATE48-RESULT', JSON.stringify({ matched: results.matched, floor: results.debug?.neuralFloor, flat: results.debug?.lastFlatness, backend: results.backend }))
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    expect(results.matched[0].midi).toBe(60)
+    // Flatness gate did NOT misfire on real music at 48 kHz.
+    expect(results.debug.lastFlatness ?? 0).toBeLessThan(0.48)
+    expect(results.debug.windowsRun).toBeGreaterThan(0)
+  }, 240_000)
+
+  it('recognizes quiet (-12 dB) and hot (+12 dB) input without misfires', async () => {
+    // M4 gain sweep: the same recording at two gains through the whole
+    // pipeline. Quiet must still advance (no over-quiet suppression);
+    // hot must not trip the flatness/silence gates.
+    for (const gain of [0.25, 4.0]) {
+      const clip = loadAccuracyClip('real-piano-c4.wav')
+      const samples = gainScaled(clip.samples, gain)
+      const page = await browser.newPage()
+      await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+      await page.evaluate(
+        ({ samples, gain }) => window.__liveApi.inject({
+          samples,
+          sampleRate: 44100,
+          expectedMidis: [60],
+          checkpointId: `live-gain-${gain}`,
+          forceListen: true,
+        }),
+        { samples, gain },
+      )
+      // 240 s per gain point: the suite runs browser files in parallel,
+      // so headless model compile can take 3-4x the standalone time.
+      // This is a load headroom allowance, not a latency claim.
+      await page.waitForFunction(
+        () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.phase === 'unavailable'),
+        null,
+        { timeout: 240_000, polling: 2000 },
+      )
+      const results = await page.evaluate(() => window.__liveResults)
+      console.log('GAIN-RESULT', JSON.stringify({ gain, matched: results.matched, floor: results.debug?.neuralFloor, flat: results.debug?.lastFlatness }))
+      await page.evaluate(() => window.__liveTeardown?.())
+      await page.close()
+      expect(results.phase).toBe('listening')
+      expect(results.matched[0].midi).toBe(60)
+      expect(results.debug.windowsRun).toBeGreaterThan(0)
+    }
+  }, 720_000)
+
+  it('handles a stereo MediaStream (channel downmix)', async () => {
+    // M1: channelCount asks for mono, but a browser may deliver stereo.
+    // The AnalyserNode downmixes; prove a 2-channel injection advances.
+    const clip = loadAccuracyClip('real-piano-c4.wav')
+    const mono = clip.samples
+    const stereo = new Float32Array(mono.length * 2)
+    for (let i = 0; i < mono.length; i += 1) {
+      stereo[i * 2] = mono[i]
+      stereo[i * 2 + 1] = mono[i]
+    }
+    const page = await browser.newPage()
+    await page.goto(`${baseUrl}/scripts/neural-live/live.html`, { waitUntil: 'load' })
+    await page.evaluate(
+      ({ stereo }) => window.__liveApi.inject({
+        samples: stereo,
+        sampleRate: 44100,
+        channels: 2,
+        expectedMidis: [60],
+        checkpointId: 'live-stereo',
+        forceListen: true,
+      }),
+      { stereo },
+    )
+    await page.waitForFunction(
+      () => window.__liveResults && (window.__liveResults.matched.length >= 1 || window.__liveResults.phase === 'unavailable'),
+      null,
+      { timeout: 150_000, polling: 2000 },
+    )
+    const results = await page.evaluate(() => window.__liveResults)
+    console.log('STEREO-RESULT', JSON.stringify({ matched: results.matched, floor: results.debug?.neuralFloor, flat: results.debug?.lastFlatness }))
+    await page.evaluate(() => window.__liveTeardown?.())
+    await page.close()
+    expect(results.phase).toBe('listening')
+    expect(results.matched[0].midi).toBe(60)
   }, 240_000)
 })

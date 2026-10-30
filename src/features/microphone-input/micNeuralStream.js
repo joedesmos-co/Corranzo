@@ -55,6 +55,23 @@ export const NEURAL_STREAM_DEFAULTS = {
    */
   octaveOverlapRatio: 0.7,
   /**
+   * Attack-conditioned octave gate — calibrated 2026-10 (this commit)
+   * on frozen corpora (see body of the gate below for measurements).
+   *
+   * The gate kills TRUE later octaves in dense passages without this:
+   * schubert-dense C5, eg11-dense 57, eg12-triad 62 were all dropped
+   * despite the model emitting them 3-9 times each (3 eval misses).
+   * Their onsets carry real attacks (flux 0.34-1.0). The ghost
+   * population the gate exists for measures <= 0.246 (measured max:
+   * pp-c4 late C5 ring 0.246/0.182/0.174). 0.3 clears every measured
+   * ghost by 22% and sits 11% under the weakest decisive true emission.
+   *
+   * Corpus A/B at 0.25-0.3 (identical outcomes): eval 19/23 -> 22/23,
+   * all other splits unchanged, false completions unchanged (4/199).
+   * At 0.17 the pp-c4 late ring leaked (+1 FP) — calibrated up.
+   */
+  octaveAttackKeepFlux: 0.3,
+  /**
    * Ghost memory: fundamentals stay eligible as ghost references this
    * long after their track expires. Late octave ring (fundamental long
    * decayed, harmonic still ringing) is the top false-award vector —
@@ -85,7 +102,7 @@ export function createNeuralStreamState(options = {}) {
     activeNotes: new Map(),
     openGroup: null,
     emitted: [],
-    stats: { windows: 0, rawNotes: 0, droppedEdge: 0, droppedShort: 0, droppedOctave: 0, merged: 0 },
+    stats: { windows: 0, rawNotes: 0, droppedEdge: 0, droppedShort: 0, droppedOctave: 0, octaveAttackKept: 0, merged: 0 },
   }
 }
 
@@ -187,7 +204,14 @@ export function emitNeuralStreamNotes(state, notes, windowStartCaptureMs) {
       state.stats.droppedShort += 1
       continue
     }
-    survivors.push({ midi, startMs, endMs })
+    // attackFlux (optional capture-derived evidence) rides through for
+    // the octave gate's attack exemption; null = no evidence available.
+    survivors.push({
+      midi,
+      startMs,
+      endMs,
+      attackFlux: note.attackFlux != null && Number.isFinite(note.attackFlux) ? note.attackFlux : null,
+    })
   }
 
   // Cross-window dedup: same pitch continuing across the overlap merges
@@ -229,10 +253,21 @@ export function emitNeuralStreamNotes(state, notes, windowStartCaptureMs) {
     if (lower && note.startMs - lower.onsetMs > config.octaveSimultaneousMs) {
       const overlap = Math.min(note.endMs, windowStartCaptureMs + windowMs) - note.startMs
       const span = note.endMs - note.startMs
-      if (span > 0 && overlap / span >= config.octaveOverlapRatio) {
+      // Attack evidence exemption: a real transient at this onset is an
+      // independently struck note (measured: true later octaves in dense
+      // music read 0.21-1.0). Co-attack ghosts share the parent's
+      // attack and read 1.0 too — this exemption deliberately leaves
+      // them to the confirm-stage vetoes; it exists to stop killing
+      // TRUE octaves the gate currently drops (3 measured eval misses).
+      const flux = Number(note.attackFlux)
+      const attackExempt = config.octaveAttackKeepFlux > 0 && Number.isFinite(flux) && flux >= config.octaveAttackKeepFlux
+      if (!attackExempt && span > 0 && overlap / span >= config.octaveOverlapRatio) {
         state.stats.droppedOctave += 1
         state.activeNotes.delete(note.midi)
         continue
+      }
+      if (attackExempt) {
+        state.stats.octaveAttackKept += 1
       }
     }
     kept.push(note)

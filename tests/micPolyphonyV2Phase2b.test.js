@@ -174,7 +174,9 @@ describe('Mic V2 Phase 2B dyad and rolled chord replay', () => {
         Array.isArray(entry.missedMidis) &&
         entry.missedMidis.includes(64),
     )
-    // Documented Sprint 2 gap: simultaneous piano E4 often drops under real MIS timbre.
-    expect(pianoMisses.length).toBeGreaterThan(0)
+    // The former Sprint 2 gap (simultaneous piano E4 dropping under real MIS
+    // timbre) is closed by the long-window local-prominence rescue. Keep the
+    // assertion so a regression that reintroduces the E4 miss is visible.
+    expect(pianoMisses.length).toBe(0)
   })
 })

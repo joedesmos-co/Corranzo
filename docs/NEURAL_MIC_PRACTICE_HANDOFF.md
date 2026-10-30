@@ -29,14 +29,25 @@ otherwise the spectral engine runs exactly as before.
 | **Heard but wrong note** | existing `onWrongNote` callback / `feedbackOutcome` | Existing wrong-note UX; unchanged. |
 | **Heard and correct** | `detectedNotes[]` (per tone: `midi`, `label`, `onsetCaptureMs`, `attackFlux`, `attackPresence`), `feedbackOutcome: 'complete'` | Existing success UX; unchanged. |
 
+## Stream-level behavior you may observe (Step 5-Free)
+
+The STREAM (not the confirm/advance path) uses one validated attack
+evidence rule: the octave-ghost gate exempts candidates whose own
+onset carries capture-derived attack flux >= 0.3. Corpus-calibrated
+(66/70 true completions, 4/199 false completions): this recovered 3
+true later-octave misses with zero new false completions. It only ever
+ADMITS notes (an over-aggressive filter was killing real chord tones) —
+it never rejects a played note.
+
 ## Hard rules (do not violate)
 
 1. **Never gate WFY advancement on `attackFlux` / `attackPresence`.**
-   They are OBSERVATIONAL evidence only. Calibration shows true piano
+   They are OBSERVATIONAL evidence for the stream's admission rule
+   above. Direct award-time gating on them is NOT validated: true piano
    attacks read presence ~0 (felt hammers are HF-soft; the flux sensor
    misses them), and guitar ghosts read HIGH (pick-shared spectra). No
-   validated discriminator exists (see `harmonicGhostVetoes` docstring
-   negatives #1–#5).
+   discriminator exists at the award level (see `harmonicGhostVetoes`
+   docstring negatives #1–#5).
 2. **Do not re-tune the flatness threshold (0.48) downward.** Music
    mixed with noise measures 0.44 at −3 dB SNR; lowering the threshold
    suppresses real playing.

@@ -143,7 +143,7 @@ window.__liveApi = {
     }
     window.__liveApi.__captureMount = null
   },
-  async inject({ samples, sampleRate, expectedMidis, checkpointId, forceListen = false, performanceMode = PERFORMANCE_MODE.WAIT_FOR_YOU, keepAudio = false, loop = true, deferUntilListening = false }) {
+  async inject({ samples, sampleRate, expectedMidis, checkpointId, forceListen = false, performanceMode = PERFORMANCE_MODE.WAIT_FOR_YOU, keepAudio = false, loop = true, deferUntilListening = false, channels = 1 }) {
     window.__liveInject = { checkpoint: { id: checkpointId, expectedMidis } }
     if (forceListen) {
       // Test-only hardware-gate bypass (see useNeuralMicInput): validates
@@ -159,8 +159,22 @@ window.__liveApi = {
     if (!keepAudio || !window.__liveApi.__audio) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext
       const context = new AudioCtx({ sampleRate })
-      const buffer = context.createBuffer(1, samples.length, sampleRate)
-      buffer.getChannelData(0).set(samples)
+      const channelCount = Math.max(1, Math.floor(channels))
+      // page.evaluate serializes typed arrays as plain objects: normalize.
+      const data = samples instanceof Float32Array ? samples : Float32Array.from(samples)
+      const frames = Math.floor(data.length / channelCount)
+      const buffer = context.createBuffer(channelCount, frames, sampleRate)
+      // Interleaved input -> per-channel data; 1 channel is the default.
+      for (let c = 0; c < channelCount; c += 1) {
+        const channel = buffer.getChannelData(c)
+        if (channelCount === 1) {
+          channel.set(data.subarray(0, frames))
+        } else {
+          for (let i = 0; i < frames; i += 1) {
+            channel[i] = data[i * channelCount + c] ?? 0
+          }
+        }
+      }
       const source = context.createBufferSource()
       source.buffer = buffer
       // Loop the short clip by default: every repetition is a fresh attack

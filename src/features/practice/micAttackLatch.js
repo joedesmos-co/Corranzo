@@ -14,6 +14,8 @@
  */
 
 export const MIC_ATTACK_RELEASE_FRAMES = 4
+/** After a wrong report, a brief gate flicker must not release the stale note. */
+export const MIC_ATTACK_STALE_RELEASE_FRAMES = 8
 
 /** A new attack must exceed the ringing note's decayed envelope by this ratio. */
 export const MIC_ATTACK_REARM_RISE_RATIO = 1.6
@@ -36,6 +38,9 @@ export const MIC_ATTACK_REARM_LOW_MIDI_MAX = 59
 export const MIC_ATTACK_REARM_MIN_FRAMES = 6
 export const MIC_ATTACK_REARM_DIFFERENT_LOW_MIN_FRAMES = 3
 export const MIC_ATTACK_REARM_LOW_RMS_RATIO = 1.45
+/** A same-note re-attack must happen after the previous attack has decayed. */
+export const MIC_ATTACK_DECAY_RATIO = 0.65
+export const MIC_ATTACK_REARM_MIN_FRAMES_AFTER_CONSUME = 6
 /** High-register attacks need an absolute derivative envelope, not brightness. */
 export const MIC_ATTACK_REARM_HIGH_MIDI_MIN = 84
 export const MIC_ATTACK_REARM_HIGH_TRANSIENT_RATIO = 1.1
@@ -57,6 +62,11 @@ export function createMicAttackLatchState() {
     lastRms: null,
     previousFrameRms: null,
     framesSinceConsumed: 0,
+    attackPeakRms: null,
+    postPeakMinRms: null,
+    postPeakMinTransientRms: null,
+    decayedSinceConsumed: false,
+    staleBoundary: false,
   }
 }
 
@@ -73,6 +83,11 @@ export function resetMicAttackLatch(state) {
   state.lastRms = null
   state.previousFrameRms = null
   state.framesSinceConsumed = 0
+  state.attackPeakRms = null
+  state.postPeakMinRms = null
+  state.postPeakMinTransientRms = null
+  state.decayedSinceConsumed = false
+  state.staleBoundary = false
 }
 
 export function updateMicAttackRelease(
@@ -96,6 +111,30 @@ export function updateMicAttackRelease(
       state.previousFrameRms = state.lastRms
       state.lastRms = rms
       state.envelopeRms = state.envelopeRms == null ? rms : Math.min(state.envelopeRms, rms)
+      // A rising envelope immediately after a consume is the SAME attack
+      // still reaching its peak, not a new note. Track the attack peak and
+      // require a real decay before any rise can re-arm a same-note repeat.
+      if (state.attackPeakRms == null || rms > state.attackPeakRms) {
+        state.attackPeakRms = rms
+        state.postPeakMinRms = rms
+        state.postPeakMinTransientRms = transientRms
+      } else {
+        state.postPeakMinRms = state.postPeakMinRms == null
+          ? rms
+          : Math.min(state.postPeakMinRms, rms)
+        if (Number.isFinite(transientRms)) {
+          state.postPeakMinTransientRms = state.postPeakMinTransientRms == null
+            ? transientRms
+            : Math.min(state.postPeakMinTransientRms, transientRms)
+        }
+      }
+      if (
+        state.attackPeakRms > 0 &&
+        state.postPeakMinRms != null &&
+        state.postPeakMinRms <= state.attackPeakRms * MIC_ATTACK_DECAY_RATIO
+      ) {
+        state.decayedSinceConsumed = true
+      }
     }
     if (state.awaitingRelease) {
       state.framesSinceConsumed += 1
@@ -115,7 +154,10 @@ export function updateMicAttackRelease(
     return
   }
   state.gateClosedFrames += 1
-  if (state.awaitingRelease && state.gateClosedFrames >= releaseFrames) {
+  const requiredReleaseFrames = state.staleBoundary
+    ? Math.max(releaseFrames, MIC_ATTACK_STALE_RELEASE_FRAMES)
+    : releaseFrames
+  if (state.awaitingRelease && state.gateClosedFrames >= requiredReleaseFrames) {
     resetMicAttackLatch(state)
   }
 }
@@ -124,7 +166,7 @@ export function canAcceptMicAttackMatch(state) {
   return Boolean(state && !state.awaitingRelease)
 }
 
-export function markMicAttackConsumed(state, { consumedMidis = [] } = {}) {
+export function markMicAttackConsumed(state, { consumedMidis = [], staleBoundary = false } = {}) {
   if (!state) {
     return
   }
@@ -137,6 +179,11 @@ export function markMicAttackConsumed(state, { consumedMidis = [] } = {}) {
   state.lastRms = null
   state.previousFrameRms = null
   state.framesSinceConsumed = 0
+  state.attackPeakRms = null
+  state.postPeakMinRms = null
+  state.postPeakMinTransientRms = null
+  state.decayedSinceConsumed = false
+  state.staleBoundary = Boolean(staleBoundary)
 }
 
 function absCentsToNearest(midiFloat, midis) {
@@ -200,14 +247,55 @@ function hasLowNoteTransientEvidence(
   if ((state.framesSinceConsumed ?? 0) < requiredFrames) {
     return false
   }
+  // A new attack needs either a deep decay of the previous note or a fresh
+  // derivative/transient spike. A still-rising attack has neither.
+  const transientRms = frame.transientRms
+  const transientBaseline = state.postPeakMinTransientRms
+  const newAttackTransient = Boolean(
+    Number.isFinite(transientRms) &&
+    Number.isFinite(transientBaseline) &&
+    transientBaseline > 0 &&
+    transientRms >= transientBaseline * 1.5 &&
+    transientRms - transientBaseline >= 0.0015,
+  )
+  if (!state.decayedSinceConsumed && !newAttackTransient) {
+    return false
+  }
+  // A same-pitch re-attack has no pitch change to help; require either the
+  // fresh derivative/transient of a new pluck/hammer or a large spectral
+  // re-excitation. A decaying sustain's small spectral wobble is not enough
+  // (measured false re-arms on ringing low strings).
+  const strongSpectralRise = Boolean(
+    Number.isFinite(frame.spectralEnergy) &&
+    Number.isFinite(state.envelopeSpectralEnergy) &&
+    state.envelopeSpectralEnergy > 0 &&
+    frame.spectralEnergy >= state.envelopeSpectralEnergy * 2.2 &&
+    frame.spectralEnergy - state.envelopeSpectralEnergy >= 0.004,
+  )
+  if (!changesPitch && !newAttackTransient && !strongSpectralRise) {
+    return false
+  }
+  if (state.staleBoundary && !newAttackTransient) {
+    return false
+  }
   const noteEvidence = bestExpectedNoteEvidence(frame, lowExpected)
+  const detectedExpected = (frame.v2DetectedMidis ?? []).some((midi) =>
+    lowExpected.includes(midi),
+  )
+  const freshTransientExpected = Boolean(newAttackTransient && detectedExpected)
   if (
     !noteEvidence ||
     (noteEvidence.confidence ?? 0) < scoreConfidence ||
     (noteEvidence.ratio ?? 0) < scoreRatio ||
     (noteEvidence.harmonicSupport ?? 0) < 0.45
   ) {
-    return false
+    // A real low-string re-attack can arrive while the previous note still
+    // rings, depressing the harmonic confidence. A fresh transient plus the
+    // expected pitch being detected is independent evidence of a new attack;
+    // V3 still has to accept the note on its own terms.
+    if (!freshTransientExpected) {
+      return false
+    }
   }
   if (frame.signalShape !== 'sustained' && frame.signalShape !== 'distorted') {
     return false
@@ -226,10 +314,9 @@ function hasLowNoteTransientEvidence(
   const risingAttackEdge = Boolean(
     Number.isFinite(rms) &&
       Number.isFinite(previousRms) &&
-      rms >= previousRms * 1.003 &&
-      rms - previousRms >= 0.0002,
+      rms >= previousRms * 1.04 &&
+      rms - previousRms >= 0.001,
   )
-  const transientRms = frame.transientRms
   const transientRmsBaseline = state.envelopeTransientRms
   const derivativeTracked = Boolean(
     Number.isFinite(transientRms) &&
@@ -246,7 +333,8 @@ function hasLowNoteTransientEvidence(
     Number.isFinite(rms) &&
       Number.isFinite(rmsBaseline) &&
       rmsBaseline > 0 &&
-      rms >= rmsBaseline * lowRmsRatio,
+      rms >= rmsBaseline * lowRmsRatio &&
+      risingAttackEdge,
   )
   // Older/offline callers do not provide absolute derivative RMS; retain the
   // accepted bass behavior there. Live capture uses the derivative/rising-edge
@@ -254,7 +342,10 @@ function hasLowNoteTransientEvidence(
   const credibleAttackEdge = !derivativeTracked || risingAttackEdge
   return (
     (transientRise && credibleAttackEdge) ||
-    (derivativeRise && risingAttackEdge) ||
+    // A repeat can be quieter than the still-ringing previous note (same-pitch
+    // retrigger inside a loud ring). In that case RMS is falling but the new
+    // derivative spike is unambiguous; a strong new-attack transient is enough.
+    (derivativeRise && (risingAttackEdge || newAttackTransient)) ||
     lowEnergyRise
   )
 }
@@ -275,10 +366,30 @@ function hasHighNoteTransientEvidence(
   if ((state.framesSinceConsumed ?? 0) < minFrames) {
     return false
   }
+  if (!state.decayedSinceConsumed) {
+    return false
+  }
   const highExpected = expectedMidis.filter(
     (midi) => Number.isFinite(midi) && midi >= highMidiMin,
   )
   if (!highExpected.length) {
+    return false
+  }
+  const consumed = new Set(state.consumedMidis ?? [])
+  const changesPitch = highExpected.some((midi) => !consumed.has(midi))
+  const transientRms = frame.transientRms
+  const transientBaseline = state.postPeakMinTransientRms
+  const newAttackTransient = Boolean(
+    Number.isFinite(transientRms) &&
+    Number.isFinite(transientBaseline) &&
+    transientBaseline > 0 &&
+    transientRms >= transientBaseline * 1.5 &&
+    transientRms - transientBaseline >= 0.0015,
+  )
+  if (!changesPitch && !newAttackTransient) {
+    return false
+  }
+  if (state.staleBoundary && !newAttackTransient) {
     return false
   }
   const noteEvidence = bestExpectedNoteEvidence(frame, highExpected)
@@ -293,7 +404,6 @@ function hasHighNoteTransientEvidence(
   if (frame.signalShape !== 'sustained' && frame.signalShape !== 'distorted') {
     return false
   }
-  const transientRms = frame.transientRms
   const baseline = state.envelopeTransientRms
   return Boolean(
     Number.isFinite(transientRms) &&
@@ -341,16 +451,39 @@ export function getMicAttackRearmReason(
   // 1. Energy rise: any real new attack (same or different note) jumps above
   // the previous note's decayed envelope.
   const rms = frame.filteredRms ?? frame.rms ?? null
+  const previousRms = state.previousFrameRms ?? state.lastRms
+  // A rise relative to the earliest post-consume frame is not enough: the
+  // attack that was just accepted is still reaching its peak, so its own
+  // envelope can look like a 1.6x "rise". A genuine re-attack either follows
+  // a deep decay of the previous note or produces a new derivative/transient
+  // spike; plateau wobble does neither.
+  const risingAttackEdge = Boolean(
+    Number.isFinite(rms) &&
+    Number.isFinite(previousRms) &&
+    rms >= previousRms * 1.04 &&
+    rms - previousRms >= 0.001,
+  )
+  const transientRms = frame.transientRms
+  const transientBaseline = state.postPeakMinTransientRms
+  const newAttackTransient = Boolean(
+    Number.isFinite(transientRms) &&
+    Number.isFinite(transientBaseline) &&
+    transientBaseline > 0 &&
+    transientRms >= transientBaseline * 1.5 &&
+    transientRms - transientBaseline >= 0.0015,
+  )
   if (
     rms != null &&
     Number.isFinite(rms) &&
     state.envelopeRms != null &&
     state.envelopeRms > 0 &&
-    rms >= state.envelopeRms * riseRatio
+    rms >= state.envelopeRms * riseRatio &&
+    (state.framesSinceConsumed ?? 0) >= MIC_ATTACK_REARM_MIN_FRAMES_AFTER_CONSUME &&
+    newAttackTransient &&
+    risingAttackEdge
   ) {
     return 'energy-rise'
   }
-
   // A bass re-attack can be obvious in the hammer/pluck transient while a
   // long, compressed decay barely changes whole-window RMS. Require a coherent
   // expected low-note harmonic family and a sharp first-difference-energy rise
@@ -386,6 +519,12 @@ export function getMicAttackRearmReason(
     })
   ) {
     return 'high-note-transient'
+  }
+  if (state.staleBoundary) {
+    // Low/high derivative paths above may prove a real new attack. Pitch-only
+    // dominance and score-transition paths are not allowed to beat the stale
+    // boundary.
+    return null
   }
 
   // 2. Different-note dominance: the next checkpoint expects a note the

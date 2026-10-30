@@ -31,6 +31,9 @@ const NOTES_PATH = arg('notes', null)
 const EDGE_MS = Number(arg('edge', '80'))
 const OCTAVE_RATIO = Number(arg('octave-ratio', '0.7'))
 const TOLERANCE = Number(arg('tolerance', '50'))
+// Attack-conditioned octave gate (same default the live hook uses;
+// --attack-keep 0 reproduces the legacy gate-off numbers for A/B).
+const ATTACK_KEEP = Number(arg('attack-keep', '0.3'))
 const WINDOW_SECONDS = Number(arg('window', '0.5'))
 
 if (!NOTES_PATH) {
@@ -40,31 +43,7 @@ if (!NOTES_PATH) {
 
 const { clips } = JSON.parse(readFileSync(NOTES_PATH, 'utf8'))
 
-function wrongExpectations(expected, truthMidis = null) {
-  const truth = truthMidis ? new Set(truthMidis) : null
-  // A scenario is only meaningful when its MUTATED pitches never sound
-  // in the clip: otherwise a "false" complete is just the piece's own
-  // true notes matching (dense performances contain dozens of pitches).
-  // Scenarios colliding with truth are skipped, never counted.
-  const scenarios = []
-  const consider = (name, mutated) => {
-    if (truth && mutated.some((midi) => truth.has(midi))) {
-      return
-    }
-    scenarios.push({ name, expected: mutated })
-  }
-  for (const midi of expected) {
-    consider(`neighbor+1-of-${midi}`, expected.map((value) => (value === midi ? value + 1 : value)))
-    consider(`neighbor-1-of-${midi}`, expected.map((value) => (value === midi ? value - 1 : value)))
-    consider(`octave-up-of-${midi}`, expected.map((value) => (value === midi ? value + 12 : value)))
-  }
-  if (expected.length > 1) {
-    consider('wrong-chord-same-count', expected.map((value) => value + 2))
-  } else {
-    consider('wrong-single-plus-2', expected.map((value) => value + 2))
-  }
-  return scenarios
-}
+import { wrongExpectations } from './lib/micFalseAwardScenarios.mjs'
 
 const report = []
 for (const clip of clips) {
@@ -73,6 +52,7 @@ for (const clip of clips) {
     hopSeconds: 0.25,
     edgeSuppressMs: EDGE_MS,
     octaveOverlapRatio: OCTAVE_RATIO,
+    octaveAttackKeepFlux: ATTACK_KEEP,
   })
   const windowMs = WINDOW_SECONDS * 1000
   const pool = new Map()
@@ -83,6 +63,7 @@ for (const clip of clips) {
       midi: Math.round(note.midi),
       startOffsetSeconds: note.start,
       endOffsetSeconds: note.end,
+      attackFlux: note.attackFlux,
     })), window.windowStartMs)
     for (const attack of drainNeuralStreamEvents(state)) {
       pool.set(`${attack.midi}@${Math.round(attack.onsetCaptureMs)}`, {

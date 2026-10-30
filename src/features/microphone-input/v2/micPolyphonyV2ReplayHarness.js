@@ -14,7 +14,7 @@ import {
   shiftClipRelativeTracks,
 } from './micScoreInformedAggregation.js'
 import { SCORE_INFORMED_DEFAULTS, scoreBlindPianoRange, scoreInformedChordWindow } from './scoreInformedChordScorer.js'
-import { DEFAULT_FFT_SIZE, hannWindow } from './micSpectralAnalysis.js'
+import { hannWindow } from './micSpectralAnalysis.js'
 
 const ENGINE_ID = 'v2-score-informed-phase-2b'
 
@@ -89,7 +89,9 @@ export function replayScoreInformedPolyphonySamples(samples, sampleRate, options
     if (timeMs < minAnalysisTimeMs) {
       continue
     }
-    const slice = samples.subarray(end - fftSize, end)
+    // Match the live path: the normal scorer trims to fftSize, while the
+    // bounded local-prominence rescue may look back up to 8192 samples.
+    const slice = samples.subarray(Math.max(0, end - Math.max(fftSize, 8192)), end)
 
     let frameResult
     if (expectedMidis?.length) {

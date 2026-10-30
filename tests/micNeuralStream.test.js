@@ -180,4 +180,63 @@ describe('micNeuralStream', () => {
     // Draining works and inference delay never shifts onsets (see above).
     expect(drainNeuralStreamEvents(state)).toEqual([])
   })
+
+  it('keeps a late true octave when attack evidence survives the gate', () => {
+    // Schubert-dense C5 shape: lower C4 struck 330 ms earlier and still
+    // ringing (overlap >= 0.7) — the gate would kill the true C5. With
+    // capture-derived attack evidence at the candidate's own onset, the
+    // exemption keeps it.
+    const state = createNeuralStreamState({
+      windowSeconds: 0.5,
+      hopSeconds: 0.25,
+      edgeSuppressMs: 80,
+      octaveOverlapRatio: 0.7,
+      octaveAttackKeepFlux: 0.17,
+    })
+    const kept = emitNeuralStreamNotes(state, [
+      { midi: 60, startOffsetSeconds: 0.1, endOffsetSeconds: 0.45 },
+      { midi: 72, startOffsetSeconds: 0.35, endOffsetSeconds: 0.41, attackFlux: 0.62 },
+    ], 10_000)
+    expect(kept.map((event) => event.midi)).toContain(72)
+    expect(state.stats.octaveAttackKept).toBe(1)
+    expect(state.stats.droppedOctave).toBe(0)
+  })
+
+  it('still drops a late ring ghost with no attack of its own', () => {
+    // Decay-phase ring: flux null/0 falls back to the legacy kill.
+    const state = createNeuralStreamState({
+      windowSeconds: 0.5,
+      hopSeconds: 0.25,
+      edgeSuppressMs: 80,
+      octaveOverlapRatio: 0.7,
+      octaveAttackKeepFlux: 0.17,
+    })
+    const ghost = emitNeuralStreamNotes(state, [
+      { midi: 60, startOffsetSeconds: 0.1, endOffsetSeconds: 0.45 },
+      { midi: 72, startOffsetSeconds: 0.35, endOffsetSeconds: 0.41, attackFlux: 0.05 },
+    ], 10_000)
+    expect(ghost.map((event) => event.midi)).not.toContain(72)
+    expect(state.stats.droppedOctave).toBe(1)
+  })
+
+  it('drops the late ghost by default and reproduces legacy at gate 0', () => {
+    // Shipped default (0.3): high-flux true octave survives.
+    const shipped = () => {
+      const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80 })
+      return emitNeuralStreamNotes(state, [
+        { midi: 60, startOffsetSeconds: 0.1, endOffsetSeconds: 0.45 },
+        { midi: 72, startOffsetSeconds: 0.35, endOffsetSeconds: 0.41, attackFlux: 0.9 },
+      ], 10_000).map((event) => event.midi)
+    }
+    expect(shipped()).toEqual([60, 72])
+    // Explicit gate 0 (A/B control) = the pre-calibration behavior.
+    const legacy = () => {
+      const state = createNeuralStreamState({ windowSeconds: 0.5, hopSeconds: 0.25, edgeSuppressMs: 80, octaveAttackKeepFlux: 0 })
+      return emitNeuralStreamNotes(state, [
+        { midi: 60, startOffsetSeconds: 0.1, endOffsetSeconds: 0.45 },
+        { midi: 72, startOffsetSeconds: 0.35, endOffsetSeconds: 0.41, attackFlux: 0.9 },
+      ], 10_000).map((event) => event.midi)
+    }
+    expect(legacy()).toEqual([60])
+  })
 })

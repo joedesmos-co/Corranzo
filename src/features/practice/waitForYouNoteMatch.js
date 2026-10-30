@@ -2,8 +2,6 @@ import { findMatchingExpectedIndex, matchesAnyExpected, pitchMatches } from './m
 import {
   CHORD_WINDOW_MS_MAX,
   CHORD_WINDOW_MS_MIN,
-  MIC_CHORD_COLLECTION_WINDOW_MS_MAX,
-  MIC_CHORD_COLLECTION_WINDOW_MS_MIN,
   MUSICAL_EVENT_WINDOW_MS_MAX,
   MUSICAL_EVENT_WINDOW_MS_MIN,
   ROLLED_CHORD_TOTAL_CAP_MS,
@@ -13,7 +11,6 @@ import {
 import {
   evaluateMicChordCollection,
   MIC_CHORD_MATCH_COMPLETE,
-  MIC_CHORD_MATCH_PROGRESS,
   MIC_CHORD_MATCH_WRONG,
   resolveMicChordCollectionWindowMs,
 } from './waitForYouMicChordCollection.js'
@@ -487,6 +484,12 @@ export function filterGuitarChordDetectedMidis(
     const note = (frame.v2Notes ?? []).find((entry) => entry?.midi === midi)
     if (!note?.detected) {
       return false
+    }
+    // The local-prominence rescue already proved an independent local peak
+    // with harmonic/subharmonic guards; the generic guitar confidence floors
+    // must not discard that evidence.
+    if (note.localProminenceRescue) {
+      return true
     }
     const stringNum = stringByMidi.get(midi)
     const midiPitchClass = guitarMidiPitchClass(midi)
