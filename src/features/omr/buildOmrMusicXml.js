@@ -27,6 +27,28 @@ const TYPE_BY_DIVISIONS = {
   2: 'eighth',
   1: 'sixteenth',
 }
+// Written base durations in the same raw-division units as TYPE_BY_DIVISIONS.
+const BASE_DIVISIONS_BY_TYPE = {
+  whole: 16,
+  half: 8,
+  quarter: 4,
+  eighth: 2,
+  sixteenth: 1,
+  '32nd': 0.5,
+  '64th': 0.25,
+}
+
+/**
+ * A dotted written value must actually last 1.5x its base. Duration
+ * reconstruction can set `dotted` from spacing without changing the duration
+ * (e.g. a plain quarter labelled dotted). Emitting `<dot/>` in that case
+ * fabricates a dotted rhythm, so require the duration to corroborate the dot.
+ */
+function writtenDottedValue(type, rawDuration) {
+  const base = BASE_DIVISIONS_BY_TYPE[type]
+  if (!Number.isFinite(base) || !Number.isFinite(rawDuration)) return false
+  return Math.abs(rawDuration - base * 1.5) <= Math.max(0.5, base * 0.12)
+}
 
 const BEAMABLE_DURATION_TYPES = new Set(['eighth', 'sixteenth', '32nd', '64th'])
 const MAX_BEAM_LEVEL_BY_TYPE = {
@@ -512,7 +534,7 @@ function noteXml(
     `<note${sourceIdXml}>${chord ? '<chord/>' : ''}` +
     `${pitchXml(note, octaveShiftSemitones)}` +
     `${accidentalXml(note)}<duration>${duration}</duration>${tieXml}<voice>${voice}</voice>` +
-    `<type>${type}</type>${dotXml}${timeModXml}${staffXml}${stemXml}${beamXml}${notationsXml}</note>`
+    `${type ? `<type>${type}</type>` : ''}${dotXml}${timeModXml}${staffXml}${stemXml}${beamXml}${notationsXml}</note>`
   )
 }
 
@@ -797,6 +819,21 @@ export function buildOmrMusicXml({
             left.order - right.order,
     )
 
+    const measureContentDivisions = structureUnits.reduce(
+      (sum, unit) => sum + (unit.event?.durationDivisions ?? 0),
+      0,
+    )
+    const measureTargetDivisions =
+      (Number(measure.timeSignature?.beats ?? 4) *
+        OMR_DIVISIONS_PER_QUARTER *
+        4) /
+      Number(measure.timeSignature?.beatType ?? 4)
+    const isPickupMeasure =
+      measure.measureNumber === 1 &&
+      Number.isFinite(measureTargetDivisions) &&
+      measureTargetDivisions > 0 &&
+      measureContentDivisions < measureTargetDivisions
+
     for (const unit of structureUnits) {
       const event = unit.event
       const rawDuration = event.durationDivisions
@@ -818,7 +855,7 @@ export function buildOmrMusicXml({
           type,
           voice,
           staff,
-          Boolean(event.dotted),
+          Boolean(event.dotted) && writtenDottedValue(type, rawDuration),
           event.notationArticulations,
         )
         cursor += duration
@@ -845,11 +882,24 @@ export function buildOmrMusicXml({
           timeModification != null
             ? event.durationType ?? note.durationType ?? type
             : type
+        // Only emit a dot when the written duration itself is dotted. Tuplets
+        // carry their own time modification and are left untouched. A leading
+        // pickup measure additionally requires printed evidence: a 1.5x length
+        // there is usually a held pickup note, not a dotted value.
+        const durationCorroboratesDot = writtenDottedValue(writtenType, rawDuration)
+        const emitDotted = Boolean(event.dotted) &&
+          (timeModification != null ||
+            (durationCorroboratesDot && !isPickupMeasure))
+        // If the dot was suppressed but the length is exactly a dotted value,
+        // the written type would contradict <duration>; omit the type rather
+        // than claim a value the evidence does not support.
+        const typeForXml =
+          !emitDotted && durationCorroboratesDot ? null : writtenType
         inner += noteXml(note, {
           chord: index > 0,
           duration,
-          type: writtenType,
-          dotted: event.dotted,
+          type: typeForXml,
+          dotted: emitDotted,
           tieStart: Boolean(note.tieStart ?? (notes.length === 1 && event.tieStart)),
           tieStop: Boolean(note.tieStop ?? (notes.length === 1 && event.tieStop)),
           tiePlacement: note.tiePlacement ?? event.tiePlacement ?? null,
