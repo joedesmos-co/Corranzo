@@ -33,9 +33,19 @@ function pathChunks(value) {
   if (!Array.isArray(value)) {
     return []
   }
-  return value.flatMap((entry) =>
-    ArrayBuffer.isView(entry) ? Array.from(entry) : Array.isArray(entry) ? entry : [],
-  )
+  const out = value.flatMap((entry) => {
+    if (ArrayBuffer.isView(entry)) return Array.from(entry)
+    if (Array.isArray(entry)) return entry
+    // pdf.js 5.x may expose path data as a numeric-keyed object, e.g.
+    // { 0: 0, 1: x0, 2: y0, ... }.
+    if (entry && typeof entry === 'object') {
+      return Object.keys(entry)
+        .sort((left, right) => Number(left) - Number(right))
+        .map((key) => entry[key])
+    }
+    return []
+  })
+  return out
 }
 
 function parseTransformedPath(rawPath, transform) {

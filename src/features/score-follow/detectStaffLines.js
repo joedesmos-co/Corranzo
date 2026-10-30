@@ -469,11 +469,12 @@ function tryChunkStavesWithOrphans(staves, perSystem) {
  * `stavesPerSystem` (from MusicXML) is used as a cross-check / cap, not as the
  * sole grouping rule.
  */
-export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
+export function groupStavesIntoSystems(staves, stavesPerSystem = 1, options = {}) {
   if (staves.length <= 1) {
     return staves.map((stave) => ({ ...stave, staveCount: 1 }))
   }
   const perSystem = Math.max(1, Math.round(stavesPerSystem))
+  const { pairExactStaves = false } = options
 
   // Hypothesis test for chunking by `stavesPerSystem` (e.g. pair treble+bass):
   // correct only when the gaps WITHIN a chunk are consistently smaller than the
@@ -482,6 +483,10 @@ export function groupStavesIntoSystems(staves, stavesPerSystem = 1) {
   // rather than a fixed ratio, because airy classical engraving (Satie) has a
   // within-pair gap only slightly smaller than the between-system gap — but the
   // separation is still clean (every inter-gap exceeds every intra-gap).
+  if (perSystem >= 2 && staves.length === perSystem) {
+    if (pairExactStaves) return [mergeStaveGroup(staves)]
+    return staves.map((stave) => ({ ...stave, staveCount: 1 }))
+  }
   if (perSystem >= 2 && staves.length > perSystem) {
     const direct = tryChunkStaves(staves, perSystem)
     if (direct) {
@@ -865,6 +870,34 @@ export function selectViableStavesForSystemGrouping(staves, stavesPerSystem = 1)
  *
  * Returns { systems: [{ y0, y1, center, staveCount, barlineCount, measureEstimate }] }.
  */
+
+/**
+ * A grand staff normally has a brace/bracket column in the gap between its two
+ * staves. A page with two sequential single-staff systems has no such connector.
+ * This is deliberately conservative: require a nearly full-gap ink column in
+ * the left margin, not merely a stem or note passing through the gap.
+ */
+function hasGrandStaffConnector(imageData, staves, darkThreshold, contentBounds) {
+  if (!Array.isArray(staves) || staves.length < 2) return false
+  const { width, height, data } = imageData
+  const upper = staves[0]
+  const lower = staves[1]
+  const y0 = Math.max(0, Math.floor(upper.y1 * height))
+  const y1 = Math.min(height - 1, Math.ceil(lower.y0 * height))
+  if (y1 <= y0) return false
+  const left = Math.max(0, Math.floor((contentBounds.x0 ?? 0) * width))
+  const right = Math.min(width - 1, left + Math.floor(width * 0.15))
+  let bestInk = 0
+  for (let x = left; x <= right; x += 1) {
+    let ink = 0
+    for (let y = y0; y <= y1; y += 1) {
+      if (compositeLuminance(data, (y * width + x) * 4) < darkThreshold) ink += 1
+    }
+    if (ink > bestInk) bestInk = ink
+  }
+  return bestInk / Math.max(1, y1 - y0 + 1) >= 0.75
+}
+
 export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   const { stavesPerSystem = 1, countBarlines = true } = options
   // Adaptive ink threshold drives BOTH staff-line and barline detection so light
@@ -877,7 +910,11 @@ export function detectStaffLineSystems(imageData, contentBounds, options = {}) {
   const viableStaves = selectViableStavesForSystemGrouping(rawStaves, stavesPerSystem)
   const staves = coalesceFragmentedStaves(viableStaves)
   const trace = detectStaffLineStaves.lastTrace ?? null
-  const grouped = groupStavesIntoSystems(staves, stavesPerSystem)
+  const pairExactStaves =
+    stavesPerSystem >= 2 &&
+    staves.length === stavesPerSystem &&
+    hasGrandStaffConnector(imageData, staves, inkThreshold, contentBounds)
+  const grouped = groupStavesIntoSystems(staves, stavesPerSystem, { pairExactStaves })
 
   // Barlines are darker than staff lines, so bias the threshold toward ink but
   // never below the staff-line threshold.

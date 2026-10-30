@@ -6,6 +6,7 @@ import {
   classifyVectorRepeatDirection,
   detectVectorRepeatAtEdge,
   fuseVectorRepeatMarkings,
+  extractPdfVectorBarlineComponentsFromOperatorList,
 } from '../src/features/omr/detectVectorRepeatBarlines.js'
 import {
   detectMeasureStructureMarkings,
@@ -514,4 +515,27 @@ describe('vector-native repeat barlines', () => {
     expect(roundTrip).toContain('repeat direction="forward"')
     expect(roundTrip).toContain('repeat direction="backward"')
   })
+  it('parses pdf.js 5.x numeric-keyed object path data for vector barlines', () => {
+    const ops = {
+      save: 1, restore: 2, transform: 3, setLineWidth: 4, constructPath: 5,
+      stroke: 6, fill: 7, eoFill: 8, fillStroke: 9, eoFillStroke: 10,
+      closeFillStroke: 11, closeEOFillStroke: 12, closeStroke: 13,
+    }
+    const operatorList = {
+      fnArray: [5, 6],
+      argsArray: [
+        [6, [{ 0: 0, 1: 10, 2: 10, 3: 1, 4: 10, 5: 100 }]],
+        null,
+      ],
+    }
+    const result = extractPdfVectorBarlineComponentsFromOperatorList({
+      operatorList,
+      ops,
+      viewportTransform: [1, 0, 0, 1, 0, 0],
+      targetWidth: 1000,
+    })
+    expect(result.verticalBars.length).toBe(1)
+    expect(result.verticalBars[0].x).toBeCloseTo(10)
+  })
+
 })
