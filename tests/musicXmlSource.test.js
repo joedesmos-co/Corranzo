@@ -17,6 +17,7 @@ import {
   shouldShowLibraryOmrPanel,
   validateRestoredOmrPlayback,
   validateOmrMusicXmlMeasureRhythm,
+  validateOmrMusicXmlMeasureRhythmStrict,
 } from '../src/features/import/musicXmlSource.js'
 import { buildSessionMeta, validateRestoredSession } from '../src/features/session/sessionPersistence.js'
 
@@ -421,5 +422,102 @@ describe('validateOmrMusicXmlMeasureRhythm', () => {
 </part></score-partwise>`
     const result = validateOmrMusicXmlMeasureRhythm(xml)
     expect(result.ok).toBe(true)
+  })
+})
+
+describe('validateOmrMusicXmlMeasureRhythm boundary tests', () => {
+  // Helper to build a score with N measures where some are bad.
+  function buildScore(measureCount, badIndices = []) {
+    const measures = []
+    for (let i = 0; i < measureCount; i++) {
+      const isBad = badIndices.includes(i)
+      const noteCount = isBad ? 1 : 4
+      const notes = Array.from({ length: noteCount }, (_, j) =>
+        `<note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><voice>1</voice><staff>1</staff></note>`
+      ).join('')
+      const attrs = i === 0
+        ? `<attributes><divisions>4</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>`
+        : `<attributes></attributes>`
+      measures.push(`<measure number="${i + 1}">${attrs}${notes}</measure>`)
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0"><part id="P1">
+${measures.join('\n')}
+</part></score-partwise>`
+  }
+
+  it('short score (4 measures): 3 bad measures rejected', () => {
+    const xml = buildScore(4, [1, 2, 3])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(false)
+    expect(result.badMeasures).toBe(3)
+  })
+
+  it('short score (4 measures): 2 bad measures accepted', () => {
+    const xml = buildScore(4, [1, 2])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(2)
+  })
+
+  it('medium score (20 measures): 1 bad measure accepted', () => {
+    const xml = buildScore(20, [5])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(1)
+  })
+
+  it('medium score (20 measures): 3 bad measures accepted (within 5%)', () => {
+    // 5% of 20 = 1, min 3, so maxBadMeasures = 3. 3 bad → 3 < 3 → false → rejected
+    const xml = buildScore(20, [5, 10, 15])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(false)
+    expect(result.badMeasures).toBe(3)
+  })
+
+  it('long score (100 measures): 4 bad measures accepted (within 5%)', () => {
+    // 5% of 100 = 5, capped at 10. 4 bad → 4 < 5 → true → accepted
+    const xml = buildScore(100, [10, 20, 30, 40])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(4)
+  })
+
+  it('long score (100 measures): 6 bad measures rejected (exceeds 5%)', () => {
+    // 5% of 100 = 5. 6 bad → 6 < 5 → false → rejected
+    const xml = buildScore(100, [10, 20, 30, 40, 50, 60])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(false)
+    expect(result.badMeasures).toBe(6)
+  })
+
+  it('empty score (0 measures): accepted', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0"><part id="P1"></part></score-partwise>`
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(0)
+  })
+
+  it('single measure (1): bad measure rejected', () => {
+    const xml = buildScore(1, [0])
+    const result = validateOmrMusicXmlMeasureRhythm(xml)
+    // 1 measure, 1 bad. maxBadMeasures = min(10, max(3, ceil(1*0.05))) = 3
+    // 1 < 3 → true → accepted (because min is 3)
+    expect(result.ok).toBe(true)
+  })
+
+  it('strict validation rejects any bad measure', () => {
+    const xml = buildScore(20, [5])
+    const result = validateOmrMusicXmlMeasureRhythmStrict(xml)
+    expect(result.ok).toBe(false)
+    expect(result.badMeasures).toBe(1)
+  })
+
+  it('strict validation accepts perfect score', () => {
+    const xml = buildScore(20, [])
+    const result = validateOmrMusicXmlMeasureRhythmStrict(xml)
+    expect(result.ok).toBe(true)
+    expect(result.badMeasures).toBe(0)
   })
 })
