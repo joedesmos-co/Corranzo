@@ -32,6 +32,19 @@ function expandPerformedNotes(timingMap, performedBeats) {
   const notes = timingMap.notes ?? []
   const expanded = []
 
+  // Group once instead of filtering the whole score for every performed
+  // measure. Repeats make the same written measure appear several times, so
+  // the old O(entries × notes) scan was the hot path during first Play.
+  const notesByMeasure = new Map()
+  for (const note of notes) {
+    const bucket = notesByMeasure.get(note.measureNumber)
+    if (bucket) {
+      bucket.push(note)
+    } else {
+      notesByMeasure.set(note.measureNumber, [note])
+    }
+  }
+
   for (const entry of entries) {
     const measure = timingMap.measures[entry.writtenMeasureIndex]
     if (!measure) {
@@ -42,9 +55,7 @@ function expandPerformedNotes(timingMap, performedBeats) {
       continue
     }
 
-    const measureNotes = notes.filter(
-      (note) => note.measureNumber === entry.writtenMeasureNumber,
-    )
+    const measureNotes = notesByMeasure.get(entry.writtenMeasureNumber) ?? []
 
     for (const note of measureNotes) {
       const offset = (note.timeSeconds - measure.startTimeSeconds) / writtenDuration
@@ -68,6 +79,7 @@ function createTimeline(timingMap) {
   const entries = timingMap.performedMeasureTimeline?.entries ?? []
   const performedBeats = buildPerformedBeats(timingMap)
   const performedDurationSeconds = getPlaybackDurationSeconds(timingMap)
+  let performedNotesCache = null
 
   return {
     entries,
@@ -99,7 +111,14 @@ function createTimeline(timingMap) {
     },
 
     performedNotes() {
-      return expandPerformedNotes(timingMap, performedBeats)
+      // The expanded list is immutable for a parsed timing map, but callers
+      // (motion timeline, note targets, checkpoints, playback schedule) ask
+      // for it repeatedly. Cache it so first Play does not re-expand the whole
+      // score once per measure.
+      if (performedNotesCache == null) {
+        performedNotesCache = expandPerformedNotes(timingMap, performedBeats)
+      }
+      return performedNotesCache
     },
 
     locate(timeSeconds) {
