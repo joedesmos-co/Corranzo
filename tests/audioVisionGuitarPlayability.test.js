@@ -172,3 +172,109 @@ describe('product pipeline exposes playability (solo guitar)', () => {
     }
   }, 60000)
 })
+
+describe('full fingering and transitions', () => {
+  it('assigns four fingers and detects a barre on an F shape', async () => {
+    const { assignFingers } = await import('../src/features/audio-vision/guitarPlayability.js')
+    const fBarre = [
+      { midi: 53, string: 6, fret: 1 },
+      { midi: 60, string: 4, fret: 3 },
+      { midi: 65, string: 3, fret: 1 },
+      { midi: 69, string: 2, fret: 1 },
+      { midi: 72, string: 1, fret: 1 },
+    ]
+    const result = assignFingers(fBarre)
+    expect(result.feasible).toBe(true)
+    expect(result.barre).toBeTruthy()
+    expect(result.barre.fret).toBe(1)
+    expect(result.fingersUsed).toBeLessThanOrEqual(4)
+    // fret 1 is the barre finger (1), fret 3 is finger 2
+    const barreNotes = result.positions.filter((p) => p.fret === 1)
+    expect(barreNotes.every((p) => p.finger === 1)).toBe(true)
+    expect(result.positions.find((p) => p.fret === 3).finger).toBe(2)
+  })
+
+  it('leaves open strings unfingered', async () => {
+    const { assignFingers } = await import('../src/features/audio-vision/guitarPlayability.js')
+    const openC = [
+      { midi: 48, string: 5, fret: 3 },
+      { midi: 52, string: 4, fret: 2 },
+      { midi: 55, string: 3, fret: 0 },
+      { midi: 60, string: 2, fret: 1 },
+      { midi: 64, string: 1, fret: 0 },
+    ]
+    const result = assignFingers(openC)
+    expect(result.feasible).toBe(true)
+    expect(result.positions.filter((p) => p.fret === 0).every((p) => p.finger === 0)).toBe(true)
+  })
+
+  it('rejects a shape needing five distinct frets', async () => {
+    const { assignFingers } = await import('../src/features/audio-vision/guitarPlayability.js')
+    const result = assignFingers([
+      { midi: 45, string: 6, fret: 5 },
+      { midi: 50, string: 5, fret: 5 },
+      { midi: 55, string: 4, fret: 5 },
+      { midi: 60, string: 3, fret: 5 },
+      { midi: 65, string: 2, fret: 5 },
+      { midi: 69, string: 1, fret: 5 },
+    ])
+    // All at one fret is a barre, so this IS feasible.
+    expect(result.feasible).toBe(true)
+    const spread = assignFingers([
+      { midi: 45, string: 6, fret: 1 },
+      { midi: 51, string: 5, fret: 2 },
+      { midi: 57, string: 4, fret: 3 },
+      { midi: 63, string: 3, fret: 4 },
+      { midi: 69, string: 2, fret: 5 },
+    ])
+    expect(spread.feasible).toBe(false)
+  })
+
+  it('flags a hand jump and a same-string overlap', async () => {
+    const { analyzeGuitarTransitions } = await import('../src/features/audio-vision/guitarPlayability.js')
+    const diagnostics = analyzeGuitarTransitions([
+      { midi: 45, startBeat: 0, durBeats: 2, string: 6, fret: 5 },
+      { midi: 72, startBeat: 0.5, durBeats: 0.5, string: 1, fret: 8 },
+    ], { maxHandJump: 2, beatSeconds: 0.5 })
+    expect(diagnostics.some((d) => d.kind === 'hand-jump')).toBe(true)
+    expect(diagnostics.some((d) => d.kind === 'same-string-overlap')).toBe(false)
+    const overlap = analyzeGuitarTransitions([
+      { midi: 45, startBeat: 0, durBeats: 2, string: 6, fret: 5 },
+      { midi: 47, startBeat: 0.5, durBeats: 0.5, string: 6, fret: 7 },
+    ])
+    expect(overlap.some((d) => d.kind === 'same-string-overlap')).toBe(true)
+  })
+
+  it('difficulty changes the playable span and note count', async () => {
+    const notes = [40, 47, 52, 59, 64, 71, 76, 80].map((midi) => ({
+      midi, quantizedStartBeat: 0, quantizedDurBeats: 1, strength: 0.8,
+    }))
+    const easy = arrangeSoloGuitar({ quantizedNotes: notes, chords: [], difficulty: 'easy' })
+    const advanced = arrangeSoloGuitar({ quantizedNotes: notes, chords: [], difficulty: 'advanced' })
+    expect(validateGuitarArrangement(easy.events, { maxSpan: 3 }).playable).toBe(true)
+    expect(validateGuitarArrangement(advanced.events, { maxSpan: 5 }).playable).toBe(true)
+    expect(easy.events.length).toBeLessThanOrEqual(advanced.events.length)
+  })
+})
+
+describe('export consistency', () => {
+  it('MusicXML TAB and notation carry exactly the arranged string/fret', async () => {
+    const { buildArrangementMusicXml } = await import('../src/features/audio-vision/arrangementMusicXml.js')
+    const { parseMusicXml } = await import('../src/features/musicxml/parseMusicXml.js')
+    const notes = [
+      { midi: 60, quantizedStartBeat: 0, quantizedDurBeats: 1 },
+      { midi: 64, quantizedStartBeat: 0, quantizedDurBeats: 1 },
+      { midi: 67, quantizedStartBeat: 0, quantizedDurBeats: 1 },
+      { midi: 72, quantizedStartBeat: 1, quantizedDurBeats: 1 },
+    ]
+    const { events } = arrangeSoloGuitar({ quantizedNotes: notes, chords: [], difficulty: 'intermediate' })
+    const xml = buildArrangementMusicXml({ events, targetPart: 'solo-guitar', bpm: 100, title: 'T' })
+    const parsed = parseMusicXml(xml)
+    const staffOne = (parsed.notes ?? []).filter((n) => !n.isRest && (n.staff ?? 1) === 1)
+    expect(staffOne.length).toBe(events.length)
+    for (const e of events) {
+      const match = staffOne.find((n) => n.midi === e.midi && n.string === e.string && n.fret === e.fret)
+      expect(match).toBeTruthy()
+    }
+  })
+})

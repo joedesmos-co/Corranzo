@@ -7,7 +7,7 @@ import { PROVENANCE } from './musicAnalysis.js'
 import { resolveSimultaneous, selectTexture, chooseMelodyMidi } from './arrangementModel.js'
 import { paramsForDifficulty } from './difficulty.js'
 import { STANDARD_GUITAR_TUNING } from '../instruments/instruments.js'
-import { choosePlayableVoicing, positionsForMidi, validateGuitarArrangement } from './guitarPlayability.js'
+import { choosePlayableVoicing, fingerArrangement, positionsForMidi, validateGuitarArrangement } from './guitarPlayability.js'
 
 export const GUITAR_STRINGS = {
   count: 6,
@@ -131,18 +131,35 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
       handFret = anchor
     }
   }
+  // Assign actual fretting fingers (barre aware) to the emitted events.
+  const fingered = fingerArrangement(events)
+  // Derive the beat duration from the transcription when available so shift
+  // speed is judged in real time, not in beat units.
+  let beatSeconds = 0.5
+  for (let i = 1; i < quantizedNotes.length; i += 1) {
+    const a = quantizedNotes[i - 1]
+    const b = quantizedNotes[i]
+    const dt = (b.startSeconds ?? 0) - (a.startSeconds ?? 0)
+    const db = (b.quantizedStartBeat ?? 0) - (a.quantizedStartBeat ?? 0)
+    if (dt > 0 && db > 1e-6) { beatSeconds = dt / db; break }
+  }
   // Independent playability gate: the arrangement must pass before it is
   // allowed to become TAB or be labelled ready to practice.
-  const playability = validateGuitarArrangement(events, {
+  const playability = validateGuitarArrangement(fingered, {
     maxSpan,
     maxFingers: 4,
     maxFret: strings.fretCount,
     maxHandJump: maxSpan + 1,
+    beatSeconds: Number.isFinite(beatSeconds) && beatSeconds > 0 ? beatSeconds : 0.5,
   })
   if (!playability.playable) {
     warnings.push({ kind: 'arrangement-unplayable', detail: `${playability.violations.length} violation(s)` })
   }
+  for (const t of playability.transitions ?? []) {
+    if (t.kind === 'fast-shift') warnings.push({ kind: 'fast-shift', detail: `${t.jump} frets / ${t.seconds}s`, measureIndex: Math.floor(t.startBeat / beatsPerMeasure) })
+    if (t.kind === 'same-string-overlap') warnings.push({ kind: 'same-string-overlap', detail: `string ${t.string}: ${t.from}->${t.to}`, measureIndex: Math.floor(t.startBeat / beatsPerMeasure) })
+  }
   void capo
   void chords
-  return { events, warnings, strings, droppedNotes, playability }
+  return { events: fingered, warnings, strings, droppedNotes, playability }
 }

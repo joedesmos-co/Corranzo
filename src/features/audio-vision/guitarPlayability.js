@@ -191,8 +191,11 @@ export function validateGuitarArrangement(events, {
   maxFingers = 4,
   maxFret = 19,
   maxHandJump = 5,
+  beatSeconds = 0.5,
+  maxShiftFretsPerSecond = 12,
 } = {}) {
   const violations = []
+  const shapes = []
   const byOnset = new Map()
   for (const e of events) {
     const key = Number(e.startBeat ?? 0).toFixed(3)
@@ -200,24 +203,140 @@ export function validateGuitarArrangement(events, {
     byOnset.get(key).push(e)
   }
   const onsets = [...byOnset.keys()].map(Number).sort((a, b) => a - b)
-  let prevAnchor = null
   for (const onset of onsets) {
     const group = byOnset.get(onset.toFixed(3))
     const positions = group.map((e) => ({ string: e.string, fret: e.fret, midi: e.midi }))
     const check = evaluateShape(positions, { maxSpan, maxFingers, maxFret })
+    const finger = assignFingers(positions)
     if (!check.playable) {
       violations.push({ startBeat: onset, kind: 'unplayable-shape', reasons: check.reasons, events: group.length })
     }
-    const anchor = check.shape.minFret
-    if (prevAnchor != null && anchor != null && Math.abs(anchor - prevAnchor) > maxHandJump) {
-      violations.push({ startBeat: onset, kind: 'hand-jump', detail: `${prevAnchor}->${anchor}` })
+    if (!finger.feasible) {
+      violations.push({ startBeat: onset, kind: 'finger-infeasible', reason: finger.reason })
     }
-    if (anchor != null) prevAnchor = anchor
+    shapes.push({ startBeat: onset, span: check.shape.span, fingers: finger.fingersUsed, barre: finger.barre })
   }
+  const transitions = analyzeGuitarTransitions(events, { beatSeconds, maxHandJump, maxShiftFretsPerSecond })
+  violations.push(...transitions.filter((t) => t.kind === 'hand-jump'))
+  const unplayable = violations.filter((v) => v.kind === 'unplayable-shape' || v.kind === 'finger-infeasible')
   return {
-    playable: violations.length === 0,
+    playable: unplayable.length === 0,
     violations,
     onsets: onsets.length,
-    playableOnsets: onsets.length - violations.filter((v) => v.kind === 'unplayable-shape').length,
+    playableOnsets: onsets.length - unplayable.length,
+    shapes,
+    transitions,
   }
+}
+
+/** Assign fingering to every event and return them with `finger`/`barre`. */
+export function fingerArrangement(events) {
+  const byOnset = new Map()
+  for (const e of events) {
+    const key = Number(e.startBeat ?? 0).toFixed(4)
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(e)
+  }
+  const out = []
+  for (const [, group] of byOnset) {
+    const finger = assignFingers(group.map((e) => ({ string: e.string, fret: e.fret, midi: e.midi })))
+    const byString = new Map(finger.positions.map((p) => [p.string, p]))
+    for (const e of group) {
+      const f = byString.get(e.string)
+      out.push({ ...e, finger: f?.finger ?? 0, ...(finger.barre ? { barre: finger.barre } : {}) })
+    }
+  }
+  return out
+}
+
+/**
+ * Assign actual fretting fingers to a shape.
+ * Finger 1 takes the lowest fret (a barre when it covers 2+ strings); the
+ * remaining distinct frets take fingers 2, 3, 4 in ascending order. Open
+ * strings are finger 0. Returns feasibility and barre provenance.
+ */
+export function assignFingers(positions) {
+  const fretted = positions.filter((p) => p.fret > 0)
+  if (!fretted.length) {
+    return { positions: positions.map((p) => ({ ...p, finger: 0 })), barre: null, feasible: true, fingersUsed: 0 }
+  }
+  const fretsAsc = [...new Set(fretted.map((p) => p.fret))].sort((a, b) => a - b)
+  const minFret = fretsAsc[0]
+  const atMin = fretted.filter((p) => p.fret === minFret)
+  const barre = atMin.length >= 2
+    ? {
+        fret: minFret,
+        strings: atMin.map((p) => p.string).sort((a, b) => a - b),
+        from: Math.min(...atMin.map((p) => p.string)),
+        to: Math.max(...atMin.map((p) => p.string)),
+        partial: atMin.length < Math.max(...atMin.map((p) => p.string)) - Math.min(...atMin.map((p) => p.string)) + 1,
+      }
+    : null
+  const fingerByFret = new Map([[minFret, 1]])
+  let next = 2
+  for (const fret of fretsAsc.slice(1)) {
+    if (next > 4) {
+      return { positions, barre, feasible: false, reason: 'needs-more-than-four-fingers', fingersUsed: next - 1 }
+    }
+    fingerByFret.set(fret, next)
+    next += 1
+  }
+  return {
+    positions: positions.map((p) => ({ ...p, finger: p.fret === 0 ? 0 : fingerByFret.get(p.fret) })),
+    barre,
+    feasible: true,
+    fingersUsed: next - 1,
+  }
+}
+
+/**
+ * Transition and sustain analysis across a whole arrangement.
+ * - hand travel per shift and its speed (needs the beat duration);
+ * - same-string overlaps (the previous note must be damped/re-plucked);
+ * - impossible shift speed (a large jump in a very short time).
+ */
+export function analyzeGuitarTransitions(events, {
+  beatSeconds = 0.5,
+  maxHandJump = 5,
+  maxShiftFretsPerSecond = 12,
+} = {}) {
+  const byOnset = new Map()
+  for (const e of events) {
+    const key = Number(e.startBeat ?? 0).toFixed(4)
+    if (!byOnset.has(key)) byOnset.set(key, [])
+    byOnset.get(key).push(e)
+  }
+  const onsets = [...byOnset.keys()].map(Number).sort((a, b) => a - b)
+  const diagnostics = []
+  let prevAnchor = null
+  let prevOnset = null
+  for (const onset of onsets) {
+    const group = byOnset.get(onset.toFixed(4))
+    const fretted = group.map((e) => e.fret).filter((f) => f > 0)
+    const anchor = fretted.length ? Math.min(...fretted) : null
+    if (anchor != null && prevAnchor != null && prevOnset != null) {
+      const jump = Math.abs(anchor - prevAnchor)
+      const seconds = Math.max(1e-3, (onset - prevOnset) * beatSeconds)
+      const speed = jump / seconds
+      if (jump > maxHandJump) {
+        diagnostics.push({ startBeat: onset, kind: 'hand-jump', jump, seconds: Math.round(seconds * 1000) / 1000 })
+      } else if (speed > maxShiftFretsPerSecond) {
+        diagnostics.push({ startBeat: onset, kind: 'fast-shift', jump, speed: Math.round(speed * 10) / 10 })
+      }
+    }
+    if (anchor != null) { prevAnchor = anchor; prevOnset = onset }
+  }
+  // Same-string overlap: a new pitch on a string still sounding an older pitch.
+  const sorted = [...events].sort((a, b) => Number(a.startBeat) - Number(b.startBeat))
+  for (let i = 0; i < sorted.length; i += 1) {
+    const a = sorted[i]
+    for (let j = i + 1; j < sorted.length; j += 1) {
+      const b = sorted[j]
+      if (Number(b.startBeat) > Number(a.startBeat) + Number(a.durBeats ?? 0.5)) break
+      if (a.string === b.string && a.midi !== b.midi && Number(b.startBeat) < Number(a.startBeat) + Number(a.durBeats ?? 0.5)) {
+        diagnostics.push({ startBeat: Number(b.startBeat), kind: 'same-string-overlap', string: a.string, from: a.midi, to: b.midi })
+      }
+    }
+  }
+  return diagnostics
 }
