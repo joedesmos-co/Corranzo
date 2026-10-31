@@ -13,6 +13,7 @@ cursor geometry.
 | Total task CPU over 3 s | 1189–1304 ms | **395–402 ms** |
 | First transport advance | 266–281 ms | **233–235 ms** |
 | First cursor movement | 50–64 ms | **33–35 ms** |
+| Click → first scheduled audio source | 42.8–49.0 ms | **6.7–9.3 ms** |
 | Playing state | 14–18 ms | 16–18 ms |
 | Retained heap after forced GC | +0.87 MB | +1.17 MB |
 
@@ -121,6 +122,7 @@ node scripts/cursor-startup-longtask.mjs --base http://localhost:5180
 node scripts/cursor-first-play-metrics.mjs --base http://localhost:5180
 node scripts/cursor-first-play-webkit.mjs --base http://localhost:5180
 node scripts/cursor-memory-metrics.mjs --base http://localhost:5180
+node scripts/cursor-first-audio-onset.mjs --base http://localhost:5180
 ```
 
 ## Integration
