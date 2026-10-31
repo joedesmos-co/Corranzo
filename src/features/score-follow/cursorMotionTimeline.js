@@ -264,7 +264,7 @@ function buildMeasureKnots(
   }
 
   const knots = []
-  if (onsets[0].time > mStart + 0.02) {
+  if (onsets.length > 0 && onsets[0].time > mStart + 1e-6) {
     knots.push({ t: mStart, x: startX, measureNumber, kind: 'measure-start' })
   }
   for (let i = 0; i < onsets.length; i += 1) {
@@ -546,7 +546,7 @@ export function buildCursorMotionTimeline({
  * perception and below the 12ms chord-grouping window, so real repeat jumps
  * still resolve as jumps.
  */
-export const PHRASE_BOUNDARY_EPSILON_SECONDS = 0.01
+export const PHRASE_BOUNDARY_EPSILON_SECONDS = 0.001
 
 function findPhraseIndex(phrases, t) {
   for (let index = phrases.length - 1; index >= 0; index -= 1) {

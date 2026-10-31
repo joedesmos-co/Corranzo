@@ -761,6 +761,12 @@ export class ScorePlaybackEngine {
   }
 
   releaseAll() {
+    // Nothing has been scheduled and playback is stopped: the voice already
+    // built by ensureVoices() is clean, so disposing/rebuilding the sampler and
+    // metronome here only adds first-Play startup cost.
+    if (!this.playing && this.scheduledEvents.size === 0) {
+      return
+    }
     this.flushPendingAudio()
   }
 
