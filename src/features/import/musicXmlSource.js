@@ -451,5 +451,10 @@ export function validateOmrMusicXmlMeasureRhythm(xmlString) {
   // non-leading measures per-staff imbalanced, so tolerate fewer than three
   // bad non-leading measures to avoid false-rejecting legitimate cross-staff
   // scores while still catching grossly malformed transcription.
-  return { ok: nonLeadingBadCount < 3, badMeasures: badCount, totalMeasures: measures.length }
+  // 
+  // For longer scores (e.g., multi-page arrangements), use a percentage-based
+  // threshold: allow up to 10% of measures to be bad, but always allow at
+  // least 3 bad measures for short scores.
+  const maxBadMeasures = Math.max(3, Math.ceil(measures.length * 0.1))
+  return { ok: nonLeadingBadCount < maxBadMeasures, badMeasures: badCount, totalMeasures: measures.length }
 }
