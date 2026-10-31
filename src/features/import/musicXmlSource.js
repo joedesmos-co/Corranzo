@@ -267,7 +267,23 @@ export function isPracticePlaybackReady({ restoreGateOpen, pdfFile, musicXmlSour
     return false
   }
   if (isOmrGeneratedPlayback(musicXmlSource)) {
-    return validateOmrSourceMeta(musicXmlSource).ok
+    const meta = validateOmrSourceMeta(musicXmlSource)
+    if (!meta.ok) return false
+    // Practice requires ALL measures to be correct (0 bad), not just
+    // "few enough to pass import". Preview may tolerate cross-staff artifacts.
+    if (musicXmlSource?.data) {
+      try {
+        const bytes = musicXmlSource.data instanceof ArrayBuffer
+          ? new Uint8Array(musicXmlSource.data)
+          : new Uint8Array(musicXmlSource.data)
+        const xml = new TextDecoder().decode(bytes)
+        const strict = validateOmrMusicXmlMeasureRhythmStrict(xml)
+        return strict.ok
+      } catch {
+        // Do not block on parse failure.
+      }
+    }
+    return true
   }
   return true
 }
@@ -459,4 +475,18 @@ export function validateOmrMusicXmlMeasureRhythm(xmlString) {
   // cross-staff artifacts without admitting grossly malformed transcription.
   const maxBadMeasures = Math.min(10, Math.max(3, Math.ceil(measures.length * 0.05)))
   return { ok: nonLeadingBadCount < maxBadMeasures, badMeasures: badCount, totalMeasures: measures.length }
+}
+
+/**
+ * Strict measure-rhythm validation for Practice readiness.
+ *
+ * Import may tolerate a small number of imbalanced measures (cross-staff
+ * artifacts, pickup ambiguity), but Practice requires every non-leading
+ * measure to fill its time signature exactly. A single bad measure means the
+ * score-follow cursor and Wait For You checkpoints would be wrong for that
+ * measure, so the score is preview-only until corrected.
+ */
+export function validateOmrMusicXmlMeasureRhythmStrict(xmlString) {
+  const result = validateOmrMusicXmlMeasureRhythm(xmlString)
+  return { ...result, ok: result.badMeasures === 0 }
 }
