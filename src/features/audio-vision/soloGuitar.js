@@ -7,7 +7,7 @@ import { PROVENANCE } from './musicAnalysis.js'
 import { resolveSimultaneous, selectTexture, chooseMelodyMidi } from './arrangementModel.js'
 import { paramsForDifficulty } from './difficulty.js'
 import { STANDARD_GUITAR_TUNING } from '../instruments/instruments.js'
-import { assignChordPositions, candidatePositionsForMidi, stringFretForMidi } from '../instruments/fretboard.js'
+import { choosePlayableVoicing, positionsForMidi, validateGuitarArrangement } from './guitarPlayability.js'
 
 export const GUITAR_STRINGS = {
   count: 6,
@@ -27,16 +27,19 @@ export const GUITAR_MAX = 88 // nominal top; positions decide playability
 export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPerMeasure = 4, capo = 0, tuning = null, melodyContour = null }) {
   const params = paramsForDifficulty(difficulty)
   const strings = tuning ? { ...GUITAR_STRINGS, tuning } : GUITAR_STRINGS
+  const tuningValues = strings.tuning
+  const maxSpan = params.maxFretSpan
   const byOnset = new Map()
   for (const n of quantizedNotes) {
     const key = Math.round((n.quantizedStartBeat ?? 0) * 4) / 4
     if (!byOnset.has(key)) byOnset.set(key, [])
-    // A5: never pre-clamp out-of-range pitches — the per-onset range logic
-    // below transposes deliberately (marked) or drops honestly (warned).
+    // A5: never pre-clamp out-of-range pitches — the range logic below
+    // transposes deliberately (marked) or drops honestly (warned).
     byOnset.get(key).push({ ...n, midi: Math.round(n.midi) })
   }
   const events = []
   const warnings = []
+  const droppedNotes = []
   let handFret = null
   const sortedOnsets = [...byOnset.keys()].sort((a, b) => a - b)
   for (const onset of sortedOnsets) {
@@ -55,13 +58,12 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
       melodyMidi,
       measureIndex,
     }))
-    // Guitar: max 4 simultaneous in advanced, fewer below; melody always kept.
     // Melody comes from the DETECTED contour (evidence) so an upper octave
     // shadow cannot take the melody role and strand the real line.
     const resolved = resolveSimultaneous(tagged, { maxVoices: Math.min(4, params.maxVoicesPerOnset + 1), melodyMidi })
       .filter((e) => e.kept)
     const texture = selectTexture({ noteDensity: group.length, chordConfidence: 0.5, difficulty })
-    // A5: deliberate octave transposition before dropping. A note outside the
+    // Deliberate octave transposition before dropping. A note outside the
     // guitar range is tried an octave down (high) or up (low) and marked
     // octaveShifted — never silently clamped to a nearby pitch.
     const ranged = []
@@ -71,97 +73,76 @@ export function arrangeSoloGuitar({ quantizedNotes, chords, difficulty, beatsPer
         continue
       }
       const shifted = r.midi > GUITAR_MAX ? r.midi - 12 : r.midi + 12
-      if (shifted >= GUITAR_MIN && shifted <= GUITAR_MAX && candidatePositionsForMidi(strings, shifted).length > 0) {
+      if (shifted >= GUITAR_MIN && shifted <= GUITAR_MAX && positionsForMidi(tuningValues, shifted, { fretCount: strings.fretCount }).length > 0) {
         ranged.push({ ...r, midi: shifted, octaveShifted: shifted - r.midi })
         warnings.push({ kind: 'octave-transposed', detail: `midi ${r.midi}→${shifted}`, measureIndex })
       } else {
         warnings.push({ kind: 'unplayable-note-dropped', detail: `midi ${r.midi}`, measureIndex })
+        droppedNotes.push({ midi: r.midi, reason: 'out-of-range', startBeat: onset })
       }
     }
-    if (ranged.length === 1) {
-      const n = ranged[0]
-      const pos = stringFretForMidi(strings, n.midi, { handFret })
-      if (!pos) {
-        warnings.push({ kind: 'unplayable-note-dropped', detail: `midi ${n.midi}`, measureIndex })
-        continue
-      }
-      if (pos.fret > 0) {
-        if (handFret != null && Math.abs(pos.fret - handFret) > 5) {
-          warnings.push({ kind: 'position-shift', detail: `${handFret}→${pos.fret}`, measureIndex })
-        }
-        handFret = pos.fret
-      }
+    if (!ranged.length) continue
+    // ONE playable voicing per onset, with HARD span/finger/string limits.
+    // If the full chord is physically impossible, notes are dropped by
+    // priority (melody, then bass, then harmony) and the loss is reported.
+    const voicing = choosePlayableVoicing(ranged, {
+      tuning: tuningValues,
+      handFret,
+      maxSpan,
+      maxFingers: 4,
+      fretCount: strings.fretCount,
+      maxFret: strings.fretCount,
+      preferredMaxFret: strings.preferredMaxFret ?? 12,
+    })
+    for (const drop of voicing.dropped) {
+      if (!ranged.some((r) => r.midi === drop.midi)) continue
+      warnings.push({
+        kind: drop.reason === 'out-of-range' ? 'unplayable-note-dropped' : 'chord-voice-dropped',
+        detail: `midi ${drop.midi}`,
+        measureIndex,
+      })
+      droppedNotes.push({ midi: drop.midi, reason: drop.reason, startBeat: onset })
+    }
+    for (const pos of voicing.positions) {
+      const n = pos.note
+      if (!n) continue
       events.push({
         midi: n.midi,
         startBeat: onset,
         durBeats: Math.max(params.minNoteBeats, n.quantizedDurBeats ?? 0.5),
         string: pos.string,
-        fret: pos.fret + capo * 0,
-        role: n.isMelody ? 'melody' : 'harmony',
+        fret: pos.fret,
+        role: n.isMelody ? 'melody' : n.isBassRoot ? 'bass' : 'harmony',
         isMelody: Boolean(n.isMelody),
+        isBassRoot: Boolean(n.isBassRoot),
         texture,
         measureIndex,
+        simplified: voicing.simplified,
         ...(n.octaveShifted ? { octaveShifted: n.octaveShifted } : {}),
         provenance: PROVENANCE.ARRANGED,
       })
-    } else if (ranged.length > 1) {
-      const midis = ranged.map((r) => r.midi)
-      const assignment = assignChordPositions(strings, midis, { handFret })
-      const frets = []
-      for (const r of ranged) {
-        const pos = assignment.get(r.midi)
-        if (!pos) {
-          // Keep melody at all costs; drop unassignable inner voice.
-          if (r.isMelody) {
-            const fallback = stringFretForMidi(strings, r.midi, { handFret })
-            if (!fallback) {
-              warnings.push({ kind: 'unplayable-note-dropped', detail: `midi ${r.midi}`, measureIndex })
-              continue
-            }
-            frets.push(fallback.fret)
-            events.push({
-              midi: r.midi, startBeat: onset,
-              durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
-              string: fallback.string, fret: fallback.fret,
-              role: 'melody', texture, measureIndex,
-              isMelody: true,
-              ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
-              provenance: PROVENANCE.ARRANGED,
-            })
-          } else {
-            warnings.push({ kind: 'chord-voice-dropped', detail: `midi ${r.midi}`, measureIndex })
-          }
-          continue
-        }
-        frets.push(pos.fret)
-        events.push({
-          midi: r.midi, startBeat: onset,
-          durBeats: Math.max(params.minNoteBeats, r.quantizedDurBeats ?? 0.5),
-          string: pos.string, fret: pos.fret,
-          role: r.isMelody ? 'melody' : r.isBassRoot ? 'bass' : 'harmony',
-          isMelody: Boolean(r.isMelody),
-          isBassRoot: Boolean(r.isBassRoot),
-          texture, measureIndex,
-          ...(r.octaveShifted ? { octaveShifted: r.octaveShifted } : {}),
-          provenance: PROVENANCE.ARRANGED,
-        })
-      }
-      const fretted = frets.filter((f) => f > 0)
-      if (fretted.length >= 2) {
-        const span = Math.max(...fretted) - Math.min(...fretted)
-        if (span > params.maxFretSpan) {
-          warnings.push({ kind: 'wide-stretch', detail: `span ${span}`, measureIndex })
-        }
-        handFret = Math.min(...fretted)
-      }
     }
-    void capo
-    void chords
+    const fretted = voicing.positions.map((p) => p.fret).filter((f) => f > 0)
+    const anchor = fretted.length ? Math.min(...fretted) : null
+    if (anchor != null) {
+      if (handFret != null && Math.abs(anchor - handFret) > 5) {
+        warnings.push({ kind: 'position-shift', detail: `${handFret}→${anchor}`, measureIndex })
+      }
+      handFret = anchor
+    }
   }
-  // Reachability audit: every event must have a candidate position.
-  const playable = events.filter((e) => candidatePositionsForMidi(strings, e.midi).length > 0)
-  if (playable.length !== events.length) {
-    warnings.push({ kind: 'range-audit', detail: `${events.length - playable.length} out-of-range dropped` })
+  // Independent playability gate: the arrangement must pass before it is
+  // allowed to become TAB or be labelled ready to practice.
+  const playability = validateGuitarArrangement(events, {
+    maxSpan,
+    maxFingers: 4,
+    maxFret: strings.fretCount,
+    maxHandJump: maxSpan + 1,
+  })
+  if (!playability.playable) {
+    warnings.push({ kind: 'arrangement-unplayable', detail: `${playability.violations.length} violation(s)` })
   }
-  return { events: playable, warnings, strings }
+  void capo
+  void chords
+  return { events, warnings, strings, droppedNotes, playability }
 }

@@ -326,6 +326,11 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
   const model = createArrangementModel({ targetPart, difficulty })
   model.parts[0].events = correctedEvents
   model.parts[0].warnings = arranged.warnings ?? []
+  // Instrument-specific playability is reported next to the arrangement, so a
+  // simplification can never masquerade as a faithful transcription. Piano
+  // arrangements do not use the guitar gate.
+  if (arranged.playability) model.parts[0].playability = arranged.playability
+  if (arranged.droppedNotes) model.parts[0].droppedNotes = arranged.droppedNotes
   model.uncertainRegions = uncertainRegions
   model.transcriptionAgreement = agreement
   if (arranged.strings) model.parts[0].strings = arranged.strings
@@ -405,6 +410,8 @@ export async function runAudioArrangementPipeline(file, arrayBuffer, options, st
     arrangementEvents,
     removedEvents: corrected.removedEvents,
     originalNoteCount: arrangementEvents.length,
+    playability: arranged.playability ?? null,
+    simplifiedNoteCount: arranged.droppedNotes?.length ?? 0,
     notation,
     transcriptionEvidence: {
       noteCount: arrangementEvents.length,
