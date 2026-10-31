@@ -30,7 +30,15 @@ export function systemKeyForCursor(target) {
   // Prefer a stable logical system identity from the score layout. A Y-derived
   // key can change when a coordinate crosses a rounding boundary even though
   // the cursor is still on the same system, which produced spurious resets.
-  const systemIndex = target.meta?.systemIndex
+  // Prefer the stable logical system identity. The realtime motion cursor
+  // (resolveCursorMotion) stamps systemIndex at the top level, while anchors
+  // and resolved cursors carry it under meta. Check both so the key never
+  // falls back to Y-based rounding for motion-timeline cursors — that fallback
+  // flickers when Y crosses a rounding boundary and causes the cursor to reset
+  // (bounce) within a system.
+  const systemIndex =
+    (Number.isFinite(target?.systemIndex) ? target.systemIndex : null) ??
+    (Number.isFinite(target?.meta?.systemIndex) ? target.meta.systemIndex : null)
   if (Number.isFinite(systemIndex)) {
     return `${page}:sys${systemIndex}`
   }

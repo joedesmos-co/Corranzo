@@ -255,6 +255,20 @@ describe('system line transition', () => {
   })
 })
 
+describe('systemKeyForCursor motion-timeline cursor', () => {
+  it('uses top-level systemIndex from resolveCursorMotion (no meta)', () => {
+    // resolveCursorMotion stamps systemIndex at the top level, not under meta.
+    // systemKeyForCursor must read it there, otherwise the key falls back to
+    // Y-based rounding and the realtime cursor resets (bounces) mid-system.
+    const cursor = { page: 1, y: 0.3, x: 0.5, systemIndex: 3 }
+    expect(systemKeyForCursor(cursor)).toBe('1:sys3')
+  })
+  it('prefers top-level systemIndex over meta.systemIndex when both present', () => {
+    const cursor = { page: 1, y: 0.3, systemIndex: 5, meta: { systemIndex: 2 } }
+    expect(systemKeyForCursor(cursor)).toBe('1:sys5')
+  })
+})
+
 describe('systemKeyForCursor tolerance', () => {
   it('prefers stable logical systemIndex over Y geometry', () => {
     const a = systemKeyForCursor({ page: 1, y: 0.3, meta: { systemIndex: 2 } })
