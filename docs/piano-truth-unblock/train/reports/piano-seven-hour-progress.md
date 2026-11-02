@@ -97,3 +97,26 @@ The QA worktree's Verovio 6.3.0 + Chromium fixtures were evaluated separately:
   route credit instead of throwing on image-route IRs.
 - Raster/image fallback accuracy is not claimed because no approved image
   engine was available in this run.
+
+
+## Real-world input survey and MuseScore staff-block support
+
+Surveyed 17 legal/available PDFs. Key classes:
+
+- Controlled ReportLab SMuFL: vector route, full notes, practice-ready.
+- MuseScore 4.6 (`Ao no Sumika`): SMuFL vector route, 32 notes/2 rests on
+  page 1; incomplete/time signature unresolved, Practice false.
+- MuseScore 3.4/3.6 (`La Campanella`, `Fantaisie-Impromptu`): previously
+  `no staff systems`; now vector route after detecting five-line staff blocks
+  drawn as one path. Page-1 coverage: 57/64 and 14/11 notes/rests; Practice
+  false due unresolved time signature/ties/noteheads.
+- MuseScore 3.x web export (`Pokemon`): vector route, 352 notes page 1;
+  Practice false.
+- LilyPond 2.x (Bach, Brahms, Mozart, Chopin, Beethoven): no SMuFL text;
+  image fallback required.
+- Verovio/Chromium: outlined paths; image fallback required.
+- Scanned/LOC and PDF-lib inputs: image fallback required.
+
+Added general five-line staff-block detection for MuseScore-class PDFs. The
+controlled corpus remains 453/453 independent full events with all prior
+safety controls.

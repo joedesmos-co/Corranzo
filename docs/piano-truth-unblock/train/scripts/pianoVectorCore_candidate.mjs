@@ -150,6 +150,37 @@ export async function extractFromData(pdfjsLib, data, pageNo = 1) {
             beams.push({ x0: +Math.min(x0, x1).toFixed(1), x1: +Math.max(x0, x1).toFixed(1),
                          y: +((H - y0) + (H - y1)) / 2 })
           }
+        } else if (pops.length >= 10 && pops.length <= 14 && !pops.includes(2)) {
+          // MuseScore-class PDFs draw each five-line staff segment as one
+          // path with five parallel horizontal strokes.
+          let ci = 0
+          let prev = null
+          let pathStart = null
+          const segs = []
+          for (const op of pops) {
+            if (op === 0) {
+              prev = pt(c[ci], c[ci + 1]); ci += 2
+              pathStart = prev
+            } else if (op === 1) {
+              const p = pt(c[ci], c[ci + 1]); ci += 2
+              if (prev) segs.push([prev, p])
+              prev = p
+            } else if (op === 3) {
+              prev = pathStart
+            }
+          }
+          const horiz = segs.filter(([a, b]) =>
+            Math.abs(b[1] - a[1]) < 1.5 && Math.abs(b[0] - a[0]) > 20)
+          if (horiz.length >= 5 && horiz.length <= 6) {
+            const ys = horiz.map(([a, b]) => +(H - (a[1] + b[1]) / 2).toFixed(1))
+              .sort((a, b) => a - b)
+            const gaps = ys.slice(1).map((y, k) => y - ys[k])
+            if (gaps.length >= 4 &&
+                Math.max(...gaps) - Math.min(...gaps) <= 2 &&
+                gaps.every((g) => g > 1 && g < 20)) {
+              staffLines.push(...ys)
+            }
+          }
         } else if (paint === 22 || paint === 23) {
           // Path-drawn accidental (outlined font): sharp/natural/flat.
           const xs = [], ys = []
