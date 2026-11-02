@@ -6,6 +6,7 @@
 import { PROVENANCE } from './musicAnalysis.js'
 import { resolveSimultaneous, selectTexture, chooseMelodyMidi } from './arrangementModel.js'
 import { paramsForDifficulty } from './difficulty.js'
+import { validatePianoArrangement } from './pianoPlayability.js'
 
 const PIANO_MIN = 21
 const PIANO_MAX = 108
@@ -124,7 +125,29 @@ export function arrangeSoloPiano({
   }
   // Enforce per-hand span per onset: drop farthest non-melody note when stretched.
   const finalEvents = enforceHandSpan(events, maxSpan, warnings)
-  return { events: finalEvents, warnings, textureSummary: summarizeTextures(finalEvents) }
+  // Phrase-level gate: per-hand note count, hand travel/speed, LH/RH crossing.
+  let beatSeconds = 0.5
+  for (let i = 1; i < quantizedNotes.length; i += 1) {
+    const a = quantizedNotes[i - 1]
+    const b = quantizedNotes[i]
+    const dt = (b.startSeconds ?? 0) - (a.startSeconds ?? 0)
+    const db = (b.quantizedStartBeat ?? 0) - (a.quantizedStartBeat ?? 0)
+    if (dt > 0 && db > 1e-6) { beatSeconds = dt / db; break }
+  }
+  const playability = validatePianoArrangement(finalEvents, {
+    maxSpan,
+    maxNotesPerHand: 5,
+    maxHandJump: Math.max(12, maxSpan),
+    beatSeconds: Number.isFinite(beatSeconds) && beatSeconds > 0 ? beatSeconds : 0.5,
+  })
+  for (const t of playability.transitions ?? []) {
+    if (t.kind === 'hand-crossing') {
+      warnings.push({ kind: 'hand-crossing', detail: `LH ${t.lhMax} >= RH ${t.rhMin}`, measureIndex: Math.floor(t.startBeat / beatsPerMeasure) })
+    } else if (t.kind === 'fast-shift') {
+      warnings.push({ kind: 'fast-shift', detail: `${t.hand} ${t.jump} semitones`, measureIndex: Math.floor(t.startBeat / beatsPerMeasure) })
+    }
+  }
+  return { events: finalEvents, warnings, textureSummary: summarizeTextures(finalEvents), playability }
 }
 
 // Exported for unit tests: resolving chord windows by time (not by measure
